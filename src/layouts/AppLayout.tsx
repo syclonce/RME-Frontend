@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/AuthContext'
 import { generatedRoutes } from '@/routes/generated'
 
 function domainOf(moduleName: string): string {
@@ -9,6 +11,8 @@ function domainOf(moduleName: string): string {
 
 export function AppLayout() {
   const [filter, setFilter] = useState('')
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   const grouped = useMemo(() => {
     const listRoutes = generatedRoutes.filter((r) => !r.path.endsWith('/tambah'))
@@ -26,6 +30,18 @@ export function AppLayout() {
   return (
     <div className="flex h-svh">
       <aside className="w-72 shrink-0 overflow-y-auto border-r p-3">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <span className="truncate text-sm font-medium">{user?.name ?? user?.username}</span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              void logout().then(() => navigate('/login'))
+            }}
+          >
+            Keluar
+          </Button>
+        </div>
         <input
           className="mb-3 w-full rounded border px-2 py-1 text-sm"
           placeholder="Cari modul..."
