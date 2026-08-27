@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","planned_by","created_by","care_goals","planned
 export function InpatientCarePlanListPage() {
   const { useList } = useInpatientCarePlanResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

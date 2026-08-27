@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","username","email","phone","is_active","creat
 export function PatientPortalAccountListPage() {
   const { useList, remove } = usePatientPortalAccountResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PatientPortalAccountListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","service_id","performed_at","performed_by","not
 export function MedicalProcedureListPage() {
   const { useList } = useMedicalProcedureResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function MedicalProcedureListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-medical-procedure/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

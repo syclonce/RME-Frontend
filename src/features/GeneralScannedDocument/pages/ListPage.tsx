@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","document_type","file_path","scanned_at","sca
 export function GeneralScannedDocumentListPage() {
   const { useList } = useGeneralScannedDocumentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

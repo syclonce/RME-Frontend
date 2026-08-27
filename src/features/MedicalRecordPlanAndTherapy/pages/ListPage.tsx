@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","ordered_by","created_by","assessment_summary",
 export function PlanAndTherapyListPage() {
   const { useList } = usePlanAndTherapyResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

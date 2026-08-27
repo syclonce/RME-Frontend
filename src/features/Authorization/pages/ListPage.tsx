@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","created_at","updated_at"] as const
 export function RoleListPage() {
   const { useList, remove } = useRoleResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RoleListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

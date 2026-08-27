@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","ward_id","phone","is_active","created_at"] 
 export function PharmacyDepotListPage() {
   const { useList, remove } = usePharmacyDepotResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PharmacyDepotListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

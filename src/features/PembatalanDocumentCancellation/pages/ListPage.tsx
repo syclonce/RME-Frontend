@@ -8,7 +8,6 @@ const COLUMNS = ["id","document_id","document_type","reason","cancellation_date"
 export function PembatalanDocumentCancellationListPage() {
   const { useList, remove } = usePembatalanDocumentCancellationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PembatalanDocumentCancellationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

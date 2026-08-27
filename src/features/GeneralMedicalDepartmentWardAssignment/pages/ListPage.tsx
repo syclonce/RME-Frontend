@@ -8,7 +8,6 @@ const COLUMNS = ["id","medical_department_id","ward_id","is_primary","assigned_a
 export function MedicalDepartmentWardAssignmentListPage() {
   const { useList, remove } = useMedicalDepartmentWardAssignmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function MedicalDepartmentWardAssignmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

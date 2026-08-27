@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","description","category","is_active","created_at","
 export function Icd10CauseOfDeathCodeListPage() {
   const { useList, remove } = useIcd10CauseOfDeathCodeResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function Icd10CauseOfDeathCodeListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

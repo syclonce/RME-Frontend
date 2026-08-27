@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","topic","method","understanding_level","educato
 export function EmergencyEducationListPage() {
   const { useList, remove } = useEmergencyEducationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EmergencyEducationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

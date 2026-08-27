@@ -8,7 +8,6 @@ const COLUMNS = ["id","pathology_anatomy_result_id","test_name","result","examin
 export function PathologyMolecularResultListPage() {
   const { useList } = usePathologyMolecularResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

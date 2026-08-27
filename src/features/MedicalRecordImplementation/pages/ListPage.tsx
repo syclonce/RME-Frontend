@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","order_reference","description","performed_by",
 export function ImplementationListPage() {
   const { useList, remove } = useImplementationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ImplementationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

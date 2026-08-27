@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","diagnosis_label","related_factors","defining_c
 export function NursingDiagnosisListPage() {
   const { useList, remove } = useNursingDiagnosisResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function NursingDiagnosisListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

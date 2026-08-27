@@ -8,7 +8,6 @@ const COLUMNS = ["id","registration_id","full_name","relationship_to_patient","i
 export function ApplicantListPage() {
   const { useList, remove } = useApplicantResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ApplicantListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

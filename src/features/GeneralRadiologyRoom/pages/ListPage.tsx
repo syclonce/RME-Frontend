@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","radiology_type","is_active"] as const
 export function GeneralRadiologyRoomListPage() {
   const { useList, remove } = useGeneralRadiologyRoomResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GeneralRadiologyRoomListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

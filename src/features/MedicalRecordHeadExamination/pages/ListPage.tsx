@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","skull_shape","hair_distribution","facial_symme
 export function HeadExaminationListPage() {
   const { useList, remove } = useHeadExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function HeadExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

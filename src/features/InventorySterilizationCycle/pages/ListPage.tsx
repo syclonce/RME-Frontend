@@ -8,7 +8,6 @@ const COLUMNS = ["id","machine_name","temperature_celsius","pressure_bar","durat
 export function SterilizationCycleListPage() {
   const { useList, remove } = useSterilizationCycleResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function SterilizationCycleListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_service_group_id","name","code","unit","is_active"] a
 export function LabServiceParameterListPage() {
   const { useList, remove } = useLabServiceParameterResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LabServiceParameterListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

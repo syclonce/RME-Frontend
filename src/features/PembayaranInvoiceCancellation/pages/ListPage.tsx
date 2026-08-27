@@ -8,7 +8,6 @@ const COLUMNS = ["id","invoice_id","cancelled_at","cancelled_by","reason","creat
 export function InvoiceCancellationListPage() {
   const { useList } = useInvoiceCancellationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

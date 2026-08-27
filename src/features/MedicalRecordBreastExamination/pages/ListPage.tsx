@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","side","inspection","palpation","lump_present",
 export function BreastExaminationListPage() {
   const { useList, remove } = useBreastExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BreastExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","color","coating","moisture","lesions","movemen
 export function TongueExaminationListPage() {
   const { useList, remove } = useTongueExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function TongueExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

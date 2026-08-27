@@ -8,7 +8,6 @@ const COLUMNS = ["id","pharmacy_service_time_id","stage_name","recorded_at","rec
 export function PharmacyServiceTimeStageListPage() {
   const { useList, remove } = usePharmacyServiceTimeStageResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PharmacyServiceTimeStageListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

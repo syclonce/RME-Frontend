@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_order_id","target_gene","result","ct_value","examined
 export function LabPcrResultListPage() {
   const { useList } = useLabPcrResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

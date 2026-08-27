@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","diagnosis_id","procedure_name","surgeon_id","a
 export function SurgeryListPage() {
   const { useList } = useSurgeryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function SurgeryListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/medical-record-surgery/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","nursing_indicator_type_id","unit","target_v
 export function NursingIndicatorListPage() {
   const { useList, remove } = useNursingIndicatorResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function NursingIndicatorListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

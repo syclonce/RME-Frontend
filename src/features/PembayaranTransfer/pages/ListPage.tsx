@@ -8,7 +8,6 @@ const COLUMNS = ["id","payment_id","transfer_reference_number","source_bank_name
 export function TransferListPage() {
   const { useList } = useTransferResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function TransferListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pembayaran-transfer/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

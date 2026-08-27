@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","price","description","is_active","created_a
 export function PackageListPage() {
   const { useList, remove } = usePackageResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PackageListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

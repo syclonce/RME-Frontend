@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","visit_id","doctor_id","test_date","validity_
 export function MmpiTestListPage() {
   const { useList, remove } = useMmpiTestResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function MmpiTestListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

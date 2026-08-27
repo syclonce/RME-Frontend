@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_microscopic_result_id","parameter_name","value","crea
 export function LabMicroscopicResultItemListPage() {
   const { useList } = useLabMicroscopicResultItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

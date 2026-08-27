@@ -8,7 +8,6 @@ const COLUMNS = ["id","shipment_id","item_id","quantity","created_at"] as const
 export function ShipmentItemListPage() {
   const { useList } = useShipmentItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

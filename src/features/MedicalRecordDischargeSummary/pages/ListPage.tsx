@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","admission_diagnosis_id","discharge_diagnosis_i
 export function DischargeSummaryListPage() {
   const { useList } = useDischargeSummaryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

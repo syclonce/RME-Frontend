@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","spine_alignment","scoliosis","kyphosis","lordo
 export function BackExaminationListPage() {
   const { useList, remove } = useBackExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BackExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","report_type_id","name","code","sequence","is_active","cre
 export function ReportTypeItemListPage() {
   const { useList, remove } = useReportTypeItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ReportTypeItemListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

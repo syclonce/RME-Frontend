@@ -8,7 +8,6 @@ const COLUMNS = ["id","leftover_medication_voucher_id","item_id","quantity","uni
 export function LeftoverMedicationVoucherItemListPage() {
   const { useList } = useLeftoverMedicationVoucherItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

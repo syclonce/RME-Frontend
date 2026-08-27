@@ -8,7 +8,6 @@ const COLUMNS = ["id","blood_transfusion_id","blood_component","blood_type","bag
 export function BloodRequestItemListPage() {
   const { useList, remove } = useBloodRequestItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BloodRequestItemListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

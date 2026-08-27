@@ -8,7 +8,6 @@ const COLUMNS = ["id","prescription_id","queue_number","status","called_at","com
 export function PharmacyOutpatientQueueListPage() {
   const { useList } = usePharmacyOutpatientQueueResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function PharmacyOutpatientQueueListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-pharmacy-outpatient-queue/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

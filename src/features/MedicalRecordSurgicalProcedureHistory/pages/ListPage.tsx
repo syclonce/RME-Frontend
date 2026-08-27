@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","created_by","procedure_name","procedure_date",
 export function SurgicalProcedureHistoryListPage() {
   const { useList } = useSurgicalProcedureHistoryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

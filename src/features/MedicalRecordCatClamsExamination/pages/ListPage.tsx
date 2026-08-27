@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","cat_score","clams_score","develop
 export function CatClamsExaminationListPage() {
   const { useList, remove } = useCatClamsExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function CatClamsExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

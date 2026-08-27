@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","doctor_id","created_by","procedure_name","indi
 export function DoctorProcedureConsentListPage() {
   const { useList } = useDoctorProcedureConsentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

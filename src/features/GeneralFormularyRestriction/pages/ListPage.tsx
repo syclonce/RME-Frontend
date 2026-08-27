@@ -8,7 +8,6 @@ const COLUMNS = ["id","drug_name","formulary_category","requires_substitution","
 export function FormularyRestrictionListPage() {
   const { useList, remove } = useFormularyRestrictionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function FormularyRestrictionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

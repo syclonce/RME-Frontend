@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","mother_patient_id","baby_name","gender_id","bi
 export function BirthRecordListPage() {
   const { useList } = useBirthRecordResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function BirthRecordListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-birth-record/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

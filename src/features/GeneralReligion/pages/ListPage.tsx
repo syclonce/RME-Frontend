@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","code","is_active"] as const
 export function ReligionListPage() {
   const { useList, remove } = useReligionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ReligionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","accession_number","viewed_by","viewed_at","ip_
 export function RadiologyViewerLogListPage() {
   const { useList, remove } = useRadiologyViewerLogResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RadiologyViewerLogListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

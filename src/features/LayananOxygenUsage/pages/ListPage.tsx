@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","flow_rate_lpm","method","started_at","ended_at
 export function OxygenUsageListPage() {
   const { useList } = useOxygenUsageResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function OxygenUsageListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-oxygen-usage/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","reconciliation_id","drug_name","dose","frequency","route"
 export function AdmissionMedicationReconciliationItemListPage() {
   const { useList } = useAdmissionMedicationReconciliationItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

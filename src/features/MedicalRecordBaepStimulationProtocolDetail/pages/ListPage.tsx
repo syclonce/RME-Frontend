@@ -8,7 +8,6 @@ const COLUMNS = ["id","baep_protocol_id","stimulation_site","stimulation_frequen
 export function BaepStimulationProtocolDetailListPage() {
   const { useList } = useBaepStimulationProtocolDetailResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

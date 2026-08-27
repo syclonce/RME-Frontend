@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","total_score","risk_level","respon
 export function MchatAssessmentExaminationListPage() {
   const { useList, remove } = useMchatAssessmentExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function MchatAssessmentExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

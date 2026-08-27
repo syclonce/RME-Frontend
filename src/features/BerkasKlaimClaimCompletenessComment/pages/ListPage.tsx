@@ -8,7 +8,6 @@ const COLUMNS = ["id","claim_completeness_id","comment","commented_by","commente
 export function BerkasKlaimClaimCompletenessCommentListPage() {
   const { useList, remove } = useBerkasKlaimClaimCompletenessCommentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BerkasKlaimClaimCompletenessCommentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

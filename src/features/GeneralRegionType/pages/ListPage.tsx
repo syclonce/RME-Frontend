@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","digit_count","delimiter","is_active"] as const
 export function RegionTypeListPage() {
   const { useList, remove } = useRegionTypeResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RegionTypeListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

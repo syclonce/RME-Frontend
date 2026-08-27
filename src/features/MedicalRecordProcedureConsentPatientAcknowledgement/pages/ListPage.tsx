@@ -8,7 +8,6 @@ const COLUMNS = ["id","consent_id","acknowledger_name","relationship_to_patient"
 export function ProcedureConsentPatientAcknowledgementListPage() {
   const { useList } = useProcedureConsentPatientAcknowledgementResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

@@ -8,7 +8,6 @@ const COLUMNS = ["id","stock_opname_id","item_id","system_quantity","physical_qu
 export function InventoryStockOpnameItemListPage() {
   const { useList } = useInventoryStockOpnameItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

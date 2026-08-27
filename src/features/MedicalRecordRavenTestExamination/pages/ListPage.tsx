@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","test_form","raw_score","percentile","iq_grade"
 export function RavenTestExaminationListPage() {
   const { useList, remove } = useRavenTestExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RavenTestExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

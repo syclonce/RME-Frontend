@@ -8,7 +8,6 @@ const COLUMNS = ["id","clinical_note_id","verifier_doctor_id","verification_stat
 export function ClinicalNoteVerificationListPage() {
   const { useList, remove } = useClinicalNoteVerificationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ClinicalNoteVerificationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

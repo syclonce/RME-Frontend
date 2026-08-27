@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_order_id","specimen_type","findings","examined_by","e
 export function LabMicroscopicResultListPage() {
   const { useList } = useLabMicroscopicResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

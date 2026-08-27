@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","blood_type_id","volume_ml","started_at","ended
 export function BloodTransfusionListPage() {
   const { useList } = useBloodTransfusionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function BloodTransfusionListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/medical-record-blood-transfusion/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

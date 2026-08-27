@@ -8,7 +8,6 @@ const COLUMNS = ["id","baep_protocol_id","scale_used","score","domains_affected"
 export function BaepCognitiveDetailListPage() {
   const { useList } = useBaepCognitiveDetailResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

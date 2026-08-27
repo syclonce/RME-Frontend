@@ -8,7 +8,6 @@ const COLUMNS = ["id","guarantor_id","item_category_id","is_covered","coverage_p
 export function GuarantorItemCategoryMappingListPage() {
   const { useList, remove } = useGuarantorItemCategoryMappingResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GuarantorItemCategoryMappingListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

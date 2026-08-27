@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","description","times_per_day","interval_hours","is_
 export function PrescriptionFrequencyRuleListPage() {
   const { useList, remove } = usePrescriptionFrequencyRuleResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PrescriptionFrequencyRuleListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

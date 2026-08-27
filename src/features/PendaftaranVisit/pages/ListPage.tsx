@@ -1,15 +1,32 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { apiClient } from '@/api/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useVisitResource } from '../api'
 
 const COLUMNS = ["id","visit_number","registration_id","attending_physician_id","ward_id","bed_id","admitted_at","discharged_at","is_new_visit","is_deposit","deposit_class_id","received_by","final_outcome","final_outcome_by","final_outcome_at","status","created_at","updated_at"] as const
 
+const WF_ACTIONS = [{"label":"Transfer","verb":"post","prefix":"visits","action":"transfer"},{"label":"Discharge","verb":"post","prefix":"visits","action":"discharge"}] as const
+
 export function VisitListPage() {
   const { useList, remove } = useVisitResource()
   const { data, isLoading } = useList()
+  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+
+  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
+      queryClient.invalidateQueries({ queryKey: ['/visits'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
 
   return (
     <div className="p-4">
@@ -46,6 +63,24 @@ export function VisitListPage() {
                     }}
                   >
                     Hapus
+                  </Button>
+                                    <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Transfer'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
+                  >
+                    Transfer
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Discharge'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
+                  >
+                    Discharge
                   </Button>
                 </div>
               </TableCell>

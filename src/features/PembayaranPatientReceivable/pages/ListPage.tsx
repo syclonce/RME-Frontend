@@ -8,7 +8,6 @@ const COLUMNS = ["id","invoice_id","patient_id","amount","due_date","status","cr
 export function PatientReceivableListPage() {
   const { useList } = usePatientReceivableResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function PatientReceivableListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pembayaran-patient-receivable/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

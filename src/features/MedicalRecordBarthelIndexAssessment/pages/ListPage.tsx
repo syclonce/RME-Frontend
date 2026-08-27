@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","feeding","bathing","grooming","dressing","bowe
 export function BarthelIndexAssessmentListPage() {
   const { useList, remove } = useBarthelIndexAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BarthelIndexAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

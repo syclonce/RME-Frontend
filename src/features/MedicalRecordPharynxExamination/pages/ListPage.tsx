@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","mucosa_color","exudate","post_nasal_drip","pos
 export function PharynxExaminationListPage() {
   const { useList, remove } = usePharynxExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PharynxExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

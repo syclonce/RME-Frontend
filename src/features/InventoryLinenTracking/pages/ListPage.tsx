@@ -8,7 +8,6 @@ const COLUMNS = ["id","linen_item_id","status","sent_at","received_at","quantity
 export function LinenItemListPage() {
   const { useList, remove } = useLinenItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LinenItemListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

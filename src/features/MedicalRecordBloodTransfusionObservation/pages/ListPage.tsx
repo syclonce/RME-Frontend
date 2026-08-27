@@ -8,7 +8,6 @@ const COLUMNS = ["id","blood_transfusion_id","observed_at","temperature_c","puls
 export function BloodTransfusionObservationListPage() {
   const { useList, remove } = useBloodTransfusionObservationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BloodTransfusionObservationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

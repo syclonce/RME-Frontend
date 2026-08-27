@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","specimen_description","macroscopi
 export function PathologyAnatomyResultListPage() {
   const { useList } = usePathologyAnatomyResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function PathologyAnatomyResultListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-pathology-anatomy-result/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

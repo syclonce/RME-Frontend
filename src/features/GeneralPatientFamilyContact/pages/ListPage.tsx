@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_family_id","contact_type","contact_value","is_act
 export function PatientFamilyContactListPage() {
   const { useList, remove } = usePatientFamilyContactResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PatientFamilyContactListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

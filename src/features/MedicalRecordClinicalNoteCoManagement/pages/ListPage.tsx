@@ -8,7 +8,6 @@ const COLUMNS = ["id","clinical_note_id","medical_department_id","notes","author
 export function ClinicalNoteCoManagementListPage() {
   const { useList, remove } = useClinicalNoteCoManagementResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ClinicalNoteCoManagementListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

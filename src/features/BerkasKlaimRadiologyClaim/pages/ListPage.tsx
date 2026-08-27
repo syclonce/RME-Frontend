@@ -8,7 +8,6 @@ const COLUMNS = ["id","claim_file_id","order_id","submitted_at","status","create
 export function RadiologyClaimListPage() {
   const { useList } = useRadiologyClaimResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function RadiologyClaimListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/berkas-klaim-radiology-claim/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

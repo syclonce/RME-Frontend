@@ -8,7 +8,6 @@ const COLUMNS = ["id","employee_id","contact_type","value","created_at"] as cons
 export function EmployeeContactListPage() {
   const { useList, remove } = useEmployeeContactResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EmployeeContactListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

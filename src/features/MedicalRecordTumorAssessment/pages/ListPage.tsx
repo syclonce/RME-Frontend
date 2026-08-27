@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","diagnosis_id","assessed_by","created_by","tumo
 export function TumorAssessmentListPage() {
   const { useList } = useTumorAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","performed_by","created_by","indication","stimu
 export function BaepInterventionProtocolListPage() {
   const { useList } = useBaepInterventionProtocolResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

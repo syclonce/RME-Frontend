@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","nerve_conduction_velocity","spont
 export function EmgExaminationListPage() {
   const { useList, remove } = useEmgExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EmgExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

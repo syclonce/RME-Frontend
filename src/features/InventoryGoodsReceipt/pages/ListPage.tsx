@@ -8,7 +8,6 @@ const COLUMNS = ["id","receipt_number","supplier_id","item_id","quantity","unit_
 export function GoodsReceiptListPage() {
   const { useList } = useGoodsReceiptResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","queue_number","visit_id","called_at","status","
 export function WardQueueListPage() {
   const { useList } = useWardQueueResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function WardQueueListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pendaftaran-ward-queue/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

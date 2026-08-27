@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","lymph_nodes","thyroid","jugular_venous_pressur
 export function NeckExaminationListPage() {
   const { useList, remove } = useNeckExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function NeckExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

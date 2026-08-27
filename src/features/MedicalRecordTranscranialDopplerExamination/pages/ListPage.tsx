@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","indication","vessel","mean_velocity_cm_s","pul
 export function TranscranialDopplerExaminationListPage() {
   const { useList, remove } = useTranscranialDopplerExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function TranscranialDopplerExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

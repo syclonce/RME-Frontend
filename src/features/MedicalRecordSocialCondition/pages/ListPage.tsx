@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","living_situation","occupation_status","financi
 export function SocialConditionListPage() {
   const { useList, remove } = useSocialConditionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function SocialConditionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

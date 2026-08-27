@@ -8,7 +8,6 @@ const COLUMNS = ["id","cancellation_number","goods_receipt_id","reason","cancell
 export function InventoryGoodsReceiptCancellationListPage() {
   const { useList } = useInventoryGoodsReceiptCancellationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

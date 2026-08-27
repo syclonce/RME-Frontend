@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_service_parameter_id","gender","min_age","max_age","m
 export function LabReferenceValueListPage() {
   const { useList, remove } = useLabReferenceValueResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LabReferenceValueListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

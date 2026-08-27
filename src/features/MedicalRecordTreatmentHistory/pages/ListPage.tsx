@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","created_by","treatment_description","facility_
 export function TreatmentHistoryListPage() {
   const { useList } = useTreatmentHistoryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

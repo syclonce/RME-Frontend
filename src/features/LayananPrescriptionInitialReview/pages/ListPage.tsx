@@ -8,7 +8,6 @@ const COLUMNS = ["id","prescription_id","reviewed_by","reviewed_at","is_appropri
 export function PrescriptionInitialReviewListPage() {
   const { useList, remove } = usePrescriptionInitialReviewResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PrescriptionInitialReviewListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

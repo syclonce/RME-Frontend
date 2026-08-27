@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","external_genitalia","discharge_characteristics
 export function GenitalExaminationListPage() {
   const { useList, remove } = useGenitalExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GenitalExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

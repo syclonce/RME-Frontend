@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","inspection","auscultation_bowel_sounds","palpa
 export function AbdomenExaminationListPage() {
   const { useList, remove } = useAbdomenExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function AbdomenExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

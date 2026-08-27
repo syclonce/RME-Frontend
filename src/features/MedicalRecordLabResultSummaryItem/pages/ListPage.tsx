@@ -8,7 +8,6 @@ const COLUMNS = ["id","summary_id","lab_test_name","result_value","unit","refere
 export function LabResultSummaryItemListPage() {
   const { useList } = useLabResultSummaryItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

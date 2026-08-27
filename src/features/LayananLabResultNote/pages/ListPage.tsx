@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_result_id","note","created_by","created_at"] as const
 export function LabResultNoteListPage() {
   const { useList, remove } = useLabResultNoteResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LabResultNoteListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

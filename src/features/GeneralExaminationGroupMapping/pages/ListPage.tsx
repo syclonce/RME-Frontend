@@ -8,7 +8,6 @@ const COLUMNS = ["id","examination_group_id","mapping_category","external_code",
 export function ExaminationGroupMappingListPage() {
   const { useList, remove } = useExaminationGroupMappingResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ExaminationGroupMappingListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","bed_id","patient_id","queue_number","status","created_at"
 export function BedQueueListPage() {
   const { useList } = useBedQueueResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function BedQueueListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pendaftaran-bed-queue/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

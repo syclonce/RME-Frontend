@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","foot_side","deformity","ulceration","capillary
 export function ToeExaminationListPage() {
   const { useList, remove } = useToeExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ToeExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

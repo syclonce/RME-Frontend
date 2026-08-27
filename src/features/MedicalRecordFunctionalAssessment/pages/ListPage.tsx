@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","assessment_date","mobility_status","adl_score"
 export function FunctionalAssessmentListPage() {
   const { useList, remove } = useFunctionalAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function FunctionalAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","procedure_type","colon_findings","rectum_findi
 export function LowerGiTractExaminationListPage() {
   const { useList, remove } = useLowerGiTractExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LowerGiTractExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

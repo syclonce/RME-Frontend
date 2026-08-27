@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","received_by","received_at","notes","created_at"
 export function ReceivingRecordListPage() {
   const { useList } = useReceivingRecordResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

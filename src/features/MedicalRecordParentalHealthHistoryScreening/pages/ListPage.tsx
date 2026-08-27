@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","screened_by","created_by","father_health_condi
 export function ParentalHealthHistoryScreeningListPage() {
   const { useList } = useParentalHealthHistoryScreeningResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

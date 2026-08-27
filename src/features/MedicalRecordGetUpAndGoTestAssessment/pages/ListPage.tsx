@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","time_seconds","assistive_device","fall_risk","
 export function GetUpAndGoTestAssessmentListPage() {
   const { useList, remove } = useGetUpAndGoTestAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GetUpAndGoTestAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

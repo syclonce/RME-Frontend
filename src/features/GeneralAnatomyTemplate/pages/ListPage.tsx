@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","description","is_active"] as const
 export function AnatomyTemplateListPage() {
   const { useList, remove } = useAnatomyTemplateResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function AnatomyTemplateListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

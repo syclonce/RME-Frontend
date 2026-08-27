@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","category","allergen","reaction","severity","
 export function AllergyListPage() {
   const { useList } = useAllergyResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function AllergyListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/medical-record-allergy/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

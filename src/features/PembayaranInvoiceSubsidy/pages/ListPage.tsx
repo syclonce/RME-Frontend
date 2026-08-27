@@ -8,7 +8,6 @@ const COLUMNS = ["id","invoice_id","subsidy_source","subsidy_amount","approved_b
 export function InvoiceSubsidyListPage() {
   const { useList, remove } = useInvoiceSubsidyResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InvoiceSubsidyListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

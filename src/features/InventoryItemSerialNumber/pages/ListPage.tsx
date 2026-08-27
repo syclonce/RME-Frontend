@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_item_stock_id","serial_number","expiry_date","create
 export function InventoryItemSerialNumberListPage() {
   const { useList, remove } = useInventoryItemSerialNumberResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InventoryItemSerialNumberListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

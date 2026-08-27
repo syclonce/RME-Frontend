@@ -8,7 +8,6 @@ const COLUMNS = ["id","icd_code","snomed_code","icd_description","snomed_descrip
 export function IcdSnomedCtMappingListPage() {
   const { useList, remove } = useIcdSnomedCtMappingResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function IcdSnomedCtMappingListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

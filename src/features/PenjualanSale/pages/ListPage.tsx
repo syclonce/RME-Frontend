@@ -8,7 +8,6 @@ const COLUMNS = ["id","sale_number","patient_id","sold_by","sold_at","total_amou
 export function SaleListPage() {
   const { useList } = useSaleResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function SaleListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/penjualan-sale/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

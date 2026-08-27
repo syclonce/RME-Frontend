@@ -8,7 +8,6 @@ const COLUMNS = ["id","stock_request_id","item_id","quantity","created_at"] as c
 export function InventoryStockRequestItemListPage() {
   const { useList } = useInventoryStockRequestItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

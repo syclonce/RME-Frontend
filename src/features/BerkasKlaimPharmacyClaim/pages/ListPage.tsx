@@ -8,7 +8,6 @@ const COLUMNS = ["id","claim_file_id","prescription_id","submitted_at","status",
 export function PharmacyClaimListPage() {
   const { useList } = usePharmacyClaimResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function PharmacyClaimListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/berkas-klaim-pharmacy-claim/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

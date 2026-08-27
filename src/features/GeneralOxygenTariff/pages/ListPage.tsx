@@ -8,7 +8,6 @@ const COLUMNS = ["id","oxygen_id","room_class_id","price","effective_date","is_a
 export function OxygenTariffListPage() {
   const { useList, remove } = useOxygenTariffResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function OxygenTariffListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

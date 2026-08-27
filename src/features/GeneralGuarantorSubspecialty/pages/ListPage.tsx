@@ -8,7 +8,6 @@ const COLUMNS = ["id","guarantor_id","subspecialty_name","is_covered","coverage_
 export function GuarantorSubspecialtyListPage() {
   const { useList, remove } = useGuarantorSubspecialtyResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GuarantorSubspecialtyListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

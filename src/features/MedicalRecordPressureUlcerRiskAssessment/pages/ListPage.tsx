@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","sensory_perception","moisture","activity","mob
 export function PressureUlcerRiskAssessmentListPage() {
   const { useList, remove } = usePressureUlcerRiskAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PressureUlcerRiskAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

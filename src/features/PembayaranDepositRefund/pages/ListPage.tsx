@@ -8,7 +8,6 @@ const COLUMNS = ["id","deposit_id","refunded_amount","refunded_at","refunded_by"
 export function DepositRefundListPage() {
   const { useList } = useDepositRefundResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

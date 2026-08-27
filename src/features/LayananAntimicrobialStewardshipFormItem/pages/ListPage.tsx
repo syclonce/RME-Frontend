@@ -8,7 +8,6 @@ const COLUMNS = ["id","antimicrobial_stewardship_form_id","item_id","dose","rout
 export function AntimicrobialStewardshipFormItemListPage() {
   const { useList } = useAntimicrobialStewardshipFormItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

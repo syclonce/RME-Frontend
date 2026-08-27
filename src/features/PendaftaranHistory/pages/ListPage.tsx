@@ -8,7 +8,6 @@ const COLUMNS = ["id","registration_id","old_status","new_status","changed_by","
 export function PendaftaranHistoryListPage() {
   const { useList } = usePendaftaranHistoryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

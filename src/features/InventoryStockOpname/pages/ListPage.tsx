@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","opname_date","conducted_by","status","notes","c
 export function InventoryStockOpnameListPage() {
   const { useList } = useInventoryStockOpnameResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function InventoryStockOpnameListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/inventory-stock-opname/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

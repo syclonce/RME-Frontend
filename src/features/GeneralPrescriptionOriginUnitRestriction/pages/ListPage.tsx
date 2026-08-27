@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","item_id","is_allowed","note","is_active","creat
 export function PrescriptionOriginUnitRestrictionListPage() {
   const { useList, remove } = usePrescriptionOriginUnitRestrictionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PrescriptionOriginUnitRestrictionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

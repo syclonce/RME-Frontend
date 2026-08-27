@@ -8,7 +8,6 @@ const COLUMNS = ["id","package_code","name","pharmacy_service_room_id","category
 export function InventoryPharmacyPackageListPage() {
   const { useList, remove } = useInventoryPharmacyPackageResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InventoryPharmacyPackageListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

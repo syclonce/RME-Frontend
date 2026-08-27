@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","ward_id","handed_over_by","received_by","hande
 export function ServiceHandoverListPage() {
   const { useList } = useServiceHandoverResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function ServiceHandoverListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pendaftaran-service-handover/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

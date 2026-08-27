@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","locked_by","reason","locked_at","unlocked_at
 export function PatientAccessLockListPage() {
   const { useList, remove } = usePatientAccessLockResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PatientAccessLockListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

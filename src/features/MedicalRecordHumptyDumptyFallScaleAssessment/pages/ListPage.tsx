@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","assessed_by","created_by","age_score","gender_
 export function HumptyDumptyFallScaleAssessmentListPage() {
   const { useList } = useHumptyDumptyFallScaleAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

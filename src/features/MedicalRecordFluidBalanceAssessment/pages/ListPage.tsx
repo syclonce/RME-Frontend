@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","shift","assessed_at","total_intake_ml","total_
 export function FluidBalanceAssessmentListPage() {
   const { useList, remove } = useFluidBalanceAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function FluidBalanceAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

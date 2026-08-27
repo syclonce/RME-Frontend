@@ -8,7 +8,6 @@ const COLUMNS = ["id","claim_file_id","checklist_item","is_complete","checked_by
 export function BerkasKlaimClaimCompletenessListPage() {
   const { useList, remove } = useBerkasKlaimClaimCompletenessResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BerkasKlaimClaimCompletenessListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

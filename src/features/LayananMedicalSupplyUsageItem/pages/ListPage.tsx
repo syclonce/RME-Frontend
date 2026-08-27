@@ -8,7 +8,6 @@ const COLUMNS = ["id","medical_supply_usage_id","item_id","quantity","unit","cre
 export function MedicalSupplyUsageItemListPage() {
   const { useList } = useMedicalSupplyUsageItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

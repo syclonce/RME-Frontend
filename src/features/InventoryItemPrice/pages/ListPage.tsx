@@ -8,7 +8,6 @@ const COLUMNS = ["id","item_id","price","effective_date","is_active","created_at
 export function InventoryItemPriceListPage() {
   const { useList } = useInventoryItemPriceResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function InventoryItemPriceListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/inventory-item-price/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

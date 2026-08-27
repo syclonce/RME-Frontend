@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","assessor_id","criteria_notes","score","risk_le
 export function EpfraAssessmentListPage() {
   const { useList, remove } = useEpfraAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EpfraAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

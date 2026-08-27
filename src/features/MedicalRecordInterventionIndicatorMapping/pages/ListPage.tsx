@@ -8,7 +8,6 @@ const COLUMNS = ["id","intervention_code","intervention_name","indicator_code","
 export function InterventionIndicatorMappingListPage() {
   const { useList, remove } = useInterventionIndicatorMappingResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InterventionIndicatorMappingListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","created_by","previous_tb_treatment","treatment
 export function TbDiseaseHistoryListPage() {
   const { useList } = useTbDiseaseHistoryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

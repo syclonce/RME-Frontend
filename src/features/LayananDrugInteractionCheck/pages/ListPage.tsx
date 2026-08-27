@@ -8,7 +8,6 @@ const COLUMNS = ["id","item_id_a","item_id_b","severity","clinical_note"] as con
 export function DrugInteractionRuleListPage() {
   const { useList, remove } = useDrugInteractionRuleResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function DrugInteractionRuleListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

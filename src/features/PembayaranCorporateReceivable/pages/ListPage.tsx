@@ -8,7 +8,6 @@ const COLUMNS = ["id","invoice_id","guarantor_id","amount","due_date","status","
 export function CorporateReceivableListPage() {
   const { useList } = useCorporateReceivableResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function CorporateReceivableListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pembayaran-corporate-receivable/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

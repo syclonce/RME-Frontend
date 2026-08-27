@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","contact_person","phone","email","address","
 export function SupplierListPage() {
   const { useList, remove } = useSupplierResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function SupplierListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

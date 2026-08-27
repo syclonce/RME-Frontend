@@ -8,7 +8,6 @@ const COLUMNS = ["id","return_number","supplier_id","returned_by","returned_at",
 export function InventoryGoodsReturnListPage() {
   const { useList, remove } = useInventoryGoodsReturnResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InventoryGoodsReturnListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","inspection","palpation","sphincter_tone","rect
 export function AnalExaminationListPage() {
   const { useList, remove } = useAnalExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function AnalExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

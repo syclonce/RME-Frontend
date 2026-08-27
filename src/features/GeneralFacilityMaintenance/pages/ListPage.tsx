@@ -1,15 +1,32 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { apiClient } from '@/api/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useMaintenanceAssetResource } from '../api'
 
 const COLUMNS = ["id","asset_code","asset_name","location","ward_id","status"] as const
 
+const WF_ACTIONS = [{"label":"Assign","verb":"post","prefix":"work-orders","action":"assign"},{"label":"Complete","verb":"post","prefix":"work-orders","action":"complete"}] as const
+
 export function MaintenanceAssetListPage() {
   const { useList, remove } = useMaintenanceAssetResource()
   const { data, isLoading } = useList()
+  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+
+  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
+      queryClient.invalidateQueries({ queryKey: ['/maintenance-assets'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
 
   return (
     <div className="p-4">
@@ -46,6 +63,24 @@ export function MaintenanceAssetListPage() {
                     }}
                   >
                     Hapus
+                  </Button>
+                                    <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Assign'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
+                  >
+                    Assign
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Complete'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
+                  >
+                    Complete
                   </Button>
                 </div>
               </TableCell>

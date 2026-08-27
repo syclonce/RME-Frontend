@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","allergen","wheal_size_mm","flare_size_mm","res
 export function SkinPrickTestExaminationListPage() {
   const { useList, remove } = useSkinPrickTestExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function SkinPrickTestExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

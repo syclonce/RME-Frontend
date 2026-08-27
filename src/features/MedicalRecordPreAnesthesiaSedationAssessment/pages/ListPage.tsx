@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","doctor_id","created_by","asa_classification","
 export function PreAnesthesiaSedationAssessmentListPage() {
   const { useList } = usePreAnesthesiaSedationAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

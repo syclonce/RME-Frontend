@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_norm","card_type","card_number"] as const
 export function KapListPage() {
   const { useList, remove } = useKapResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function KapListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

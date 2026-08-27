@@ -8,7 +8,6 @@ const COLUMNS = ["id","pathology_claim_id","exam_name","amount","created_at"] as
 export function PathologyClaimItemListPage() {
   const { useList } = usePathologyClaimItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

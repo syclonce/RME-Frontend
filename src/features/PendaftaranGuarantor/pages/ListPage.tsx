@@ -8,7 +8,6 @@ const COLUMNS = ["id","registration_id","payer_type","member_number","room_class
 export function GuarantorListPage() {
   const { useList, remove } = useGuarantorResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GuarantorListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","allergen_name","reaction_grade","
 export function InhalantAllergenExaminationListPage() {
   const { useList, remove } = useInhalantAllergenExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InhalantAllergenExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

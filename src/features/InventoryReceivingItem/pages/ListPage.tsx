@@ -8,7 +8,6 @@ const COLUMNS = ["id","receiving_record_id","item_id","quantity","unit_price","c
 export function ReceivingItemListPage() {
   const { useList } = useReceivingItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

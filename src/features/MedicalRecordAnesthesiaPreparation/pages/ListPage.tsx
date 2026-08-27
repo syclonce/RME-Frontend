@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","prepared_by","created_by","fasting_hours","all
 export function AnesthesiaPreparationListPage() {
   const { useList } = useAnesthesiaPreparationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

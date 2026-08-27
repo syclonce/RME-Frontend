@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","decayed_teeth_count","missing_teeth_count","fi
 export function DentalExaminationListPage() {
   const { useList, remove } = useDentalExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function DentalExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

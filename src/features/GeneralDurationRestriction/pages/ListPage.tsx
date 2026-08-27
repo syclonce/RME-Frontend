@@ -8,7 +8,6 @@ const COLUMNS = ["id","antibiotic_name","max_days","min_days","requires_reevalua
 export function DurationRestrictionListPage() {
   const { useList, remove } = useDurationRestrictionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function DurationRestrictionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -1,15 +1,32 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { apiClient } from '@/api/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useBloodBagResource } from '../api'
 
 const COLUMNS = ["id","bag_number","blood_type_id","volume_ml","collected_at","expires_at","status","created_at","updated_at"] as const
 
+const WF_ACTIONS = [{"label":"Crossmatch","verb":"post","prefix":"blood-bags","action":"crossmatch"},{"label":"Transfuse","verb":"post","prefix":"blood-bags","action":"transfuse"},{"label":"Release","verb":"post","prefix":"crossmatch-tests","action":"release"}] as const
+
 export function BloodBagListPage() {
   const { useList, remove } = useBloodBagResource()
   const { data, isLoading } = useList()
+  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+
+  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
+      queryClient.invalidateQueries({ queryKey: ['/blood-bags'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
 
   return (
     <div className="p-4">
@@ -46,6 +63,33 @@ export function BloodBagListPage() {
                     }}
                   >
                     Hapus
+                  </Button>
+                                    <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Crossmatch'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
+                  >
+                    Crossmatch
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Transfuse'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
+                  >
+                    Transfuse
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Release'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[2], row.id)}
+                  >
+                    Release
                   </Button>
                 </div>
               </TableCell>

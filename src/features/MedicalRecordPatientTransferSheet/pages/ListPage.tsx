@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","from_ward_id","to_ward_id","trans
 export function PatientTransferSheetListPage() {
   const { useList, remove } = usePatientTransferSheetResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PatientTransferSheetListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

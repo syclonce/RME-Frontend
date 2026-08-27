@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","visit_id","medical_department_id","scheduled
 export function ControlScheduleListPage() {
   const { useList, remove } = useControlScheduleResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ControlScheduleListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","procedure_name","therapist_id","diagnosis_summ
 export function RehabilitationProcedureExaminationListPage() {
   const { useList, remove } = useRehabilitationProcedureExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RehabilitationProcedureExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

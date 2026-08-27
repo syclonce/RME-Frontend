@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","protocol_name","prescribed_by","started_at","e
 export function TreatmentProtocolListPage() {
   const { useList, remove } = useTreatmentProtocolResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function TreatmentProtocolListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

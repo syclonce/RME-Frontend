@@ -8,7 +8,6 @@ const COLUMNS = ["id","diagnosis_id","indicator_code","indicator_name","target_s
 export function DiagnosisIndicatorMappingListPage() {
   const { useList, remove } = useDiagnosisIndicatorMappingResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function DiagnosisIndicatorMappingListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

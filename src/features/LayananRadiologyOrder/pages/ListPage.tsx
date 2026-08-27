@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","ordering_doctor_id","ordered_at",
 export function RadiologyOrderListPage() {
   const { useList } = useRadiologyOrderResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function RadiologyOrderListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-radiology-order/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

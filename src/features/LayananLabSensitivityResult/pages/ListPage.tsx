@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_order_id","organism","antibiotic_name","sensitivity_r
 export function LabSensitivityResultListPage() {
   const { useList } = useLabSensitivityResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

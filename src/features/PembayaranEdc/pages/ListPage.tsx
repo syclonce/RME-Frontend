@@ -8,7 +8,6 @@ const COLUMNS = ["id","payment_id","edc_reference_number","bank_name","card_type
 export function EdcListPage() {
   const { useList } = useEdcResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function EdcListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pembayaran-edc/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

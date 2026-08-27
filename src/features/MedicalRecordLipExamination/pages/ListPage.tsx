@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","color","symmetry","lesions","moisture","notes"
 export function LipExaminationListPage() {
   const { useList, remove } = useLipExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LipExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

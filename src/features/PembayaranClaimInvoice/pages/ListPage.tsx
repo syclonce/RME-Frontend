@@ -8,7 +8,6 @@ const COLUMNS = ["id","claim_number","invoice_id","guarantor_id","claim_amount",
 export function ClaimInvoiceListPage() {
   const { useList, remove } = useClaimInvoiceResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ClaimInvoiceListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

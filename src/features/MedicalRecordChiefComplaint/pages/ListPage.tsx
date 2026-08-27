@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","complaint","onset","duration","recorded_by","r
 export function ChiefComplaintListPage() {
   const { useList, remove } = useChiefComplaintResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ChiefComplaintListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

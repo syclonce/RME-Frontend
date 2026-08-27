@@ -8,7 +8,6 @@ const COLUMNS = ["id","radiology_order_id","examination_name","body_part","price
 export function RadiologyOrderItemListPage() {
   const { useList } = useRadiologyOrderItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

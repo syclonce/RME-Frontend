@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","side","muscle_strength","range_of_motion","def
 export function UpperArmExaminationListPage() {
   const { useList, remove } = useUpperArmExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function UpperArmExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

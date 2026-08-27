@@ -8,7 +8,6 @@ const COLUMNS = ["id","bank_name","account_number","account_holder","account_typ
 export function BankAccountListPage() {
   const { useList, remove } = useBankAccountResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BankAccountListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

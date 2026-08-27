@@ -8,7 +8,6 @@ const COLUMNS = ["id","from_ward_id","to_ward_id","shipped_by","shipped_at","sta
 export function ShipmentListPage() {
   const { useList } = useShipmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function ShipmentListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/inventory-shipment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

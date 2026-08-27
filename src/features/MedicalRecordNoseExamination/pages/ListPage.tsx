@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","deformity","septum_deviation","turbinate_hyper
 export function NoseExaminationListPage() {
   const { useList, remove } = useNoseExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function NoseExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

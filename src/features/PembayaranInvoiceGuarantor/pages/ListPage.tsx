@@ -8,7 +8,6 @@ const COLUMNS = ["id","invoice_id","guarantor_id","sequence","room_class_id","co
 export function InvoiceGuarantorListPage() {
   const { useList, remove } = useInvoiceGuarantorResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InvoiceGuarantorListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

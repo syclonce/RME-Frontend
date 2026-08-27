@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","hard_palate","soft_palate","uvula_position","c
 export function PalateExaminationListPage() {
   const { useList, remove } = usePalateExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PalateExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

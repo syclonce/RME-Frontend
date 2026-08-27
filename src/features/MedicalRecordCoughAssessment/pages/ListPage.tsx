@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","has_cough","duration_weeks","cough_type","othe
 export function CoughAssessmentListPage() {
   const { useList, remove } = useCoughAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function CoughAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

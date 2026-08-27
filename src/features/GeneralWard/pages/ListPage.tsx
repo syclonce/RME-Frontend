@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","type_id","visit_type_id","allows_request","is_acti
 export function WardListPage() {
   const { useList, remove } = useWardResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function WardListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

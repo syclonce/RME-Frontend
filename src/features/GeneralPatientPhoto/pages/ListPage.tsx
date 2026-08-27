@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","file_path","taken_at"] as const
 export function GeneralPatientPhotoListPage() {
   const { useList, remove } = useGeneralPatientPhotoResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GeneralPatientPhotoListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

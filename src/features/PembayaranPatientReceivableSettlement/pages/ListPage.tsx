@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_receivable_id","paid_amount","paid_at","received_
 export function PatientReceivableSettlementListPage() {
   const { useList } = usePatientReceivableSettlementResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

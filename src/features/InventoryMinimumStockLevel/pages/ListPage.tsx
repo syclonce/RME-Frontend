@@ -8,7 +8,6 @@ const COLUMNS = ["id","item_id","ward_id","minimum_quantity","created_at","updat
 export function InventoryMinimumStockLevelListPage() {
   const { useList, remove } = useInventoryMinimumStockLevelResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InventoryMinimumStockLevelListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

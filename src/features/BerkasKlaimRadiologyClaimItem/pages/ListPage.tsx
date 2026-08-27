@@ -8,7 +8,6 @@ const COLUMNS = ["id","radiology_claim_id","exam_name","amount","created_at"] as
 export function RadiologyClaimItemListPage() {
   const { useList } = useRadiologyClaimItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

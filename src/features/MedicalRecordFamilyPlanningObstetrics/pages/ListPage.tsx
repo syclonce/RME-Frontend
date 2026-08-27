@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","contraceptive_method","installati
 export function FamilyPlanningObstetricsListPage() {
   const { useList, remove } = useFamilyPlanningObstetricsResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function FamilyPlanningObstetricsListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

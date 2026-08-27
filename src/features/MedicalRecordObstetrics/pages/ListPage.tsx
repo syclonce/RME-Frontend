@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","gravida","para","abortus","gestat
 export function ObstetricsListPage() {
   const { useList, remove } = useObstetricsResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ObstetricsListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

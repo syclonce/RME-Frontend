@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","code","is_active"] as const
 export function RoomClassListPage() {
   const { useList, remove } = useRoomClassResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RoomClassListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

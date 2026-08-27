@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","borrower_name","borrower_unit","purpose","lo
 export function RecordFileLoanListPage() {
   const { useList, remove } = useRecordFileLoanResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RecordFileLoanListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

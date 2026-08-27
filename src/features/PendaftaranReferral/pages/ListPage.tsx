@@ -8,7 +8,6 @@ const COLUMNS = ["id","referral_number","patient_id","direction","facility_name"
 export function ReferralListPage() {
   const { useList } = useReferralResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function ReferralListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pendaftaran-referral/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

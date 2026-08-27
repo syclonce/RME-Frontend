@@ -8,7 +8,6 @@ const COLUMNS = ["id","item_id","guarantor_type","max_quantity_per_month","max_d
 export function MedicationServiceLimitListPage() {
   const { useList, remove } = useMedicationServiceLimitResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function MedicationServiceLimitListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

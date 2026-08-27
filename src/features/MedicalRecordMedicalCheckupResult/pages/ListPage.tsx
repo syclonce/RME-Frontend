@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","visit_id","checkup_date","category","summary
 export function MedicalCheckupResultListPage() {
   const { useList, remove } = useMedicalCheckupResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function MedicalCheckupResultListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","employee_id","cashier_code","shift","is_active"] as const
 export function CashierListPage() {
   const { useList, remove } = useCashierResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function CashierListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","registration_id","invoice_id","invoice_category","amount"
 export function RegistrationInvoiceListPage() {
   const { useList, remove } = useRegistrationInvoiceResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RegistrationInvoiceListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

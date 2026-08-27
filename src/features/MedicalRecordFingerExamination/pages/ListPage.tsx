@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","hand_side","clubbing","cyanosis","capillary_re
 export function FingerExaminationListPage() {
   const { useList, remove } = useFingerExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function FingerExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

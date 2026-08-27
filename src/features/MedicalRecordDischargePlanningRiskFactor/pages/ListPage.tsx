@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","risk_factor","score","assessed_by","assessed_a
 export function DischargePlanningRiskFactorListPage() {
   const { useList, remove } = useDischargePlanningRiskFactorResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function DischargePlanningRiskFactorListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","description","is_active"] as const
 export function PenjaminRSClaimDriverListPage() {
   const { useList, remove } = usePenjaminRSClaimDriverResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PenjaminRSClaimDriverListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

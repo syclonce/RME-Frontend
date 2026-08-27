@@ -8,7 +8,6 @@ const COLUMNS = [] as const
 export function PatientTransferListPage() {
   const { useList } = usePatientTransferResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

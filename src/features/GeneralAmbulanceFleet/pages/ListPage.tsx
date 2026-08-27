@@ -1,15 +1,32 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { apiClient } from '@/api/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useAmbulanceResource } from '../api'
 
 const COLUMNS = ["id","vehicle_code","plate_number"] as const
 
+const WF_ACTIONS = [{"label":"Complete","verb":"post","prefix":"ambulance-trips","action":"complete"}] as const
+
 export function AmbulanceListPage() {
   const { useList } = useAmbulanceResource()
   const { data, isLoading } = useList()
+  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+
+  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
+      queryClient.invalidateQueries({ queryKey: ['/ambulances'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
 
   return (
     <div className="p-4">
@@ -38,6 +55,15 @@ export function AmbulanceListPage() {
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/general-ambulance-fleet/${row.id}/edit`} className="text-primary underline">Ubah</Link>
                   
+                                    <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Complete'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
+                  >
+                    Complete
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>

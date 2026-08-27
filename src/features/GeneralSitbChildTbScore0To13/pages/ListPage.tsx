@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","code","is_active"] as const
 export function SitbChildTbScore0To13ListPage() {
   const { useList, remove } = useSitbChildTbScore0To13Resource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function SitbChildTbScore0To13ListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

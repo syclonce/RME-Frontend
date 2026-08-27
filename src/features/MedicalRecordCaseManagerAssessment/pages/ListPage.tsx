@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","case_manager_id","screening_criteria","risk_le
 export function CaseManagerAssessmentListPage() {
   const { useList, remove } = useCaseManagerAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function CaseManagerAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

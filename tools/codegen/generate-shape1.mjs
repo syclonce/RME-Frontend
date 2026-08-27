@@ -75,6 +75,10 @@ function humanizeEnumValue(val) {
   return val.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
+function humanizeWorkflowAction(action) {
+  return action.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 function isEnumField(field) {
   return field.enumValues && field.enumValues.length >= 2 && field.enumValues.every((v) => v !== '')
 }
@@ -122,6 +126,12 @@ function generateModule(entry) {
   const hasDestroy = (entry.route.apiResources ?? []).some((r) => r.chain.includes("'destroy'") || r.chain === '')
   const hasUpdate = (entry.route.apiResources ?? []).some((r) => r.chain.includes("'update'") || r.chain === '')
 
+  // Workflow verbs: POST/PATCH custom yang mentransisi status (bukan CRUD standar)
+  const workflowVerbs = (entry.route.verbs ?? []).filter(
+    (v) => (v.verb === 'post' || v.verb === 'patch') && !['store', 'update', 'destroy'].includes(v.verb),
+  )
+  const hasWorkflow = workflowVerbs.length > 0
+
   const typeFields = fields
     .map((f) => `  ${f.name}${f.nullable ? '?' : ''}: ${tsType(f)} | null`)
     .join('\n')
@@ -148,7 +158,17 @@ export function use${entity}Resource() {
 }
 `
 
-  const actionsHeader = (hasUpdate || hasDestroy) ? `\n            <TableHead>Aksi</TableHead>` : ''
+  // Workflow actions (POST/PATCH custom verbs untuk transisi status)
+  const wfActionsJson = JSON.stringify(workflowVerbs.map((v) => {
+    const segments = v.uri.split('/')
+    const action = segments.pop()
+    // Hanya segmen non-{param} — resource prefix tanpa ID param
+    const prefix = segments.filter((s) => !s.startsWith('{') && !s.endsWith('}')).join('/')
+    return { label: humanizeWorkflowAction(action), verb: v.verb, prefix, action }
+  }))
+
+  const hasAnyAction = hasUpdate || hasDestroy || hasWorkflow
+  const actionsHeader = hasAnyAction ? `\n            <TableHead>Aksi</TableHead>` : ''
   const editLink = hasUpdate
     ? `<Link to={\`/modul/${slug}/\${row.id}/edit\`} className="text-primary underline">Ubah</Link>`
     : ''
@@ -164,29 +184,61 @@ export function use${entity}Resource() {
                     Hapus
                   </Button>`
     : ''
-  const actionsCell = (hasUpdate || hasDestroy)
+  const wfButtons = hasWorkflow
+    ? JSON.parse(wfActionsJson).map((wf, i) =>
+        `                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === '${wf.label}'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[${i}], row.id)}
+                  >
+                    ${wf.label}
+                  </Button>`,
+      ).join('\n')
+    : ''
+  const actionsCell = hasAnyAction
     ? `\n              <TableCell>
                 <div className="flex items-center gap-2">
                   ${editLink}
                   ${deleteButton}
+                  ${wfButtons}
                 </div>
               </TableCell>`
     : ''
 
-  const listPageTsx = `import { Link } from 'react-router-dom'
+  const wfImport = hasWorkflow ? `import { useState } from 'react'\n` : ''
+  const wfApiImport = hasWorkflow ? `import { apiClient } from '@/api/client'\nimport { useQueryClient } from '@tanstack/react-query'\n` : ''
+  const wfActionsConst = hasWorkflow ? `\nconst WF_ACTIONS = ${wfActionsJson} as const\n` : ''
+  const wfHook = hasWorkflow ? `  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
+
+` : ''
+  const wfHandler = hasWorkflow ? `  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: \`/\${wf.prefix}/\${id}/\${wf.action}\` })
+      queryClient.invalidateQueries({ queryKey: ['/${uri}'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
+
+` : ''
+
+  const listPageTsx = `${wfImport}import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { use${entity}Resource } from '../api'
+${wfApiImport}import { use${entity}Resource } from '../api'
 
 const COLUMNS = ${JSON.stringify(columns)} as const
-
+${wfActionsConst}
 export function ${entity}ListPage() {
   const { useList${hasDestroy ? ', remove' : ''} } = use${entity}Resource()
   const { data, isLoading } = useList()
+${wfHook}  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  return (
+${wfHandler}  return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-lg font-semibold">${toLabel(entity)}</h1>

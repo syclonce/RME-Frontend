@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","distribution","texture","color","hair_loss","s
 export function HairExaminationListPage() {
   const { useList, remove } = useHairExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function HairExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

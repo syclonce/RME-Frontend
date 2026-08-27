@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","heart_rate_bpm","rhythm","p_wave"
 export function EkgExaminationListPage() {
   const { useList, remove } = useEkgExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EkgExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","employee_id","license_type","license_number","issued_at",
 export function PracticeLicenseListPage() {
   const { useList } = usePracticeLicenseResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function PracticeLicenseListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/pegawai-practice-license/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

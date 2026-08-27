@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","joint","range_of_motion","swelling","tendernes
 export function LegJointExaminationListPage() {
   const { useList, remove } = useLegJointExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LegJointExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

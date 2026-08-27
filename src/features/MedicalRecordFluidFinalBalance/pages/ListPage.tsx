@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","period_date","total_intake_ml","total_output_m
 export function FluidFinalBalanceListPage() {
   const { useList, remove } = useFluidFinalBalanceResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function FluidFinalBalanceListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

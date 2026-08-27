@@ -8,7 +8,6 @@ const COLUMNS = ["id","sale_id","returned_at","reason","refund_amount","created_
 export function SaleReturnListPage() {
   const { useList } = useSaleReturnResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

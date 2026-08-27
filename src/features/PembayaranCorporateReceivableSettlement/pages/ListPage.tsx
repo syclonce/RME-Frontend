@@ -8,7 +8,6 @@ const COLUMNS = ["id","corporate_receivable_id","paid_amount","paid_at","receive
 export function CorporateReceivableSettlementListPage() {
   const { useList } = useCorporateReceivableSettlementResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

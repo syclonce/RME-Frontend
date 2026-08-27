@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","discharged_at","discharge_method"
 export function PatientDischargeRecordListPage() {
   const { useList } = usePatientDischargeRecordResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function PatientDischargeRecordListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-patient-discharge-record/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

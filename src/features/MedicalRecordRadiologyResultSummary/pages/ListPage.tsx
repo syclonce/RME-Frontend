@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","summarized_by","created_by","overall_impressio
 export function RadiologyResultSummaryListPage() {
   const { useList } = useRadiologyResultSummaryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

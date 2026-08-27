@@ -8,7 +8,6 @@ const COLUMNS = ["id","payment_number","invoice_id","payment_method","amount","a
 export function PaymentListPage() {
   const { useList } = usePaymentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

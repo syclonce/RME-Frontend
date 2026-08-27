@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","administered_by","created_by","drug_name","dos
 export function MedicationAdministrationHistoryListPage() {
   const { useList } = useMedicationAdministrationHistoryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

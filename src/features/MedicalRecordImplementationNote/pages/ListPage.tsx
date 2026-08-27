@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","note_type","content","recorded_by","recorded_a
 export function ImplementationNoteListPage() {
   const { useList, remove } = useImplementationNoteResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ImplementationNoteListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

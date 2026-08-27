@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","lab_type","is_active"] as const
 export function GeneralLaboratoryRoomListPage() {
   const { useList, remove } = useGeneralLaboratoryRoomResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GeneralLaboratoryRoomListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

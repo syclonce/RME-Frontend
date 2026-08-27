@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","category","description","is_active","create
 export function ImplementationChecklistItemListPage() {
   const { useList, remove } = useImplementationChecklistItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ImplementationChecklistItemListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

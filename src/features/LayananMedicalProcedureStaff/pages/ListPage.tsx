@@ -8,7 +8,6 @@ const COLUMNS = ["id","medical_procedure_id","employee_id","role","notes","creat
 export function MedicalProcedureStaffListPage() {
   const { useList, remove } = useMedicalProcedureStaffResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function MedicalProcedureStaffListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

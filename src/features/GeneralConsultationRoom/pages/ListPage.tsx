@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","consultation_type","is_active"] as const
 export function GeneralConsultationRoomListPage() {
   const { useList, remove } = useGeneralConsultationRoomResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GeneralConsultationRoomListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

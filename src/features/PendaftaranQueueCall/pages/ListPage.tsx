@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_queue_id","called_at","called_by","counter","created
 export function QueueCallListPage() {
   const { useList } = useQueueCallResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

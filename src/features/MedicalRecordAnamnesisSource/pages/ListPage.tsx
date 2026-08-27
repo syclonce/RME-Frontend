@@ -8,7 +8,6 @@ const COLUMNS = ["id","anamnesis_id","source_type","source_name","relationship",
 export function AnamnesisSourceListPage() {
   const { useList, remove } = useAnamnesisSourceResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function AnamnesisSourceListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

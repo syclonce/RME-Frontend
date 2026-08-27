@@ -8,7 +8,6 @@ const COLUMNS = ["id","information_id","item_name","is_explained","is_understood
 export function ProcedureConsentInformationItemListPage() {
   const { useList } = useProcedureConsentInformationItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

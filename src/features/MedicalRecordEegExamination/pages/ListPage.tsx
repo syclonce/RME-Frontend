@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","background_rhythm","epileptiform_
 export function EegExaminationListPage() {
   const { useList, remove } = useEegExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EegExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

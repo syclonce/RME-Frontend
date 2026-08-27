@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_guardian_id","card_type","card_number","issued_da
 export function PatientGuardianIdentityCardListPage() {
   const { useList, remove } = usePatientGuardianIdentityCardResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PatientGuardianIdentityCardListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

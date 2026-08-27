@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","village_id","is_active","created_at"] as const
 export function BirthplaceListPage() {
   const { useList, remove } = useBirthplaceResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BirthplaceListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

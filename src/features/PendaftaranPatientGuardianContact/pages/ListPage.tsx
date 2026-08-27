@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_guardian_id","contact_type","contact_value","is_p
 export function PatientGuardianContactListPage() {
   const { useList, remove } = usePatientGuardianContactResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PatientGuardianContactListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

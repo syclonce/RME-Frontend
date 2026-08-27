@@ -8,7 +8,6 @@ const COLUMNS = ["id","baep_protocol_id","muscle_strength_score","spasticity_lev
 export function BaepMotorDetailListPage() {
   const { useList } = useBaepMotorDetailResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

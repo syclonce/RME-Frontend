@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","side","muscle_strength","circumference_cm","sw
 export function ThighExaminationListPage() {
   const { useList, remove } = useThighExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ThighExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

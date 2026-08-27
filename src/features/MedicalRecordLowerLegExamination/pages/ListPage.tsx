@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","side","muscle_strength","edema","pulses","skin
 export function LowerLegExaminationListPage() {
   const { useList, remove } = useLowerLegExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function LowerLegExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

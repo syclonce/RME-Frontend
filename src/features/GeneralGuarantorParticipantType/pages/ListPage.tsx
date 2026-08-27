@@ -8,7 +8,6 @@ const COLUMNS = ["id","name","code","payer_type","requires_verification","is_act
 export function GuarantorParticipantTypeListPage() {
   const { useList, remove } = useGuarantorParticipantTypeResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GuarantorParticipantTypeListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

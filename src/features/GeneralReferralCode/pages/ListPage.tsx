@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","category","is_active","created_at"] as cons
 export function ReferralCodeListPage() {
   const { useList, remove } = useReferralCodeResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ReferralCodeListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

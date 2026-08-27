@@ -1,15 +1,32 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { apiClient } from '@/api/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useImagingOrderResource } from '../api'
 
 const COLUMNS = ["id","visit_id","modality","body_part","ordered_by","ordered_at","scheduled_at","status","created_at"] as const
 
+const WF_ACTIONS = [{"label":"Schedule","verb":"post","prefix":"imaging-orders","action":"schedule"},{"label":"Cancel","verb":"post","prefix":"imaging-orders","action":"cancel"}] as const
+
 export function ImagingOrderListPage() {
   const { useList } = useImagingOrderResource()
   const { data, isLoading } = useList()
+  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+
+  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
+      queryClient.invalidateQueries({ queryKey: ['/imaging-orders'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
 
   return (
     <div className="p-4">
@@ -38,6 +55,24 @@ export function ImagingOrderListPage() {
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-imaging-order/${row.id}/edit`} className="text-primary underline">Ubah</Link>
                   
+                                    <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Schedule'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
+                  >
+                    Schedule
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Cancel'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>

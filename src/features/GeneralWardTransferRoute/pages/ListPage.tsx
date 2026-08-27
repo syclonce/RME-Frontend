@@ -8,7 +8,6 @@ const COLUMNS = ["id","from_ward_id","to_ward_id","requires_approval","is_active
 export function WardTransferRouteListPage() {
   const { useList, remove } = useWardTransferRouteResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function WardTransferRouteListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

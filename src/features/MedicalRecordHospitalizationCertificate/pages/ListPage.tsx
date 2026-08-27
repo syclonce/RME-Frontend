@@ -8,7 +8,6 @@ const COLUMNS = ["id","letter_number","patient_id","visit_id","doctor_id","issue
 export function HospitalizationCertificateListPage() {
   const { useList, remove } = useHospitalizationCertificateResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function HospitalizationCertificateListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

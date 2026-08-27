@@ -8,7 +8,6 @@ const COLUMNS = ["id","transcranial_doppler_examination_id","window_site","signa
 export function TranscranialDopplerWindowListPage() {
   const { useList, remove } = useTranscranialDopplerWindowResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function TranscranialDopplerWindowListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

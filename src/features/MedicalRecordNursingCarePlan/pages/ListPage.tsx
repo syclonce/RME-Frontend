@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","assessment","goal","intervention_plan","target
 export function NursingCarePlanListPage() {
   const { useList, remove } = useNursingCarePlanResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function NursingCarePlanListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

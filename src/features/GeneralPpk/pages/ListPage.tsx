@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","bpjs_code","type","ownership","jpk","name","class"
 export function PpkListPage() {
   const { useList, remove } = usePpkResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PpkListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

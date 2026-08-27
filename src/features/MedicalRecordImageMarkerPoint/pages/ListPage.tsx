@@ -8,7 +8,6 @@ const COLUMNS = ["id","image_marker_id","x_coordinate","y_coordinate","label","d
 export function ImageMarkerPointListPage() {
   const { useList, remove } = useImageMarkerPointResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ImageMarkerPointListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","level","chief_complaint","assessed_by","assess
 export function TriageListPage() {
   const { useList } = useTriageResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

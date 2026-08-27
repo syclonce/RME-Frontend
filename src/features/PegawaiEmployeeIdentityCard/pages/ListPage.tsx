@@ -8,7 +8,6 @@ const COLUMNS = ["id","employee_id","id_type","id_number","issued_at","created_a
 export function EmployeeIdentityCardListPage() {
   const { useList, remove } = useEmployeeIdentityCardResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EmployeeIdentityCardListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

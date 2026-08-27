@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","created_by","symptom_onset_date","progression_
 export function IllnessProgressionHistoryListPage() {
   const { useList } = useIllnessProgressionHistoryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

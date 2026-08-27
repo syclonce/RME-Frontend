@@ -8,7 +8,6 @@ const COLUMNS = ["id","invoice_id","package_id","quantity","unit_price","subtota
 export function PackageInvoiceItemListPage() {
   const { useList, remove } = usePackageInvoiceItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PackageInvoiceItemListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

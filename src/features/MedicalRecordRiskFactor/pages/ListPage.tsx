@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","risk_category","description","risk_level","ide
 export function RiskFactorListPage() {
   const { useList, remove } = useRiskFactorResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RiskFactorListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

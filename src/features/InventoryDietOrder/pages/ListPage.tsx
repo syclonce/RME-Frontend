@@ -1,15 +1,32 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { apiClient } from '@/api/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useDietOrderResource } from '../api'
 
 const COLUMNS = ["id","visit_id","diet_type","calorie_target","allergy_notes","meal_schedule","ordered_by","status","order_date","created_at","updated_at"] as const
 
+const WF_ACTIONS = [{"label":"Status","verb":"patch","prefix":"diet-orders","action":"status"}] as const
+
 export function DietOrderListPage() {
   const { useList, remove } = useDietOrderResource()
   const { data, isLoading } = useList()
+  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+
+  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
+      queryClient.invalidateQueries({ queryKey: ['/diet-orders'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
 
   return (
     <div className="p-4">
@@ -46,6 +63,15 @@ export function DietOrderListPage() {
                     }}
                   >
                     Hapus
+                  </Button>
+                                    <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Status'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
+                  >
+                    Status
                   </Button>
                 </div>
               </TableCell>

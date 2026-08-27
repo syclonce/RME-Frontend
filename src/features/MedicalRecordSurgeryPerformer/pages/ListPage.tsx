@@ -8,7 +8,6 @@ const COLUMNS = ["id","surgery_id","visit_id","doctor_id","role","notes","create
 export function SurgeryPerformerListPage() {
   const { useList, remove } = useSurgeryPerformerResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function SurgeryPerformerListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

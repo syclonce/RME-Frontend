@@ -8,7 +8,6 @@ const COLUMNS = ["id","baep_protocol_id","swallowing_test_used","severity_level"
 export function BaepDysphagiaDetailListPage() {
   const { useList } = useBaepDysphagiaDetailResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

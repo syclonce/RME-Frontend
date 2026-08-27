@@ -8,7 +8,6 @@ const COLUMNS = ["id","employee_id","source_type","source_id","role","gross_amou
 export function RemunerationEntryListPage() {
   const { useList, remove } = useRemunerationEntryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RemunerationEntryListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

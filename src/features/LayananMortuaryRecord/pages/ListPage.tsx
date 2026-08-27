@@ -1,15 +1,32 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { apiClient } from '@/api/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useMortuaryRecordResource } from '../api'
 
 const COLUMNS = ["id","visit_id","patient_id","admitted_at","released_at","cause_of_death_notes","released_to_name","released_to_relationship","released_by","status","created_at"] as const
 
+const WF_ACTIONS = [{"label":"Release","verb":"post","prefix":"mortuary-records","action":"release"}] as const
+
 export function MortuaryRecordListPage() {
   const { useList, remove } = useMortuaryRecordResource()
   const { data, isLoading } = useList()
+  const queryClient = useQueryClient()
+  const [wfLoading, setWfLoading] = useState<string | null>(null)
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+
+  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
+    setWfLoading(wf.label)
+    try {
+      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
+      queryClient.invalidateQueries({ queryKey: ['/mortuary-records'] })
+    } finally {
+      setWfLoading(null)
+    }
+  }
 
   return (
     <div className="p-4">
@@ -46,6 +63,15 @@ export function MortuaryRecordListPage() {
                     }}
                   >
                     Hapus
+                  </Button>
+                                    <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={wfLoading === 'Release'}
+                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
+                  >
+                    Release
                   </Button>
                 </div>
               </TableCell>

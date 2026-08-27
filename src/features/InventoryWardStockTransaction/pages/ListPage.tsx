@@ -8,7 +8,6 @@ const COLUMNS = ["id","ward_id","item_id","type","quantity","performed_by","perf
 export function InventoryWardStockTransactionListPage() {
   const { useList } = useInventoryWardStockTransactionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

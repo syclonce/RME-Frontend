@@ -8,7 +8,6 @@ const COLUMNS = ["id","antibiotic_name","bacteria_name","sensitivity_category","
 export function AntibioticBacteriaMappingListPage() {
   const { useList, remove } = useAntibioticBacteriaMappingResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function AntibioticBacteriaMappingListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

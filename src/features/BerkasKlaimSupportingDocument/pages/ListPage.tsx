@@ -8,7 +8,6 @@ const COLUMNS = ["id","claim_file_id","document_type","file_path","uploaded_at"]
 export function BerkasKlaimSupportingDocumentListPage() {
   const { useList, remove } = useBerkasKlaimSupportingDocumentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function BerkasKlaimSupportingDocumentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","died_at","cause_of_death","declar
 export function PatientDeathRecordListPage() {
   const { useList } = usePatientDeathRecordResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function PatientDeathRecordListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-patient-death-record/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

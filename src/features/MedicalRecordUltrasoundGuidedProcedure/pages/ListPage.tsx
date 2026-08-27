@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","visit_id","doctor_id","procedure_name","targ
 export function UltrasoundGuidedProcedureListPage() {
   const { useList, remove } = useUltrasoundGuidedProcedureResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function UltrasoundGuidedProcedureListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

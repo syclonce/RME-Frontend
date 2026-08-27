@@ -8,7 +8,6 @@ const COLUMNS = ["id","request_number","ward_id","item_id","quantity","requested
 export function StockRequestListPage() {
   const { useList } = useStockRequestResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function StockRequestListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/inventory-stock-request/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

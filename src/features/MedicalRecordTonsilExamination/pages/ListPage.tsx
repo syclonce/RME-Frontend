@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","side","grade","color","exudate","findings","ex
 export function TonsilExaminationListPage() {
   const { useList, remove } = useTonsilExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function TonsilExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

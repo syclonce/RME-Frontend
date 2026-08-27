@@ -8,7 +8,6 @@ const COLUMNS = ["id","guarantor_id","margin_percentage","effective_date","is_ac
 export function PharmacyGuarantorMarginListPage() {
   const { useList, remove } = usePharmacyGuarantorMarginResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PharmacyGuarantorMarginListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

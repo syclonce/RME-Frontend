@@ -8,7 +8,6 @@ const COLUMNS = ["id","registration_number","patient_id","registered_at","admiss
 export function RegistrationListPage() {
   const { useList, remove } = useRegistrationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function RegistrationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","examination_type","status","verified_by","veri
 export function ExaminationResultStatusListPage() {
   const { useList, remove } = useExaminationResultStatusResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ExaminationResultStatusListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","cancelled_by","reason","cancelled_at","created
 export function VisitCancellationListPage() {
   const { useList } = useVisitCancellationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

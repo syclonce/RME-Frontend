@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","assessed_by","created_by","killip_class","hear
 export function KillipClassAssessmentListPage() {
   const { useList } = useKillipClassAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

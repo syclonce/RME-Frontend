@@ -8,7 +8,6 @@ const COLUMNS = ["id","diagnosis_code_id","restricted_antibiotic_name","requires
 export function DiagnosisRestrictionListPage() {
   const { useList, remove } = useDiagnosisRestrictionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function DiagnosisRestrictionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

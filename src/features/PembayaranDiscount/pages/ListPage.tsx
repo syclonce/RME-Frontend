@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","discount_type","value","is_active"] as cons
 export function DiscountListPage() {
   const { useList, remove } = useDiscountResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function DiscountListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

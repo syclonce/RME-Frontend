@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","assessed_by","created_by","bathing_status","dr
 export function FunctionalStatusAssessmentListPage() {
   const { useList } = useFunctionalStatusAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

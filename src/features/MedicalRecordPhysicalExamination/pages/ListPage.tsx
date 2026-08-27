@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","general_condition","consciousness_gcs","head_t
 export function PhysicalExaminationListPage() {
   const { useList, remove } = usePhysicalExaminationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PhysicalExaminationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

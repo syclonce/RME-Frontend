@@ -8,7 +8,6 @@ const COLUMNS = ["id","antibiotic_name","aware_category","requires_pra_approval"
 export function AntibioticRestrictionListPage() {
   const { useList, remove } = useAntibioticRestrictionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function AntibioticRestrictionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

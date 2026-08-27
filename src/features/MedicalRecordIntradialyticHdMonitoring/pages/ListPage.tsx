@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","patient_id","dialysis_hour","blood_pressure_sy
 export function IntradialyticHdMonitoringListPage() {
   const { useList, remove } = useIntradialyticHdMonitoringResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function IntradialyticHdMonitoringListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

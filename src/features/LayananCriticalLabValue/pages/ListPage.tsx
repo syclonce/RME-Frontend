@@ -8,7 +8,6 @@ const COLUMNS = ["id","lab_order_id","parameter_name","critical_value","notified
 export function CriticalLabValueListPage() {
   const { useList } = useCriticalLabValueResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function CriticalLabValueListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-critical-lab-value/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

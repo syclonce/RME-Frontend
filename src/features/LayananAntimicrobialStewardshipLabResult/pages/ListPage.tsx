@@ -8,7 +8,6 @@ const COLUMNS = ["id","antimicrobial_stewardship_form_id","lab_result_id","exami
 export function AntimicrobialStewardshipLabResultListPage() {
   const { useList } = useAntimicrobialStewardshipLabResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

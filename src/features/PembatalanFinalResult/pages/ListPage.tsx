@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","reason","cancellation_date","requested_by","st
 export function PembatalanFinalResultListPage() {
   const { useList, remove } = usePembatalanFinalResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PembatalanFinalResultListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

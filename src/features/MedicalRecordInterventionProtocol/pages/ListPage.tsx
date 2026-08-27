@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","started_by","created_by","protocol_name","indi
 export function InterventionProtocolListPage() {
   const { useList } = useInterventionProtocolResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

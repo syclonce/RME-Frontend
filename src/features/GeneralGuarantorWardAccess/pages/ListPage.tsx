@@ -8,7 +8,6 @@ const COLUMNS = ["id","guarantor_id","ward_id","is_allowed","notes","created_at"
 export function GuarantorWardAccessListPage() {
   const { useList, remove } = useGuarantorWardAccessResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GuarantorWardAccessListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

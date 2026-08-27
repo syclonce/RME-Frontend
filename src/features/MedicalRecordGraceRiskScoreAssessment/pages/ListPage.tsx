@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","age","heart_rate","systolic_bp","creatinine_mg
 export function GraceRiskScoreAssessmentListPage() {
   const { useList, remove } = useGraceRiskScoreAssessmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function GraceRiskScoreAssessmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","prescription_id","served_by","served_at","status","notes"
 export function PrescriptionFulfillmentListPage() {
   const { useList, remove } = usePrescriptionFulfillmentResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PrescriptionFulfillmentListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

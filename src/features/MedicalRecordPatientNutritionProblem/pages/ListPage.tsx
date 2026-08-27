@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","identified_by","created_by","problem_category"
 export function PatientNutritionProblemListPage() {
   const { useList } = usePatientNutritionProblemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

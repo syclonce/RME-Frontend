@@ -8,7 +8,6 @@ const COLUMNS = ["id","code","name","category","type_id","is_active","current_pr
 export function ServiceListPage() {
   const { useList, remove } = useServiceResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ServiceListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

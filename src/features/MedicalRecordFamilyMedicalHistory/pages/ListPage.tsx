@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","created_by","relation","condition","diagnosed_
 export function FamilyMedicalHistoryListPage() {
   const { useList } = useFamilyMedicalHistoryResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

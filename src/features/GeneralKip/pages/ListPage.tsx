@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_norm","card_type","card_number","address","rt","r
 export function KipListPage() {
   const { useList, remove } = useKipResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function KipListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","visit_id","birth_weight_grams","birth_length
 export function PediatricStatusListPage() {
   const { useList, remove } = usePediatricStatusResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PediatricStatusListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","merge_number","payment_id","invoice_id","allocated_amount
 export function InvoiceMergeListPage() {
   const { useList, remove } = useInvoiceMergeResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function InvoiceMergeListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

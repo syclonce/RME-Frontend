@@ -8,7 +8,6 @@ const COLUMNS = ["id","consent_id","receiver_name","receiver_relationship","sign
 export function ProcedureConsentInformationReceiverListPage() {
   const { useList } = useProcedureConsentInformationReceiverResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

@@ -8,7 +8,6 @@ const COLUMNS = ["id","package_id","component_name","percentage","amount","is_ac
 export function PackageTariffDistributionListPage() {
   const { useList, remove } = usePackageTariffDistributionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PackageTariffDistributionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

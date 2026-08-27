@@ -8,7 +8,6 @@ const COLUMNS = ["id","radiology_order_id","findings","impression","radiologist_
 export function RadiologyResultListPage() {
   const { useList } = useRadiologyResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -37,6 +36,7 @@ export function RadiologyResultListPage() {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Link to={`/modul/layanan-radiology-result/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
                   
                 </div>
               </TableCell>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","other_service_id","room_class_id","price","effective_date
 export function OtherServiceTariffListPage() {
   const { useList, remove } = useOtherServiceTariffResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function OtherServiceTariffListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

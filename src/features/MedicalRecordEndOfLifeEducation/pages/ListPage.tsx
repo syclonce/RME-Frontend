@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","topic","participants","decision_summary","educ
 export function EndOfLifeEducationListPage() {
   const { useList, remove } = useEndOfLifeEducationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EndOfLifeEducationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

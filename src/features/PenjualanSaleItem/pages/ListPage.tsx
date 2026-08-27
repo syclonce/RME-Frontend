@@ -8,7 +8,6 @@ const COLUMNS = ["id","sale_id","item_id","quantity","unit_price","subtotal","cr
 export function SaleItemListPage() {
   const { useList } = useSaleItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

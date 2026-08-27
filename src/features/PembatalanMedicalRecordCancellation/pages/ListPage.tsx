@@ -8,7 +8,6 @@ const COLUMNS = ["id","medical_record_id","reason","cancellation_date","requeste
 export function PembatalanMedicalRecordCancellationListPage() {
   const { useList, remove } = usePembatalanMedicalRecordCancellationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function PembatalanMedicalRecordCancellationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

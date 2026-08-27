@@ -8,7 +8,6 @@ const COLUMNS = ["id","summary_id","exam_name","finding","impression","performed
 export function RadiologyResultSummaryItemListPage() {
   const { useList } = useRadiologyResultSummaryItemResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

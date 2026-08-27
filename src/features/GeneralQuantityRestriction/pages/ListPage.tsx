@@ -8,7 +8,6 @@ const COLUMNS = ["id","drug_name","max_quantity_per_prescription","unit","notes"
 export function QuantityRestrictionListPage() {
   const { useList, remove } = useQuantityRestrictionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function QuantityRestrictionListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

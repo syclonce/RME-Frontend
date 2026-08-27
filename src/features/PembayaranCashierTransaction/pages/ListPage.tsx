@@ -8,7 +8,6 @@ const COLUMNS = ["id","cashier_id","invoice_id","amount","transaction_type","tra
 export function CashierTransactionListPage() {
   const { useList } = useCashierTransactionResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

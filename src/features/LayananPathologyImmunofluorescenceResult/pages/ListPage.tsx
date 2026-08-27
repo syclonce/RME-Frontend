@@ -8,7 +8,6 @@ const COLUMNS = ["id","pathology_anatomy_result_id","marker","result","intensity
 export function PathologyImmunofluorescenceResultListPage() {
   const { useList } = usePathologyImmunofluorescenceResultResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (

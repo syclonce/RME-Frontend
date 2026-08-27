@@ -8,7 +8,6 @@ const COLUMNS = ["id","patient_id","visit_id","vaccine_name","dose_number","batc
 export function ImmunizationVaccinationListPage() {
   const { useList, remove } = useImmunizationVaccinationResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function ImmunizationVaccinationListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

@@ -8,7 +8,6 @@ const COLUMNS = ["id","indicator_id","period_month","period_year","numerator","d
 export function QualityIndicatorListPage() {
   const { useList, remove } = useQualityIndicatorResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function QualityIndicatorListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>

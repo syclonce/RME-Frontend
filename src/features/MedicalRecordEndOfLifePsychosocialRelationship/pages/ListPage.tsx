@@ -8,7 +8,6 @@ const COLUMNS = ["id","visit_id","relationship_type","support_system","spiritual
 export function EndOfLifePsychosocialRelationshipListPage() {
   const { useList, remove } = useEndOfLifePsychosocialRelationshipResource()
   const { data, isLoading } = useList()
-
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
@@ -47,6 +46,7 @@ export function EndOfLifePsychosocialRelationshipListPage() {
                   >
                     Hapus
                   </Button>
+                  
                 </div>
               </TableCell>
             </TableRow>
