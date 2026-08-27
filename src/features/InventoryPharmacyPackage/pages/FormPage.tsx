@@ -1,0 +1,55 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useInventoryPharmacyPackageResource } from '../api'
+import type { InventoryPharmacyPackageFormValues } from '../types'
+
+export function InventoryPharmacyPackageFormPage() {
+  const { create } = useInventoryPharmacyPackageResource()
+  const [values, setValues] = useState<InventoryPharmacyPackageFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah InventoryPharmacyPackage</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="package_code">Package Code *</Label>
+        <Input id="package_code" type="text" value={values.package_code ?? ''} onChange={(e) => setValues({ ...values, package_code: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="name">Name *</Label>
+        <Input id="name" type="text" value={values.name ?? ''} onChange={(e) => setValues({ ...values, name: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="pharmacy_service_room_id">Pharmacy Service Room</Label>
+        <Input id="pharmacy_service_room_id" type="number" value={values.pharmacy_service_room_id ?? ''} onChange={(e) => setValues({ ...values, pharmacy_service_room_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="category">Category *</Label>
+        <Input id="category" type="text" value={values.category ?? ''} onChange={(e) => setValues({ ...values, category: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="price">Price *</Label>
+        <Input id="price" type="number" value={values.price ?? ''} onChange={(e) => setValues({ ...values, price: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="description">Description</Label>
+        <Input id="description" type="text" value={values.description ?? ''} onChange={(e) => setValues({ ...values, description: e.target.value })} />
+      </div>
+      <div className="flex items-center gap-2">
+        <Checkbox id="is_active" checked={!!values.is_active} onCheckedChange={(v) => setValues({ ...values, is_active: !!v })} />
+        <Label htmlFor="is_active">Is Active</Label>
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

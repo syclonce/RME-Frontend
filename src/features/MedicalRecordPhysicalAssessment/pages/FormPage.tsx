@@ -1,0 +1,58 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { usePhysicalAssessmentResource } from '../api'
+import type { PhysicalAssessmentFormValues } from '../types'
+
+export function PhysicalAssessmentFormPage() {
+  const { create } = usePhysicalAssessmentResource()
+  const [values, setValues] = useState<PhysicalAssessmentFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah PhysicalAssessment</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="visit_id">Visit *</Label>
+        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="mobility_status">Mobility Status</Label>
+        <Input id="mobility_status" type="text" value={values.mobility_status ?? ''} onChange={(e) => setValues({ ...values, mobility_status: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="adl_status">Adl Status</Label>
+        <Input id="adl_status" type="text" value={values.adl_status ?? ''} onChange={(e) => setValues({ ...values, adl_status: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="cognitive_status">Cognitive Status</Label>
+        <Input id="cognitive_status" type="text" value={values.cognitive_status ?? ''} onChange={(e) => setValues({ ...values, cognitive_status: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="nutritional_risk">Nutritional Risk</Label>
+        <Input id="nutritional_risk" type="text" value={values.nutritional_risk ?? ''} onChange={(e) => setValues({ ...values, nutritional_risk: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="pain_level">Pain Level</Label>
+        <Input id="pain_level" type="number" value={values.pain_level ?? ''} onChange={(e) => setValues({ ...values, pain_level: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="notes">Notes</Label>
+        <Input id="notes" type="text" value={values.notes ?? ''} onChange={(e) => setValues({ ...values, notes: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="assessed_at">Assessed At</Label>
+        <Input id="assessed_at" type="date" value={values.assessed_at ?? ''} onChange={(e) => setValues({ ...values, assessed_at: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

@@ -1,0 +1,42 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useInventoryStockOpnameItemResource } from '../api'
+import type { InventoryStockOpnameItemFormValues } from '../types'
+
+export function InventoryStockOpnameItemFormPage() {
+  const { create } = useInventoryStockOpnameItemResource()
+  const [values, setValues] = useState<InventoryStockOpnameItemFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah InventoryStockOpnameItem</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="stock_opname_id">Stock Opname *</Label>
+        <Input id="stock_opname_id" type="number" value={values.stock_opname_id ?? ''} onChange={(e) => setValues({ ...values, stock_opname_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="item_id">Item *</Label>
+        <Input id="item_id" type="number" value={values.item_id ?? ''} onChange={(e) => setValues({ ...values, item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="system_quantity">System Quantity *</Label>
+        <Input id="system_quantity" type="number" value={values.system_quantity ?? ''} onChange={(e) => setValues({ ...values, system_quantity: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="physical_quantity">Physical Quantity *</Label>
+        <Input id="physical_quantity" type="number" value={values.physical_quantity ?? ''} onChange={(e) => setValues({ ...values, physical_quantity: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

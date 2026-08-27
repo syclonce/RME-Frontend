@@ -1,0 +1,51 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useDiagnosisIndicatorMappingResource } from '../api'
+import type { DiagnosisIndicatorMappingFormValues } from '../types'
+
+export function DiagnosisIndicatorMappingFormPage() {
+  const { create } = useDiagnosisIndicatorMappingResource()
+  const [values, setValues] = useState<DiagnosisIndicatorMappingFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah DiagnosisIndicatorMapping</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="diagnosis_id">Diagnosis *</Label>
+        <Input id="diagnosis_id" type="number" value={values.diagnosis_id ?? ''} onChange={(e) => setValues({ ...values, diagnosis_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="indicator_code">Indicator Code *</Label>
+        <Input id="indicator_code" type="text" value={values.indicator_code ?? ''} onChange={(e) => setValues({ ...values, indicator_code: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="indicator_name">Indicator Name *</Label>
+        <Input id="indicator_name" type="text" value={values.indicator_name ?? ''} onChange={(e) => setValues({ ...values, indicator_name: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="target_score">Target Score</Label>
+        <Input id="target_score" type="text" value={values.target_score ?? ''} onChange={(e) => setValues({ ...values, target_score: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="description">Description</Label>
+        <Input id="description" type="text" value={values.description ?? ''} onChange={(e) => setValues({ ...values, description: e.target.value })} />
+      </div>
+      <div className="flex items-center gap-2">
+        <Checkbox id="is_active" checked={!!values.is_active} onCheckedChange={(v) => setValues({ ...values, is_active: !!v })} />
+        <Label htmlFor="is_active">Is Active</Label>
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

@@ -1,0 +1,63 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useLabReferenceValueResource } from '../api'
+import type { LabReferenceValueFormValues } from '../types'
+
+export function LabReferenceValueFormPage() {
+  const { create } = useLabReferenceValueResource()
+  const [values, setValues] = useState<LabReferenceValueFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah LabReferenceValue</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="lab_service_parameter_id">Lab Service Parameter *</Label>
+        <Input id="lab_service_parameter_id" type="number" value={values.lab_service_parameter_id ?? ''} onChange={(e) => setValues({ ...values, lab_service_parameter_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="gender">Gender</Label>
+        <Input id="gender" type="text" value={values.gender ?? ''} onChange={(e) => setValues({ ...values, gender: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="min_age">Min Age</Label>
+        <Input id="min_age" type="number" value={values.min_age ?? ''} onChange={(e) => setValues({ ...values, min_age: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="max_age">Max Age</Label>
+        <Input id="max_age" type="number" value={values.max_age ?? ''} onChange={(e) => setValues({ ...values, max_age: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="min_value">Min Value</Label>
+        <Input id="min_value" type="number" value={values.min_value ?? ''} onChange={(e) => setValues({ ...values, min_value: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="max_value">Max Value</Label>
+        <Input id="max_value" type="number" value={values.max_value ?? ''} onChange={(e) => setValues({ ...values, max_value: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="unit">Unit</Label>
+        <Input id="unit" type="text" value={values.unit ?? ''} onChange={(e) => setValues({ ...values, unit: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="note">Note</Label>
+        <Input id="note" type="text" value={values.note ?? ''} onChange={(e) => setValues({ ...values, note: e.target.value })} />
+      </div>
+      <div className="flex items-center gap-2">
+        <Checkbox id="is_active" checked={!!values.is_active} onCheckedChange={(v) => setValues({ ...values, is_active: !!v })} />
+        <Label htmlFor="is_active">Is Active</Label>
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

@@ -1,0 +1,46 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useTranscranialDopplerWindowResource } from '../api'
+import type { TranscranialDopplerWindowFormValues } from '../types'
+
+export function TranscranialDopplerWindowFormPage() {
+  const { create } = useTranscranialDopplerWindowResource()
+  const [values, setValues] = useState<TranscranialDopplerWindowFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah TranscranialDopplerWindow</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="transcranial_doppler_examination_id">Transcranial Doppler Examination *</Label>
+        <Input id="transcranial_doppler_examination_id" type="number" value={values.transcranial_doppler_examination_id ?? ''} onChange={(e) => setValues({ ...values, transcranial_doppler_examination_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="window_site">Window Site *</Label>
+        <Input id="window_site" type="text" value={values.window_site ?? ''} onChange={(e) => setValues({ ...values, window_site: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="signal_quality">Signal Quality</Label>
+        <Input id="signal_quality" type="text" value={values.signal_quality ?? ''} onChange={(e) => setValues({ ...values, signal_quality: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="depth_mm">Depth Mm</Label>
+        <Input id="depth_mm" type="number" value={values.depth_mm ?? ''} onChange={(e) => setValues({ ...values, depth_mm: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="velocity_cm_s">Velocity Cm S</Label>
+        <Input id="velocity_cm_s" type="number" value={values.velocity_cm_s ?? ''} onChange={(e) => setValues({ ...values, velocity_cm_s: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

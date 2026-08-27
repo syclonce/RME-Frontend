@@ -1,0 +1,50 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useBloodBagResource } from '../api'
+import type { BloodBagFormValues } from '../types'
+
+export function BloodBagFormPage() {
+  const { create } = useBloodBagResource()
+  const [values, setValues] = useState<BloodBagFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah BloodBag</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="bag_number">Bag Number *</Label>
+        <Input id="bag_number" type="text" value={values.bag_number ?? ''} onChange={(e) => setValues({ ...values, bag_number: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="blood_type_id">Blood Type *</Label>
+        <Input id="blood_type_id" type="number" value={values.blood_type_id ?? ''} onChange={(e) => setValues({ ...values, blood_type_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="volume_ml">Volume Ml *</Label>
+        <Input id="volume_ml" type="number" value={values.volume_ml ?? ''} onChange={(e) => setValues({ ...values, volume_ml: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="collected_at">Collected At *</Label>
+        <Input id="collected_at" type="date" value={values.collected_at ?? ''} onChange={(e) => setValues({ ...values, collected_at: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="expires_at">Expires At *</Label>
+        <Input id="expires_at" type="date" value={values.expires_at ?? ''} onChange={(e) => setValues({ ...values, expires_at: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="status">Status</Label>
+        <Input id="status" type="text" value={values.status ?? ''} onChange={(e) => setValues({ ...values, status: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

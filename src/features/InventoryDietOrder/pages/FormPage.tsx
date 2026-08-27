@@ -1,0 +1,54 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useDietOrderResource } from '../api'
+import type { DietOrderFormValues } from '../types'
+
+export function DietOrderFormPage() {
+  const { create } = useDietOrderResource()
+  const [values, setValues] = useState<DietOrderFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah DietOrder</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="visit_id">Visit *</Label>
+        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="diet_type">Diet Type *</Label>
+        <Input id="diet_type" type="text" value={values.diet_type ?? ''} onChange={(e) => setValues({ ...values, diet_type: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="calorie_target">Calorie Target</Label>
+        <Input id="calorie_target" type="number" value={values.calorie_target ?? ''} onChange={(e) => setValues({ ...values, calorie_target: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="allergy_notes">Allergy Notes</Label>
+        <Input id="allergy_notes" type="text" value={values.allergy_notes ?? ''} onChange={(e) => setValues({ ...values, allergy_notes: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="meal_schedule">Meal Schedule *</Label>
+        <Input id="meal_schedule" type="text" value={values.meal_schedule ?? ''} onChange={(e) => setValues({ ...values, meal_schedule: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="ordered_by">Ordered By *</Label>
+        <Input id="ordered_by" type="number" value={values.ordered_by ?? ''} onChange={(e) => setValues({ ...values, ordered_by: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="order_date">Order Date *</Label>
+        <Input id="order_date" type="date" value={values.order_date ?? ''} onChange={(e) => setValues({ ...values, order_date: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

@@ -1,0 +1,58 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useNursingCarePlanResource } from '../api'
+import type { NursingCarePlanFormValues } from '../types'
+
+export function NursingCarePlanFormPage() {
+  const { create } = useNursingCarePlanResource()
+  const [values, setValues] = useState<NursingCarePlanFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah NursingCarePlan</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="visit_id">Visit *</Label>
+        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="assessment">Assessment</Label>
+        <Input id="assessment" type="text" value={values.assessment ?? ''} onChange={(e) => setValues({ ...values, assessment: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="goal">Goal</Label>
+        <Input id="goal" type="text" value={values.goal ?? ''} onChange={(e) => setValues({ ...values, goal: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="intervention_plan">Intervention Plan</Label>
+        <Input id="intervention_plan" type="text" value={values.intervention_plan ?? ''} onChange={(e) => setValues({ ...values, intervention_plan: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="target_date">Target Date</Label>
+        <Input id="target_date" type="date" value={values.target_date ?? ''} onChange={(e) => setValues({ ...values, target_date: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="recorded_by">Recorded By *</Label>
+        <Input id="recorded_by" type="number" value={values.recorded_by ?? ''} onChange={(e) => setValues({ ...values, recorded_by: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="recorded_at">Recorded At *</Label>
+        <Input id="recorded_at" type="date" value={values.recorded_at ?? ''} onChange={(e) => setValues({ ...values, recorded_at: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="status">Status</Label>
+        <Input id="status" type="text" value={values.status ?? ''} onChange={(e) => setValues({ ...values, status: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

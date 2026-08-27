@@ -1,0 +1,54 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useFluidFinalBalanceResource } from '../api'
+import type { FluidFinalBalanceFormValues } from '../types'
+
+export function FluidFinalBalanceFormPage() {
+  const { create } = useFluidFinalBalanceResource()
+  const [values, setValues] = useState<FluidFinalBalanceFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah FluidFinalBalance</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="visit_id">Visit *</Label>
+        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="period_date">Period Date *</Label>
+        <Input id="period_date" type="date" value={values.period_date ?? ''} onChange={(e) => setValues({ ...values, period_date: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="total_intake_ml">Total Intake Ml *</Label>
+        <Input id="total_intake_ml" type="number" value={values.total_intake_ml ?? ''} onChange={(e) => setValues({ ...values, total_intake_ml: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="total_output_ml">Total Output Ml *</Label>
+        <Input id="total_output_ml" type="number" value={values.total_output_ml ?? ''} onChange={(e) => setValues({ ...values, total_output_ml: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="balance_ml">Balance Ml</Label>
+        <Input id="balance_ml" type="number" value={values.balance_ml ?? ''} onChange={(e) => setValues({ ...values, balance_ml: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="recorded_by">Recorded By *</Label>
+        <Input id="recorded_by" type="number" value={values.recorded_by ?? ''} onChange={(e) => setValues({ ...values, recorded_by: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="recorded_at">Recorded At *</Label>
+        <Input id="recorded_at" type="date" value={values.recorded_at ?? ''} onChange={(e) => setValues({ ...values, recorded_at: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

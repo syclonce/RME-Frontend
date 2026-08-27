@@ -1,0 +1,50 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useFamilyMedicalHistoryResource } from '../api'
+import type { FamilyMedicalHistoryFormValues } from '../types'
+
+export function FamilyMedicalHistoryFormPage() {
+  const { create } = useFamilyMedicalHistoryResource()
+  const [values, setValues] = useState<FamilyMedicalHistoryFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah FamilyMedicalHistory</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="visit_id">Visit *</Label>
+        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="created_by">Created By</Label>
+        <Input id="created_by" type="number" value={values.created_by ?? ''} onChange={(e) => setValues({ ...values, created_by: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="relation">Relation *</Label>
+        <Input id="relation" type="text" value={values.relation ?? ''} onChange={(e) => setValues({ ...values, relation: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="condition">Condition *</Label>
+        <Input id="condition" type="text" value={values.condition ?? ''} onChange={(e) => setValues({ ...values, condition: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="diagnosed_age">Diagnosed Age</Label>
+        <Input id="diagnosed_age" type="number" value={values.diagnosed_age ?? ''} onChange={(e) => setValues({ ...values, diagnosed_age: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="notes">Notes</Label>
+        <Input id="notes" type="text" value={values.notes ?? ''} onChange={(e) => setValues({ ...values, notes: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

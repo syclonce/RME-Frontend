@@ -1,0 +1,54 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useMchatAssessmentExaminationResource } from '../api'
+import type { MchatAssessmentExaminationFormValues } from '../types'
+
+export function MchatAssessmentExaminationFormPage() {
+  const { create } = useMchatAssessmentExaminationResource()
+  const [values, setValues] = useState<MchatAssessmentExaminationFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah MchatAssessmentExamination</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="visit_id">Visit *</Label>
+        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="patient_id">Patient *</Label>
+        <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="total_score">Total Score</Label>
+        <Input id="total_score" type="number" value={values.total_score ?? ''} onChange={(e) => setValues({ ...values, total_score: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="risk_level">Risk Level</Label>
+        <Input id="risk_level" type="text" value={values.risk_level ?? ''} onChange={(e) => setValues({ ...values, risk_level: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="responses_json">Responses Json</Label>
+        <Input id="responses_json" type="text" value={values.responses_json ?? ''} onChange={(e) => setValues({ ...values, responses_json: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="recommendation">Recommendation</Label>
+        <Input id="recommendation" type="text" value={values.recommendation ?? ''} onChange={(e) => setValues({ ...values, recommendation: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="assessed_at">Assessed At</Label>
+        <Input id="assessed_at" type="date" value={values.assessed_at ?? ''} onChange={(e) => setValues({ ...values, assessed_at: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}

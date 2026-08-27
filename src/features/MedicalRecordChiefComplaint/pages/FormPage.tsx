@@ -1,0 +1,50 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useChiefComplaintResource } from '../api'
+import type { ChiefComplaintFormValues } from '../types'
+
+export function ChiefComplaintFormPage() {
+  const { create } = useChiefComplaintResource()
+  const [values, setValues] = useState<ChiefComplaintFormValues>({})
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        create.mutate(values)
+      }}
+    >
+      <h1 className="text-lg font-semibold">Tambah ChiefComplaint</h1>
+      <div className="grid gap-1.5">
+        <Label htmlFor="visit_id">Visit *</Label>
+        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="complaint">Complaint</Label>
+        <Input id="complaint" type="text" value={values.complaint ?? ''} onChange={(e) => setValues({ ...values, complaint: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="onset">Onset</Label>
+        <Input id="onset" type="text" value={values.onset ?? ''} onChange={(e) => setValues({ ...values, onset: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="duration">Duration</Label>
+        <Input id="duration" type="text" value={values.duration ?? ''} onChange={(e) => setValues({ ...values, duration: e.target.value })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="recorded_by">Recorded By *</Label>
+        <Input id="recorded_by" type="number" value={values.recorded_by ?? ''} onChange={(e) => setValues({ ...values, recorded_by: e.target.value === '' ? null : Number(e.target.value) })} />
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="recorded_at">Recorded At *</Label>
+        <Input id="recorded_at" type="date" value={values.recorded_at ?? ''} onChange={(e) => setValues({ ...values, recorded_at: e.target.value })} />
+      </div>
+      <Button type="submit" disabled={create.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}
