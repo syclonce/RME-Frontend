@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useInventoryStockOpnameItemResource } from '../api'
 import type { InventoryStockOpnameItemFormValues } from '../types'
 
 export function InventoryStockOpnameItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useInventoryStockOpnameItemResource()
   const [values, setValues] = useState<InventoryStockOpnameItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function InventoryStockOpnameItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/inventory-stock-opname-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah InventoryStockOpnameItem</h1>

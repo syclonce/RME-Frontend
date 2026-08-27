@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useReferralResource } from '../api'
 
@@ -11,13 +13,19 @@ export function ReferralListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">Referral</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-lg font-semibold">Referral</h1>
+        <Button asChild>
+          <Link to="/modul/pendaftaran-referral/tambah">Tambah</Link>
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
             {COLUMNS.map((col) => (
               <TableHead key={col}>{col}</TableHead>
             ))}
+            <TableHead>Aksi</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -26,6 +34,12 @@ export function ReferralListPage() {
               {COLUMNS.map((col) => (
                 <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
               ))}
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Link to={`/modul/pendaftaran-referral/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

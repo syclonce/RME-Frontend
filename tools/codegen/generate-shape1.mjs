@@ -76,6 +76,10 @@ function isEligibleShape1(entry) {
   return true
 }
 
+function toKebab(str) {
+  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
 function generateModule(entry) {
   const fields = pickStoreFields(entry)
   const columns = pickResourceColumns(entry, fields)
@@ -83,6 +87,9 @@ function generateModule(entry) {
   const entity = toPascalCase(entry.route.apiResources[0].controller.replace(/Controller$/, ''))
   const dir = path.join(FEATURES_ROOT, entry.module)
   mkdirSync(path.join(dir, 'pages'), { recursive: true })
+  const slug = toKebab(entry.module)
+  const hasDestroy = (entry.route.apiResources ?? []).some((r) => r.chain.includes("'destroy'") || r.chain === '')
+  const hasUpdate = (entry.route.apiResources ?? []).some((r) => r.chain.includes("'update'") || r.chain === '')
 
   const typeFields = fields
     .map((f) => `  ${f.name}${f.nullable ? '?' : ''}: ${tsType(f)} | null`)
@@ -110,26 +117,58 @@ export function use${entity}Resource() {
 }
 `
 
-  const listPageTsx = `import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+  const actionsHeader = (hasUpdate || hasDestroy) ? `\n            <TableHead>Aksi</TableHead>` : ''
+  const editLink = hasUpdate
+    ? `<Link to={\`/modul/${slug}/\${row.id}/edit\`} className="text-primary underline">Ubah</Link>`
+    : ''
+  const deleteButton = hasDestroy
+    ? `<Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
+                    }}
+                  >
+                    Hapus
+                  </Button>`
+    : ''
+  const actionsCell = (hasUpdate || hasDestroy)
+    ? `\n              <TableCell>
+                <div className="flex items-center gap-2">
+                  ${editLink}
+                  ${deleteButton}
+                </div>
+              </TableCell>`
+    : ''
+
+  const listPageTsx = `import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { use${entity}Resource } from '../api'
 
 const COLUMNS = ${JSON.stringify(columns)} as const
 
 export function ${entity}ListPage() {
-  const { list } = use${entity}Resource()
+  const { list${hasDestroy ? ', remove' : ''} } = use${entity}Resource()
   const { data, isLoading } = list()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">${toLabel(entity)}</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-lg font-semibold">${toLabel(entity)}</h1>
+        <Button asChild>
+          <Link to="/modul/${slug}/tambah">Tambah</Link>
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
             {COLUMNS.map((col) => (
               <TableHead key={col}>{col}</TableHead>
-            ))}
+            ))}${actionsHeader}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -137,7 +176,7 @@ export function ${entity}ListPage() {
             <TableRow key={row.id}>
               {COLUMNS.map((col) => (
                 <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
+              ))}${actionsCell}
             </TableRow>
           ))}
         </TableBody>
@@ -169,7 +208,10 @@ export function ${entity}ListPage() {
     .join('\n')
 
   const hasCheckbox = fields.some((f) => inputType(f) === 'checkbox')
-  const formPageTsx = `import { useState } from 'react'
+
+  const formPageTsx = hasUpdate
+    ? `import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 ${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -177,6 +219,45 @@ import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
 export function ${entity}FormPage() {
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = use${entity}Resource()
+  const existing = detail(isEdit ? Number(id) : undefined)
+  const [values, setValues] = useState<${entity}FormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as ${entity}FormValues)
+  }, [existing.data])
+
+  return (
+    <form
+      className="mx-auto grid max-w-lg gap-4 p-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/${slug}') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/${slug}') })
+      }}
+    >
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ${toLabel(entity)}</h1>
+${formFieldsJsx}
+      <Button type="submit" disabled={create.isPending || update.isPending}>
+        Simpan
+      </Button>
+    </form>
+  )
+}
+`
+    : `import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { use${entity}Resource } from '../api'
+import type { ${entity}FormValues } from '../types'
+
+export function ${entity}FormPage() {
+  const navigate = useNavigate()
   const { create } = use${entity}Resource()
   const [values, setValues] = useState<${entity}FormValues>({})
 
@@ -185,7 +266,7 @@ export function ${entity}FormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/${slug}') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah ${toLabel(entity)}</h1>

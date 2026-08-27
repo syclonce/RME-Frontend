@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useRadiologyClaimItemResource } from '../api'
 import type { RadiologyClaimItemFormValues } from '../types'
 
 export function RadiologyClaimItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useRadiologyClaimItemResource()
   const [values, setValues] = useState<RadiologyClaimItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function RadiologyClaimItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/berkas-klaim-radiology-claim-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah RadiologyClaimItem</h1>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useLeftoverMedicationVoucherItemResource } from '../api'
 import type { LeftoverMedicationVoucherItemFormValues } from '../types'
 
 export function LeftoverMedicationVoucherItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useLeftoverMedicationVoucherItemResource()
   const [values, setValues] = useState<LeftoverMedicationVoucherItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function LeftoverMedicationVoucherItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-leftover-medication-voucher-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah LeftoverMedicationVoucherItem</h1>

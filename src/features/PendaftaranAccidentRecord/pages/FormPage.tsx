@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useAccidentRecordResource } from '../api'
 import type { AccidentRecordFormValues } from '../types'
 
 export function AccidentRecordFormPage() {
+  const navigate = useNavigate()
   const { create } = useAccidentRecordResource()
   const [values, setValues] = useState<AccidentRecordFormValues>({})
 
@@ -14,7 +16,7 @@ export function AccidentRecordFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/pendaftaran-accident-record') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah AccidentRecord</h1>

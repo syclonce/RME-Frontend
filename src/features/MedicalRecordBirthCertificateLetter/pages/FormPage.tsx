@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { useBirthCertificateLetterResource } from '../api'
 import type { BirthCertificateLetterFormValues } from '../types'
 
 export function BirthCertificateLetterFormPage() {
-  const { create } = useBirthCertificateLetterResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useBirthCertificateLetterResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BirthCertificateLetterFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as BirthCertificateLetterFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/medical-record-birth-certificate-letter') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-birth-certificate-letter') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah BirthCertificateLetter</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BirthCertificateLetter</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="letter_number">Letter Number *</Label>
         <Input id="letter_number" type="text" value={values.letter_number ?? ''} onChange={(e) => setValues({ ...values, letter_number: e.target.value })} />
@@ -66,7 +76,7 @@ export function BirthCertificateLetterFormPage() {
         <Label htmlFor="remarks">Remarks</Label>
         <Input id="remarks" type="text" value={values.remarks ?? ''} onChange={(e) => setValues({ ...values, remarks: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

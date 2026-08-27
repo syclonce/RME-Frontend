@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { usePatientEscortIdentityCardResource } from '../api'
 import type { PatientEscortIdentityCardFormValues } from '../types'
 
 export function PatientEscortIdentityCardFormPage() {
-  const { create } = usePatientEscortIdentityCardResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = usePatientEscortIdentityCardResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PatientEscortIdentityCardFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as PatientEscortIdentityCardFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/pendaftaran-patient-escort-identity-card') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/pendaftaran-patient-escort-identity-card') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah PatientEscortIdentityCard</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientEscortIdentityCard</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_escort_id">Patient Escort *</Label>
         <Input id="patient_escort_id" type="number" value={values.patient_escort_id ?? ''} onChange={(e) => setValues({ ...values, patient_escort_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -54,7 +64,7 @@ export function PatientEscortIdentityCardFormPage() {
         <Label htmlFor="region_code">Region Code</Label>
         <Input id="region_code" type="text" value={values.region_code ?? ''} onChange={(e) => setValues({ ...values, region_code: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

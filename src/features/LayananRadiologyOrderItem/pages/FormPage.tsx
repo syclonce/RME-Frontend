@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useRadiologyOrderItemResource } from '../api'
 import type { RadiologyOrderItemFormValues } from '../types'
 
 export function RadiologyOrderItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useRadiologyOrderItemResource()
   const [values, setValues] = useState<RadiologyOrderItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function RadiologyOrderItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-radiology-order-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah RadiologyOrderItem</h1>

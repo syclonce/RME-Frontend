@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useMedicalSupplyUsageItemResource } from '../api'
 
@@ -11,7 +13,12 @@ export function MedicalSupplyUsageItemListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">MedicalSupplyUsageItem</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-lg font-semibold">MedicalSupplyUsageItem</h1>
+        <Button asChild>
+          <Link to="/modul/layanan-medical-supply-usage-item/tambah">Tambah</Link>
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>

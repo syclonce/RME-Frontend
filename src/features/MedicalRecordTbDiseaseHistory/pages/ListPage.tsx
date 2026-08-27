@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useTbDiseaseHistoryResource } from '../api'
 
@@ -11,7 +13,12 @@ export function TbDiseaseHistoryListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">TbDiseaseHistory</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-lg font-semibold">TbDiseaseHistory</h1>
+        <Button asChild>
+          <Link to="/modul/medical-record-tb-disease-history/tambah">Tambah</Link>
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>

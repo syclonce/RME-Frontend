@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useProcedureConsentPatientAcknowledgementResource } from '../api'
 import type { ProcedureConsentPatientAcknowledgementFormValues } from '../types'
 
 export function ProcedureConsentPatientAcknowledgementFormPage() {
+  const navigate = useNavigate()
   const { create } = useProcedureConsentPatientAcknowledgementResource()
   const [values, setValues] = useState<ProcedureConsentPatientAcknowledgementFormValues>({})
 
@@ -14,7 +16,7 @@ export function ProcedureConsentPatientAcknowledgementFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-procedure-consent-patient-acknowledgement') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah ProcedureConsentPatientAcknowledgement</h1>

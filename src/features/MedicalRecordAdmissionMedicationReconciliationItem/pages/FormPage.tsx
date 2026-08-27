@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useAdmissionMedicationReconciliationItemResource } from '../api'
 import type { AdmissionMedicationReconciliationItemFormValues } from '../types'
 
 export function AdmissionMedicationReconciliationItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useAdmissionMedicationReconciliationItemResource()
   const [values, setValues] = useState<AdmissionMedicationReconciliationItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function AdmissionMedicationReconciliationItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-admission-medication-reconciliation-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah AdmissionMedicationReconciliationItem</h1>

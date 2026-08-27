@@ -1,23 +1,31 @@
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useEmployeeResource } from '../api'
 
 const COLUMNS = ["id","user_id","employee_number","name","nickname","title_prefix","title_suffix","birth_place","birth_date","religion_id","gender_id","profession_id","smf_id","address","rt","rw","postal_code","village_id","is_non_employee","is_active","created_at","updated_at"] as const
 
 export function EmployeeListPage() {
-  const { list } = useEmployeeResource()
+  const { list, remove } = useEmployeeResource()
   const { data, isLoading } = list()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">Employee</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-lg font-semibold">Employee</h1>
+        <Button asChild>
+          <Link to="/modul/general-employee/tambah">Tambah</Link>
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
             {COLUMNS.map((col) => (
               <TableHead key={col}>{col}</TableHead>
             ))}
+            <TableHead>Aksi</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -26,6 +34,21 @@ export function EmployeeListPage() {
               {COLUMNS.map((col) => (
                 <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
               ))}
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Link to={`/modul/general-employee/${row.id}/edit`} className="text-primary underline">Ubah</Link>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
+                    }}
+                  >
+                    Hapus
+                  </Button>
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

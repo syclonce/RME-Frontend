@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useVitalSignObservationResource } from '../api'
 import type { VitalSignObservationFormValues } from '../types'
 
 export function VitalSignObservationFormPage() {
+  const navigate = useNavigate()
   const { create } = useVitalSignObservationResource()
   const [values, setValues] = useState<VitalSignObservationFormValues>({})
 
@@ -14,7 +16,7 @@ export function VitalSignObservationFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-early-warning-score') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah VitalSignObservation</h1>

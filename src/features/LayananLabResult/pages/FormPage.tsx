@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { useLabResultResource } from '../api'
 import type { LabResultFormValues } from '../types'
 
 export function LabResultFormPage() {
+  const navigate = useNavigate()
   const { create } = useLabResultResource()
   const [values, setValues] = useState<LabResultFormValues>({})
 
@@ -15,7 +17,7 @@ export function LabResultFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-lab-result') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah LabResult</h1>

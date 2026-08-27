@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { useDischargeMedicationReconciliationItemResource } from '../api'
 import type { DischargeMedicationReconciliationItemFormValues } from '../types'
 
 export function DischargeMedicationReconciliationItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useDischargeMedicationReconciliationItemResource()
   const [values, setValues] = useState<DischargeMedicationReconciliationItemFormValues>({})
 
@@ -15,7 +17,7 @@ export function DischargeMedicationReconciliationItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-discharge-medication-reconciliation-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah DischargeMedicationReconciliationItem</h1>

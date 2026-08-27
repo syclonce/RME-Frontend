@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { usePharmacyServiceTimeStageResource } from '../api'
 import type { PharmacyServiceTimeStageFormValues } from '../types'
 
 export function PharmacyServiceTimeStageFormPage() {
+  const navigate = useNavigate()
   const { create } = usePharmacyServiceTimeStageResource()
   const [values, setValues] = useState<PharmacyServiceTimeStageFormValues>({})
 
@@ -14,7 +16,7 @@ export function PharmacyServiceTimeStageFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-pharmacy-service-time-stage') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah PharmacyServiceTimeStage</h1>

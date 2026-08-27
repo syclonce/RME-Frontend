@@ -33,7 +33,8 @@ const routeEntries = entries
   .map(
     (e, i) =>
       `  { path: '/modul/${e.slug}', module: '${e.module}', element: <List_${i} /> },
-  { path: '/modul/${e.slug}/tambah', module: '${e.module}', element: <Form_${i} /> },`,
+  { path: '/modul/${e.slug}/tambah', module: '${e.module}', element: <Form_${i} /> },
+  { path: '/modul/${e.slug}/:id/edit', module: '${e.module}', element: <Form_${i} /> },`,
   )
   .join('\n')
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useGoodsReceiptResource } from '../api'
 import type { GoodsReceiptFormValues } from '../types'
 
 export function GoodsReceiptFormPage() {
+  const navigate = useNavigate()
   const { create } = useGoodsReceiptResource()
   const [values, setValues] = useState<GoodsReceiptFormValues>({})
 
@@ -14,7 +16,7 @@ export function GoodsReceiptFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/inventory-goods-receipt') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah GoodsReceipt</h1>

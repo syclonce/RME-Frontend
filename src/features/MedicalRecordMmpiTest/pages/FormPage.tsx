@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { useMmpiTestResource } from '../api'
 import type { MmpiTestFormValues } from '../types'
 
 export function MmpiTestFormPage() {
-  const { create } = useMmpiTestResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useMmpiTestResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MmpiTestFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as MmpiTestFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/medical-record-mmpi-test') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-mmpi-test') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah MmpiTest</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} MmpiTest</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
         <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -58,7 +68,7 @@ export function MmpiTestFormPage() {
         <Label htmlFor="conclusion">Conclusion</Label>
         <Input id="conclusion" type="text" value={values.conclusion ?? ''} onChange={(e) => setValues({ ...values, conclusion: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

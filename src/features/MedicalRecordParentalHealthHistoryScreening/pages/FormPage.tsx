@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { useParentalHealthHistoryScreeningResource } from '../api'
 import type { ParentalHealthHistoryScreeningFormValues } from '../types'
 
 export function ParentalHealthHistoryScreeningFormPage() {
+  const navigate = useNavigate()
   const { create } = useParentalHealthHistoryScreeningResource()
   const [values, setValues] = useState<ParentalHealthHistoryScreeningFormValues>({})
 
@@ -15,7 +17,7 @@ export function ParentalHealthHistoryScreeningFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-parental-health-history-screening') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah ParentalHealthHistoryScreening</h1>

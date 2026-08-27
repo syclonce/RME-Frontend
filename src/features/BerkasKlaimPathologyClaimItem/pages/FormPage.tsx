@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { usePathologyClaimItemResource } from '../api'
 import type { PathologyClaimItemFormValues } from '../types'
 
 export function PathologyClaimItemFormPage() {
+  const navigate = useNavigate()
   const { create } = usePathologyClaimItemResource()
   const [values, setValues] = useState<PathologyClaimItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function PathologyClaimItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/berkas-klaim-pathology-claim-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah PathologyClaimItem</h1>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useClinicalLabClaimItemResource } from '../api'
 import type { ClinicalLabClaimItemFormValues } from '../types'
 
 export function ClinicalLabClaimItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useClinicalLabClaimItemResource()
   const [values, setValues] = useState<ClinicalLabClaimItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function ClinicalLabClaimItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/berkas-klaim-clinical-lab-claim-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah ClinicalLabClaimItem</h1>

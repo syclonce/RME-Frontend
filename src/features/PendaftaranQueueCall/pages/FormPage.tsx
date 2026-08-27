@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useQueueCallResource } from '../api'
 import type { QueueCallFormValues } from '../types'
 
 export function QueueCallFormPage() {
+  const navigate = useNavigate()
   const { create } = useQueueCallResource()
   const [values, setValues] = useState<QueueCallFormValues>({})
 
@@ -14,7 +16,7 @@ export function QueueCallFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/pendaftaran-queue-call') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah QueueCall</h1>

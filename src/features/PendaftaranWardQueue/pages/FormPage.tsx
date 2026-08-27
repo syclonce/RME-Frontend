@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { useWardQueueResource } from '../api'
 import type { WardQueueFormValues } from '../types'
 
 export function WardQueueFormPage() {
-  const { create } = useWardQueueResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useWardQueueResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<WardQueueFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as WardQueueFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/pendaftaran-ward-queue') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/pendaftaran-ward-queue') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah WardQueue</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} WardQueue</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward *</Label>
         <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -30,7 +40,7 @@ export function WardQueueFormPage() {
         <Label htmlFor="visit_id">Visit</Label>
         <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useInventoryGoodsReceiptCancellationResource } from '../api'
 import type { InventoryGoodsReceiptCancellationFormValues } from '../types'
 
 export function InventoryGoodsReceiptCancellationFormPage() {
+  const navigate = useNavigate()
   const { create } = useInventoryGoodsReceiptCancellationResource()
   const [values, setValues] = useState<InventoryGoodsReceiptCancellationFormValues>({})
 
@@ -14,7 +16,7 @@ export function InventoryGoodsReceiptCancellationFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/inventory-goods-receipt-cancellation') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah InventoryGoodsReceiptCancellation</h1>

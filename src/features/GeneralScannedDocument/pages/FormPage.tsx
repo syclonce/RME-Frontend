@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useGeneralScannedDocumentResource } from '../api'
 import type { GeneralScannedDocumentFormValues } from '../types'
 
 export function GeneralScannedDocumentFormPage() {
+  const navigate = useNavigate()
   const { create } = useGeneralScannedDocumentResource()
   const [values, setValues] = useState<GeneralScannedDocumentFormValues>({})
 
@@ -14,7 +16,7 @@ export function GeneralScannedDocumentFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/general-scanned-document') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah GeneralScannedDocument</h1>

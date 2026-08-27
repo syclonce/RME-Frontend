@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useDepositRefundResource } from '../api'
 import type { DepositRefundFormValues } from '../types'
 
 export function DepositRefundFormPage() {
+  const navigate = useNavigate()
   const { create } = useDepositRefundResource()
   const [values, setValues] = useState<DepositRefundFormValues>({})
 
@@ -14,7 +16,7 @@ export function DepositRefundFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/pembayaran-deposit-refund') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah DepositRefund</h1>

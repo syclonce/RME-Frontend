@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,18 +8,27 @@ import { useCriticalLabValueResource } from '../api'
 import type { CriticalLabValueFormValues } from '../types'
 
 export function CriticalLabValueFormPage() {
-  const { create } = useCriticalLabValueResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useCriticalLabValueResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<CriticalLabValueFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as CriticalLabValueFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/layanan-critical-lab-value') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/layanan-critical-lab-value') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah CriticalLabValue</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} CriticalLabValue</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_order_id">Lab Order *</Label>
         <Input id="lab_order_id" type="number" value={values.lab_order_id ?? ''} onChange={(e) => setValues({ ...values, lab_order_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -43,7 +53,7 @@ export function CriticalLabValueFormPage() {
         <Checkbox id="acknowledged" checked={!!values.acknowledged} onCheckedChange={(v) => setValues({ ...values, acknowledged: !!v })} />
         <Label htmlFor="acknowledged">Acknowledged</Label>
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

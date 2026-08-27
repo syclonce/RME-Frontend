@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { useRehabilitationProcedureExaminationItemResource } from '../api'
 import type { RehabilitationProcedureExaminationItemFormValues } from '../types'
 
 export function RehabilitationProcedureExaminationItemFormPage() {
-  const { create } = useRehabilitationProcedureExaminationItemResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useRehabilitationProcedureExaminationItemResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<RehabilitationProcedureExaminationItemFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as RehabilitationProcedureExaminationItemFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/medical-record-rehabilitation-procedure-examination-item') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-rehabilitation-procedure-examination-item') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah RehabilitationProcedureExaminationItem</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} RehabilitationProcedureExaminationItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="rehabilitation_procedure_examination_id">Rehabilitation Procedure Examination *</Label>
         <Input id="rehabilitation_procedure_examination_id" type="number" value={values.rehabilitation_procedure_examination_id ?? ''} onChange={(e) => setValues({ ...values, rehabilitation_procedure_examination_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -38,7 +48,7 @@ export function RehabilitationProcedureExaminationItemFormPage() {
         <Label htmlFor="sequence">Sequence</Label>
         <Input id="sequence" type="number" value={values.sequence ?? ''} onChange={(e) => setValues({ ...values, sequence: e.target.value === '' ? null : Number(e.target.value) })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

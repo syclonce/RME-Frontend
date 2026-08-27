@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { useSterilizationCycleResource } from '../api'
 import type { SterilizationCycleFormValues } from '../types'
 
 export function SterilizationCycleFormPage() {
-  const { create } = useSterilizationCycleResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useSterilizationCycleResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SterilizationCycleFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as SterilizationCycleFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/inventory-sterilization-cycle') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/inventory-sterilization-cycle') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah SterilizationCycle</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} SterilizationCycle</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="machine_name">Machine Name *</Label>
         <Input id="machine_name" type="text" value={values.machine_name ?? ''} onChange={(e) => setValues({ ...values, machine_name: e.target.value })} />
@@ -50,7 +60,7 @@ export function SterilizationCycleFormPage() {
         <Label htmlFor="status">Status</Label>
         <Input id="status" type="text" value={values.status ?? ''} onChange={(e) => setValues({ ...values, status: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

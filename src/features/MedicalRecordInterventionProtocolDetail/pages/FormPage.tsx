@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useInterventionProtocolDetailResource } from '../api'
 import type { InterventionProtocolDetailFormValues } from '../types'
 
 export function InterventionProtocolDetailFormPage() {
+  const navigate = useNavigate()
   const { create } = useInterventionProtocolDetailResource()
   const [values, setValues] = useState<InterventionProtocolDetailFormValues>({})
 
@@ -14,7 +16,7 @@ export function InterventionProtocolDetailFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-intervention-protocol-detail') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah InterventionProtocolDetail</h1>

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,18 +8,27 @@ import { usePrescriptionFulfillmentItemResource } from '../api'
 import type { PrescriptionFulfillmentItemFormValues } from '../types'
 
 export function PrescriptionFulfillmentItemFormPage() {
-  const { create } = usePrescriptionFulfillmentItemResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = usePrescriptionFulfillmentItemResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PrescriptionFulfillmentItemFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as PrescriptionFulfillmentItemFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/layanan-prescription-fulfillment-item') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/layanan-prescription-fulfillment-item') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah PrescriptionFulfillmentItem</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PrescriptionFulfillmentItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_fulfillment_id">Prescription Fulfillment *</Label>
         <Input id="prescription_fulfillment_id" type="number" value={values.prescription_fulfillment_id ?? ''} onChange={(e) => setValues({ ...values, prescription_fulfillment_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -39,7 +49,7 @@ export function PrescriptionFulfillmentItemFormPage() {
         <Label htmlFor="notes">Notes</Label>
         <Input id="notes" type="text" value={values.notes ?? ''} onChange={(e) => setValues({ ...values, notes: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

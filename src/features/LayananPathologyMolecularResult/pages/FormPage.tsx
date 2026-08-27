@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { usePathologyMolecularResultResource } from '../api'
 import type { PathologyMolecularResultFormValues } from '../types'
 
 export function PathologyMolecularResultFormPage() {
+  const navigate = useNavigate()
   const { create } = usePathologyMolecularResultResource()
   const [values, setValues] = useState<PathologyMolecularResultFormValues>({})
 
@@ -14,7 +16,7 @@ export function PathologyMolecularResultFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-pathology-molecular-result') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah PathologyMolecularResult</h1>

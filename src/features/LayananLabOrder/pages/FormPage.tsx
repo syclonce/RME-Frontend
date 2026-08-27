@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,18 +8,27 @@ import { useLabOrderResource } from '../api'
 import type { LabOrderFormValues } from '../types'
 
 export function LabOrderFormPage() {
-  const { create } = useLabOrderResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useLabOrderResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LabOrderFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as LabOrderFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/layanan-lab-order') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/layanan-lab-order') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah LabOrder</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LabOrder</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="order_number">Order Number</Label>
         <Input id="order_number" type="text" value={values.order_number ?? ''} onChange={(e) => setValues({ ...values, order_number: e.target.value })} />
@@ -51,7 +61,7 @@ export function LabOrderFormPage() {
         <Label htmlFor="notes">Notes</Label>
         <Input id="notes" type="text" value={values.notes ?? ''} onChange={(e) => setValues({ ...values, notes: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

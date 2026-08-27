@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,18 +8,27 @@ import { useLabReferenceValueResource } from '../api'
 import type { LabReferenceValueFormValues } from '../types'
 
 export function LabReferenceValueFormPage() {
-  const { create } = useLabReferenceValueResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useLabReferenceValueResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LabReferenceValueFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as LabReferenceValueFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/general-lab-reference-value') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/general-lab-reference-value') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah LabReferenceValue</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LabReferenceValue</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_service_parameter_id">Lab Service Parameter *</Label>
         <Input id="lab_service_parameter_id" type="number" value={values.lab_service_parameter_id ?? ''} onChange={(e) => setValues({ ...values, lab_service_parameter_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -55,7 +65,7 @@ export function LabReferenceValueFormPage() {
         <Checkbox id="is_active" checked={!!values.is_active} onCheckedChange={(v) => setValues({ ...values, is_active: !!v })} />
         <Label htmlFor="is_active">Is Active</Label>
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

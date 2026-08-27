@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useProcedureConsentInformationGiverResource } from '../api'
 import type { ProcedureConsentInformationGiverFormValues } from '../types'
 
 export function ProcedureConsentInformationGiverFormPage() {
+  const navigate = useNavigate()
   const { create } = useProcedureConsentInformationGiverResource()
   const [values, setValues] = useState<ProcedureConsentInformationGiverFormValues>({})
 
@@ -14,7 +16,7 @@ export function ProcedureConsentInformationGiverFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-procedure-consent-information-giver') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah ProcedureConsentInformationGiver</h1>

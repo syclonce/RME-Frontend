@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { useBaepDysphagiaDetailResource } from '../api'
 import type { BaepDysphagiaDetailFormValues } from '../types'
 
 export function BaepDysphagiaDetailFormPage() {
+  const navigate = useNavigate()
   const { create } = useBaepDysphagiaDetailResource()
   const [values, setValues] = useState<BaepDysphagiaDetailFormValues>({})
 
@@ -15,7 +17,7 @@ export function BaepDysphagiaDetailFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-baep-dysphagia-detail') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah BaepDysphagiaDetail</h1>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useNutritionDietPatternResource } from '../api'
 import type { NutritionDietPatternFormValues } from '../types'
 
 export function NutritionDietPatternFormPage() {
+  const navigate = useNavigate()
   const { create } = useNutritionDietPatternResource()
   const [values, setValues] = useState<NutritionDietPatternFormValues>({})
 
@@ -14,7 +16,7 @@ export function NutritionDietPatternFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-nutrition-diet-pattern') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah NutritionDietPattern</h1>

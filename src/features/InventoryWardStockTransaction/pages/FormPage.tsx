@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useInventoryWardStockTransactionResource } from '../api'
 import type { InventoryWardStockTransactionFormValues } from '../types'
 
 export function InventoryWardStockTransactionFormPage() {
+  const navigate = useNavigate()
   const { create } = useInventoryWardStockTransactionResource()
   const [values, setValues] = useState<InventoryWardStockTransactionFormValues>({})
 
@@ -14,7 +16,7 @@ export function InventoryWardStockTransactionFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/inventory-ward-stock-transaction') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah InventoryWardStockTransaction</h1>

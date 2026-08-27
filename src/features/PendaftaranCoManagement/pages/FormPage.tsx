@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useCoManagementResource } from '../api'
 import type { CoManagementFormValues } from '../types'
 
 export function CoManagementFormPage() {
+  const navigate = useNavigate()
   const { create } = useCoManagementResource()
   const [values, setValues] = useState<CoManagementFormValues>({})
 
@@ -14,7 +16,7 @@ export function CoManagementFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/pendaftaran-co-management') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah CoManagement</h1>

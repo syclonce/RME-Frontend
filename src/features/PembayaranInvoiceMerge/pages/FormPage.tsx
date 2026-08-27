@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { useInvoiceMergeResource } from '../api'
 import type { InvoiceMergeFormValues } from '../types'
 
 export function InvoiceMergeFormPage() {
-  const { create } = useInvoiceMergeResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useInvoiceMergeResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InvoiceMergeFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as InvoiceMergeFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/pembayaran-invoice-merge') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/pembayaran-invoice-merge') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah InvoiceMerge</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} InvoiceMerge</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="merge_number">Merge Number</Label>
         <Input id="merge_number" type="text" value={values.merge_number ?? ''} onChange={(e) => setValues({ ...values, merge_number: e.target.value })} />
@@ -42,7 +52,7 @@ export function InvoiceMergeFormPage() {
         <Label htmlFor="notes">Notes</Label>
         <Input id="notes" type="text" value={values.notes ?? ''} onChange={(e) => setValues({ ...values, notes: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

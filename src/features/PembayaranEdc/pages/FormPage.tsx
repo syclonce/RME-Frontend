@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,18 +7,27 @@ import { useEdcResource } from '../api'
 import type { EdcFormValues } from '../types'
 
 export function EdcFormPage() {
-  const { create } = useEdcResource()
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = id !== undefined
+  const { create, update, detail } = useEdcResource()
+  const existing = detail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<EdcFormValues>({})
+
+  useEffect(() => {
+    if (existing.data) setValues(existing.data as unknown as EdcFormValues)
+  }, [existing.data])
 
   return (
     <form
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        if (isEdit) update.mutate({ id: Number(id), payload: values }, { onSuccess: () => navigate('/modul/pembayaran-edc') })
+        else create.mutate(values, { onSuccess: () => navigate('/modul/pembayaran-edc') })
       }}
     >
-      <h1 className="text-lg font-semibold">Tambah Edc</h1>
+      <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Edc</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="payment_id">Payment *</Label>
         <Input id="payment_id" type="number" value={values.payment_id ?? ''} onChange={(e) => setValues({ ...values, payment_id: e.target.value === '' ? null : Number(e.target.value) })} />
@@ -50,7 +60,7 @@ export function EdcFormPage() {
         <Label htmlFor="transaction_at">Transaction At</Label>
         <Input id="transaction_at" type="date" value={values.transaction_at ?? ''} onChange={(e) => setValues({ ...values, transaction_at: e.target.value })} />
       </div>
-      <Button type="submit" disabled={create.isPending}>
+      <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan
       </Button>
     </form>

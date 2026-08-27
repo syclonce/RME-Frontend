@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useTransferMedicationReconciliationResource } from '../api'
 import type { TransferMedicationReconciliationFormValues } from '../types'
 
 export function TransferMedicationReconciliationFormPage() {
+  const navigate = useNavigate()
   const { create } = useTransferMedicationReconciliationResource()
   const [values, setValues] = useState<TransferMedicationReconciliationFormValues>({})
 
@@ -14,7 +16,7 @@ export function TransferMedicationReconciliationFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-transfer-medication-reconciliation') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah TransferMedicationReconciliation</h1>

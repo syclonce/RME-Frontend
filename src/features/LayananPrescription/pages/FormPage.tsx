@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { usePrescriptionResource } from '../api'
 import type { PrescriptionFormValues } from '../types'
 
 export function PrescriptionFormPage() {
+  const navigate = useNavigate()
   const { create } = usePrescriptionResource()
   const [values, setValues] = useState<PrescriptionFormValues>({})
 
@@ -15,7 +17,7 @@ export function PrescriptionFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-prescription') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah Prescription</h1>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { useClinicalNoteResource } from '../api'
 import type { ClinicalNoteFormValues } from '../types'
 
 export function ClinicalNoteFormPage() {
+  const navigate = useNavigate()
   const { create } = useClinicalNoteResource()
   const [values, setValues] = useState<ClinicalNoteFormValues>({})
 
@@ -15,7 +17,7 @@ export function ClinicalNoteFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-clinical-note') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah ClinicalNote</h1>

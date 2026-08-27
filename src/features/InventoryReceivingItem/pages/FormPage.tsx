@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useReceivingItemResource } from '../api'
 import type { ReceivingItemFormValues } from '../types'
 
 export function ReceivingItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useReceivingItemResource()
   const [values, setValues] = useState<ReceivingItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function ReceivingItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/inventory-receiving-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah ReceivingItem</h1>

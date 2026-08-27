@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useLabOrderItemResource } from '../api'
 import type { LabOrderItemFormValues } from '../types'
 
 export function LabOrderItemFormPage() {
+  const navigate = useNavigate()
   const { create } = useLabOrderItemResource()
   const [values, setValues] = useState<LabOrderItemFormValues>({})
 
@@ -14,7 +16,7 @@ export function LabOrderItemFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-lab-order-item') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah LabOrderItem</h1>

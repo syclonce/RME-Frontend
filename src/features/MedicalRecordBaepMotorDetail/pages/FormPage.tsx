@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useBaepMotorDetailResource } from '../api'
 import type { BaepMotorDetailFormValues } from '../types'
 
 export function BaepMotorDetailFormPage() {
+  const navigate = useNavigate()
   const { create } = useBaepMotorDetailResource()
   const [values, setValues] = useState<BaepMotorDetailFormValues>({})
 
@@ -14,7 +16,7 @@ export function BaepMotorDetailFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/medical-record-baep-motor-detail') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah BaepMotorDetail</h1>

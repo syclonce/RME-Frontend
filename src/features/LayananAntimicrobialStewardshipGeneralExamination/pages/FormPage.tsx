@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -6,6 +7,7 @@ import { useAntimicrobialStewardshipGeneralExaminationResource } from '../api'
 import type { AntimicrobialStewardshipGeneralExaminationFormValues } from '../types'
 
 export function AntimicrobialStewardshipGeneralExaminationFormPage() {
+  const navigate = useNavigate()
   const { create } = useAntimicrobialStewardshipGeneralExaminationResource()
   const [values, setValues] = useState<AntimicrobialStewardshipGeneralExaminationFormValues>({})
 
@@ -14,7 +16,7 @@ export function AntimicrobialStewardshipGeneralExaminationFormPage() {
       className="mx-auto grid max-w-lg gap-4 p-4"
       onSubmit={(e) => {
         e.preventDefault()
-        create.mutate(values)
+        create.mutate(values, { onSuccess: () => navigate('/modul/layanan-antimicrobial-stewardship-general-examination') })
       }}
     >
       <h1 className="text-lg font-semibold">Tambah AntimicrobialStewardshipGeneralExamination</h1>
