@@ -3,23 +3,23 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "get",
-    "uri": "tempat-tidur"
+    "uri": "sirs-online-bor/tempat-tidur"
   },
   {
     "verb": "post",
-    "uri": "tempat-tidur"
+    "uri": "sirs-online-bor/tempat-tidur"
   },
   {
     "verb": "get",
-    "uri": "tempat-tidur/{tempatTidur}"
+    "uri": "sirs-online-bor/tempat-tidur/{tempatTidur}"
   },
   {
     "verb": "put",
-    "uri": "tempat-tidur/{tempatTidur}"
+    "uri": "sirs-online-bor/tempat-tidur/{tempatTidur}"
   },
   {
     "verb": "delete",
-    "uri": "tempat-tidur/{tempatTidur}"
+    "uri": "sirs-online-bor/tempat-tidur/{tempatTidur}"
   }
 ] as const
 

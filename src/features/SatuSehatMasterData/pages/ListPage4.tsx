@@ -5,11 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const COLUMNS = ["id"] as const
 
-export function SaranaListPage() {
+export function SatusehatMasterDataSaranaListPage() {
   const { data, isLoading } = useQuery({
-    queryKey: ['/sarana', 'list'],
+    queryKey: ['/satusehat/master-data/sarana', 'list'],
     queryFn: async () => {
-      const res = await apiClient.get('/sarana')
+      const res = await apiClient.get('/satusehat/master-data/sarana')
       return normalizeList<Record<string, unknown>>(res.data)
     },
   })
@@ -18,7 +18,7 @@ export function SaranaListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">Sarana (read-only)</h1>
+      <h1 className="mb-4 text-lg font-semibold">SatusehatMasterDataSarana (read-only)</h1>
       <Table>
         <TableHeader>
           <TableRow>

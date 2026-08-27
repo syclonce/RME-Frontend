@@ -2680,7 +2680,7 @@
     "route": {
       "apiResources": [
         {
-          "uri": "antrean",
+          "uri": "antrean-fktp/antrean",
           "controller": "AntreanController",
           "chain": "->only(['index', 'store', 'show'])\n        ->parameters(['antrean' => 'antrean'])"
         }
@@ -2688,107 +2688,107 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "antrean/{antrean}/batal"
+          "uri": "antrean-fktp/antrean/{antrean}/batal"
         },
         {
           "verb": "get",
-          "uri": "antrean/{antrean}/waktu"
+          "uri": "antrean-fktp/antrean/{antrean}/waktu"
         },
         {
           "verb": "post",
-          "uri": "antrean/{antrean}/waktu"
+          "uri": "antrean-fktp/antrean/{antrean}/waktu"
         },
         {
           "verb": "post",
-          "uri": "antrean/{antrean}/farmasi"
+          "uri": "antrean-fktp/antrean/{antrean}/farmasi"
         },
         {
           "verb": "get",
-          "uri": "poli"
+          "uri": "antrean-fktp/referensi/poli"
         },
         {
           "verb": "get",
-          "uri": "dokter/{kodepoli}/{tanggal}"
+          "uri": "antrean-fktp/referensi/dokter/{kodepoli}/{tanggal}"
         },
         {
           "verb": "get",
-          "uri": "jadwal-dokter/{kodedokter}/{tanggal}"
+          "uri": "antrean-fktp/referensi/jadwal-dokter/{kodedokter}/{tanggal}"
         },
         {
           "verb": "get",
-          "uri": "poli-fingerprint"
+          "uri": "antrean-fktp/referensi/poli-fingerprint"
         },
         {
           "verb": "get",
-          "uri": "pasien-fingerprint/{norm}"
+          "uri": "antrean-fktp/referensi/pasien-fingerprint/{norm}"
         },
         {
           "verb": "post",
-          "uri": "jadwal-dokter"
+          "uri": "antrean-fktp/jadwal-dokter"
         },
         {
           "verb": "get",
-          "uri": "dashboard/tanggal/{tanggal}/{kodepoli}"
+          "uri": "antrean-fktp/dashboard/tanggal/{tanggal}/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "dashboard/bulan/{bulan}/{tahun}/{kodepoli}"
+          "uri": "antrean-fktp/dashboard/bulan/{bulan}/{tahun}/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "laporan/tanggal/{tanggal}/{kodepoli}"
+          "uri": "antrean-fktp/laporan/tanggal/{tanggal}/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "laporan/kodebooking/{kodebooking}"
+          "uri": "antrean-fktp/laporan/kodebooking/{kodebooking}"
         },
         {
           "verb": "get",
-          "uri": "laporan/belum-dilayani/{kodepoli}"
+          "uri": "antrean-fktp/laporan/belum-dilayani/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "laporan/belum-dilayani/{kodepoli}/{kodedokter}/{tanggal}/{jampraktek}"
+          "uri": "antrean-fktp/laporan/belum-dilayani/{kodepoli}/{kodedokter}/{tanggal}/{jampraktek}"
         },
         {
           "verb": "get",
-          "uri": "token"
+          "uri": "antrean-fktp/mobile-jkn/token"
         },
         {
           "verb": "post",
-          "uri": "antrean"
+          "uri": "antrean-fktp/mobile-jkn/antrean"
         },
         {
           "verb": "get",
-          "uri": "antrean/{kodebooking}"
+          "uri": "antrean-fktp/mobile-jkn/antrean/{kodebooking}"
         },
         {
           "verb": "post",
-          "uri": "antrean/{kodebooking}/batal"
+          "uri": "antrean-fktp/mobile-jkn/antrean/{kodebooking}/batal"
         },
         {
           "verb": "post",
-          "uri": "antrean/{kodebooking}/checkin"
+          "uri": "antrean-fktp/mobile-jkn/antrean/{kodebooking}/checkin"
         },
         {
           "verb": "post",
-          "uri": "antrean/{kodebooking}/farmasi"
+          "uri": "antrean-fktp/mobile-jkn/antrean/{kodebooking}/farmasi"
         },
         {
           "verb": "get",
-          "uri": "antrean/{kodebooking}/farmasi"
+          "uri": "antrean-fktp/mobile-jkn/antrean/{kodebooking}/farmasi"
         },
         {
           "verb": "post",
-          "uri": "pasien-baru"
+          "uri": "antrean-fktp/mobile-jkn/pasien-baru"
         },
         {
           "verb": "get",
-          "uri": "jadwal-operasi"
+          "uri": "antrean-fktp/mobile-jkn/jadwal-operasi"
         },
         {
           "verb": "get",
-          "uri": "jadwal-operasi/{norm}"
+          "uri": "antrean-fktp/mobile-jkn/jadwal-operasi/{norm}"
         }
       ]
     },
@@ -3352,7 +3352,7 @@
     "route": {
       "apiResources": [
         {
-          "uri": "antrean",
+          "uri": "antrean-rs/antrean",
           "controller": "AntreanController",
           "chain": "->only(['index', 'store', 'show'])\n        ->parameters(['antrean' => 'antrean'])"
         }
@@ -3360,107 +3360,107 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "antrean/{antrean}/batal"
+          "uri": "antrean-rs/antrean/{antrean}/batal"
         },
         {
           "verb": "get",
-          "uri": "antrean/{antrean}/waktu"
+          "uri": "antrean-rs/antrean/{antrean}/waktu"
         },
         {
           "verb": "post",
-          "uri": "antrean/{antrean}/waktu"
+          "uri": "antrean-rs/antrean/{antrean}/waktu"
         },
         {
           "verb": "post",
-          "uri": "antrean/{antrean}/farmasi"
+          "uri": "antrean-rs/antrean/{antrean}/farmasi"
         },
         {
           "verb": "get",
-          "uri": "poli"
+          "uri": "antrean-rs/referensi/poli"
         },
         {
           "verb": "get",
-          "uri": "dokter/{kodepoli}/{tanggal}"
+          "uri": "antrean-rs/referensi/dokter/{kodepoli}/{tanggal}"
         },
         {
           "verb": "get",
-          "uri": "jadwal-dokter/{kodedokter}/{tanggal}"
+          "uri": "antrean-rs/referensi/jadwal-dokter/{kodedokter}/{tanggal}"
         },
         {
           "verb": "get",
-          "uri": "poli-fingerprint"
+          "uri": "antrean-rs/referensi/poli-fingerprint"
         },
         {
           "verb": "get",
-          "uri": "pasien-fingerprint/{norm}"
+          "uri": "antrean-rs/referensi/pasien-fingerprint/{norm}"
         },
         {
           "verb": "post",
-          "uri": "jadwal-dokter"
+          "uri": "antrean-rs/jadwal-dokter"
         },
         {
           "verb": "get",
-          "uri": "dashboard/tanggal/{tanggal}/{kodepoli}"
+          "uri": "antrean-rs/dashboard/tanggal/{tanggal}/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "dashboard/bulan/{bulan}/{tahun}/{kodepoli}"
+          "uri": "antrean-rs/dashboard/bulan/{bulan}/{tahun}/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "laporan/tanggal/{tanggal}/{kodepoli}"
+          "uri": "antrean-rs/laporan/tanggal/{tanggal}/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "laporan/kodebooking/{kodebooking}"
+          "uri": "antrean-rs/laporan/kodebooking/{kodebooking}"
         },
         {
           "verb": "get",
-          "uri": "laporan/belum-dilayani/{kodepoli}"
+          "uri": "antrean-rs/laporan/belum-dilayani/{kodepoli}"
         },
         {
           "verb": "get",
-          "uri": "laporan/belum-dilayani/{kodepoli}/{kodedokter}/{tanggal}/{jampraktek}"
+          "uri": "antrean-rs/laporan/belum-dilayani/{kodepoli}/{kodedokter}/{tanggal}/{jampraktek}"
         },
         {
           "verb": "get",
-          "uri": "token"
+          "uri": "antrean-rs/mobile-jkn/token"
         },
         {
           "verb": "post",
-          "uri": "antrean"
+          "uri": "antrean-rs/mobile-jkn/antrean"
         },
         {
           "verb": "get",
-          "uri": "antrean/{kodebooking}"
+          "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}"
         },
         {
           "verb": "post",
-          "uri": "antrean/{kodebooking}/batal"
+          "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/batal"
         },
         {
           "verb": "post",
-          "uri": "antrean/{kodebooking}/checkin"
+          "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/checkin"
         },
         {
           "verb": "post",
-          "uri": "antrean/{kodebooking}/farmasi"
+          "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/farmasi"
         },
         {
           "verb": "get",
-          "uri": "antrean/{kodebooking}/farmasi"
+          "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/farmasi"
         },
         {
           "verb": "post",
-          "uri": "pasien-baru"
+          "uri": "antrean-rs/mobile-jkn/pasien-baru"
         },
         {
           "verb": "get",
-          "uri": "jadwal-operasi"
+          "uri": "antrean-rs/mobile-jkn/jadwal-operasi"
         },
         {
           "verb": "get",
-          "uri": "jadwal-operasi/{norm}"
+          "uri": "antrean-rs/mobile-jkn/jadwal-operasi/{norm}"
         }
       ]
     },
@@ -3505,27 +3505,27 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "referensi/kamar/{query?}"
+          "uri": "aplicares/referensi/kamar/{query?}"
         },
         {
           "verb": "get",
-          "uri": "rooms"
+          "uri": "aplicares/rooms"
         },
         {
           "verb": "post",
-          "uri": "rooms"
+          "uri": "aplicares/rooms"
         },
         {
           "verb": "get",
-          "uri": "rooms/{aplicares_room_sync}"
+          "uri": "aplicares/rooms/{aplicares_room_sync}"
         },
         {
           "verb": "delete",
-          "uri": "rooms/{aplicares_room_sync}"
+          "uri": "aplicares/rooms/{aplicares_room_sync}"
         },
         {
           "verb": "post",
-          "uri": "rooms/{aplicares_room_sync}/beds"
+          "uri": "aplicares/rooms/{aplicares_room_sync}/beds"
         }
       ]
     },
@@ -3781,7 +3781,7 @@
     "route": {
       "apiResources": [
         {
-          "uri": "resep",
+          "uri": "apotek/resep",
           "controller": "ApotekResepController",
           "chain": "->only(['index', 'store', 'show', 'destroy'])\n        ->parameters(['resep' => 'apotek_resep'])"
         }
@@ -3789,63 +3789,63 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "dpho/{query?}"
+          "uri": "apotek/referensi/dpho/{query?}"
         },
         {
           "verb": "get",
-          "uri": "poli/{query?}"
+          "uri": "apotek/referensi/poli/{query?}"
         },
         {
           "verb": "get",
-          "uri": "faskes/{query?}"
+          "uri": "apotek/referensi/faskes/{query?}"
         },
         {
           "verb": "get",
-          "uri": "setting-apotek"
+          "uri": "apotek/referensi/setting-apotek"
         },
         {
           "verb": "get",
-          "uri": "spesialistik/{query?}"
+          "uri": "apotek/referensi/spesialistik/{query?}"
         },
         {
           "verb": "get",
-          "uri": "obat/{query?}"
+          "uri": "apotek/referensi/obat/{query?}"
         },
         {
           "verb": "get",
-          "uri": "pelayanan-obat"
+          "uri": "apotek/pelayanan-obat"
         },
         {
           "verb": "delete",
-          "uri": "pelayanan-obat/{apotek_pelayanan_obat}"
+          "uri": "apotek/pelayanan-obat/{apotek_pelayanan_obat}"
         },
         {
           "verb": "get",
-          "uri": "pelayanan-obat-riwayat/{no_sep}"
+          "uri": "apotek/pelayanan-obat-riwayat/{no_sep}"
         },
         {
           "verb": "post",
-          "uri": "penyimpanan-obat"
+          "uri": "apotek/penyimpanan-obat"
         },
         {
           "verb": "get",
-          "uri": "penyimpanan-obat/{apotek_penyimpanan_obat}"
+          "uri": "apotek/penyimpanan-obat/{apotek_penyimpanan_obat}"
         },
         {
           "verb": "post",
-          "uri": "penyimpanan-obat-stok"
+          "uri": "apotek/penyimpanan-obat-stok"
         },
         {
           "verb": "get",
-          "uri": "sep/{query}"
+          "uri": "apotek/sep/{query}"
         },
         {
           "verb": "get",
-          "uri": "monitoring"
+          "uri": "apotek/monitoring"
         },
         {
           "verb": "get",
-          "uri": "prb"
+          "uri": "apotek/prb"
         }
       ]
     },
@@ -4759,43 +4759,43 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "diagnosa"
+          "uri": "pcare-ref/diagnosa"
         },
         {
           "verb": "get",
-          "uri": "dokter"
+          "uri": "pcare-ref/dokter"
         },
         {
           "verb": "get",
-          "uri": "kelompok"
+          "uri": "pcare-ref/kelompok"
         },
         {
           "verb": "get",
-          "uri": "kesadaran"
+          "uri": "pcare-ref/kesadaran"
         },
         {
           "verb": "get",
-          "uri": "obat"
+          "uri": "pcare-ref/obat"
         },
         {
           "verb": "get",
-          "uri": "poli"
+          "uri": "pcare-ref/poli"
         },
         {
           "verb": "get",
-          "uri": "provider"
+          "uri": "pcare-ref/provider"
         },
         {
           "verb": "get",
-          "uri": "spesialis"
+          "uri": "pcare-ref/spesialis"
         },
         {
           "verb": "get",
-          "uri": "status-pulang"
+          "uri": "pcare-ref/status-pulang"
         },
         {
           "verb": "get",
-          "uri": "peserta"
+          "uri": "pcare-ref/peserta"
         },
         {
           "verb": "get",
@@ -5995,15 +5995,15 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "calls"
+          "uri": "eklaim/calls"
         },
         {
           "verb": "get",
-          "uri": "calls/{eklaimCall}"
+          "uri": "eklaim/calls/{eklaimCall}"
         },
         {
           "verb": "post",
-          "uri": "calls"
+          "uri": "eklaim/calls"
         }
       ]
     },
@@ -21309,19 +21309,19 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "provinces"
+          "uri": "regions/provinces"
         },
         {
           "verb": "get",
-          "uri": "provinces/{province}/cities"
+          "uri": "regions/provinces/{province}/cities"
         },
         {
           "verb": "get",
-          "uri": "cities/{city}/districts"
+          "uri": "regions/cities/{city}/districts"
         },
         {
           "verb": "get",
-          "uri": "districts/{district}/villages"
+          "uri": "regions/districts/{district}/villages"
         }
       ]
     },
@@ -74611,79 +74611,79 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "/"
+          "uri": "rs-online"
         },
         {
           "verb": "get",
-          "uri": "{rsOnlineSubmission}"
+          "uri": "rs-online/{rsOnlineSubmission}"
         },
         {
           "verb": "post",
-          "uri": "data/sdm"
+          "uri": "rs-online/data/sdm"
         },
         {
           "verb": "post",
-          "uri": "data/layanan"
+          "uri": "rs-online/data/layanan"
         },
         {
           "verb": "post",
-          "uri": "data/alkes"
+          "uri": "rs-online/data/alkes"
         },
         {
           "verb": "post",
-          "uri": "data/tempat-tidur"
+          "uri": "rs-online/data/tempat-tidur"
         },
         {
           "verb": "post",
-          "uri": "registrasi-user"
+          "uri": "rs-online/registrasi-user"
         },
         {
           "verb": "put",
-          "uri": "registrasi-user/{id}"
+          "uri": "rs-online/registrasi-user/{id}"
         },
         {
           "verb": "delete",
-          "uri": "registrasi-user/{id}"
+          "uri": "rs-online/registrasi-user/{id}"
         },
         {
           "verb": "get",
-          "uri": "referensi/sdm"
+          "uri": "rs-online/referensi/sdm"
         },
         {
           "verb": "get",
-          "uri": "referensi/sarana"
+          "uri": "rs-online/referensi/sarana"
         },
         {
           "verb": "get",
-          "uri": "referensi/ruang-perawatan"
+          "uri": "rs-online/referensi/ruang-perawatan"
         },
         {
           "verb": "get",
-          "uri": "referensi/pelayanan"
+          "uri": "rs-online/referensi/pelayanan"
         },
         {
           "verb": "get",
-          "uri": "referensi/kelas"
+          "uri": "rs-online/referensi/kelas"
         },
         {
           "verb": "get",
-          "uri": "referensi/kategori-sdm"
+          "uri": "rs-online/referensi/kategori-sdm"
         },
         {
           "verb": "get",
-          "uri": "referensi/kategori-layanan"
+          "uri": "rs-online/referensi/kategori-layanan"
         },
         {
           "verb": "get",
-          "uri": "referensi/instalasi"
+          "uri": "rs-online/referensi/instalasi"
         },
         {
           "verb": "get",
-          "uri": "referensi/alkes"
+          "uri": "rs-online/referensi/alkes"
         },
         {
           "verb": "get",
-          "uri": "referensi/faskes"
+          "uri": "rs-online/referensi/faskes"
         }
       ]
     },
@@ -74758,27 +74758,27 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "mtbs/bundle"
+          "uri": "satusehat/anak/mtbs/bundle"
         },
         {
           "verb": "post",
-          "uri": "imunisasi/bundle"
+          "uri": "satusehat/anak/imunisasi/bundle"
         },
         {
           "verb": "post",
-          "uri": "gizi/bundle"
+          "uri": "satusehat/anak/gizi/bundle"
         },
         {
           "verb": "post",
-          "uri": "tumbuh-kembang/bundle"
+          "uri": "satusehat/anak/tumbuh-kembang/bundle"
         },
         {
           "verb": "post",
-          "uri": "pkpr/bundle"
+          "uri": "satusehat/anak/pkpr/bundle"
         },
         {
           "verb": "post",
-          "uri": "imunisasi-covid19/bundle"
+          "uri": "satusehat/anak/imunisasi-covid19/bundle"
         }
       ]
     },
@@ -75134,7 +75134,7 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "medication-requests"
+          "uri": "satusehat/farmasi/medication-requests"
         }
       ]
     },
@@ -75195,31 +75195,31 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "anc/bundle"
+          "uri": "satusehat/ibu-anak/anc/bundle"
         },
         {
           "verb": "post",
-          "uri": "inc/bundle"
+          "uri": "satusehat/ibu-anak/inc/bundle"
         },
         {
           "verb": "post",
-          "uri": "pnc/bundle"
+          "uri": "satusehat/ibu-anak/pnc/bundle"
         },
         {
           "verb": "post",
-          "uri": "neonatus/bundle"
+          "uri": "satusehat/ibu-anak/neonatus/bundle"
         },
         {
           "verb": "post",
-          "uri": "shk/bundle"
+          "uri": "satusehat/ibu-anak/shk/bundle"
         },
         {
           "verb": "post",
-          "uri": "kematian-maternal/bundle"
+          "uri": "satusehat/ibu-anak/kematian-maternal/bundle"
         },
         {
           "verb": "post",
-          "uri": "data-kelahiran/bundle"
+          "uri": "satusehat/ibu-anak/data-kelahiran/bundle"
         }
       ]
     },
@@ -75406,11 +75406,11 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "encounters"
+          "uri": "satusehat/igd/encounters"
         },
         {
           "verb": "post",
-          "uri": "triage-observations"
+          "uri": "satusehat/igd/triage-observations"
         }
       ]
     },
@@ -75459,15 +75459,15 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "/"
+          "uri": "satu-sehat-klaim"
         },
         {
           "verb": "get",
-          "uri": "{klaimSubmission}"
+          "uri": "satu-sehat-klaim/{klaimSubmission}"
         },
         {
           "verb": "post",
-          "uri": "{useCase}"
+          "uri": "satu-sehat-klaim/{useCase}"
         }
       ]
     },
@@ -75486,27 +75486,27 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "code"
+          "uri": "satusehat/kptl/code"
         },
         {
           "verb": "post",
-          "uri": "base-code"
+          "uri": "satusehat/kptl/base-code"
         },
         {
           "verb": "post",
-          "uri": "base-code-combination"
+          "uri": "satusehat/kptl/base-code-combination"
         },
         {
           "verb": "post",
-          "uri": "modifier"
+          "uri": "satusehat/kptl/modifier"
         },
         {
           "verb": "post",
-          "uri": "modifier-value"
+          "uri": "satusehat/kptl/modifier-value"
         },
         {
           "verb": "post",
-          "uri": "base-code-by-modifier"
+          "uri": "satusehat/kptl/base-code-by-modifier"
         }
       ]
     },
@@ -75525,31 +75525,31 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "provinces"
+          "uri": "satusehat/master-data/provinces"
         },
         {
           "verb": "get",
-          "uri": "cities"
+          "uri": "satusehat/master-data/cities"
         },
         {
           "verb": "get",
-          "uri": "districts"
+          "uri": "satusehat/master-data/districts"
         },
         {
           "verb": "get",
-          "uri": "sub-districts"
+          "uri": "satusehat/master-data/sub-districts"
         },
         {
           "verb": "get",
-          "uri": "sarana"
+          "uri": "satusehat/master-data/sarana"
         },
         {
           "verb": "get",
-          "uri": "kfa/products"
+          "uri": "satusehat/master-data/kfa/products"
         },
         {
           "verb": "get",
-          "uri": "kfa/products/all"
+          "uri": "satusehat/master-data/kfa/products/all"
         }
       ]
     },
@@ -75598,15 +75598,15 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "/"
+          "uri": "satu-sehat-penyakit-menular"
         },
         {
           "verb": "get",
-          "uri": "{penyakitMenularSubmission}"
+          "uri": "satu-sehat-penyakit-menular/{penyakitMenularSubmission}"
         },
         {
           "verb": "post",
-          "uri": "{useCase}"
+          "uri": "satu-sehat-penyakit-menular/{useCase}"
         }
       ]
     },
@@ -75667,23 +75667,23 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "skrining-ptm/bundle"
+          "uri": "satusehat/ptm-registry/skrining-ptm/bundle"
         },
         {
           "verb": "post",
-          "uri": "kanker/bundle"
+          "uri": "satusehat/ptm-registry/kanker/bundle"
         },
         {
           "verb": "post",
-          "uri": "jantung/bundle"
+          "uri": "satusehat/ptm-registry/jantung/bundle"
         },
         {
           "verb": "post",
-          "uri": "stroke/bundle"
+          "uri": "satusehat/ptm-registry/stroke/bundle"
         },
         {
           "verb": "post",
-          "uri": "uronefrologi/bundle"
+          "uri": "satusehat/ptm-registry/uronefrologi/bundle"
         }
       ]
     },
@@ -75850,7 +75850,7 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "encounters"
+          "uri": "satusehat/rawat-inap/encounters"
         }
       ]
     },
@@ -76008,7 +76008,7 @@
       "verbs": [
         {
           "verb": "post",
-          "uri": "encounters"
+          "uri": "satusehat/rawat-jalan/encounters"
         }
       ]
     },
@@ -76057,15 +76057,15 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "/"
+          "uri": "satu-sehat-spesialistik"
         },
         {
           "verb": "get",
-          "uri": "{spesialistikSubmission}"
+          "uri": "satu-sehat-spesialistik/{spesialistikSubmission}"
         },
         {
           "verb": "post",
-          "uri": "{useCase}"
+          "uri": "satu-sehat-spesialistik/{useCase}"
         }
       ]
     },
@@ -76213,23 +76213,23 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "tempat-tidur"
+          "uri": "sirs-online-bor/tempat-tidur"
         },
         {
           "verb": "post",
-          "uri": "tempat-tidur"
+          "uri": "sirs-online-bor/tempat-tidur"
         },
         {
           "verb": "get",
-          "uri": "tempat-tidur/{tempatTidur}"
+          "uri": "sirs-online-bor/tempat-tidur/{tempatTidur}"
         },
         {
           "verb": "put",
-          "uri": "tempat-tidur/{tempatTidur}"
+          "uri": "sirs-online-bor/tempat-tidur/{tempatTidur}"
         },
         {
           "verb": "delete",
-          "uri": "tempat-tidur/{tempatTidur}"
+          "uri": "sirs-online-bor/tempat-tidur/{tempatTidur}"
         }
       ]
     },
@@ -76335,11 +76335,11 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "resume"
+          "uri": "sisrute-resume-medis/resume"
         },
         {
           "verb": "post",
-          "uri": "resume"
+          "uri": "sisrute-resume-medis/resume"
         }
       ]
     },
@@ -76913,19 +76913,19 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "pasien-tb"
+          "uri": "sitb/pasien-tb"
         },
         {
           "verb": "post",
-          "uri": "pasien-tb"
+          "uri": "sitb/pasien-tb"
         },
         {
           "verb": "get",
-          "uri": "pasien-tb/{pasienTb}"
+          "uri": "sitb/pasien-tb/{pasienTb}"
         },
         {
           "verb": "put",
-          "uri": "pasien-tb/{pasienTb}"
+          "uri": "sitb/pasien-tb/{pasienTb}"
         }
       ]
     },
@@ -76994,23 +76994,23 @@
       "verbs": [
         {
           "verb": "get",
-          "uri": "/status"
+          "uri": "system/license/status"
         },
         {
           "verb": "get",
-          "uri": "/fingerprint"
+          "uri": "system/license/fingerprint"
         },
         {
           "verb": "post",
-          "uri": "/activate"
+          "uri": "system/license/activate"
         },
         {
           "verb": "post",
-          "uri": "/sync"
+          "uri": "system/license/sync"
         },
         {
           "verb": "post",
-          "uri": "/webhook"
+          "uri": "system/license/webhook"
         }
       ]
     },

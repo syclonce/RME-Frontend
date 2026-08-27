@@ -3,23 +3,23 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "post",
-    "uri": "skrining-ptm/bundle"
+    "uri": "satusehat/ptm-registry/skrining-ptm/bundle"
   },
   {
     "verb": "post",
-    "uri": "kanker/bundle"
+    "uri": "satusehat/ptm-registry/kanker/bundle"
   },
   {
     "verb": "post",
-    "uri": "jantung/bundle"
+    "uri": "satusehat/ptm-registry/jantung/bundle"
   },
   {
     "verb": "post",
-    "uri": "stroke/bundle"
+    "uri": "satusehat/ptm-registry/stroke/bundle"
   },
   {
     "verb": "post",
-    "uri": "uronefrologi/bundle"
+    "uri": "satusehat/ptm-registry/uronefrologi/bundle"
   }
 ] as const
 

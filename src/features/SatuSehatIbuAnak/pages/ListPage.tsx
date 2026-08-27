@@ -3,31 +3,31 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "post",
-    "uri": "anc/bundle"
+    "uri": "satusehat/ibu-anak/anc/bundle"
   },
   {
     "verb": "post",
-    "uri": "inc/bundle"
+    "uri": "satusehat/ibu-anak/inc/bundle"
   },
   {
     "verb": "post",
-    "uri": "pnc/bundle"
+    "uri": "satusehat/ibu-anak/pnc/bundle"
   },
   {
     "verb": "post",
-    "uri": "neonatus/bundle"
+    "uri": "satusehat/ibu-anak/neonatus/bundle"
   },
   {
     "verb": "post",
-    "uri": "shk/bundle"
+    "uri": "satusehat/ibu-anak/shk/bundle"
   },
   {
     "verb": "post",
-    "uri": "kematian-maternal/bundle"
+    "uri": "satusehat/ibu-anak/kematian-maternal/bundle"
   },
   {
     "verb": "post",
-    "uri": "data-kelahiran/bundle"
+    "uri": "satusehat/ibu-anak/data-kelahiran/bundle"
   }
 ] as const
 

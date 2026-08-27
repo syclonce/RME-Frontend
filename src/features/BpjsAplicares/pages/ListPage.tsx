@@ -3,27 +3,27 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "get",
-    "uri": "referensi/kamar/{query?}"
+    "uri": "aplicares/referensi/kamar/{query?}"
   },
   {
     "verb": "get",
-    "uri": "rooms"
+    "uri": "aplicares/rooms"
   },
   {
     "verb": "post",
-    "uri": "rooms"
+    "uri": "aplicares/rooms"
   },
   {
     "verb": "get",
-    "uri": "rooms/{aplicares_room_sync}"
+    "uri": "aplicares/rooms/{aplicares_room_sync}"
   },
   {
     "verb": "delete",
-    "uri": "rooms/{aplicares_room_sync}"
+    "uri": "aplicares/rooms/{aplicares_room_sync}"
   },
   {
     "verb": "post",
-    "uri": "rooms/{aplicares_room_sync}/beds"
+    "uri": "aplicares/rooms/{aplicares_room_sync}/beds"
   }
 ] as const
 

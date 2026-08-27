@@ -5,11 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const COLUMNS = ["id"] as const
 
-export function CitiesListPage() {
+export function SatusehatMasterDataCitiesListPage() {
   const { data, isLoading } = useQuery({
-    queryKey: ['/cities', 'list'],
+    queryKey: ['/satusehat/master-data/cities', 'list'],
     queryFn: async () => {
-      const res = await apiClient.get('/cities')
+      const res = await apiClient.get('/satusehat/master-data/cities')
       return normalizeList<Record<string, unknown>>(res.data)
     },
   })
@@ -18,7 +18,7 @@ export function CitiesListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">Cities (read-only)</h1>
+      <h1 className="mb-4 text-lg font-semibold">SatusehatMasterDataCities (read-only)</h1>
       <Table>
         <TableHeader>
           <TableRow>

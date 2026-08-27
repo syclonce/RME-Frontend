@@ -31,44 +31,44 @@
   },
   {
     "module": "SatuSehatMasterData",
-    "uri": "provinces",
+    "uri": "satusehat/master-data/provinces",
     "fileName": "ListPage.tsx",
-    "entityName": "Provinces"
+    "entityName": "SatusehatMasterDataProvinces"
   },
   {
     "module": "SatuSehatMasterData",
-    "uri": "cities",
+    "uri": "satusehat/master-data/cities",
     "fileName": "ListPage1.tsx",
-    "entityName": "Cities"
+    "entityName": "SatusehatMasterDataCities"
   },
   {
     "module": "SatuSehatMasterData",
-    "uri": "districts",
+    "uri": "satusehat/master-data/districts",
     "fileName": "ListPage2.tsx",
-    "entityName": "Districts"
+    "entityName": "SatusehatMasterDataDistricts"
   },
   {
     "module": "SatuSehatMasterData",
-    "uri": "sub-districts",
+    "uri": "satusehat/master-data/sub-districts",
     "fileName": "ListPage3.tsx",
-    "entityName": "SubDistricts"
+    "entityName": "SatusehatMasterDataSubDistricts"
   },
   {
     "module": "SatuSehatMasterData",
-    "uri": "sarana",
+    "uri": "satusehat/master-data/sarana",
     "fileName": "ListPage4.tsx",
-    "entityName": "Sarana"
+    "entityName": "SatusehatMasterDataSarana"
   },
   {
     "module": "SatuSehatMasterData",
-    "uri": "kfa/products",
+    "uri": "satusehat/master-data/kfa/products",
     "fileName": "ListPage5.tsx",
-    "entityName": "KfaProducts"
+    "entityName": "SatusehatMasterDataKfaProducts"
   },
   {
     "module": "SatuSehatMasterData",
-    "uri": "kfa/products/all",
+    "uri": "satusehat/master-data/kfa/products/all",
     "fileName": "ListPage6.tsx",
-    "entityName": "KfaProductsAll"
+    "entityName": "SatusehatMasterDataKfaProductsAll"
   }
 ]

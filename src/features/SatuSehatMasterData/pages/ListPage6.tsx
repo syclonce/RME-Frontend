@@ -5,11 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const COLUMNS = ["id"] as const
 
-export function KfaProductsAllListPage() {
+export function SatusehatMasterDataKfaProductsAllListPage() {
   const { data, isLoading } = useQuery({
-    queryKey: ['/kfa/products/all', 'list'],
+    queryKey: ['/satusehat/master-data/kfa/products/all', 'list'],
     queryFn: async () => {
-      const res = await apiClient.get('/kfa/products/all')
+      const res = await apiClient.get('/satusehat/master-data/kfa/products/all')
       return normalizeList<Record<string, unknown>>(res.data)
     },
   })
@@ -18,7 +18,7 @@ export function KfaProductsAllListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">KfaProductsAll (read-only)</h1>
+      <h1 className="mb-4 text-lg font-semibold">SatusehatMasterDataKfaProductsAll (read-only)</h1>
       <Table>
         <TableHeader>
           <TableRow>

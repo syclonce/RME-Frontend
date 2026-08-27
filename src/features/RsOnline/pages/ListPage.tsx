@@ -3,79 +3,79 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "get",
-    "uri": ""
+    "uri": "rs-online"
   },
   {
     "verb": "get",
-    "uri": "{rsOnlineSubmission}"
+    "uri": "rs-online/{rsOnlineSubmission}"
   },
   {
     "verb": "post",
-    "uri": "data/sdm"
+    "uri": "rs-online/data/sdm"
   },
   {
     "verb": "post",
-    "uri": "data/layanan"
+    "uri": "rs-online/data/layanan"
   },
   {
     "verb": "post",
-    "uri": "data/alkes"
+    "uri": "rs-online/data/alkes"
   },
   {
     "verb": "post",
-    "uri": "data/tempat-tidur"
+    "uri": "rs-online/data/tempat-tidur"
   },
   {
     "verb": "post",
-    "uri": "registrasi-user"
+    "uri": "rs-online/registrasi-user"
   },
   {
     "verb": "put",
-    "uri": "registrasi-user/{id}"
+    "uri": "rs-online/registrasi-user/{id}"
   },
   {
     "verb": "delete",
-    "uri": "registrasi-user/{id}"
+    "uri": "rs-online/registrasi-user/{id}"
   },
   {
     "verb": "get",
-    "uri": "referensi/sdm"
+    "uri": "rs-online/referensi/sdm"
   },
   {
     "verb": "get",
-    "uri": "referensi/sarana"
+    "uri": "rs-online/referensi/sarana"
   },
   {
     "verb": "get",
-    "uri": "referensi/ruang-perawatan"
+    "uri": "rs-online/referensi/ruang-perawatan"
   },
   {
     "verb": "get",
-    "uri": "referensi/pelayanan"
+    "uri": "rs-online/referensi/pelayanan"
   },
   {
     "verb": "get",
-    "uri": "referensi/kelas"
+    "uri": "rs-online/referensi/kelas"
   },
   {
     "verb": "get",
-    "uri": "referensi/kategori-sdm"
+    "uri": "rs-online/referensi/kategori-sdm"
   },
   {
     "verb": "get",
-    "uri": "referensi/kategori-layanan"
+    "uri": "rs-online/referensi/kategori-layanan"
   },
   {
     "verb": "get",
-    "uri": "referensi/instalasi"
+    "uri": "rs-online/referensi/instalasi"
   },
   {
     "verb": "get",
-    "uri": "referensi/alkes"
+    "uri": "rs-online/referensi/alkes"
   },
   {
     "verb": "get",
-    "uri": "referensi/faskes"
+    "uri": "rs-online/referensi/faskes"
   }
 ] as const
 

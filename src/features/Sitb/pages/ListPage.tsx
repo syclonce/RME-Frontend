@@ -3,19 +3,19 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "get",
-    "uri": "pasien-tb"
+    "uri": "sitb/pasien-tb"
   },
   {
     "verb": "post",
-    "uri": "pasien-tb"
+    "uri": "sitb/pasien-tb"
   },
   {
     "verb": "get",
-    "uri": "pasien-tb/{pasienTb}"
+    "uri": "sitb/pasien-tb/{pasienTb}"
   },
   {
     "verb": "put",
-    "uri": "pasien-tb/{pasienTb}"
+    "uri": "sitb/pasien-tb/{pasienTb}"
   }
 ] as const
 

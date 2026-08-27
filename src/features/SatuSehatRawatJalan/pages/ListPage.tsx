@@ -3,7 +3,7 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "post",
-    "uri": "encounters"
+    "uri": "satusehat/rawat-jalan/encounters"
   }
 ] as const
 

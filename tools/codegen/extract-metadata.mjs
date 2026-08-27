@@ -164,15 +164,69 @@ function extractTableName(moduleDir) {
   return null
 }
 
+function joinUri(prefixStack, uri) {
+  const parts = [...prefixStack, uri.replace(/^\//, '')].filter((p) => p !== '')
+  const joined = parts.join('/').replace(/\/+/g, '/')
+  // apiClient (frontend) sudah punya baseURL '.../api/v1' - segmen 'v1' di
+  // depan URI hasil gabungan prefix akan dobel kalau tidak distrip di sini.
+  return joined.replace(/^v1\/?/, '')
+}
+
+/**
+ * Route::prefix('x')->group(function () { ... }) BISA BERSARANG (mis.
+ * SystemLicenseGuard: prefix('v1/system/license') menyelimuti /status,
+ * /activate, dst - BpjsAntreanFktp/Rs, BpjsApotek/PCare: prefix('v1')
+ * di luar, prefix('pcare-ref')/'referensi'/'mobile-jkn' bersarang di
+ * dalam). Regex satu-baris lama TIDAK melacak prefix pembungkus - URI
+ * hasil ekstraksi jadi salah (hilang segmen prefix), method konsumen
+ * (console/read-only generator) memanggil endpoint yang sungguhan TIDAK
+ * ADA. Scan baris-per-baris dgn depth kurung kurawal, lacak stack prefix
+ * aktif, tempelkan ke tiap rute yang ditemukan di dalamnya.
+ */
 function extractRouteInfo(moduleDir) {
   const src = readIfExists(path.join(moduleDir, 'routes/api.php'))
-  if (!src) return { hasApiResource: false, verbs: [], uris: [] }
-  const apiResourceCalls = [...src.matchAll(/Route::apiResource\('([^']+)'\s*,\s*(\w+)::class\)([^;]*);/g)]
-  const verbCalls = [...src.matchAll(/Route::(get|post|put|patch|delete)\(\s*'([^']+)'/g)]
-  return {
-    apiResources: apiResourceCalls.map((m) => ({ uri: m[1], controller: m[2], chain: m[3].trim() })),
-    verbs: verbCalls.map((m) => ({ verb: m[1], uri: m[2] })),
+  if (!src) return { apiResources: [], verbs: [] }
+
+  // Lolos 1: bangun snapshot prefix aktif PER BARIS via depth kurung kurawal.
+  const lines = src.split('\n')
+  let depth = 0
+  const stack = [] // { closeBelowDepth, segment }
+  const prefixAtLine = []
+
+  for (const line of lines) {
+    const opens = (line.match(/\{/g) ?? []).length
+    const closes = (line.match(/\}/g) ?? []).length
+    const prefixMatch = line.match(/(?:Route::|->)prefix\('([^']+)'\)/)
+    const opensGroupHere = /group\(function\s*\(\)\s*\{\s*$/.test(line.trim())
+
+    prefixAtLine.push(stack.map((s) => s.segment))
+
+    if (prefixMatch && opensGroupHere) {
+      stack.push({ closeBelowDepth: depth + opens - closes, segment: prefixMatch[1] })
+    }
+    depth += opens - closes
+    while (stack.length && depth < stack[stack.length - 1].closeBelowDepth) stack.pop()
   }
+
+  // Lolos 2: cocokkan ke TEKS PENUH (bukan per baris) - panggilan apiResource
+  // kerap menyebar beberapa baris (mis. ->parameters([...]) di baris
+  // berikutnya); regex per-baris akan melewatkannya. Petakan posisi match
+  // balik ke nomor baris utk ambil prefix yang benar dari lolos 1.
+  function lineOf(index) {
+    return src.slice(0, index).split('\n').length - 1
+  }
+
+  const apiResources = [...src.matchAll(/Route::apiResource\('([^']+)'\s*,\s*(\w+)::class\)([^;]*);/g)].map((m) => ({
+    uri: joinUri(prefixAtLine[lineOf(m.index)] ?? [], m[1]),
+    controller: m[2],
+    chain: m[3].trim(),
+  }))
+  const verbs = [...src.matchAll(/Route::(get|post|put|patch|delete)\(\s*'([^']+)'/g)].map((m) => ({
+    verb: m[1],
+    uri: joinUri(prefixAtLine[lineOf(m.index)] ?? [], m[2]),
+  }))
+
+  return { apiResources, verbs }
 }
 
 function main() {

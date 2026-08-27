@@ -3,23 +3,23 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "get",
-    "uri": "status"
+    "uri": "system/license/status"
   },
   {
     "verb": "get",
-    "uri": "fingerprint"
+    "uri": "system/license/fingerprint"
   },
   {
     "verb": "post",
-    "uri": "activate"
+    "uri": "system/license/activate"
   },
   {
     "verb": "post",
-    "uri": "sync"
+    "uri": "system/license/sync"
   },
   {
     "verb": "post",
-    "uri": "webhook"
+    "uri": "system/license/webhook"
   }
 ] as const
 

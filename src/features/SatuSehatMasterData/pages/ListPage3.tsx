@@ -5,11 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const COLUMNS = ["id"] as const
 
-export function SubDistrictsListPage() {
+export function SatusehatMasterDataSubDistrictsListPage() {
   const { data, isLoading } = useQuery({
-    queryKey: ['/sub-districts', 'list'],
+    queryKey: ['/satusehat/master-data/sub-districts', 'list'],
     queryFn: async () => {
-      const res = await apiClient.get('/sub-districts')
+      const res = await apiClient.get('/satusehat/master-data/sub-districts')
       return normalizeList<Record<string, unknown>>(res.data)
     },
   })
@@ -18,7 +18,7 @@ export function SubDistrictsListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-lg font-semibold">SubDistricts (read-only)</h1>
+      <h1 className="mb-4 text-lg font-semibold">SatusehatMasterDataSubDistricts (read-only)</h1>
       <Table>
         <TableHeader>
           <TableRow>

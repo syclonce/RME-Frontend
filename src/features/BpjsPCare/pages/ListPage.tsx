@@ -39,43 +39,43 @@ const ROUTES = [
   },
   {
     "verb": "get",
-    "uri": "diagnosa"
+    "uri": "pcare-ref/diagnosa"
   },
   {
     "verb": "get",
-    "uri": "dokter"
+    "uri": "pcare-ref/dokter"
   },
   {
     "verb": "get",
-    "uri": "kelompok"
+    "uri": "pcare-ref/kelompok"
   },
   {
     "verb": "get",
-    "uri": "kesadaran"
+    "uri": "pcare-ref/kesadaran"
   },
   {
     "verb": "get",
-    "uri": "obat"
+    "uri": "pcare-ref/obat"
   },
   {
     "verb": "get",
-    "uri": "poli"
+    "uri": "pcare-ref/poli"
   },
   {
     "verb": "get",
-    "uri": "provider"
+    "uri": "pcare-ref/provider"
   },
   {
     "verb": "get",
-    "uri": "spesialis"
+    "uri": "pcare-ref/spesialis"
   },
   {
     "verb": "get",
-    "uri": "status-pulang"
+    "uri": "pcare-ref/status-pulang"
   },
   {
     "verb": "get",
-    "uri": "peserta"
+    "uri": "pcare-ref/peserta"
   },
   {
     "verb": "get",

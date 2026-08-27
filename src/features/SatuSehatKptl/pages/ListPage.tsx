@@ -3,27 +3,27 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "post",
-    "uri": "code"
+    "uri": "satusehat/kptl/code"
   },
   {
     "verb": "post",
-    "uri": "base-code"
+    "uri": "satusehat/kptl/base-code"
   },
   {
     "verb": "post",
-    "uri": "base-code-combination"
+    "uri": "satusehat/kptl/base-code-combination"
   },
   {
     "verb": "post",
-    "uri": "modifier"
+    "uri": "satusehat/kptl/modifier"
   },
   {
     "verb": "post",
-    "uri": "modifier-value"
+    "uri": "satusehat/kptl/modifier-value"
   },
   {
     "verb": "post",
-    "uri": "base-code-by-modifier"
+    "uri": "satusehat/kptl/base-code-by-modifier"
   }
 ] as const
 

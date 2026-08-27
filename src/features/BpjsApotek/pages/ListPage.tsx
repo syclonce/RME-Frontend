@@ -3,79 +3,79 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "get",
-    "uri": "resep"
+    "uri": "apotek/resep"
   },
   {
     "verb": "get",
-    "uri": "resep/{id}"
+    "uri": "apotek/resep/{id}"
   },
   {
     "verb": "post",
-    "uri": "resep"
+    "uri": "apotek/resep"
   },
   {
     "verb": "delete",
-    "uri": "resep/{id}"
+    "uri": "apotek/resep/{id}"
   },
   {
     "verb": "get",
-    "uri": "dpho/{query?}"
+    "uri": "apotek/referensi/dpho/{query?}"
   },
   {
     "verb": "get",
-    "uri": "poli/{query?}"
+    "uri": "apotek/referensi/poli/{query?}"
   },
   {
     "verb": "get",
-    "uri": "faskes/{query?}"
+    "uri": "apotek/referensi/faskes/{query?}"
   },
   {
     "verb": "get",
-    "uri": "setting-apotek"
+    "uri": "apotek/referensi/setting-apotek"
   },
   {
     "verb": "get",
-    "uri": "spesialistik/{query?}"
+    "uri": "apotek/referensi/spesialistik/{query?}"
   },
   {
     "verb": "get",
-    "uri": "obat/{query?}"
+    "uri": "apotek/referensi/obat/{query?}"
   },
   {
     "verb": "get",
-    "uri": "pelayanan-obat"
+    "uri": "apotek/pelayanan-obat"
   },
   {
     "verb": "delete",
-    "uri": "pelayanan-obat/{apotek_pelayanan_obat}"
+    "uri": "apotek/pelayanan-obat/{apotek_pelayanan_obat}"
   },
   {
     "verb": "get",
-    "uri": "pelayanan-obat-riwayat/{no_sep}"
+    "uri": "apotek/pelayanan-obat-riwayat/{no_sep}"
   },
   {
     "verb": "post",
-    "uri": "penyimpanan-obat"
+    "uri": "apotek/penyimpanan-obat"
   },
   {
     "verb": "get",
-    "uri": "penyimpanan-obat/{apotek_penyimpanan_obat}"
+    "uri": "apotek/penyimpanan-obat/{apotek_penyimpanan_obat}"
   },
   {
     "verb": "post",
-    "uri": "penyimpanan-obat-stok"
+    "uri": "apotek/penyimpanan-obat-stok"
   },
   {
     "verb": "get",
-    "uri": "sep/{query}"
+    "uri": "apotek/sep/{query}"
   },
   {
     "verb": "get",
-    "uri": "monitoring"
+    "uri": "apotek/monitoring"
   },
   {
     "verb": "get",
-    "uri": "prb"
+    "uri": "apotek/prb"
   }
 ] as const
 

@@ -3,27 +3,27 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "post",
-    "uri": "mtbs/bundle"
+    "uri": "satusehat/anak/mtbs/bundle"
   },
   {
     "verb": "post",
-    "uri": "imunisasi/bundle"
+    "uri": "satusehat/anak/imunisasi/bundle"
   },
   {
     "verb": "post",
-    "uri": "gizi/bundle"
+    "uri": "satusehat/anak/gizi/bundle"
   },
   {
     "verb": "post",
-    "uri": "tumbuh-kembang/bundle"
+    "uri": "satusehat/anak/tumbuh-kembang/bundle"
   },
   {
     "verb": "post",
-    "uri": "pkpr/bundle"
+    "uri": "satusehat/anak/pkpr/bundle"
   },
   {
     "verb": "post",
-    "uri": "imunisasi-covid19/bundle"
+    "uri": "satusehat/anak/imunisasi-covid19/bundle"
   }
 ] as const
 

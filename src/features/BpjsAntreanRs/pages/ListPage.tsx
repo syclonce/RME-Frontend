@@ -3,119 +3,119 @@ import { ApiConsole } from '@/shared/components/ApiConsole'
 const ROUTES = [
   {
     "verb": "get",
-    "uri": "antrean"
+    "uri": "antrean-rs/antrean"
   },
   {
     "verb": "get",
-    "uri": "antrean/{id}"
+    "uri": "antrean-rs/antrean/{id}"
   },
   {
     "verb": "post",
-    "uri": "antrean"
+    "uri": "antrean-rs/antrean"
   },
   {
     "verb": "post",
-    "uri": "antrean/{antrean}/batal"
+    "uri": "antrean-rs/antrean/{antrean}/batal"
   },
   {
     "verb": "get",
-    "uri": "antrean/{antrean}/waktu"
+    "uri": "antrean-rs/antrean/{antrean}/waktu"
   },
   {
     "verb": "post",
-    "uri": "antrean/{antrean}/waktu"
+    "uri": "antrean-rs/antrean/{antrean}/waktu"
   },
   {
     "verb": "post",
-    "uri": "antrean/{antrean}/farmasi"
+    "uri": "antrean-rs/antrean/{antrean}/farmasi"
   },
   {
     "verb": "get",
-    "uri": "poli"
+    "uri": "antrean-rs/referensi/poli"
   },
   {
     "verb": "get",
-    "uri": "dokter/{kodepoli}/{tanggal}"
+    "uri": "antrean-rs/referensi/dokter/{kodepoli}/{tanggal}"
   },
   {
     "verb": "get",
-    "uri": "jadwal-dokter/{kodedokter}/{tanggal}"
+    "uri": "antrean-rs/referensi/jadwal-dokter/{kodedokter}/{tanggal}"
   },
   {
     "verb": "get",
-    "uri": "poli-fingerprint"
+    "uri": "antrean-rs/referensi/poli-fingerprint"
   },
   {
     "verb": "get",
-    "uri": "pasien-fingerprint/{norm}"
+    "uri": "antrean-rs/referensi/pasien-fingerprint/{norm}"
   },
   {
     "verb": "post",
-    "uri": "jadwal-dokter"
+    "uri": "antrean-rs/jadwal-dokter"
   },
   {
     "verb": "get",
-    "uri": "dashboard/tanggal/{tanggal}/{kodepoli}"
+    "uri": "antrean-rs/dashboard/tanggal/{tanggal}/{kodepoli}"
   },
   {
     "verb": "get",
-    "uri": "dashboard/bulan/{bulan}/{tahun}/{kodepoli}"
+    "uri": "antrean-rs/dashboard/bulan/{bulan}/{tahun}/{kodepoli}"
   },
   {
     "verb": "get",
-    "uri": "laporan/tanggal/{tanggal}/{kodepoli}"
+    "uri": "antrean-rs/laporan/tanggal/{tanggal}/{kodepoli}"
   },
   {
     "verb": "get",
-    "uri": "laporan/kodebooking/{kodebooking}"
+    "uri": "antrean-rs/laporan/kodebooking/{kodebooking}"
   },
   {
     "verb": "get",
-    "uri": "laporan/belum-dilayani/{kodepoli}"
+    "uri": "antrean-rs/laporan/belum-dilayani/{kodepoli}"
   },
   {
     "verb": "get",
-    "uri": "laporan/belum-dilayani/{kodepoli}/{kodedokter}/{tanggal}/{jampraktek}"
+    "uri": "antrean-rs/laporan/belum-dilayani/{kodepoli}/{kodedokter}/{tanggal}/{jampraktek}"
   },
   {
     "verb": "get",
-    "uri": "token"
+    "uri": "antrean-rs/mobile-jkn/token"
   },
   {
     "verb": "post",
-    "uri": "antrean"
+    "uri": "antrean-rs/mobile-jkn/antrean"
   },
   {
     "verb": "get",
-    "uri": "antrean/{kodebooking}"
+    "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}"
   },
   {
     "verb": "post",
-    "uri": "antrean/{kodebooking}/batal"
+    "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/batal"
   },
   {
     "verb": "post",
-    "uri": "antrean/{kodebooking}/checkin"
+    "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/checkin"
   },
   {
     "verb": "post",
-    "uri": "antrean/{kodebooking}/farmasi"
+    "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/farmasi"
   },
   {
     "verb": "get",
-    "uri": "antrean/{kodebooking}/farmasi"
+    "uri": "antrean-rs/mobile-jkn/antrean/{kodebooking}/farmasi"
   },
   {
     "verb": "post",
-    "uri": "pasien-baru"
+    "uri": "antrean-rs/mobile-jkn/pasien-baru"
   },
   {
     "verb": "get",
-    "uri": "jadwal-operasi"
+    "uri": "antrean-rs/mobile-jkn/jadwal-operasi"
   },
   {
     "verb": "get",
-    "uri": "jadwal-operasi/{norm}"
+    "uri": "antrean-rs/mobile-jkn/jadwal-operasi/{norm}"
   }
 ] as const
 
