@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'
 import { usePatientResource } from '../api'
 import type { PatientFormValues } from '../types'
 
@@ -91,8 +92,11 @@ export function PatientFormPage() {
         <Input id="postal_code" type="text" value={values.postal_code ?? ''} onChange={(e) => setValues({ ...values, postal_code: e.target.value })} />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="village_id">Village</Label>
-        <Input id="village_id" type="number" value={values.village_id ?? ''} onChange={(e) => setValues({ ...values, village_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <Label>Village</Label>
+        <RegionVillagePicker
+          value={values.village_id ?? null}
+          onChange={(v) => setValues({ ...values, village_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="education_id">Education</Label>

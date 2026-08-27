@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'
 import { useEmployeeResource } from '../api'
 import type { EmployeeFormValues } from '../types'
 
@@ -99,8 +100,11 @@ export function EmployeeFormPage() {
         <Input id="postal_code" type="text" value={values.postal_code ?? ''} onChange={(e) => setValues({ ...values, postal_code: e.target.value })} />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="village_id">Village</Label>
-        <Input id="village_id" type="number" value={values.village_id ?? ''} onChange={(e) => setValues({ ...values, village_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <Label>Village</Label>
+        <RegionVillagePicker
+          value={values.village_id ?? null}
+          onChange={(v) => setValues({ ...values, village_id: v })}
+        />
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="is_non_employee" checked={!!values.is_non_employee} onCheckedChange={(v) => setValues({ ...values, is_non_employee: !!v })} />

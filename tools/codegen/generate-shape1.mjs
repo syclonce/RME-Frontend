@@ -208,6 +208,15 @@ function relationEndpoint(field) {
       const label = toLabel(f.name)
       const type = inputType(f)
       const endpoint = relationEndpoint(f)
+      if (f.type === 'relation' && f.relation?.table === 'indonesia_villages') {
+        return `      <div className="grid gap-1.5">
+        <Label>${label}${f.required ? ' *' : ''}</Label>
+        <RegionVillagePicker
+          value={values.${f.name} ?? null}
+          onChange={(v) => setValues({ ...values, ${f.name}: v })}
+        />
+      </div>`
+      }
       if (endpoint) {
         return `      <div className="grid gap-1.5">
         <Label htmlFor="${f.name}">${label}${f.required ? ' *' : ''}</Label>
@@ -236,15 +245,17 @@ function relationEndpoint(field) {
     .join('\n')
 
   const hasCheckbox = fields.some((f) => inputType(f) === 'checkbox')
+  const isVillageField = (f) => f.type === 'relation' && f.relation?.table === 'indonesia_villages'
   const hasRelationSelect = fields.some((f) => relationEndpoint(f) !== null)
-  const hasPlainInput = fields.some((f) => relationEndpoint(f) === null && inputType(f) !== 'checkbox')
+  const hasVillagePicker = fields.some(isVillageField)
+  const hasPlainInput = fields.some((f) => relationEndpoint(f) === null && !isVillageField(f) && inputType(f) !== 'checkbox')
 
   const formPageTsx = hasUpdate
     ? `import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 ${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
-${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}import { use${entity}Resource } from '../api'
+${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
 export function ${entity}FormPage() {
@@ -281,7 +292,7 @@ ${formFieldsJsx}
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 ${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
-${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}import { use${entity}Resource } from '../api'
+${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
 export function ${entity}FormPage() {
