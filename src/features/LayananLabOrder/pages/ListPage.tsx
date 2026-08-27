@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useLabOrderResource } from '../api'
 
-const COLUMNS = ["id","order_number","visit_id","ordered_by","ordered_at","destination","is_emergency","reason","notes","status","results","id","test_name","result_value","normal_range","unit","is_abnormal","created_at"] as const
+const COLUMNS = ["id","order_number","visit_id","ordered_by","ordered_at","destination","is_emergency","reason","notes","status","results","test_name","result_value","normal_range","unit","is_abnormal","created_at"] as const
 
 export function LabOrderListPage() {
   const { useList } = useLabOrderResource()

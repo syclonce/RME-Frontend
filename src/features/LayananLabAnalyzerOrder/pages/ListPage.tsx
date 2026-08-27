@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useLabAnalyzerVendorResource } from '../api'
 
-const COLUMNS = ["id","visit_id","vendor_id","test_code","ordered_by","ordered_at","status","raw_result_text","verified_by","verified_at","visit","id","visit_number","status","vendor","id","vendor_name","created_at"] as const
+const COLUMNS = ["id","visit_id","vendor_id","test_code","ordered_by","ordered_at","status","raw_result_text","verified_by","verified_at","visit","visit_number","vendor","vendor_name","created_at"] as const
 
 export function LabAnalyzerVendorListPage() {
   const { useList, remove } = useLabAnalyzerVendorResource()

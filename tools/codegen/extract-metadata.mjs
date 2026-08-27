@@ -144,7 +144,10 @@ function extractResourceFields(moduleDir) {
     if (!src) continue
     const bodyMatch = src.match(/function\s+toArray\s*\([^)]*\)\s*:\s*array\s*\{([\s\S]*?)\n\s{4}\}/)
     if (!bodyMatch) continue
-    const keys = [...bodyMatch[1].matchAll(/'([a-zA-Z0-9_]+)'\s*=>/g)].map((x) => x[1])
+    // dedupe: field nested (mis. 'items' => $this->items->map(fn($i) => ['id' => ..., ...]))
+    // ikut match regex ini karena tak menelusuri kedalaman kurung, jadi kolom
+    // top-level bisa muncul lagi di dalam closure map - hasil harus unik.
+    const keys = [...new Set([...bodyMatch[1].matchAll(/'([a-zA-Z0-9_]+)'\s*=>/g)].map((x) => x[1]))]
     byFile[path.basename(f, '.php')] = keys
   }
   return byFile

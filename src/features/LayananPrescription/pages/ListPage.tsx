@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { usePrescriptionResource } from '../api'
 
-const COLUMNS = ["id","prescription_number","visit_id","diagnosis_id","prescribed_by","prescribed_at","weight_kg","height_cm","has_drug_allergy","is_pregnant","is_breastfeeding","is_discharge_prescription","is_emergency","notes","status","items","id","drug_name","dosage","frequency","route","duration","quantity","created_at"] as const
+const COLUMNS = ["id","prescription_number","visit_id","diagnosis_id","prescribed_by","prescribed_at","weight_kg","height_cm","has_drug_allergy","is_pregnant","is_breastfeeding","is_discharge_prescription","is_emergency","notes","status","items","drug_name","dosage","frequency","route","duration","quantity","created_at"] as const
 
 export function PrescriptionListPage() {
   const { useList } = usePrescriptionResource()
