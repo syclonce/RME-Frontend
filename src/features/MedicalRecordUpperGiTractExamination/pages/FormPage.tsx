@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -55,7 +56,16 @@ export function UpperGiTractExaminationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="hpylori_result">Hpylori Result</Label>
-        <Input id="hpylori_result" type="text" value={values.hpylori_result ?? ''} onChange={(e) => setValues({ ...values, hpylori_result: e.target.value })} />
+        <Select value={values.hpylori_result ?? ''} onValueChange={(v) => setValues({ ...values, hpylori_result: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="positive" value="positive">Positive</SelectItem>
+            <SelectItem key="negative" value="negative">Negative</SelectItem>
+            <SelectItem key="not_tested" value="not_tested">Not Tested</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="examined_at">Examined At</Label>

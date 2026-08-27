@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,15 @@ export function ProcedureConsentPatientAcknowledgementFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="decision">Decision *</Label>
-        <Input id="decision" type="text" value={values.decision ?? ''} onChange={(e) => setValues({ ...values, decision: e.target.value })} />
+        <Select value={values.decision ?? ''} onValueChange={(v) => setValues({ ...values, decision: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="agree" value="agree">Agree</SelectItem>
+            <SelectItem key="refuse" value="refuse">Refuse</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="signed_at">Signed At</Label>

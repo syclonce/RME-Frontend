@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -31,7 +32,17 @@ export function BaepSensoryDetailFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="sensory_modality">Sensory Modality *</Label>
-        <Input id="sensory_modality" type="text" value={values.sensory_modality ?? ''} onChange={(e) => setValues({ ...values, sensory_modality: e.target.value })} />
+        <Select value={values.sensory_modality ?? ''} onValueChange={(v) => setValues({ ...values, sensory_modality: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="touch" value="touch">Touch</SelectItem>
+            <SelectItem key="pain" value="pain">Pain</SelectItem>
+            <SelectItem key="vibration" value="vibration">Vibration</SelectItem>
+            <SelectItem key="proprioception" value="proprioception">Proprioception</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="sensory_score">Sensory Score</Label>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -47,23 +48,68 @@ export function FunctionalStatusAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="bathing_status">Bathing Status</Label>
-        <Input id="bathing_status" type="text" value={values.bathing_status ?? ''} onChange={(e) => setValues({ ...values, bathing_status: e.target.value })} />
+        <Select value={values.bathing_status ?? ''} onValueChange={(v) => setValues({ ...values, bathing_status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="independent" value="independent">Independent</SelectItem>
+            <SelectItem key="assisted" value="assisted">Assisted</SelectItem>
+            <SelectItem key="dependent" value="dependent">Dependent</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="dressing_status">Dressing Status</Label>
-        <Input id="dressing_status" type="text" value={values.dressing_status ?? ''} onChange={(e) => setValues({ ...values, dressing_status: e.target.value })} />
+        <Select value={values.dressing_status ?? ''} onValueChange={(v) => setValues({ ...values, dressing_status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="independent" value="independent">Independent</SelectItem>
+            <SelectItem key="assisted" value="assisted">Assisted</SelectItem>
+            <SelectItem key="dependent" value="dependent">Dependent</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="toileting_status">Toileting Status</Label>
-        <Input id="toileting_status" type="text" value={values.toileting_status ?? ''} onChange={(e) => setValues({ ...values, toileting_status: e.target.value })} />
+        <Select value={values.toileting_status ?? ''} onValueChange={(v) => setValues({ ...values, toileting_status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="independent" value="independent">Independent</SelectItem>
+            <SelectItem key="assisted" value="assisted">Assisted</SelectItem>
+            <SelectItem key="dependent" value="dependent">Dependent</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="transferring_status">Transferring Status</Label>
-        <Input id="transferring_status" type="text" value={values.transferring_status ?? ''} onChange={(e) => setValues({ ...values, transferring_status: e.target.value })} />
+        <Select value={values.transferring_status ?? ''} onValueChange={(v) => setValues({ ...values, transferring_status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="independent" value="independent">Independent</SelectItem>
+            <SelectItem key="assisted" value="assisted">Assisted</SelectItem>
+            <SelectItem key="dependent" value="dependent">Dependent</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="feeding_status">Feeding Status</Label>
-        <Input id="feeding_status" type="text" value={values.feeding_status ?? ''} onChange={(e) => setValues({ ...values, feeding_status: e.target.value })} />
+        <Select value={values.feeding_status ?? ''} onValueChange={(v) => setValues({ ...values, feeding_status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="independent" value="independent">Independent</SelectItem>
+            <SelectItem key="assisted" value="assisted">Assisted</SelectItem>
+            <SelectItem key="dependent" value="dependent">Dependent</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="total_score">Total Score</Label>

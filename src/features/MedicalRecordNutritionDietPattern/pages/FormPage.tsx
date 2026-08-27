@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -51,7 +52,16 @@ export function NutritionDietPatternFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="appetite">Appetite</Label>
-        <Input id="appetite" type="text" value={values.appetite ?? ''} onChange={(e) => setValues({ ...values, appetite: e.target.value })} />
+        <Select value={values.appetite ?? ''} onValueChange={(v) => setValues({ ...values, appetite: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="good" value="good">Good</SelectItem>
+            <SelectItem key="fair" value="fair">Fair</SelectItem>
+            <SelectItem key="poor" value="poor">Poor</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="meal_frequency_per_day">Meal Frequency Per Day</Label>

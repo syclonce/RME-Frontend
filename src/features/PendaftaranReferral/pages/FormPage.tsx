@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,15 @@ export function ReferralFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="direction">Direction *</Label>
-        <Input id="direction" type="text" value={values.direction ?? ''} onChange={(e) => setValues({ ...values, direction: e.target.value })} />
+        <Select value={values.direction ?? ''} onValueChange={(v) => setValues({ ...values, direction: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="incoming" value="incoming">Incoming</SelectItem>
+            <SelectItem key="outgoing" value="outgoing">Outgoing</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="facility_name">Facility Name *</Label>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -48,7 +49,18 @@ export function DischargeMedicationReconciliationItemFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="action">Action *</Label>
-        <Input id="action" type="text" value={values.action ?? ''} onChange={(e) => setValues({ ...values, action: e.target.value })} />
+        <Select value={values.action ?? ''} onValueChange={(v) => setValues({ ...values, action: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="continue" value="continue">Continue</SelectItem>
+            <SelectItem key="hold" value="hold">Hold</SelectItem>
+            <SelectItem key="discontinue" value="discontinue">Discontinue</SelectItem>
+            <SelectItem key="modify" value="modify">Modify</SelectItem>
+            <SelectItem key="new" value="new">New</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reason">Reason</Label>

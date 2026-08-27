@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,17 @@ export function LinenItemFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="status">Status</Label>
-        <Input id="status" type="text" value={values.status ?? ''} onChange={(e) => setValues({ ...values, status: e.target.value })} />
+        <Select value={values.status ?? ''} onValueChange={(v) => setValues({ ...values, status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="dikirim_londri" value="dikirim_londri">Dikirim Londri</SelectItem>
+            <SelectItem key="dicuci" value="dicuci">Dicuci</SelectItem>
+            <SelectItem key="kembali_bersih" value="kembali_bersih">Kembali Bersih</SelectItem>
+            <SelectItem key="rusak_hilang" value="rusak_hilang">Rusak Hilang</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="sent_at">Sent At</Label>

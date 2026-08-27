@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -51,7 +52,16 @@ export function BaepInterventionProtocolFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="stimulation_ear">Stimulation Ear *</Label>
-        <Input id="stimulation_ear" type="text" value={values.stimulation_ear ?? ''} onChange={(e) => setValues({ ...values, stimulation_ear: e.target.value })} />
+        <Select value={values.stimulation_ear ?? ''} onValueChange={(v) => setValues({ ...values, stimulation_ear: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="left" value="left">Left</SelectItem>
+            <SelectItem key="right" value="right">Right</SelectItem>
+            <SelectItem key="bilateral" value="bilateral">Bilateral</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="click_rate_hz">Click Rate Hz</Label>
@@ -79,7 +89,15 @@ export function BaepInterventionProtocolFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="status">Status</Label>
-        <Input id="status" type="text" value={values.status ?? ''} onChange={(e) => setValues({ ...values, status: e.target.value })} />
+        <Select value={values.status ?? ''} onValueChange={(v) => setValues({ ...values, status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="in_progress" value="in_progress">In Progress</SelectItem>
+            <SelectItem key="completed" value="completed">Completed</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_at">Performed At</Label>

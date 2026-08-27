@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -40,7 +41,16 @@ export function LabReferenceValueFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="gender">Gender</Label>
-        <Input id="gender" type="text" value={values.gender ?? ''} onChange={(e) => setValues({ ...values, gender: e.target.value })} />
+        <Select value={values.gender ?? ''} onValueChange={(v) => setValues({ ...values, gender: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="male" value="male">Male</SelectItem>
+            <SelectItem key="female" value="female">Female</SelectItem>
+            <SelectItem key="all" value="all">All</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="min_age">Min Age</Label>

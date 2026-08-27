@@ -61,6 +61,14 @@ function toLabel(fieldName) {
     .join(' ')
 }
 
+function humanizeEnumValue(val) {
+  return val.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+function isEnumField(field) {
+  return field.enumValues && field.enumValues.length >= 2 && field.enumValues.every((v) => v !== '')
+}
+
 function tsType(field) {
   if (field.type === 'boolean') return 'boolean'
   if (field.type === 'number' || field.type === 'relation') return 'number'
@@ -71,6 +79,7 @@ function inputType(field) {
   if (field.type === 'boolean') return 'checkbox'
   if (field.type === 'number' || field.type === 'relation') return 'number'
   if (field.type === 'date') return 'date'
+  if (isEnumField(field)) return 'enum'
   return 'text'
 }
 
@@ -244,6 +253,22 @@ function relationEndpoint(field) {
         />
       </div>`
       }
+      if (type === 'enum') {
+        const enumOptions = f.enumValues
+          .map((v) => `            <SelectItem key="${v}" value="${v}">${humanizeEnumValue(v)}</SelectItem>`)
+          .join('\n')
+        return `      <div className="grid gap-1.5">
+        <Label htmlFor="${f.name}">${label}${f.required ? ' *' : ''}</Label>
+        <Select value={values.${f.name} ?? ''} onValueChange={(v) => setValues({ ...values, ${f.name}: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+${enumOptions}
+          </SelectContent>
+        </Select>
+      </div>`
+      }
       if (type === 'checkbox') {
         return `      <div className="flex items-center gap-2">
         <Checkbox id="${f.name}" checked={!!values.${f.name}} onCheckedChange={(v) => setValues({ ...values, ${f.name}: !!v })} />
@@ -265,13 +290,14 @@ function relationEndpoint(field) {
   const isVillageField = (f) => f.type === 'relation' && f.relation?.table === 'indonesia_villages'
   const hasRelationSelect = fields.some((f) => relationEndpoint(f) !== null)
   const hasVillagePicker = fields.some(isVillageField)
-  const hasPlainInput = fields.some((f) => relationEndpoint(f) === null && !isVillageField(f) && inputType(f) !== 'checkbox')
+  const hasEnumSelect = fields.some((f) => isEnumField(f))
+  const hasPlainInput = fields.some((f) => relationEndpoint(f) === null && !isVillageField(f) && inputType(f) !== 'checkbox' && inputType(f) !== 'enum')
 
   const formPageTsx = hasUpdate
     ? `import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
+${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasEnumSelect ? "import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
 ${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
@@ -308,7 +334,7 @@ ${formFieldsJsx}
     : `import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
+${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasEnumSelect ? "import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
 ${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 

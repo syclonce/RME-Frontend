@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -35,7 +36,17 @@ export function PaymentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="payment_method">Payment Method *</Label>
-        <Input id="payment_method" type="text" value={values.payment_method ?? ''} onChange={(e) => setValues({ ...values, payment_method: e.target.value })} />
+        <Select value={values.payment_method ?? ''} onValueChange={(v) => setValues({ ...values, payment_method: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="cash" value="cash">Cash</SelectItem>
+            <SelectItem key="debit" value="debit">Debit</SelectItem>
+            <SelectItem key="credit" value="credit">Credit</SelectItem>
+            <SelectItem key="transfer" value="transfer">Transfer</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="amount">Amount *</Label>

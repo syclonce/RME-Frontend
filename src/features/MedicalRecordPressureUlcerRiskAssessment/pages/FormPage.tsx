@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -67,7 +68,17 @@ export function PressureUlcerRiskAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="risk_level">Risk Level</Label>
-        <Input id="risk_level" type="text" value={values.risk_level ?? ''} onChange={(e) => setValues({ ...values, risk_level: e.target.value })} />
+        <Select value={values.risk_level ?? ''} onValueChange={(v) => setValues({ ...values, risk_level: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="no_risk" value="no_risk">No Risk</SelectItem>
+            <SelectItem key="mild_risk" value="mild_risk">Mild Risk</SelectItem>
+            <SelectItem key="moderate_risk" value="moderate_risk">Moderate Risk</SelectItem>
+            <SelectItem key="high_risk" value="high_risk">High Risk</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assessed_at">Assessed At</Label>

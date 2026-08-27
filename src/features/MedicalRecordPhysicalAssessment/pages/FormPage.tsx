@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -51,7 +52,16 @@ export function PhysicalAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="nutritional_risk">Nutritional Risk</Label>
-        <Input id="nutritional_risk" type="text" value={values.nutritional_risk ?? ''} onChange={(e) => setValues({ ...values, nutritional_risk: e.target.value })} />
+        <Select value={values.nutritional_risk ?? ''} onValueChange={(v) => setValues({ ...values, nutritional_risk: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="low" value="low">Low</SelectItem>
+            <SelectItem key="medium" value="medium">Medium</SelectItem>
+            <SelectItem key="high" value="high">High</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="pain_level">Pain Level</Label>

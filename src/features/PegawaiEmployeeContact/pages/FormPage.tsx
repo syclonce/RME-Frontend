@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,16 @@ export function EmployeeContactFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="contact_type">Contact Type *</Label>
-        <Input id="contact_type" type="text" value={values.contact_type ?? ''} onChange={(e) => setValues({ ...values, contact_type: e.target.value })} />
+        <Select value={values.contact_type ?? ''} onValueChange={(v) => setValues({ ...values, contact_type: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="phone" value="phone">Phone</SelectItem>
+            <SelectItem key="email" value="email">Email</SelectItem>
+            <SelectItem key="emergency" value="emergency">Emergency</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="value">Value *</Label>

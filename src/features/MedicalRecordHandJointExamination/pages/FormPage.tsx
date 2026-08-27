@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -40,7 +41,16 @@ export function HandJointExaminationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="joint">Joint</Label>
-        <Input id="joint" type="text" value={values.joint ?? ''} onChange={(e) => setValues({ ...values, joint: e.target.value })} />
+        <Select value={values.joint ?? ''} onValueChange={(v) => setValues({ ...values, joint: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="wrist" value="wrist">Wrist</SelectItem>
+            <SelectItem key="finger" value="finger">Finger</SelectItem>
+            <SelectItem key="elbow" value="elbow">Elbow</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="range_of_motion">Range Of Motion</Label>

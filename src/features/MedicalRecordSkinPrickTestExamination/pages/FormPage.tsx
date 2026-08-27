@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -51,7 +52,16 @@ export function SkinPrickTestExaminationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="result">Result</Label>
-        <Input id="result" type="text" value={values.result ?? ''} onChange={(e) => setValues({ ...values, result: e.target.value })} />
+        <Select value={values.result ?? ''} onValueChange={(v) => setValues({ ...values, result: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="positive" value="positive">Positive</SelectItem>
+            <SelectItem key="negative" value="negative">Negative</SelectItem>
+            <SelectItem key="equivocal" value="equivocal">Equivocal</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reaction_onset_minutes">Reaction Onset Minutes</Label>

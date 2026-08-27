@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -47,7 +48,19 @@ export function PreAnesthesiaSedationAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="asa_classification">Asa Classification *</Label>
-        <Input id="asa_classification" type="text" value={values.asa_classification ?? ''} onChange={(e) => setValues({ ...values, asa_classification: e.target.value })} />
+        <Select value={values.asa_classification ?? ''} onValueChange={(v) => setValues({ ...values, asa_classification: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="I" value="I">I</SelectItem>
+            <SelectItem key="II" value="II">II</SelectItem>
+            <SelectItem key="III" value="III">III</SelectItem>
+            <SelectItem key="IV" value="IV">IV</SelectItem>
+            <SelectItem key="V" value="V">V</SelectItem>
+            <SelectItem key="VI" value="VI">VI</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="mallampati_class">Mallampati Class</Label>

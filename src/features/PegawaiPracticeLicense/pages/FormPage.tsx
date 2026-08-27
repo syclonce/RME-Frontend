@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,15 @@ export function PracticeLicenseFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="license_type">License Type *</Label>
-        <Input id="license_type" type="text" value={values.license_type ?? ''} onChange={(e) => setValues({ ...values, license_type: e.target.value })} />
+        <Select value={values.license_type ?? ''} onValueChange={(v) => setValues({ ...values, license_type: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="STR" value="STR">STR</SelectItem>
+            <SelectItem key="SIP" value="SIP">SIP</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="license_number">License Number *</Label>

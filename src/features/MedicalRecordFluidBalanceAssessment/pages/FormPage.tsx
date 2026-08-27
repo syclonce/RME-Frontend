@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,16 @@ export function FluidBalanceAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="shift">Shift</Label>
-        <Input id="shift" type="text" value={values.shift ?? ''} onChange={(e) => setValues({ ...values, shift: e.target.value })} />
+        <Select value={values.shift ?? ''} onValueChange={(v) => setValues({ ...values, shift: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="pagi" value="pagi">Pagi</SelectItem>
+            <SelectItem key="siang" value="siang">Siang</SelectItem>
+            <SelectItem key="malam" value="malam">Malam</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assessed_at">Assessed At *</Label>

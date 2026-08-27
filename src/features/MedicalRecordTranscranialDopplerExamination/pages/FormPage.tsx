@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -43,7 +44,19 @@ export function TranscranialDopplerExaminationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="vessel">Vessel</Label>
-        <Input id="vessel" type="text" value={values.vessel ?? ''} onChange={(e) => setValues({ ...values, vessel: e.target.value })} />
+        <Select value={values.vessel ?? ''} onValueChange={(v) => setValues({ ...values, vessel: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="MCA" value="MCA">MCA</SelectItem>
+            <SelectItem key="ACA" value="ACA">ACA</SelectItem>
+            <SelectItem key="PCA" value="PCA">PCA</SelectItem>
+            <SelectItem key="ICA" value="ICA">ICA</SelectItem>
+            <SelectItem key="VA" value="VA">VA</SelectItem>
+            <SelectItem key="BA" value="BA">BA</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="mean_velocity_cm_s">Mean Velocity Cm S</Label>

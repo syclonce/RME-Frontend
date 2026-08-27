@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -48,7 +49,16 @@ export function InventoryPharmacyPackageFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="category">Category *</Label>
-        <Input id="category" type="text" value={values.category ?? ''} onChange={(e) => setValues({ ...values, category: e.target.value })} />
+        <Select value={values.category ?? ''} onValueChange={(v) => setValues({ ...values, category: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="obat" value="obat">Obat</SelectItem>
+            <SelectItem key="alkes" value="alkes">Alkes</SelectItem>
+            <SelectItem key="campuran" value="campuran">Campuran</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="price">Price *</Label>

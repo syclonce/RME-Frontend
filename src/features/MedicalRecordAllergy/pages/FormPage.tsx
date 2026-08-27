@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,16 @@ export function AllergyFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="category">Category *</Label>
-        <Input id="category" type="text" value={values.category ?? ''} onChange={(e) => setValues({ ...values, category: e.target.value })} />
+        <Select value={values.category ?? ''} onValueChange={(v) => setValues({ ...values, category: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="drug" value="drug">Drug</SelectItem>
+            <SelectItem key="food" value="food">Food</SelectItem>
+            <SelectItem key="environment" value="environment">Environment</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="allergen">Allergen *</Label>
@@ -51,7 +61,16 @@ export function AllergyFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="severity">Severity</Label>
-        <Input id="severity" type="text" value={values.severity ?? ''} onChange={(e) => setValues({ ...values, severity: e.target.value })} />
+        <Select value={values.severity ?? ''} onValueChange={(v) => setValues({ ...values, severity: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="mild" value="mild">Mild</SelectItem>
+            <SelectItem key="moderate" value="moderate">Moderate</SelectItem>
+            <SelectItem key="severe" value="severe">Severe</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recorded_by">Recorded By *</Label>

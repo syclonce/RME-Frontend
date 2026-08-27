@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -35,7 +36,19 @@ export function BaepMotorDetailFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="spasticity_level">Spasticity Level</Label>
-        <Input id="spasticity_level" type="text" value={values.spasticity_level ?? ''} onChange={(e) => setValues({ ...values, spasticity_level: e.target.value })} />
+        <Select value={values.spasticity_level ?? ''} onValueChange={(v) => setValues({ ...values, spasticity_level: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="0" value="0">0</SelectItem>
+            <SelectItem key="1" value="1">1</SelectItem>
+            <SelectItem key="1+" value="1+">1+</SelectItem>
+            <SelectItem key="2" value="2">2</SelectItem>
+            <SelectItem key="3" value="3">3</SelectItem>
+            <SelectItem key="4" value="4">4</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="gait_status">Gait Status</Label>

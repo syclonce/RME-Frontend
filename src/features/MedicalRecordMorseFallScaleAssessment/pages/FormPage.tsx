@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -47,27 +48,77 @@ export function MorseFallScaleAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="history_of_falling">History Of Falling *</Label>
-        <Input id="history_of_falling" type="text" value={values.history_of_falling ?? ''} onChange={(e) => setValues({ ...values, history_of_falling: e.target.value })} />
+        <Select value={values.history_of_falling ?? ''} onValueChange={(v) => setValues({ ...values, history_of_falling: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="0" value="0">0</SelectItem>
+            <SelectItem key="25" value="25">25</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="secondary_diagnosis">Secondary Diagnosis *</Label>
-        <Input id="secondary_diagnosis" type="text" value={values.secondary_diagnosis ?? ''} onChange={(e) => setValues({ ...values, secondary_diagnosis: e.target.value })} />
+        <Select value={values.secondary_diagnosis ?? ''} onValueChange={(v) => setValues({ ...values, secondary_diagnosis: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="0" value="0">0</SelectItem>
+            <SelectItem key="15" value="15">15</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ambulatory_aid">Ambulatory Aid *</Label>
-        <Input id="ambulatory_aid" type="text" value={values.ambulatory_aid ?? ''} onChange={(e) => setValues({ ...values, ambulatory_aid: e.target.value })} />
+        <Select value={values.ambulatory_aid ?? ''} onValueChange={(v) => setValues({ ...values, ambulatory_aid: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="0" value="0">0</SelectItem>
+            <SelectItem key="15" value="15">15</SelectItem>
+            <SelectItem key="30" value="30">30</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="iv_therapy">Iv Therapy *</Label>
-        <Input id="iv_therapy" type="text" value={values.iv_therapy ?? ''} onChange={(e) => setValues({ ...values, iv_therapy: e.target.value })} />
+        <Select value={values.iv_therapy ?? ''} onValueChange={(v) => setValues({ ...values, iv_therapy: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="0" value="0">0</SelectItem>
+            <SelectItem key="20" value="20">20</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="gait">Gait *</Label>
-        <Input id="gait" type="text" value={values.gait ?? ''} onChange={(e) => setValues({ ...values, gait: e.target.value })} />
+        <Select value={values.gait ?? ''} onValueChange={(v) => setValues({ ...values, gait: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="0" value="0">0</SelectItem>
+            <SelectItem key="10" value="10">10</SelectItem>
+            <SelectItem key="20" value="20">20</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="mental_status">Mental Status *</Label>
-        <Input id="mental_status" type="text" value={values.mental_status ?? ''} onChange={(e) => setValues({ ...values, mental_status: e.target.value })} />
+        <Select value={values.mental_status ?? ''} onValueChange={(v) => setValues({ ...values, mental_status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="0" value="0">0</SelectItem>
+            <SelectItem key="15" value="15">15</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="total_score">Total Score *</Label>
@@ -75,7 +126,16 @@ export function MorseFallScaleAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="risk_level">Risk Level *</Label>
-        <Input id="risk_level" type="text" value={values.risk_level ?? ''} onChange={(e) => setValues({ ...values, risk_level: e.target.value })} />
+        <Select value={values.risk_level ?? ''} onValueChange={(v) => setValues({ ...values, risk_level: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="LOW" value="LOW">LOW</SelectItem>
+            <SelectItem key="MODERATE" value="MODERATE">MODERATE</SelectItem>
+            <SelectItem key="HIGH" value="HIGH">HIGH</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assessed_at">Assessed At</Label>

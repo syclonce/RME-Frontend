@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -47,7 +48,17 @@ export function ObstetricHistoryFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="delivery_method">Delivery Method</Label>
-        <Input id="delivery_method" type="text" value={values.delivery_method ?? ''} onChange={(e) => setValues({ ...values, delivery_method: e.target.value })} />
+        <Select value={values.delivery_method ?? ''} onValueChange={(v) => setValues({ ...values, delivery_method: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="normal" value="normal">Normal</SelectItem>
+            <SelectItem key="cesarean" value="cesarean">Cesarean</SelectItem>
+            <SelectItem key="vacuum" value="vacuum">Vacuum</SelectItem>
+            <SelectItem key="forceps" value="forceps">Forceps</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="birth_weight_grams">Birth Weight Grams</Label>

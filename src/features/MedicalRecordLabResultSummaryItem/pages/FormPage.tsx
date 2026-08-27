@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -47,7 +48,17 @@ export function LabResultSummaryItemFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="flag">Flag</Label>
-        <Input id="flag" type="text" value={values.flag ?? ''} onChange={(e) => setValues({ ...values, flag: e.target.value })} />
+        <Select value={values.flag ?? ''} onValueChange={(v) => setValues({ ...values, flag: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="normal" value="normal">Normal</SelectItem>
+            <SelectItem key="high" value="high">High</SelectItem>
+            <SelectItem key="low" value="low">Low</SelectItem>
+            <SelectItem key="critical" value="critical">Critical</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="tested_at">Tested At</Label>

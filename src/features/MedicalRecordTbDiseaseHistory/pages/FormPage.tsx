@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -48,7 +49,17 @@ export function TbDiseaseHistoryFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="treatment_outcome">Treatment Outcome</Label>
-        <Input id="treatment_outcome" type="text" value={values.treatment_outcome ?? ''} onChange={(e) => setValues({ ...values, treatment_outcome: e.target.value })} />
+        <Select value={values.treatment_outcome ?? ''} onValueChange={(v) => setValues({ ...values, treatment_outcome: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="cured" value="cured">Cured</SelectItem>
+            <SelectItem key="completed" value="completed">Completed</SelectItem>
+            <SelectItem key="failed" value="failed">Failed</SelectItem>
+            <SelectItem key="ongoing" value="ongoing">Ongoing</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="tb_category">Tb Category</Label>

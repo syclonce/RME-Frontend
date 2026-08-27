@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,11 +40,31 @@ export function TranscranialDopplerWindowFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="window_site">Window Site *</Label>
-        <Input id="window_site" type="text" value={values.window_site ?? ''} onChange={(e) => setValues({ ...values, window_site: e.target.value })} />
+        <Select value={values.window_site ?? ''} onValueChange={(v) => setValues({ ...values, window_site: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="temporal" value="temporal">Temporal</SelectItem>
+            <SelectItem key="orbital" value="orbital">Orbital</SelectItem>
+            <SelectItem key="suboccipital" value="suboccipital">Suboccipital</SelectItem>
+            <SelectItem key="submandibular" value="submandibular">Submandibular</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="signal_quality">Signal Quality</Label>
-        <Input id="signal_quality" type="text" value={values.signal_quality ?? ''} onChange={(e) => setValues({ ...values, signal_quality: e.target.value })} />
+        <Select value={values.signal_quality ?? ''} onValueChange={(v) => setValues({ ...values, signal_quality: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="good" value="good">Good</SelectItem>
+            <SelectItem key="fair" value="fair">Fair</SelectItem>
+            <SelectItem key="poor" value="poor">Poor</SelectItem>
+            <SelectItem key="absent" value="absent">Absent</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="depth_mm">Depth Mm</Label>

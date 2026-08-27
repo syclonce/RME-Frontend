@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -40,7 +41,16 @@ export function ThighExaminationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="side">Side</Label>
-        <Input id="side" type="text" value={values.side ?? ''} onChange={(e) => setValues({ ...values, side: e.target.value })} />
+        <Select value={values.side ?? ''} onValueChange={(v) => setValues({ ...values, side: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="left" value="left">Left</SelectItem>
+            <SelectItem key="right" value="right">Right</SelectItem>
+            <SelectItem key="bilateral" value="bilateral">Bilateral</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="muscle_strength">Muscle Strength</Label>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useSterilizationCycleResource } from '../api'
@@ -54,11 +55,29 @@ export function SterilizationCycleFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="biological_indicator_result">Biological Indicator Result</Label>
-        <Input id="biological_indicator_result" type="text" value={values.biological_indicator_result ?? ''} onChange={(e) => setValues({ ...values, biological_indicator_result: e.target.value })} />
+        <Select value={values.biological_indicator_result ?? ''} onValueChange={(v) => setValues({ ...values, biological_indicator_result: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="pending" value="pending">Pending</SelectItem>
+            <SelectItem key="negative" value="negative">Negative</SelectItem>
+            <SelectItem key="positive" value="positive">Positive</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="status">Status</Label>
-        <Input id="status" type="text" value={values.status ?? ''} onChange={(e) => setValues({ ...values, status: e.target.value })} />
+        <Select value={values.status ?? ''} onValueChange={(v) => setValues({ ...values, status: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="in_process" value="in_process">In Process</SelectItem>
+            <SelectItem key="passed" value="passed">Passed</SelectItem>
+            <SelectItem key="failed" value="failed">Failed</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan

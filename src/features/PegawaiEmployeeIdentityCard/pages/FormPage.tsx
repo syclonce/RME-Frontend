@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,16 @@ export function EmployeeIdentityCardFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="id_type">Id Type *</Label>
-        <Input id="id_type" type="text" value={values.id_type ?? ''} onChange={(e) => setValues({ ...values, id_type: e.target.value })} />
+        <Select value={values.id_type ?? ''} onValueChange={(v) => setValues({ ...values, id_type: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="KTP" value="KTP">KTP</SelectItem>
+            <SelectItem key="SIM" value="SIM">SIM</SelectItem>
+            <SelectItem key="Paspor" value="Paspor">Paspor</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="id_number">Id Number *</Label>

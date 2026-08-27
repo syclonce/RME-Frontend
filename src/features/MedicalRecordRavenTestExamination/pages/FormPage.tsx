@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,16 @@ export function RavenTestExaminationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="test_form">Test Form</Label>
-        <Input id="test_form" type="text" value={values.test_form ?? ''} onChange={(e) => setValues({ ...values, test_form: e.target.value })} />
+        <Select value={values.test_form ?? ''} onValueChange={(v) => setValues({ ...values, test_form: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="CPM" value="CPM">CPM</SelectItem>
+            <SelectItem key="SPM" value="SPM">SPM</SelectItem>
+            <SelectItem key="APM" value="APM">APM</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="raw_score">Raw Score</Label>

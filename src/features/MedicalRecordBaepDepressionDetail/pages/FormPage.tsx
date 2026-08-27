@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -39,7 +40,17 @@ export function BaepDepressionDetailFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="severity_level">Severity Level</Label>
-        <Input id="severity_level" type="text" value={values.severity_level ?? ''} onChange={(e) => setValues({ ...values, severity_level: e.target.value })} />
+        <Select value={values.severity_level ?? ''} onValueChange={(v) => setValues({ ...values, severity_level: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="minimal" value="minimal">Minimal</SelectItem>
+            <SelectItem key="mild" value="mild">Mild</SelectItem>
+            <SelectItem key="moderate" value="moderate">Moderate</SelectItem>
+            <SelectItem key="severe" value="severe">Severe</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="symptoms_observed">Symptoms Observed</Label>

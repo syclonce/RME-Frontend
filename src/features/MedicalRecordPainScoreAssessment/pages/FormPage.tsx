@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
@@ -47,7 +48,17 @@ export function PainScoreAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="scale_type">Scale Type *</Label>
-        <Input id="scale_type" type="text" value={values.scale_type ?? ''} onChange={(e) => setValues({ ...values, scale_type: e.target.value })} />
+        <Select value={values.scale_type ?? ''} onValueChange={(v) => setValues({ ...values, scale_type: v })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem key="NRS" value="NRS">NRS</SelectItem>
+            <SelectItem key="WONG_BAKER" value="WONG_BAKER">WONG BAKER</SelectItem>
+            <SelectItem key="FLACC" value="FLACC">FLACC</SelectItem>
+            <SelectItem key="CRIES" value="CRIES">CRIES</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="score">Score *</Label>
