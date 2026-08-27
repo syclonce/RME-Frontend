@@ -6,8 +6,8 @@ import { useAntimicrobialStewardshipApprovalResource } from '../api'
 const COLUMNS = ["id","antimicrobial_stewardship_form_id","approved_by","decision","decision_note","decided_at","created_at"] as const
 
 export function AntimicrobialStewardshipApprovalListPage() {
-  const { list } = useAntimicrobialStewardshipApprovalResource()
-  const { data, isLoading } = list()
+  const { useList } = useAntimicrobialStewardshipApprovalResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

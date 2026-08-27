@@ -11,8 +11,8 @@ export function ReportTypeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useReportTypeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useReportTypeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ReportTypeFormValues>({})
 
   useEffect(() => {

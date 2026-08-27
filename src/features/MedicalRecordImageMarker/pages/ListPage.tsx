@@ -6,8 +6,8 @@ import { useImageMarkerResource } from '../api'
 const COLUMNS = ["id","visit_id","image_path","template_name","notes","marked_at","created_at","updated_at"] as const
 
 export function ImageMarkerListPage() {
-  const { list, remove } = useImageMarkerResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useImageMarkerResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

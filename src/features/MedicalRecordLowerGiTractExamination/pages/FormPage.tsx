@@ -11,8 +11,8 @@ export function LowerGiTractExaminationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useLowerGiTractExaminationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useLowerGiTractExaminationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LowerGiTractExaminationFormValues>({})
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useReceivingRecordResource } from '../api'
 import type { ReceivingRecordFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function ReceivingRecordFormPage() {
       <h1 className="text-lg font-semibold">Tambah ReceivingRecord</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward *</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="received_by">Received By *</Label>
-        <Input id="received_by" type="number" value={values.received_by ?? ''} onChange={(e) => setValues({ ...values, received_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.received_by ?? null}
+          onChange={(v) => setValues({ ...values, received_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="received_at">Received At</Label>

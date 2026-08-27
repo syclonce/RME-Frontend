@@ -6,8 +6,8 @@ import { useDischargeConditionResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function DischargeConditionListPage() {
-  const { list, remove } = useDischargeConditionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDischargeConditionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

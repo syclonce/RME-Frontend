@@ -6,8 +6,8 @@ import { useImmunizationVaccinationResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","vaccine_name","dose_number","batch_number","administered_at","administered_by","site","route","adverse_reaction","status","created_at","updated_at"] as const
 
 export function ImmunizationVaccinationListPage() {
-  const { list, remove } = useImmunizationVaccinationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useImmunizationVaccinationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

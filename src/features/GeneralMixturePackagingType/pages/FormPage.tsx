@@ -11,8 +11,8 @@ export function MixturePackagingTypeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useMixturePackagingTypeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useMixturePackagingTypeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MixturePackagingTypeFormValues>({})
 
   useEffect(() => {

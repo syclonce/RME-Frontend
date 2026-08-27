@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBedResource } from '../api'
 import type { BedFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function BedFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBedResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBedResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BedFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function BedFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Bed</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="room_id">Room *</Label>
-        <Input id="room_id" type="number" value={values.room_id ?? ''} onChange={(e) => setValues({ ...values, room_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/rooms"
+          value={values.room_id ?? null}
+          onChange={(v) => setValues({ ...values, room_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="bed_number">Bed Number *</Label>

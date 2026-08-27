@@ -10,8 +10,8 @@ export function SterilizationCycleFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSterilizationCycleResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSterilizationCycleResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SterilizationCycleFormValues>({})
 
   useEffect(() => {

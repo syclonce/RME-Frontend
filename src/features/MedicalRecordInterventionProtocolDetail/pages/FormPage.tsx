@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInterventionProtocolDetailResource } from '../api'
 import type { InterventionProtocolDetailFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function InterventionProtocolDetailFormPage() {
       <h1 className="text-lg font-semibold">Tambah InterventionProtocolDetail</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="protocol_id">Protocol *</Label>
-        <Input id="protocol_id" type="number" value={values.protocol_id ?? ''} onChange={(e) => setValues({ ...values, protocol_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/intervention-protocols"
+          value={values.protocol_id ?? null}
+          onChange={(v) => setValues({ ...values, protocol_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_by">Performed By *</Label>
-        <Input id="performed_by" type="number" value={values.performed_by ?? ''} onChange={(e) => setValues({ ...values, performed_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.performed_by ?? null}
+          onChange={(v) => setValues({ ...values, performed_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="step_number">Step Number *</Label>

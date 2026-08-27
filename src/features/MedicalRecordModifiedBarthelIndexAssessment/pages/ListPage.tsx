@@ -6,8 +6,8 @@ import { useModifiedBarthelIndexAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","feeding","bathing","personal_hygiene","dressing","bowel_control","bladder_control","toilet_use","chair_bed_transfer","ambulation","stairs","total_score","interpretation","assessed_at","created_at","updated_at"] as const
 
 export function ModifiedBarthelIndexAssessmentListPage() {
-  const { list, remove } = useModifiedBarthelIndexAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useModifiedBarthelIndexAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useTonsilExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","side","grade","color","exudate","findings","examined_at","created_at","updated_at"] as const
 
 export function TonsilExaminationListPage() {
-  const { list, remove } = useTonsilExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTonsilExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

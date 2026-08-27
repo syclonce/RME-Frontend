@@ -6,8 +6,8 @@ import { usePrescriptionFrequencyRuleResource } from '../api'
 const COLUMNS = ["id","code","description","times_per_day","interval_hours","is_active","created_at"] as const
 
 export function PrescriptionFrequencyRuleListPage() {
-  const { list, remove } = usePrescriptionFrequencyRuleResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePrescriptionFrequencyRuleResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

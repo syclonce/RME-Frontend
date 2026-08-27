@@ -6,8 +6,8 @@ import { usePracticeLicenseResource } from '../api'
 const COLUMNS = ["id","employee_id","license_type","license_number","issued_at","expires_at","issuing_authority","created_at"] as const
 
 export function PracticeLicenseListPage() {
-  const { list } = usePracticeLicenseResource()
-  const { data, isLoading } = list()
+  const { useList } = usePracticeLicenseResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

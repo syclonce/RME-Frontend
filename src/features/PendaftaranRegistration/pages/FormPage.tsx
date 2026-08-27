@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useRegistrationResource } from '../api'
 import type { RegistrationFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function RegistrationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useRegistrationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useRegistrationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<RegistrationFormValues>({})
 
   useEffect(() => {
@@ -35,7 +36,11 @@ export function RegistrationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patients"
+          value={values.patient_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="registered_at">Registered At</Label>
@@ -43,7 +48,11 @@ export function RegistrationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="admission_diagnosis_id">Admission Diagnosis</Label>
-        <Input id="admission_diagnosis_id" type="number" value={values.admission_diagnosis_id ?? ''} onChange={(e) => setValues({ ...values, admission_diagnosis_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/diagnosis-codes"
+          value={values.admission_diagnosis_id ?? null}
+          onChange={(v) => setValues({ ...values, admission_diagnosis_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="referral_id">Referral</Label>

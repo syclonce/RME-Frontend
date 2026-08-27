@@ -6,8 +6,8 @@ import { useGeneralWardClassAssignmentResource } from '../api'
 const COLUMNS = ["id","ward_id","room_class_id"] as const
 
 export function GeneralWardClassAssignmentListPage() {
-  const { list, remove } = useGeneralWardClassAssignmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGeneralWardClassAssignmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -11,8 +11,8 @@ export function SitbPreMicroscopyFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSitbPreMicroscopyResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSitbPreMicroscopyResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SitbPreMicroscopyFormValues>({})
 
   useEffect(() => {

@@ -6,8 +6,8 @@ import { useHemodialysisLetterResource } from '../api'
 const COLUMNS = ["id","letter_number","patient_id","visit_id","doctor_id","issue_date","diagnosis","hd_frequency_per_week","vascular_access","remarks","created_by","created_at","updated_at"] as const
 
 export function HemodialysisLetterListPage() {
-  const { list, remove } = useHemodialysisLetterResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useHemodialysisLetterResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

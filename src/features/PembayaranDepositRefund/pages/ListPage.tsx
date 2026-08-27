@@ -6,8 +6,8 @@ import { useDepositRefundResource } from '../api'
 const COLUMNS = ["id","deposit_id","refunded_amount","refunded_at","refunded_by","created_at"] as const
 
 export function DepositRefundListPage() {
-  const { list } = useDepositRefundResource()
-  const { data, isLoading } = list()
+  const { useList } = useDepositRefundResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

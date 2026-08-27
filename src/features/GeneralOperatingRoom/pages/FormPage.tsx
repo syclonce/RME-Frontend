@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useGeneralOperatingRoomResource } from '../api'
 import type { GeneralOperatingRoomFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function GeneralOperatingRoomFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useGeneralOperatingRoomResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useGeneralOperatingRoomResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<GeneralOperatingRoomFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function GeneralOperatingRoomFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} GeneralOperatingRoom</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward *</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="room_number">Room Number *</Label>

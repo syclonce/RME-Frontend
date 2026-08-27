@@ -6,8 +6,8 @@ import { useKapResource } from '../api'
 const COLUMNS = ["id","patient_norm","card_type","card_number"] as const
 
 export function KapListPage() {
-  const { list, remove } = useKapResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useKapResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

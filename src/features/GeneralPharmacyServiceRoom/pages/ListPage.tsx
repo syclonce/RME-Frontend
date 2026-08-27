@@ -6,8 +6,8 @@ import { usePharmacyServiceRoomResource } from '../api'
 const COLUMNS = ["id","ward_id","service_type","is_active","created_at"] as const
 
 export function PharmacyServiceRoomListPage() {
-  const { list, remove } = usePharmacyServiceRoomResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePharmacyServiceRoomResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

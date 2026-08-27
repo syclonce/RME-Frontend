@@ -11,8 +11,8 @@ export function InsuranceCardTypeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInsuranceCardTypeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInsuranceCardTypeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InsuranceCardTypeFormValues>({})
 
   useEffect(() => {

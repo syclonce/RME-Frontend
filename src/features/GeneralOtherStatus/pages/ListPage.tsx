@@ -6,8 +6,8 @@ import { useOtherStatusResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function OtherStatusListPage() {
-  const { list, remove } = useOtherStatusResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useOtherStatusResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

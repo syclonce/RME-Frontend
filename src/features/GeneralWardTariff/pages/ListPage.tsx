@@ -6,8 +6,8 @@ import { useWardTariffResource } from '../api'
 const COLUMNS = ["id","ward_id","room_class_id","price","effective_date","is_active"] as const
 
 export function WardTariffListPage() {
-  const { list, remove } = useWardTariffResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useWardTariffResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

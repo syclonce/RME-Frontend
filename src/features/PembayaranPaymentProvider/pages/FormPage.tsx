@@ -11,8 +11,8 @@ export function PaymentProviderFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePaymentProviderResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePaymentProviderResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PaymentProviderFormValues>({})
 
   useEffect(() => {

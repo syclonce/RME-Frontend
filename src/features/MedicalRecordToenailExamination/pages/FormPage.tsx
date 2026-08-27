@@ -11,8 +11,8 @@ export function ToenailExaminationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useToenailExaminationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useToenailExaminationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ToenailExaminationFormValues>({})
 
   useEffect(() => {

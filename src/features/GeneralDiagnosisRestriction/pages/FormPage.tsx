@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDiagnosisRestrictionResource } from '../api'
 import type { DiagnosisRestrictionFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function DiagnosisRestrictionFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDiagnosisRestrictionResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDiagnosisRestrictionResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DiagnosisRestrictionFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function DiagnosisRestrictionFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DiagnosisRestriction</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="diagnosis_code_id">Diagnosis Code *</Label>
-        <Input id="diagnosis_code_id" type="number" value={values.diagnosis_code_id ?? ''} onChange={(e) => setValues({ ...values, diagnosis_code_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/diagnosis-codes"
+          value={values.diagnosis_code_id ?? null}
+          onChange={(v) => setValues({ ...values, diagnosis_code_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="restricted_antibiotic_name">Restricted Antibiotic Name *</Label>

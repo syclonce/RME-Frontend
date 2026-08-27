@@ -11,8 +11,8 @@ export function ReturnCancellationTypeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useReturnCancellationTypeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useReturnCancellationTypeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ReturnCancellationTypeFormValues>({})
 
   useEffect(() => {

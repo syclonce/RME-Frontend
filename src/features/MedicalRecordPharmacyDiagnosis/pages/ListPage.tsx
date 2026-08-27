@@ -6,8 +6,8 @@ import { usePharmacyDiagnosisResource } from '../api'
 const COLUMNS = ["id","visit_id","prescription_id","problem_category","description","recommendation","assessed_by","assessed_at","status","created_at","updated_at"] as const
 
 export function PharmacyDiagnosisListPage() {
-  const { list, remove } = usePharmacyDiagnosisResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePharmacyDiagnosisResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

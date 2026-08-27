@@ -6,8 +6,8 @@ import { usePharmacyGuarantorMarginResource } from '../api'
 const COLUMNS = ["id","guarantor_id","margin_percentage","effective_date","is_active","created_at"] as const
 
 export function PharmacyGuarantorMarginListPage() {
-  const { list, remove } = usePharmacyGuarantorMarginResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePharmacyGuarantorMarginResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

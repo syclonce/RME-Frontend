@@ -6,8 +6,8 @@ import { usePrescriptionItemResource } from '../api'
 const COLUMNS = ["id","prescription_id","item_id","drug_name","dosage","frequency","route","duration","quantity","notes","created_at"] as const
 
 export function PrescriptionItemListPage() {
-  const { list } = usePrescriptionItemResource()
-  const { data, isLoading } = list()
+  const { useList } = usePrescriptionItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

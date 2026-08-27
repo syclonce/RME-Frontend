@@ -6,8 +6,8 @@ import { useParentalHealthHistoryScreeningResource } from '../api'
 const COLUMNS = ["id","visit_id","screened_by","created_by","father_health_conditions","mother_health_conditions","consanguinity","genetic_disorder_history","screened_at","created_at"] as const
 
 export function ParentalHealthHistoryScreeningListPage() {
-  const { list } = useParentalHealthHistoryScreeningResource()
-  const { data, isLoading } = list()
+  const { useList } = useParentalHealthHistoryScreeningResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

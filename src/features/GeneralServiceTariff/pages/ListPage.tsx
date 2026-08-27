@@ -6,8 +6,8 @@ import { useServiceTariffResource } from '../api'
 const COLUMNS = ["id","service_id","room_class_id","price","effective_date","decree_number","decree_date","created_by","is_active","created_at","updated_at"] as const
 
 export function ServiceTariffListPage() {
-  const { list, remove } = useServiceTariffResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useServiceTariffResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useTreatmentHistoryResource } from '../api'
 const COLUMNS = ["id","visit_id","created_by","treatment_description","facility_name","treatment_date","outcome","created_at"] as const
 
 export function TreatmentHistoryListPage() {
-  const { list } = useTreatmentHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = useTreatmentHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -10,8 +10,8 @@ export function TongueExaminationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useTongueExaminationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useTongueExaminationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<TongueExaminationFormValues>({})
 
   useEffect(() => {

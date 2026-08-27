@@ -6,8 +6,8 @@ import { useFluidFinalBalanceResource } from '../api'
 const COLUMNS = ["id","visit_id","period_date","total_intake_ml","total_output_ml","balance_ml","recorded_by","recorded_at","created_at","updated_at"] as const
 
 export function FluidFinalBalanceListPage() {
-  const { list, remove } = useFluidFinalBalanceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFluidFinalBalanceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

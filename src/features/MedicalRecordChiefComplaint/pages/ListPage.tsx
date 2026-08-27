@@ -6,8 +6,8 @@ import { useChiefComplaintResource } from '../api'
 const COLUMNS = ["id","visit_id","complaint","onset","duration","recorded_by","recorded_at","created_at","updated_at"] as const
 
 export function ChiefComplaintListPage() {
-  const { list, remove } = useChiefComplaintResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useChiefComplaintResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

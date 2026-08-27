@@ -10,8 +10,8 @@ export function TranscranialDopplerExaminationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useTranscranialDopplerExaminationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useTranscranialDopplerExaminationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<TranscranialDopplerExaminationFormValues>({})
 
   useEffect(() => {

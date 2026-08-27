@@ -6,8 +6,8 @@ import { useDurationRestrictionResource } from '../api'
 const COLUMNS = ["id","antibiotic_name","max_days","min_days","requires_reevaluation","notes","is_active","created_at"] as const
 
 export function DurationRestrictionListPage() {
-  const { list, remove } = useDurationRestrictionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDurationRestrictionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useExaminationResultStatusResource } from '../api'
 const COLUMNS = ["id","visit_id","examination_type","status","verified_by","verified_at","notes","created_at","updated_at"] as const
 
 export function ExaminationResultStatusListPage() {
-  const { list, remove } = useExaminationResultStatusResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useExaminationResultStatusResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

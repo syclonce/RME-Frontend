@@ -6,8 +6,8 @@ import { usePrescriptionInitialReviewResource } from '../api'
 const COLUMNS = ["id","prescription_id","reviewed_by","reviewed_at","is_appropriate","issues_found","recommendation","status","created_at","updated_at"] as const
 
 export function PrescriptionInitialReviewListPage() {
-  const { list, remove } = usePrescriptionInitialReviewResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePrescriptionInitialReviewResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

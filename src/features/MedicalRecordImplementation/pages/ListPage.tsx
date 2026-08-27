@@ -6,8 +6,8 @@ import { useImplementationResource } from '../api'
 const COLUMNS = ["id","visit_id","order_reference","description","performed_by","performed_at","status","created_at","updated_at"] as const
 
 export function ImplementationListPage() {
-  const { list, remove } = useImplementationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useImplementationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

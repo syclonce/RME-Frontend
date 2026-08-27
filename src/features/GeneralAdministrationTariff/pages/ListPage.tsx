@@ -6,8 +6,8 @@ import { useAdministrationTariffResource } from '../api'
 const COLUMNS = ["id","administration_id","room_class_id","price","effective_date","is_active"] as const
 
 export function AdministrationTariffListPage() {
-  const { list, remove } = useAdministrationTariffResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAdministrationTariffResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

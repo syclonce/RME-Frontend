@@ -6,8 +6,8 @@ import { useVisitDateChangeResource } from '../api'
 const COLUMNS = [] as const
 
 export function VisitDateChangeListPage() {
-  const { list } = useVisitDateChangeResource()
-  const { data, isLoading } = list()
+  const { useList } = useVisitDateChangeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

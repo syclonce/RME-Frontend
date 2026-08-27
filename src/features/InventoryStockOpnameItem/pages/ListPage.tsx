@@ -6,8 +6,8 @@ import { useInventoryStockOpnameItemResource } from '../api'
 const COLUMNS = ["id","stock_opname_id","item_id","system_quantity","physical_quantity","difference","created_at"] as const
 
 export function InventoryStockOpnameItemListPage() {
-  const { list } = useInventoryStockOpnameItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useInventoryStockOpnameItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

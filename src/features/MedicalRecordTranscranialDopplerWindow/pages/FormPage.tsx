@@ -10,8 +10,8 @@ export function TranscranialDopplerWindowFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useTranscranialDopplerWindowResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useTranscranialDopplerWindowResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<TranscranialDopplerWindowFormValues>({})
 
   useEffect(() => {

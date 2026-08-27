@@ -6,8 +6,8 @@ import { useOxygenUsageResource } from '../api'
 const COLUMNS = ["id","visit_id","flow_rate_lpm","method","started_at","ended_at","recorded_by","created_at"] as const
 
 export function OxygenUsageListPage() {
-  const { list } = useOxygenUsageResource()
-  const { data, isLoading } = list()
+  const { useList } = useOxygenUsageResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

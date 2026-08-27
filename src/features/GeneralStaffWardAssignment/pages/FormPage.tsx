@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useStaffWardAssignmentResource } from '../api'
 import type { StaffWardAssignmentFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function StaffWardAssignmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useStaffWardAssignmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useStaffWardAssignmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<StaffWardAssignmentFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function StaffWardAssignmentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} StaffWardAssignment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="staff_member_id">Staff Member *</Label>
-        <Input id="staff_member_id" type="number" value={values.staff_member_id ?? ''} onChange={(e) => setValues({ ...values, staff_member_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/staff-members"
+          value={values.staff_member_id ?? null}
+          onChange={(v) => setValues({ ...values, staff_member_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward *</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assigned_at">Assigned At</Label>

@@ -6,8 +6,8 @@ import { useToenailExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","color","capillary_refill_seconds","clubbing","cyanosis","lesions","findings","examined_at","created_at","updated_at"] as const
 
 export function ToenailExaminationListPage() {
-  const { list, remove } = useToenailExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useToenailExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

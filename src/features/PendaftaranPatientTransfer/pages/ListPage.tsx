@@ -6,8 +6,8 @@ import { usePatientTransferResource } from '../api'
 const COLUMNS = [] as const
 
 export function PatientTransferListPage() {
-  const { list } = usePatientTransferResource()
-  const { data, isLoading } = list()
+  const { useList } = usePatientTransferResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

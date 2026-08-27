@@ -6,8 +6,8 @@ import { useServiceHandoverResource } from '../api'
 const COLUMNS = ["id","visit_id","ward_id","handed_over_by","received_by","handed_over_at","received_at","notes","status","created_at","updated_at"] as const
 
 export function ServiceHandoverListPage() {
-  const { list } = useServiceHandoverResource()
-  const { data, isLoading } = list()
+  const { useList } = useServiceHandoverResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

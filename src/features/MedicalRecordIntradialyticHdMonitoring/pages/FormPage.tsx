@@ -10,8 +10,8 @@ export function IntradialyticHdMonitoringFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useIntradialyticHdMonitoringResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useIntradialyticHdMonitoringResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<IntradialyticHdMonitoringFormValues>({})
 
   useEffect(() => {

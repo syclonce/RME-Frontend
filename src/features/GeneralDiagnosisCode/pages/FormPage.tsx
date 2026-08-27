@@ -11,8 +11,8 @@ export function DiagnosisCodeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDiagnosisCodeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDiagnosisCodeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DiagnosisCodeFormValues>({})
 
   useEffect(() => {

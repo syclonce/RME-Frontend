@@ -6,8 +6,8 @@ import { useChestExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","inspection","palpation","percussion","auscultation_breath_sounds","auscultation_heart_sounds","findings","examined_at","created_at","updated_at"] as const
 
 export function ChestExaminationListPage() {
-  const { list, remove } = useChestExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useChestExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

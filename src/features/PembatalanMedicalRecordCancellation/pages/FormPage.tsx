@@ -10,8 +10,8 @@ export function PembatalanMedicalRecordCancellationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePembatalanMedicalRecordCancellationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePembatalanMedicalRecordCancellationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PembatalanMedicalRecordCancellationFormValues>({})
 
   useEffect(() => {

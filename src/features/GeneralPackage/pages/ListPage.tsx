@@ -6,8 +6,8 @@ import { usePackageResource } from '../api'
 const COLUMNS = ["id","code","name","price","description","is_active","created_at"] as const
 
 export function PackageListPage() {
-  const { list, remove } = usePackageResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePackageResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

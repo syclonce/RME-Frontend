@@ -6,8 +6,8 @@ import { usePembatalanReturnCancellationResource } from '../api'
 const COLUMNS = ["id","return_id","reason","cancellation_date","requested_by","status"] as const
 
 export function PembatalanReturnCancellationListPage() {
-  const { list, remove } = usePembatalanReturnCancellationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePembatalanReturnCancellationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

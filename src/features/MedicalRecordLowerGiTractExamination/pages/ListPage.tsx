@@ -6,8 +6,8 @@ import { useLowerGiTractExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","procedure_type","colon_findings","rectum_findings","polyps_found","biopsy_taken","examined_at","created_at","updated_at"] as const
 
 export function LowerGiTractExaminationListPage() {
-  const { list, remove } = useLowerGiTractExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLowerGiTractExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

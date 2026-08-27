@@ -6,8 +6,8 @@ import { usePatientGuardianIdentityCardResource } from '../api'
 const COLUMNS = ["id","patient_guardian_id","card_type","card_number","issued_date","address","rt","rw","postal_code","region_code","created_at","updated_at"] as const
 
 export function PatientGuardianIdentityCardListPage() {
-  const { list, remove } = usePatientGuardianIdentityCardResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientGuardianIdentityCardResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -11,8 +11,8 @@ export function Icd9CmCodeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useIcd9CmCodeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useIcd9CmCodeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<Icd9CmCodeFormValues>({})
 
   useEffect(() => {

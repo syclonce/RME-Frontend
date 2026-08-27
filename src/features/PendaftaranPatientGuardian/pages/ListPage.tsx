@@ -6,8 +6,8 @@ import { usePatientGuardianResource } from '../api'
 const COLUMNS = ["id","registration_id","full_name","relationship_to_patient","identity_number","phone_number","address","occupation","status","created_at","updated_at"] as const
 
 export function PatientGuardianListPage() {
-  const { list, remove } = usePatientGuardianResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientGuardianResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

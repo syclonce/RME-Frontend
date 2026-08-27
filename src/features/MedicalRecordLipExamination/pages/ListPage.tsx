@@ -6,8 +6,8 @@ import { useLipExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","color","symmetry","lesions","moisture","notes","examined_at","created_at","updated_at"] as const
 
 export function LipExaminationListPage() {
-  const { list, remove } = useLipExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLipExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

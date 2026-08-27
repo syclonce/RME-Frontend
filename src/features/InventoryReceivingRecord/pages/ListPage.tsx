@@ -6,8 +6,8 @@ import { useReceivingRecordResource } from '../api'
 const COLUMNS = ["id","ward_id","received_by","received_at","notes","created_at"] as const
 
 export function ReceivingRecordListPage() {
-  const { list } = useReceivingRecordResource()
-  const { data, isLoading } = list()
+  const { useList } = useReceivingRecordResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useTreatmentCategoryResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function TreatmentCategoryListPage() {
-  const { list, remove } = useTreatmentCategoryResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTreatmentCategoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

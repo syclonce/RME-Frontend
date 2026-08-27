@@ -6,8 +6,8 @@ import { useThroatExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","pharynx","uvula","mucosa","exudate","findings","examined_at","created_at","updated_at"] as const
 
 export function ThroatExaminationListPage() {
-  const { list, remove } = useThroatExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useThroatExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

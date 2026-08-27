@@ -6,8 +6,8 @@ import { useEarExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","side","otoscopy","tympanic_membrane","hearing_test_result","discharge","findings","examined_at","created_at","updated_at"] as const
 
 export function EarExaminationListPage() {
-  const { list, remove } = useEarExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEarExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

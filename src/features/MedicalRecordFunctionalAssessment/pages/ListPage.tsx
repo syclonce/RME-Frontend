@@ -6,8 +6,8 @@ import { useFunctionalAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","assessment_date","mobility_status","adl_score","assistive_device","assessed_by","notes","created_at","updated_at"] as const
 
 export function FunctionalAssessmentListPage() {
-  const { list, remove } = useFunctionalAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFunctionalAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

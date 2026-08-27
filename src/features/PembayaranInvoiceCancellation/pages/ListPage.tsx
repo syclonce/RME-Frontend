@@ -6,8 +6,8 @@ import { useInvoiceCancellationResource } from '../api'
 const COLUMNS = ["id","invoice_id","cancelled_at","cancelled_by","reason","created_at"] as const
 
 export function InvoiceCancellationListPage() {
-  const { list } = useInvoiceCancellationResource()
-  const { data, isLoading } = list()
+  const { useList } = useInvoiceCancellationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

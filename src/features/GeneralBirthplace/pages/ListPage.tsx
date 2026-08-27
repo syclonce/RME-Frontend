@@ -6,8 +6,8 @@ import { useBirthplaceResource } from '../api'
 const COLUMNS = ["id","name","village_id","is_active","created_at"] as const
 
 export function BirthplaceListPage() {
-  const { list, remove } = useBirthplaceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBirthplaceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

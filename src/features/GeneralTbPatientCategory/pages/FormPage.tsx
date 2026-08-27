@@ -11,8 +11,8 @@ export function TbPatientCategoryFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useTbPatientCategoryResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useTbPatientCategoryResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<TbPatientCategoryFormValues>({})
 
   useEffect(() => {

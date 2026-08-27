@@ -6,8 +6,8 @@ import { useHandJointExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","joint","range_of_motion","swelling","tenderness","deformity","findings","examined_at","created_at","updated_at"] as const
 
 export function HandJointExaminationListPage() {
-  const { list, remove } = useHandJointExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useHandJointExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

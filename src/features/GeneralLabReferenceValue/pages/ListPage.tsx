@@ -6,8 +6,8 @@ import { useLabReferenceValueResource } from '../api'
 const COLUMNS = ["id","lab_service_parameter_id","gender","min_age","max_age","min_value","max_value","unit","note","is_active"] as const
 
 export function LabReferenceValueListPage() {
-  const { list, remove } = useLabReferenceValueResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLabReferenceValueResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

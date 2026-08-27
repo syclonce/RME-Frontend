@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useGuarantorWardAccessResource } from '../api'
 import type { GuarantorWardAccessFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function GuarantorWardAccessFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useGuarantorWardAccessResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useGuarantorWardAccessResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<GuarantorWardAccessFormValues>({})
 
   useEffect(() => {
@@ -31,11 +32,19 @@ export function GuarantorWardAccessFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} GuarantorWardAccess</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="guarantor_id">Guarantor *</Label>
-        <Input id="guarantor_id" type="number" value={values.guarantor_id ?? ''} onChange={(e) => setValues({ ...values, guarantor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/guarantors"
+          value={values.guarantor_id ?? null}
+          onChange={(v) => setValues({ ...values, guarantor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward *</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="is_allowed" checked={!!values.is_allowed} onCheckedChange={(v) => setValues({ ...values, is_allowed: !!v })} />

@@ -10,8 +10,8 @@ export function RehabilitationProcedureExaminationItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useRehabilitationProcedureExaminationItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useRehabilitationProcedureExaminationItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<RehabilitationProcedureExaminationItemFormValues>({})
 
   useEffect(() => {

@@ -10,8 +10,8 @@ export function ModifiedBarthelIndexAssessmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useModifiedBarthelIndexAssessmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useModifiedBarthelIndexAssessmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ModifiedBarthelIndexAssessmentFormValues>({})
 
   useEffect(() => {

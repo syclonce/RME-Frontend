@@ -6,8 +6,8 @@ import { useGeneralLaboratoryRoomResource } from '../api'
 const COLUMNS = ["id","ward_id","lab_type","is_active"] as const
 
 export function GeneralLaboratoryRoomListPage() {
-  const { list, remove } = useGeneralLaboratoryRoomResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGeneralLaboratoryRoomResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -11,8 +11,8 @@ export function PackageItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePackageItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePackageItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PackageItemFormValues>({})
 
   useEffect(() => {

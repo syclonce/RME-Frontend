@@ -6,8 +6,8 @@ import { usePaymentResource } from '../api'
 const COLUMNS = ["id","payment_number","invoice_id","payment_method","amount","admin_fee","paid_at","received_by","status","created_at","updated_at"] as const
 
 export function PaymentListPage() {
-  const { list } = usePaymentResource()
-  const { data, isLoading } = list()
+  const { useList } = usePaymentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

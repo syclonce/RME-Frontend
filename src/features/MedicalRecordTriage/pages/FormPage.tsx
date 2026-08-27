@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useTriageResource } from '../api'
 import type { TriageFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function TriageFormPage() {
       <h1 className="text-lg font-semibold">Tambah Triage</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="level">Level *</Label>
@@ -34,7 +39,11 @@ export function TriageFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assessed_by">Assessed By *</Label>
-        <Input id="assessed_by" type="number" value={values.assessed_by ?? ''} onChange={(e) => setValues({ ...values, assessed_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.assessed_by ?? null}
+          onChange={(v) => setValues({ ...values, assessed_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assessed_at">Assessed At</Label>

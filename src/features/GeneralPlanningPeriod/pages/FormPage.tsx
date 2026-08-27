@@ -11,8 +11,8 @@ export function PlanningPeriodFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePlanningPeriodResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePlanningPeriodResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PlanningPeriodFormValues>({})
 
   useEffect(() => {

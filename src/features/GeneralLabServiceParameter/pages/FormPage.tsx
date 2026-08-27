@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useLabServiceParameterResource } from '../api'
 import type { LabServiceParameterFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function LabServiceParameterFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useLabServiceParameterResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useLabServiceParameterResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LabServiceParameterFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function LabServiceParameterFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LabServiceParameter</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_service_group_id">Lab Service Group</Label>
-        <Input id="lab_service_group_id" type="number" value={values.lab_service_group_id ?? ''} onChange={(e) => setValues({ ...values, lab_service_group_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/lab-service-groups"
+          value={values.lab_service_group_id ?? null}
+          onChange={(v) => setValues({ ...values, lab_service_group_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="name">Name *</Label>

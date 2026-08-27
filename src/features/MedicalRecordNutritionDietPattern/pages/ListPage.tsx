@@ -6,8 +6,8 @@ import { useNutritionDietPatternResource } from '../api'
 const COLUMNS = ["id","visit_id","assessed_by","created_by","diet_type","appetite","meal_frequency_per_day","food_allergies","special_diet_notes","assessed_at","created_at"] as const
 
 export function NutritionDietPatternListPage() {
-  const { list } = useNutritionDietPatternResource()
-  const { data, isLoading } = list()
+  const { useList } = useNutritionDietPatternResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

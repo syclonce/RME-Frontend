@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useGeneralScannedDocumentResource } from '../api'
 import type { GeneralScannedDocumentFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function GeneralScannedDocumentFormPage() {
       <h1 className="text-lg font-semibold">Tambah GeneralScannedDocument</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient</Label>
-        <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patients"
+          value={values.patient_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="document_type">Document Type *</Label>
@@ -38,7 +43,11 @@ export function GeneralScannedDocumentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="scanned_by">Scanned By *</Label>
-        <Input id="scanned_by" type="number" value={values.scanned_by ?? ''} onChange={(e) => setValues({ ...values, scanned_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.scanned_by ?? null}
+          onChange={(v) => setValues({ ...values, scanned_by: v })}
+        />
       </div>
       <Button type="submit" disabled={create.isPending}>
         Simpan

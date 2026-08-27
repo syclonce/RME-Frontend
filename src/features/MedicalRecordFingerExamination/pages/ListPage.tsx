@@ -6,8 +6,8 @@ import { useFingerExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","hand_side","clubbing","cyanosis","capillary_refill_seconds","range_of_motion","notes","examined_at","created_at","updated_at"] as const
 
 export function FingerExaminationListPage() {
-  const { list, remove } = useFingerExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFingerExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

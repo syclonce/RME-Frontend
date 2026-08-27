@@ -6,8 +6,8 @@ import { useGeneralOperatingRoomResource } from '../api'
 const COLUMNS = ["id","ward_id","room_number","equipment_notes","is_active"] as const
 
 export function GeneralOperatingRoomListPage() {
-  const { list, remove } = useGeneralOperatingRoomResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGeneralOperatingRoomResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

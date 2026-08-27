@@ -6,8 +6,8 @@ import { usePathologyAnatomyResultResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","specimen_description","macroscopic_finding","microscopic_finding","diagnosis","examined_by","examined_at","status","created_at"] as const
 
 export function PathologyAnatomyResultListPage() {
-  const { list } = usePathologyAnatomyResultResource()
-  const { data, isLoading } = list()
+  const { useList } = usePathologyAnatomyResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

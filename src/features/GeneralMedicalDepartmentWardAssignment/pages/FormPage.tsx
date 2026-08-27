@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useMedicalDepartmentWardAssignmentResource } from '../api'
 import type { MedicalDepartmentWardAssignmentFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function MedicalDepartmentWardAssignmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useMedicalDepartmentWardAssignmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useMedicalDepartmentWardAssignmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MedicalDepartmentWardAssignmentFormValues>({})
 
   useEffect(() => {
@@ -31,11 +32,19 @@ export function MedicalDepartmentWardAssignmentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} MedicalDepartmentWardAssignment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="medical_department_id">Medical Department *</Label>
-        <Input id="medical_department_id" type="number" value={values.medical_department_id ?? ''} onChange={(e) => setValues({ ...values, medical_department_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/medical-departments"
+          value={values.medical_department_id ?? null}
+          onChange={(v) => setValues({ ...values, medical_department_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward *</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="is_primary" checked={!!values.is_primary} onCheckedChange={(v) => setValues({ ...values, is_primary: !!v })} />

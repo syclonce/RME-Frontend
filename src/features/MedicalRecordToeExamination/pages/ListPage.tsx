@@ -6,8 +6,8 @@ import { useToeExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","foot_side","deformity","ulceration","capillary_refill_seconds","sensation_monofilament","notes","examined_at","created_at","updated_at"] as const
 
 export function ToeExaminationListPage() {
-  const { list, remove } = useToeExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useToeExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

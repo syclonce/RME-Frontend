@@ -6,8 +6,8 @@ import { useMmpiTestResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","doctor_id","test_date","validity_scale_l","validity_scale_f","validity_scale_k","clinical_scales_summary","interpretation","conclusion","created_by","created_at","updated_at"] as const
 
 export function MmpiTestListPage() {
-  const { list, remove } = useMmpiTestResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMmpiTestResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

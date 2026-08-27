@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBerkasKlaimSupportingDocumentResource } from '../api'
 import type { BerkasKlaimSupportingDocumentFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function BerkasKlaimSupportingDocumentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBerkasKlaimSupportingDocumentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBerkasKlaimSupportingDocumentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BerkasKlaimSupportingDocumentFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function BerkasKlaimSupportingDocumentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BerkasKlaimSupportingDocument</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="claim_file_id">Claim File *</Label>
-        <Input id="claim_file_id" type="number" value={values.claim_file_id ?? ''} onChange={(e) => setValues({ ...values, claim_file_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/claim-files"
+          value={values.claim_file_id ?? null}
+          onChange={(v) => setValues({ ...values, claim_file_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="document_type">Document Type *</Label>

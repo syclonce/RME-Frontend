@@ -6,8 +6,8 @@ import { useTelemedicineSessionResource } from '../api'
 const COLUMNS = ["id","visit_id","doctor_employee_id","scheduled_at","started_at","ended_at","session_url","status","consultation_notes","created_at"] as const
 
 export function TelemedicineSessionListPage() {
-  const { list, remove } = useTelemedicineSessionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTelemedicineSessionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

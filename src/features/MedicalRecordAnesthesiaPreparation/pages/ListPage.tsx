@@ -6,8 +6,8 @@ import { useAnesthesiaPreparationResource } from '../api'
 const COLUMNS = ["id","visit_id","prepared_by","created_by","fasting_hours","allergy_checked","mallampati_score","consent_confirmed","equipment_checklist","prepared_at","created_at"] as const
 
 export function AnesthesiaPreparationListPage() {
-  const { list } = useAnesthesiaPreparationResource()
-  const { data, isLoading } = list()
+  const { useList } = useAnesthesiaPreparationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

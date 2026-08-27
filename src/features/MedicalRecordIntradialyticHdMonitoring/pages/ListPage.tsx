@@ -6,8 +6,8 @@ import { useIntradialyticHdMonitoringResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","dialysis_hour","blood_pressure_systolic","blood_pressure_diastolic","blood_flow_rate","dialysate_flow_rate","ultrafiltration_rate","venous_pressure","transmembrane_pressure","symptoms","monitored_at","created_at","updated_at"] as const
 
 export function IntradialyticHdMonitoringListPage() {
-  const { list, remove } = useIntradialyticHdMonitoringResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useIntradialyticHdMonitoringResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

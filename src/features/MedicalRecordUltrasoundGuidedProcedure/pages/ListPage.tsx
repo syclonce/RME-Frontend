@@ -6,8 +6,8 @@ import { useUltrasoundGuidedProcedureResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","doctor_id","procedure_name","target_site","needle_gauge","findings_and_outcome","complications","performed_at","created_by","created_at","updated_at"] as const
 
 export function UltrasoundGuidedProcedureListPage() {
-  const { list, remove } = useUltrasoundGuidedProcedureResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useUltrasoundGuidedProcedureResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

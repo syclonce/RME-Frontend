@@ -6,8 +6,8 @@ import { useMedicationServiceLimitResource } from '../api'
 const COLUMNS = ["id","item_id","guarantor_type","max_quantity_per_month","max_days_supply","is_active","created_at"] as const
 
 export function MedicationServiceLimitListPage() {
-  const { list, remove } = useMedicationServiceLimitResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMedicationServiceLimitResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

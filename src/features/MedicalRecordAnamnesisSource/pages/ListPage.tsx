@@ -6,8 +6,8 @@ import { useAnamnesisSourceResource } from '../api'
 const COLUMNS = ["id","anamnesis_id","source_type","source_name","relationship","notes","created_at","updated_at"] as const
 
 export function AnamnesisSourceListPage() {
-  const { list, remove } = useAnamnesisSourceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAnamnesisSourceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useAntimicrobialStewardshipPriorHistoryResource } from '../api'
 const COLUMNS = ["id","antimicrobial_stewardship_form_id","previous_antibiotic","start_date","end_date","outcome","notes","created_at"] as const
 
 export function AntimicrobialStewardshipPriorHistoryListPage() {
-  const { list } = useAntimicrobialStewardshipPriorHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = useAntimicrobialStewardshipPriorHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

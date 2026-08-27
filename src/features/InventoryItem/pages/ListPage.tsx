@@ -6,8 +6,8 @@ import { useItemResource } from '../api'
 const COLUMNS = ["id","code","name","category","unit","brand","is_generic","is_formulary","buy_price","sell_price","stock_quantity","is_active","created_at","updated_at"] as const
 
 export function ItemListPage() {
-  const { list, remove } = useItemResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

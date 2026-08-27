@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useGoodsReceiptResource } from '../api'
 import type { GoodsReceiptFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function GoodsReceiptFormPage() {
       <h1 className="text-lg font-semibold">Tambah GoodsReceipt</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="supplier_id">Supplier *</Label>
-        <Input id="supplier_id" type="number" value={values.supplier_id ?? ''} onChange={(e) => setValues({ ...values, supplier_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/suppliers"
+          value={values.supplier_id ?? null}
+          onChange={(v) => setValues({ ...values, supplier_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id">Item *</Label>
-        <Input id="item_id" type="number" value={values.item_id ?? ''} onChange={(e) => setValues({ ...values, item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id ?? null}
+          onChange={(v) => setValues({ ...values, item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity">Quantity *</Label>

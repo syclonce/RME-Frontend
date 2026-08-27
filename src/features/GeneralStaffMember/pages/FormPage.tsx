@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useStaffMemberResource } from '../api'
 import type { StaffMemberFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function StaffMemberFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useStaffMemberResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useStaffMemberResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<StaffMemberFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function StaffMemberFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} StaffMember</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="employee_id">Employee *</Label>
-        <Input id="employee_id" type="number" value={values.employee_id ?? ''} onChange={(e) => setValues({ ...values, employee_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.employee_id ?? null}
+          onChange={(v) => setValues({ ...values, employee_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="staff_role">Staff Role</Label>

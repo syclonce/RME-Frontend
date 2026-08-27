@@ -6,8 +6,8 @@ import { useAudioAttachmentResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","title","file_path","mime_type","duration_seconds","recorded_by","notes","is_active","created_at"] as const
 
 export function AudioAttachmentListPage() {
-  const { list, remove } = useAudioAttachmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAudioAttachmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useBaepInterventionProtocolResource } from '../api'
 const COLUMNS = ["id","visit_id","performed_by","created_by","indication","stimulation_ear","click_rate_hz","stimulus_intensity_db","wave_i_latency_ms","wave_iii_latency_ms","wave_v_latency_ms","interpretation","status","performed_at","created_at"] as const
 
 export function BaepInterventionProtocolListPage() {
-  const { list } = useBaepInterventionProtocolResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepInterventionProtocolResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

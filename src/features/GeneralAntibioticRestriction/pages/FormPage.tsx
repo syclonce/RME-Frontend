@@ -11,8 +11,8 @@ export function AntibioticRestrictionFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useAntibioticRestrictionResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useAntibioticRestrictionResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<AntibioticRestrictionFormValues>({})
 
   useEffect(() => {

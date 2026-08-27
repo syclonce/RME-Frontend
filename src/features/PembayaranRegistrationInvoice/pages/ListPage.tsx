@@ -6,8 +6,8 @@ import { useRegistrationInvoiceResource } from '../api'
 const COLUMNS = ["id","registration_id","invoice_id","invoice_category","amount","notes","created_at","updated_at"] as const
 
 export function RegistrationInvoiceListPage() {
-  const { list, remove } = useRegistrationInvoiceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRegistrationInvoiceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -11,8 +11,8 @@ export function DosageInstructionFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDosageInstructionResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDosageInstructionResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DosageInstructionFormValues>({})
 
   useEffect(() => {

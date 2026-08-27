@@ -6,8 +6,8 @@ import { useMedicalProcedureResource } from '../api'
 const COLUMNS = ["id","visit_id","service_id","performed_at","performed_by","notes","status","created_by","created_at"] as const
 
 export function MedicalProcedureListPage() {
-  const { list } = useMedicalProcedureResource()
-  const { data, isLoading } = list()
+  const { useList } = useMedicalProcedureResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useLabMicroscopicResultItemResource } from '../api'
 import type { LabMicroscopicResultItemFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function LabMicroscopicResultItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah LabMicroscopicResultItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_microscopic_result_id">Lab Microscopic Result *</Label>
-        <Input id="lab_microscopic_result_id" type="number" value={values.lab_microscopic_result_id ?? ''} onChange={(e) => setValues({ ...values, lab_microscopic_result_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/lab-microscopic-results"
+          value={values.lab_microscopic_result_id ?? null}
+          onChange={(v) => setValues({ ...values, lab_microscopic_result_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="parameter_name">Parameter Name *</Label>

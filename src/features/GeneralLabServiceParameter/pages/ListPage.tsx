@@ -6,8 +6,8 @@ import { useLabServiceParameterResource } from '../api'
 const COLUMNS = ["id","lab_service_group_id","name","code","unit","is_active"] as const
 
 export function LabServiceParameterListPage() {
-  const { list, remove } = useLabServiceParameterResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLabServiceParameterResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useIncidentReportResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","incident_category","description","occurred_at","reported_by","impact_score","probability_score","risk_grade","status","sla_due_at","created_at","updated_at","visit_number","patient_name","reported_by_name"] as const
 
 export function IncidentReportListPage() {
-  const { list } = useIncidentReportResource()
-  const { data, isLoading } = list()
+  const { useList } = useIncidentReportResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

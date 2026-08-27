@@ -11,8 +11,8 @@ export function SitbOatGuidelineFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSitbOatGuidelineResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSitbOatGuidelineResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SitbOatGuidelineFormValues>({})
 
   useEffect(() => {

@@ -6,8 +6,8 @@ import { useSitbTreatmentOutcomeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function SitbTreatmentOutcomeListPage() {
-  const { list, remove } = useSitbTreatmentOutcomeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSitbTreatmentOutcomeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

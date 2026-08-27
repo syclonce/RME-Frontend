@@ -6,8 +6,8 @@ import { useRadiologyResultSummaryItemResource } from '../api'
 const COLUMNS = ["id","summary_id","exam_name","finding","impression","performed_at","created_at"] as const
 
 export function RadiologyResultSummaryItemListPage() {
-  const { list } = useRadiologyResultSummaryItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useRadiologyResultSummaryItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

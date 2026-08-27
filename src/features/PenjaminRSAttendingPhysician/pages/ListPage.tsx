@@ -6,8 +6,8 @@ import { usePenjaminRSAttendingPhysicianResource } from '../api'
 const COLUMNS = ["id","visit_id","employee_id","assigned_at","is_primary"] as const
 
 export function PenjaminRSAttendingPhysicianListPage() {
-  const { list, remove } = usePenjaminRSAttendingPhysicianResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePenjaminRSAttendingPhysicianResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

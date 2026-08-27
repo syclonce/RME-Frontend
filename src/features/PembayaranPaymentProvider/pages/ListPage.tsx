@@ -6,8 +6,8 @@ import { usePaymentProviderResource } from '../api'
 const COLUMNS = ["id","provider_code","provider_name","provider_type","merchant_id","api_base_url","contact_person","contact_phone","is_active","created_at","updated_at"] as const
 
 export function PaymentProviderListPage() {
-  const { list, remove } = usePaymentProviderResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePaymentProviderResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

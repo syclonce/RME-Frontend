@@ -6,8 +6,8 @@ import { useHealthCertificateResource } from '../api'
 const COLUMNS = ["id","letter_number","patient_id","visit_id","doctor_id","issue_date","physical_fitness_status","purpose","blood_pressure","height_cm","weight_kg","remarks","created_by","created_at","updated_at"] as const
 
 export function HealthCertificateListPage() {
-  const { list, remove } = useHealthCertificateResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useHealthCertificateResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

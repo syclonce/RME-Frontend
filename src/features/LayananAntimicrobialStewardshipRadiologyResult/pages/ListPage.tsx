@@ -6,8 +6,8 @@ import { useAntimicrobialStewardshipRadiologyResultResource } from '../api'
 const COLUMNS = ["id","antimicrobial_stewardship_form_id","examination_name","findings","examined_at","created_at"] as const
 
 export function AntimicrobialStewardshipRadiologyResultListPage() {
-  const { list } = useAntimicrobialStewardshipRadiologyResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useAntimicrobialStewardshipRadiologyResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

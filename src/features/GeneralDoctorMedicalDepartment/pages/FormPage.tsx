@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDoctorMedicalDepartmentResource } from '../api'
 import type { DoctorMedicalDepartmentFormValues } from '../types'
 
@@ -11,8 +11,8 @@ export function DoctorMedicalDepartmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDoctorMedicalDepartmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDoctorMedicalDepartmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DoctorMedicalDepartmentFormValues>({})
 
   useEffect(() => {
@@ -31,11 +31,19 @@ export function DoctorMedicalDepartmentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DoctorMedicalDepartment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="doctor_id">Doctor *</Label>
-        <Input id="doctor_id" type="number" value={values.doctor_id ?? ''} onChange={(e) => setValues({ ...values, doctor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/doctors"
+          value={values.doctor_id ?? null}
+          onChange={(v) => setValues({ ...values, doctor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="medical_department_id">Medical Department *</Label>
-        <Input id="medical_department_id" type="number" value={values.medical_department_id ?? ''} onChange={(e) => setValues({ ...values, medical_department_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/medical-departments"
+          value={values.medical_department_id ?? null}
+          onChange={(v) => setValues({ ...values, medical_department_id: v })}
+        />
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="is_head" checked={!!values.is_head} onCheckedChange={(v) => setValues({ ...values, is_head: !!v })} />

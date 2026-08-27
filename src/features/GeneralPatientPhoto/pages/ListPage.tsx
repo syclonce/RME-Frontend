@@ -6,8 +6,8 @@ import { useGeneralPatientPhotoResource } from '../api'
 const COLUMNS = ["id","patient_id","file_path","taken_at"] as const
 
 export function GeneralPatientPhotoListPage() {
-  const { list, remove } = useGeneralPatientPhotoResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGeneralPatientPhotoResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

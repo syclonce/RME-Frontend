@@ -6,8 +6,8 @@ import { useAnesthesiaTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function AnesthesiaTypeListPage() {
-  const { list, remove } = useAnesthesiaTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAnesthesiaTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

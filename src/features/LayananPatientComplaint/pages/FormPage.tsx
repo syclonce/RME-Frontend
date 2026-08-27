@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientComplaintResource } from '../api'
 import type { PatientComplaintFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PatientComplaintFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePatientComplaintResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePatientComplaintResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PatientComplaintFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function PatientComplaintFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientComplaint</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient</Label>
-        <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patients"
+          value={values.patient_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="category">Category *</Label>

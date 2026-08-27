@@ -6,8 +6,8 @@ import { useLabResultSummaryItemResource } from '../api'
 const COLUMNS = ["id","summary_id","lab_test_name","result_value","unit","reference_range","flag","tested_at","created_at"] as const
 
 export function LabResultSummaryItemListPage() {
-  const { list } = useLabResultSummaryItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useLabResultSummaryItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

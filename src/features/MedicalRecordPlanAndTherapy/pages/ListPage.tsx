@@ -6,8 +6,8 @@ import { usePlanAndTherapyResource } from '../api'
 const COLUMNS = ["id","visit_id","ordered_by","created_by","assessment_summary","plan_description","therapy_type","target_date","status","ordered_at","created_at"] as const
 
 export function PlanAndTherapyListPage() {
-  const { list } = usePlanAndTherapyResource()
-  const { data, isLoading } = list()
+  const { useList } = usePlanAndTherapyResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

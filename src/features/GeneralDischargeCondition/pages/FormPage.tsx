@@ -11,8 +11,8 @@ export function DischargeConditionFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDischargeConditionResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDischargeConditionResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DischargeConditionFormValues>({})
 
   useEffect(() => {

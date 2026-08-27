@@ -11,8 +11,8 @@ export function SitbTreatmentHistoryClassificationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSitbTreatmentHistoryClassificationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSitbTreatmentHistoryClassificationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SitbTreatmentHistoryClassificationFormValues>({})
 
   useEffect(() => {

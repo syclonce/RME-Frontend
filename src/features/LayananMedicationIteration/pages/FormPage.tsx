@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useMedicationIterationResource } from '../api'
 import type { MedicationIterationFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function MedicationIterationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useMedicationIterationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useMedicationIterationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MedicationIterationFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function MedicationIterationFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} MedicationIteration</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription *</Label>
-        <Input id="prescription_id" type="number" value={values.prescription_id ?? ''} onChange={(e) => setValues({ ...values, prescription_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/prescriptions"
+          value={values.prescription_id ?? null}
+          onChange={(v) => setValues({ ...values, prescription_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="iteration_number">Iteration Number *</Label>

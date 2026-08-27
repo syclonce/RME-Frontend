@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useMedicalPersonnelResource } from '../api'
 import type { MedicalPersonnelFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function MedicalPersonnelFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useMedicalPersonnelResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useMedicalPersonnelResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MedicalPersonnelFormValues>({})
 
   useEffect(() => {
@@ -43,7 +44,11 @@ export function MedicalPersonnelFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="profession_id">Profession</Label>
-        <Input id="profession_id" type="number" value={values.profession_id ?? ''} onChange={(e) => setValues({ ...values, profession_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/professions"
+          value={values.profession_id ?? null}
+          onChange={(v) => setValues({ ...values, profession_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="license_number">License Number</Label>

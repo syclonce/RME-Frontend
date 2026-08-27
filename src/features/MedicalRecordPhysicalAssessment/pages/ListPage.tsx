@@ -6,8 +6,8 @@ import { usePhysicalAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","mobility_status","adl_status","cognitive_status","nutritional_risk","pain_level","notes","assessed_at","created_at","updated_at"] as const
 
 export function PhysicalAssessmentListPage() {
-  const { list, remove } = usePhysicalAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePhysicalAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useAnamnesisSourceResource } from '../api'
 import type { AnamnesisSourceFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function AnamnesisSourceFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useAnamnesisSourceResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useAnamnesisSourceResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<AnamnesisSourceFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function AnamnesisSourceFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} AnamnesisSource</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="anamnesis_id">Anamnesis *</Label>
-        <Input id="anamnesis_id" type="number" value={values.anamnesis_id ?? ''} onChange={(e) => setValues({ ...values, anamnesis_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/anamneses"
+          value={values.anamnesis_id ?? null}
+          onChange={(v) => setValues({ ...values, anamnesis_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="source_type">Source Type *</Label>

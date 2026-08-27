@@ -6,8 +6,8 @@ import { useCoughAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","has_cough","duration_weeks","cough_type","other_symptoms","is_referred_tb_screening","assessed_by","assessed_at","created_at","updated_at"] as const
 
 export function CoughAssessmentListPage() {
-  const { list, remove } = useCoughAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useCoughAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

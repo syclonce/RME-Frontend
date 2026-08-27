@@ -6,8 +6,8 @@ import { useCoManagementResource } from '../api'
 const COLUMNS = [] as const
 
 export function CoManagementListPage() {
-  const { list } = useCoManagementResource()
-  const { data, isLoading } = list()
+  const { useList } = useCoManagementResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

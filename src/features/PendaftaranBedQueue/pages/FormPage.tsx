@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBedQueueResource } from '../api'
 import type { BedQueueFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function BedQueueFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBedQueueResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBedQueueResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BedQueueFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function BedQueueFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BedQueue</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="bed_id">Bed *</Label>
-        <Input id="bed_id" type="number" value={values.bed_id ?? ''} onChange={(e) => setValues({ ...values, bed_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/beds"
+          value={values.bed_id ?? null}
+          onChange={(v) => setValues({ ...values, bed_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patients"
+          value={values.patient_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="queue_number">Queue Number *</Label>

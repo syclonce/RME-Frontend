@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useAntimicrobialStewardshipApprovalResource } from '../api'
 import type { AntimicrobialStewardshipApprovalFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function AntimicrobialStewardshipApprovalFormPage() {
       <h1 className="text-lg font-semibold">Tambah AntimicrobialStewardshipApproval</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="antimicrobial_stewardship_form_id">Antimicrobial Stewardship Form *</Label>
-        <Input id="antimicrobial_stewardship_form_id" type="number" value={values.antimicrobial_stewardship_form_id ?? ''} onChange={(e) => setValues({ ...values, antimicrobial_stewardship_form_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/antimicrobial-stewardship-forms"
+          value={values.antimicrobial_stewardship_form_id ?? null}
+          onChange={(v) => setValues({ ...values, antimicrobial_stewardship_form_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="approved_by">Approved By</Label>
-        <Input id="approved_by" type="number" value={values.approved_by ?? ''} onChange={(e) => setValues({ ...values, approved_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.approved_by ?? null}
+          onChange={(v) => setValues({ ...values, approved_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="decision">Decision *</Label>

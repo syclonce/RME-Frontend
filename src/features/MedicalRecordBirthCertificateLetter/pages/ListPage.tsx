@@ -6,8 +6,8 @@ import { useBirthCertificateLetterResource } from '../api'
 const COLUMNS = ["id","letter_number","patient_id","mother_patient_id","visit_id","doctor_id","issue_date","child_name","birth_date_time","birth_weight_grams","birth_length_cm","gender","remarks","created_by","created_at","updated_at"] as const
 
 export function BirthCertificateLetterListPage() {
-  const { list, remove } = useBirthCertificateLetterResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBirthCertificateLetterResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

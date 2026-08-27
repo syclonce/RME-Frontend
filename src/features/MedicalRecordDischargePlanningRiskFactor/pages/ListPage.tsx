@@ -6,8 +6,8 @@ import { useDischargePlanningRiskFactorResource } from '../api'
 const COLUMNS = ["id","visit_id","risk_factor","score","assessed_by","assessed_at","created_at","updated_at"] as const
 
 export function DischargePlanningRiskFactorListPage() {
-  const { list, remove } = useDischargePlanningRiskFactorResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDischargePlanningRiskFactorResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

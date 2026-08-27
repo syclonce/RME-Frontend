@@ -6,8 +6,8 @@ import { useEyeExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","side","visual_acuity","pupil_size_mm","pupil_reflex","conjunctiva","sclera","findings","examined_at","created_at","updated_at"] as const
 
 export function EyeExaminationListPage() {
-  const { list, remove } = useEyeExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEyeExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

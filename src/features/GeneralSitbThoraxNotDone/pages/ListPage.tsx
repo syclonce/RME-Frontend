@@ -6,8 +6,8 @@ import { useSitbThoraxNotDoneResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function SitbThoraxNotDoneListPage() {
-  const { list, remove } = useSitbThoraxNotDoneResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSitbThoraxNotDoneResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

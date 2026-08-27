@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDietOrderResource } from '../api'
 import type { DietOrderFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function DietOrderFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDietOrderResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDietOrderResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DietOrderFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function DietOrderFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DietOrder</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="diet_type">Diet Type *</Label>
@@ -50,7 +55,11 @@ export function DietOrderFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ordered_by">Ordered By *</Label>
-        <Input id="ordered_by" type="number" value={values.ordered_by ?? ''} onChange={(e) => setValues({ ...values, ordered_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.ordered_by ?? null}
+          onChange={(v) => setValues({ ...values, ordered_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="order_date">Order Date *</Label>

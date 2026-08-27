@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useTransferResource } from '../api'
 import type { TransferFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function TransferFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useTransferResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useTransferResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<TransferFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function TransferFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Transfer</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="payment_id">Payment *</Label>
-        <Input id="payment_id" type="number" value={values.payment_id ?? ''} onChange={(e) => setValues({ ...values, payment_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/payments"
+          value={values.payment_id ?? null}
+          onChange={(v) => setValues({ ...values, payment_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="transfer_reference_number">Transfer Reference Number *</Label>

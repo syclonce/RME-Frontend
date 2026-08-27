@@ -6,8 +6,8 @@ import { useGuarantorSubspecialtyResource } from '../api'
 const COLUMNS = ["id","guarantor_id","subspecialty_name","is_covered","coverage_note","created_at"] as const
 
 export function GuarantorSubspecialtyListPage() {
-  const { list, remove } = useGuarantorSubspecialtyResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGuarantorSubspecialtyResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

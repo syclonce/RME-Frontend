@@ -6,8 +6,8 @@ import { useGuarantorParticipantTypeResource } from '../api'
 const COLUMNS = ["id","name","code","payer_type","requires_verification","is_active"] as const
 
 export function GuarantorParticipantTypeListPage() {
-  const { list, remove } = useGuarantorParticipantTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGuarantorParticipantTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useLabResultNoteResource } from '../api'
 const COLUMNS = ["id","lab_result_id","note","created_by","created_at"] as const
 
 export function LabResultNoteListPage() {
-  const { list, remove } = useLabResultNoteResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLabResultNoteResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

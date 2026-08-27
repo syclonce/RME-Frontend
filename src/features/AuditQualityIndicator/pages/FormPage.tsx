@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useQualityIndicatorResource } from '../api'
 import type { QualityIndicatorFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function QualityIndicatorFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useQualityIndicatorResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useQualityIndicatorResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<QualityIndicatorFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function QualityIndicatorFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} QualityIndicator</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="indicator_id">Indicator *</Label>
-        <Input id="indicator_id" type="number" value={values.indicator_id ?? ''} onChange={(e) => setValues({ ...values, indicator_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/quality-indicators"
+          value={values.indicator_id ?? null}
+          onChange={(v) => setValues({ ...values, indicator_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="period_month">Period Month *</Label>
@@ -50,7 +55,11 @@ export function QualityIndicatorFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recorded_by">Recorded By</Label>
-        <Input id="recorded_by" type="number" value={values.recorded_by ?? ''} onChange={(e) => setValues({ ...values, recorded_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.recorded_by ?? null}
+          onChange={(v) => setValues({ ...values, recorded_by: v })}
+        />
       </div>
       <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan

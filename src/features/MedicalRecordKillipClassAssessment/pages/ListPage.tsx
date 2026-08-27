@@ -6,8 +6,8 @@ import { useKillipClassAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","assessed_by","created_by","killip_class","heart_rate","respiratory_rate","rales_present","s3_gallop_present","notes","assessed_at","created_at"] as const
 
 export function KillipClassAssessmentListPage() {
-  const { list } = useKillipClassAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList } = useKillipClassAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

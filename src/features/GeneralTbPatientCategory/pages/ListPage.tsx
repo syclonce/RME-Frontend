@@ -6,8 +6,8 @@ import { useTbPatientCategoryResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function TbPatientCategoryListPage() {
-  const { list, remove } = useTbPatientCategoryResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTbPatientCategoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

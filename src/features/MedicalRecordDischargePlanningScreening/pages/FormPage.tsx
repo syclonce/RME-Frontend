@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDischargePlanningScreeningResource } from '../api'
 import type { DischargePlanningScreeningFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function DischargePlanningScreeningFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDischargePlanningScreeningResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDischargePlanningScreeningResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DischargePlanningScreeningFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function DischargePlanningScreeningFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DischargePlanningScreening</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="screening_criteria">Screening Criteria</Label>
@@ -47,7 +52,11 @@ export function DischargePlanningScreeningFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="screened_by">Screened By *</Label>
-        <Input id="screened_by" type="number" value={values.screened_by ?? ''} onChange={(e) => setValues({ ...values, screened_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.screened_by ?? null}
+          onChange={(v) => setValues({ ...values, screened_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="screened_at">Screened At *</Label>

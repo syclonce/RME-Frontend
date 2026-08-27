@@ -6,8 +6,8 @@ import { useClinicalNoteResource } from '../api'
 const COLUMNS = ["id","visit_id","recorded_at","subjective","objective","assessment","planning","instructions","note_type","author_id","sub_division","has_discharge_plan","discharge_plan_date","created_by","status","created_at"] as const
 
 export function ClinicalNoteListPage() {
-  const { list } = useClinicalNoteResource()
-  const { data, isLoading } = list()
+  const { useList } = useClinicalNoteResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

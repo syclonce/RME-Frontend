@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientAccessLockResource } from '../api'
 import type { PatientAccessLockFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PatientAccessLockFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePatientAccessLockResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePatientAccessLockResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PatientAccessLockFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function PatientAccessLockFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientAccessLock</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patients"
+          value={values.patient_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="locked_by">Locked By</Label>
-        <Input id="locked_by" type="number" value={values.locked_by ?? ''} onChange={(e) => setValues({ ...values, locked_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.locked_by ?? null}
+          onChange={(v) => setValues({ ...values, locked_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reason">Reason *</Label>

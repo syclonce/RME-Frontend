@@ -6,8 +6,8 @@ import { usePathologyClaimItemResource } from '../api'
 const COLUMNS = ["id","pathology_claim_id","exam_name","amount","created_at"] as const
 
 export function PathologyClaimItemListPage() {
-  const { list } = usePathologyClaimItemResource()
-  const { data, isLoading } = list()
+  const { useList } = usePathologyClaimItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

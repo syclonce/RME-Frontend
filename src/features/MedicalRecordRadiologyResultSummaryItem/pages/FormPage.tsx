@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useRadiologyResultSummaryItemResource } from '../api'
 import type { RadiologyResultSummaryItemFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function RadiologyResultSummaryItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah RadiologyResultSummaryItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="summary_id">Summary *</Label>
-        <Input id="summary_id" type="number" value={values.summary_id ?? ''} onChange={(e) => setValues({ ...values, summary_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/radiology-result-summaries"
+          value={values.summary_id ?? null}
+          onChange={(v) => setValues({ ...values, summary_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="exam_name">Exam Name *</Label>

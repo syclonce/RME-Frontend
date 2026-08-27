@@ -6,8 +6,8 @@ import { useEmergencyEducationResource } from '../api'
 const COLUMNS = ["id","visit_id","topic","method","understanding_level","educator_id","educated_at","notes","created_at","updated_at"] as const
 
 export function EmergencyEducationListPage() {
-  const { list, remove } = useEmergencyEducationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEmergencyEducationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

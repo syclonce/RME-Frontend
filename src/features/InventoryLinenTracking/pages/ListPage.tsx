@@ -6,8 +6,8 @@ import { useLinenItemResource } from '../api'
 const COLUMNS = ["id","linen_item_id","status","sent_at","received_at","quantity","created_at","updated_at"] as const
 
 export function LinenItemListPage() {
-  const { list, remove } = useLinenItemResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLinenItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

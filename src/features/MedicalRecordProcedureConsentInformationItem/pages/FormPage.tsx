@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useProcedureConsentInformationItemResource } from '../api'
 import type { ProcedureConsentInformationItemFormValues } from '../types'
 
@@ -23,7 +24,11 @@ export function ProcedureConsentInformationItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah ProcedureConsentInformationItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="information_id">Information *</Label>
-        <Input id="information_id" type="number" value={values.information_id ?? ''} onChange={(e) => setValues({ ...values, information_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/procedure-consent-information"
+          value={values.information_id ?? null}
+          onChange={(v) => setValues({ ...values, information_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_name">Item Name *</Label>

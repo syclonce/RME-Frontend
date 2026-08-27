@@ -10,8 +10,8 @@ export function ProcedureSurgeryFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useProcedureSurgeryResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useProcedureSurgeryResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ProcedureSurgeryFormValues>({})
 
   useEffect(() => {

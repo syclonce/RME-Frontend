@@ -6,8 +6,8 @@ import { useRemunerationEntryResource } from '../api'
 const COLUMNS = ["id","employee_id","source_type","source_id","role","gross_amount","deduction_percentage","fixed_deduction","service_date","notes"] as const
 
 export function RemunerationEntryListPage() {
-  const { list, remove } = useRemunerationEntryResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRemunerationEntryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

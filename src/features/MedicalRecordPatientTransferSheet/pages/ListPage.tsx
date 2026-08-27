@@ -6,8 +6,8 @@ import { usePatientTransferSheetResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","from_ward_id","to_ward_id","transfer_reason","patient_condition","transferred_at","transferred_by","created_at","updated_at"] as const
 
 export function PatientTransferSheetListPage() {
-  const { list, remove } = usePatientTransferSheetResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientTransferSheetResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useInterventionRecommendationResource } from '../api'
 const COLUMNS = ["id","visit_id","source","recommendation","priority","recommended_by","recommended_at","status","created_at","updated_at"] as const
 
 export function InterventionRecommendationListPage() {
-  const { list, remove } = useInterventionRecommendationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInterventionRecommendationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

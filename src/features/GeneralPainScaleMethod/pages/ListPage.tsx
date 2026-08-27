@@ -6,8 +6,8 @@ import { usePainScaleMethodResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function PainScaleMethodListPage() {
-  const { list, remove } = usePainScaleMethodResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePainScaleMethodResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

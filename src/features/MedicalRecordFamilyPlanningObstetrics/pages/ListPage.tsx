@@ -6,8 +6,8 @@ import { useFamilyPlanningObstetricsResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","contraceptive_method","installation_date","removal_date","side_effects","action_taken","next_visit_date","created_at","updated_at"] as const
 
 export function FamilyPlanningObstetricsListPage() {
-  const { list, remove } = useFamilyPlanningObstetricsResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFamilyPlanningObstetricsResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

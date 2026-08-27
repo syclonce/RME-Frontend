@@ -6,8 +6,8 @@ import { useBaepDysphagiaDetailResource } from '../api'
 const COLUMNS = ["id","baep_protocol_id","swallowing_test_used","severity_level","aspiration_risk","diet_texture_recommendation","created_at"] as const
 
 export function BaepDysphagiaDetailListPage() {
-  const { list } = useBaepDysphagiaDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepDysphagiaDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

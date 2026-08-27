@@ -6,8 +6,8 @@ import { useEegExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","background_rhythm","epileptiform_discharges","abnormality_type","clinical_correlation","conclusion","examined_at","created_at","updated_at"] as const
 
 export function EegExaminationListPage() {
-  const { list, remove } = useEegExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEegExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

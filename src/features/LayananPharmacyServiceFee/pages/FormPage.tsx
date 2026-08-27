@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePharmacyServiceFeeResource } from '../api'
 import type { PharmacyServiceFeeFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function PharmacyServiceFeeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePharmacyServiceFeeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePharmacyServiceFeeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PharmacyServiceFeeFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function PharmacyServiceFeeFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PharmacyServiceFee</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id">Item</Label>
-        <Input id="item_id" type="number" value={values.item_id ?? ''} onChange={(e) => setValues({ ...values, item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id ?? null}
+          onChange={(v) => setValues({ ...values, item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="fee_name">Fee Name *</Label>

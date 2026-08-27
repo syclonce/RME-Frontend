@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useClinicalNoteResource } from '../api'
 import type { ClinicalNoteFormValues } from '../types'
 
@@ -23,7 +24,11 @@ export function ClinicalNoteFormPage() {
       <h1 className="text-lg font-semibold">Tambah ClinicalNote</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recorded_at">Recorded At</Label>
@@ -55,7 +60,11 @@ export function ClinicalNoteFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="author_id">Author *</Label>
-        <Input id="author_id" type="number" value={values.author_id ?? ''} onChange={(e) => setValues({ ...values, author_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.author_id ?? null}
+          onChange={(v) => setValues({ ...values, author_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="sub_division">Sub Division</Label>

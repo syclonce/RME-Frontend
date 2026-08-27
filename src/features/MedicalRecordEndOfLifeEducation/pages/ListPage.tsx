@@ -6,8 +6,8 @@ import { useEndOfLifeEducationResource } from '../api'
 const COLUMNS = ["id","visit_id","topic","participants","decision_summary","educator_id","educated_at","created_at","updated_at"] as const
 
 export function EndOfLifeEducationListPage() {
-  const { list, remove } = useEndOfLifeEducationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEndOfLifeEducationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

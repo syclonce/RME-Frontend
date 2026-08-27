@@ -6,8 +6,8 @@ import { useDiagnosisRestrictionResource } from '../api'
 const COLUMNS = ["id","diagnosis_code_id","restricted_antibiotic_name","requires_justification","notes","is_active","created_at"] as const
 
 export function DiagnosisRestrictionListPage() {
-  const { list, remove } = useDiagnosisRestrictionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDiagnosisRestrictionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

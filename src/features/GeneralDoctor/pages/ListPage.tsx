@@ -6,8 +6,8 @@ import { useDoctorResource } from '../api'
 const COLUMNS = ["id","employee_id","specialization","sip_number","is_active","created_at","updated_at"] as const
 
 export function DoctorListPage() {
-  const { list, remove } = useDoctorResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDoctorResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

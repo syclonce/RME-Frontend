@@ -6,8 +6,8 @@ import { usePainScoreAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","assessed_by","created_by","scale_type","score","location","character","notes","assessed_at","created_at"] as const
 
 export function PainScoreAssessmentListPage() {
-  const { list } = usePainScoreAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList } = usePainScoreAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

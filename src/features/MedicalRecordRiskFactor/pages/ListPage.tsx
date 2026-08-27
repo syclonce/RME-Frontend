@@ -6,8 +6,8 @@ import { useRiskFactorResource } from '../api'
 const COLUMNS = ["id","visit_id","risk_category","description","risk_level","identified_by","identified_at","mitigation_plan","created_at","updated_at"] as const
 
 export function RiskFactorListPage() {
-  const { list, remove } = useRiskFactorResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRiskFactorResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useAntibioticRestrictionResource } from '../api'
 const COLUMNS = ["id","antibiotic_name","aware_category","requires_pra_approval","restriction_condition","is_active","created_at"] as const
 
 export function AntibioticRestrictionListPage() {
-  const { list, remove } = useAntibioticRestrictionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAntibioticRestrictionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { usePalateExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","hard_palate","soft_palate","uvula_position","cleft_palate","findings","examined_at","created_at","updated_at"] as const
 
 export function PalateExaminationListPage() {
-  const { list, remove } = usePalateExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePalateExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

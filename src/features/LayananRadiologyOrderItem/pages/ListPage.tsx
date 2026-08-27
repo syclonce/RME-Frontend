@@ -6,8 +6,8 @@ import { useRadiologyOrderItemResource } from '../api'
 const COLUMNS = ["id","radiology_order_id","examination_name","body_part","price","created_at"] as const
 
 export function RadiologyOrderItemListPage() {
-  const { list } = useRadiologyOrderItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useRadiologyOrderItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

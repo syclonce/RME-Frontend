@@ -6,8 +6,8 @@ import { useBaepInsomniaDetailResource } from '../api'
 const COLUMNS = ["id","baep_protocol_id","scale_used","score","sleep_onset_latency_minutes","sleep_efficiency_percent","created_at"] as const
 
 export function BaepInsomniaDetailListPage() {
-  const { list } = useBaepInsomniaDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepInsomniaDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

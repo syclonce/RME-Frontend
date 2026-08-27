@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useConsultationResource } from '../api'
 import type { ConsultationFormValues } from '../types'
 
@@ -22,15 +23,27 @@ export function ConsultationFormPage() {
       <h1 className="text-lg font-semibold">Tambah Consultation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="requesting_department_id">Requesting Department *</Label>
-        <Input id="requesting_department_id" type="number" value={values.requesting_department_id ?? ''} onChange={(e) => setValues({ ...values, requesting_department_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/medical-departments"
+          value={values.requesting_department_id ?? null}
+          onChange={(v) => setValues({ ...values, requesting_department_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="consulted_department_id">Consulted Department *</Label>
-        <Input id="consulted_department_id" type="number" value={values.consulted_department_id ?? ''} onChange={(e) => setValues({ ...values, consulted_department_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/medical-departments"
+          value={values.consulted_department_id ?? null}
+          onChange={(v) => setValues({ ...values, consulted_department_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="requested_at">Requested At</Label>

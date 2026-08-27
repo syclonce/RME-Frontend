@@ -6,8 +6,8 @@ import { useTransferMedicationReconciliationResource } from '../api'
 const COLUMNS = ["id","visit_id","reconciled_by","created_by","transferred_to_ward_id","source_of_medication_list","notes","status","reconciled_at","created_at"] as const
 
 export function TransferMedicationReconciliationListPage() {
-  const { list } = useTransferMedicationReconciliationResource()
-  const { data, isLoading } = list()
+  const { useList } = useTransferMedicationReconciliationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useIcd10CodeResource } from '../api'
 const COLUMNS = ["id","code","description","category","is_active","created_at","updated_at"] as const
 
 export function Icd10CodeListPage() {
-  const { list, remove } = useIcd10CodeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useIcd10CodeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

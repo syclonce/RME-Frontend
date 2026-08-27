@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useCorporateReceivableSettlementResource } from '../api'
 import type { CorporateReceivableSettlementFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function CorporateReceivableSettlementFormPage() {
       <h1 className="text-lg font-semibold">Tambah CorporateReceivableSettlement</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="corporate_receivable_id">Corporate Receivable *</Label>
-        <Input id="corporate_receivable_id" type="number" value={values.corporate_receivable_id ?? ''} onChange={(e) => setValues({ ...values, corporate_receivable_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/corporate-receivables"
+          value={values.corporate_receivable_id ?? null}
+          onChange={(v) => setValues({ ...values, corporate_receivable_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="paid_amount">Paid Amount *</Label>

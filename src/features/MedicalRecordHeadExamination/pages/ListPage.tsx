@@ -6,8 +6,8 @@ import { useHeadExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","skull_shape","hair_distribution","facial_symmetry","tenderness","findings","examined_at","created_at","updated_at"] as const
 
 export function HeadExaminationListPage() {
-  const { list, remove } = useHeadExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useHeadExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

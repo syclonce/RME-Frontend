@@ -6,8 +6,8 @@ import { useBirthRecordResource } from '../api'
 const COLUMNS = ["id","visit_id","mother_patient_id","baby_name","gender_id","birth_date","birth_weight_grams","birth_length_cm","delivery_method","attending_doctor_id","notes","created_at"] as const
 
 export function BirthRecordListPage() {
-  const { list } = useBirthRecordResource()
-  const { data, isLoading } = list()
+  const { useList } = useBirthRecordResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

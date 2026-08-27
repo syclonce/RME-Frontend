@@ -11,8 +11,8 @@ export function InterventionIndicatorMappingFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInterventionIndicatorMappingResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInterventionIndicatorMappingResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InterventionIndicatorMappingFormValues>({})
 
   useEffect(() => {

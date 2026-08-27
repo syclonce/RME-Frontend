@@ -6,8 +6,8 @@ import { useServiceResource } from '../api'
 const COLUMNS = ["id","code","name","category","type_id","is_active","current_price","created_at","updated_at"] as const
 
 export function ServiceListPage() {
-  const { list, remove } = useServiceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useServiceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

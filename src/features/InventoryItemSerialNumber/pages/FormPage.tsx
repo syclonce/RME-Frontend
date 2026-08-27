@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInventoryItemSerialNumberResource } from '../api'
 import type { InventoryItemSerialNumberFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function InventoryItemSerialNumberFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInventoryItemSerialNumberResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInventoryItemSerialNumberResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InventoryItemSerialNumberFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function InventoryItemSerialNumberFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} InventoryItemSerialNumber</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_item_stock_id">Ward Item Stock *</Label>
-        <Input id="ward_item_stock_id" type="number" value={values.ward_item_stock_id ?? ''} onChange={(e) => setValues({ ...values, ward_item_stock_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/inventorywarditemstocks"
+          value={values.ward_item_stock_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_item_stock_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="serial_number">Serial Number *</Label>

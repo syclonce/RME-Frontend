@@ -10,8 +10,8 @@ export function PembatalanDocumentCancellationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePembatalanDocumentCancellationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePembatalanDocumentCancellationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PembatalanDocumentCancellationFormValues>({})
 
   useEffect(() => {

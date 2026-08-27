@@ -6,8 +6,8 @@ import { usePrescriptionOriginUnitRestrictionResource } from '../api'
 const COLUMNS = ["id","ward_id","item_id","is_allowed","note","is_active","created_at"] as const
 
 export function PrescriptionOriginUnitRestrictionListPage() {
-  const { list, remove } = usePrescriptionOriginUnitRestrictionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePrescriptionOriginUnitRestrictionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

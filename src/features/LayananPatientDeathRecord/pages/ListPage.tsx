@@ -6,8 +6,8 @@ import { usePatientDeathRecordResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","died_at","cause_of_death","declared_by","notes","created_at"] as const
 
 export function PatientDeathRecordListPage() {
-  const { list } = usePatientDeathRecordResource()
-  const { data, isLoading } = list()
+  const { useList } = usePatientDeathRecordResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useDiagnosisResource } from '../api'
 const COLUMNS = ["id","visit_id","diagnosis_code_id","is_primary","recorded_at","recorded_by","status","created_at"] as const
 
 export function DiagnosisListPage() {
-  const { list, remove } = useDiagnosisResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDiagnosisResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

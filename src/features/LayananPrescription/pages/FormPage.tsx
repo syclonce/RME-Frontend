@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePrescriptionResource } from '../api'
 import type { PrescriptionFormValues } from '../types'
 
@@ -27,15 +28,27 @@ export function PrescriptionFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="diagnosis_id">Diagnosis</Label>
-        <Input id="diagnosis_id" type="number" value={values.diagnosis_id ?? ''} onChange={(e) => setValues({ ...values, diagnosis_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/diagnoses"
+          value={values.diagnosis_id ?? null}
+          onChange={(v) => setValues({ ...values, diagnosis_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="prescribed_by">Prescribed By *</Label>
-        <Input id="prescribed_by" type="number" value={values.prescribed_by ?? ''} onChange={(e) => setValues({ ...values, prescribed_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.prescribed_by ?? null}
+          onChange={(v) => setValues({ ...values, prescribed_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="prescribed_at">Prescribed At</Label>

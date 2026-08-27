@@ -6,8 +6,8 @@ import { useHairExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","distribution","texture","color","hair_loss","scalp_condition","findings","examined_at","created_at","updated_at"] as const
 
 export function HairExaminationListPage() {
-  const { list, remove } = useHairExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useHairExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useAccidentRecordResource } from '../api'
 const COLUMNS = [] as const
 
 export function AccidentRecordListPage() {
-  const { list } = useAccidentRecordResource()
-  const { data, isLoading } = list()
+  const { useList } = useAccidentRecordResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

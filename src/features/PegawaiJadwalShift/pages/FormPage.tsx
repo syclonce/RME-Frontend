@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useShiftScheduleResource } from '../api'
 import type { ShiftScheduleFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function ShiftScheduleFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useShiftScheduleResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useShiftScheduleResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ShiftScheduleFormValues>({})
 
   useEffect(() => {
@@ -30,15 +31,27 @@ export function ShiftScheduleFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ShiftSchedule</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="staff_member_id">Staff Member</Label>
-        <Input id="staff_member_id" type="number" value={values.staff_member_id ?? ''} onChange={(e) => setValues({ ...values, staff_member_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/staff-members"
+          value={values.staff_member_id ?? null}
+          onChange={(v) => setValues({ ...values, staff_member_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="employee_id">Employee</Label>
-        <Input id="employee_id" type="number" value={values.employee_id ?? ''} onChange={(e) => setValues({ ...values, employee_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.employee_id ?? null}
+          onChange={(v) => setValues({ ...values, employee_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="shift_type">Shift Type *</Label>

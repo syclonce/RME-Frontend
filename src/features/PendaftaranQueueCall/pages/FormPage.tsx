@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useQueueCallResource } from '../api'
 import type { QueueCallFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function QueueCallFormPage() {
       <h1 className="text-lg font-semibold">Tambah QueueCall</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_queue_id">Ward Queue *</Label>
-        <Input id="ward_queue_id" type="number" value={values.ward_queue_id ?? ''} onChange={(e) => setValues({ ...values, ward_queue_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/ward-queues"
+          value={values.ward_queue_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_queue_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="counter">Counter *</Label>

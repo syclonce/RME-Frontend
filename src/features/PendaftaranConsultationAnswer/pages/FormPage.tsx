@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useConsultationAnswerResource } from '../api'
 import type { ConsultationAnswerFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function ConsultationAnswerFormPage() {
       <h1 className="text-lg font-semibold">Tambah ConsultationAnswer</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="consultation_id">Consultation *</Label>
-        <Input id="consultation_id" type="number" value={values.consultation_id ?? ''} onChange={(e) => setValues({ ...values, consultation_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/consultations"
+          value={values.consultation_id ?? null}
+          onChange={(v) => setValues({ ...values, consultation_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="answered_by">Answered By *</Label>
-        <Input id="answered_by" type="number" value={values.answered_by ?? ''} onChange={(e) => setValues({ ...values, answered_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.answered_by ?? null}
+          onChange={(v) => setValues({ ...values, answered_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="answered_at">Answered At</Label>

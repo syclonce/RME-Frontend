@@ -11,8 +11,8 @@ export function GuarantorParticipantTypeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useGuarantorParticipantTypeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useGuarantorParticipantTypeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<GuarantorParticipantTypeFormValues>({})
 
   useEffect(() => {

@@ -6,8 +6,8 @@ import { useBerkasKlaimClaimFileResource } from '../api'
 const COLUMNS = ["id","visit_id","invoice_id","status"] as const
 
 export function BerkasKlaimClaimFileListPage() {
-  const { list, remove } = useBerkasKlaimClaimFileResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBerkasKlaimClaimFileResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

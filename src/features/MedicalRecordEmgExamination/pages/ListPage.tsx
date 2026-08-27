@@ -6,8 +6,8 @@ import { useEmgExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","nerve_conduction_velocity","spontaneous_activity","motor_unit_potentials","recruitment_pattern","conclusion","examined_at","created_at","updated_at"] as const
 
 export function EmgExaminationListPage() {
-  const { list, remove } = useEmgExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEmgExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useSitbPreMicroscopyResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function SitbPreMicroscopyListPage() {
-  const { list, remove } = useSitbPreMicroscopyResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSitbPreMicroscopyResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

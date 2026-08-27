@@ -11,8 +11,8 @@ export function InventoryUnitOfMeasureFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInventoryUnitOfMeasureResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInventoryUnitOfMeasureResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InventoryUnitOfMeasureFormValues>({})
 
   useEffect(() => {

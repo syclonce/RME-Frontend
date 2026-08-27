@@ -11,8 +11,8 @@ export function MedicationAdministrationTypeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useMedicationAdministrationTypeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useMedicationAdministrationTypeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MedicationAdministrationTypeFormValues>({})
 
   useEffect(() => {

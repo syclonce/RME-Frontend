@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useOtherServiceTariffResource } from '../api'
 import type { OtherServiceTariffFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function OtherServiceTariffFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useOtherServiceTariffResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useOtherServiceTariffResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<OtherServiceTariffFormValues>({})
 
   useEffect(() => {
@@ -31,11 +32,19 @@ export function OtherServiceTariffFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} OtherServiceTariff</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="other_service_id">Other Service *</Label>
-        <Input id="other_service_id" type="number" value={values.other_service_id ?? ''} onChange={(e) => setValues({ ...values, other_service_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/other-services"
+          value={values.other_service_id ?? null}
+          onChange={(v) => setValues({ ...values, other_service_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="room_class_id">Room Class</Label>
-        <Input id="room_class_id" type="number" value={values.room_class_id ?? ''} onChange={(e) => setValues({ ...values, room_class_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/room-classes"
+          value={values.room_class_id ?? null}
+          onChange={(v) => setValues({ ...values, room_class_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="price">Price *</Label>

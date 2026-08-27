@@ -6,8 +6,8 @@ import { useMaintenanceAssetResource } from '../api'
 const COLUMNS = ["id","asset_code","asset_name","location","ward_id","status"] as const
 
 export function MaintenanceAssetListPage() {
-  const { list, remove } = useMaintenanceAssetResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMaintenanceAssetResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

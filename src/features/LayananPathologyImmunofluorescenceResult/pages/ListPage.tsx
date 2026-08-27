@@ -6,8 +6,8 @@ import { usePathologyImmunofluorescenceResultResource } from '../api'
 const COLUMNS = ["id","pathology_anatomy_result_id","marker","result","intensity","examined_at","created_at"] as const
 
 export function PathologyImmunofluorescenceResultListPage() {
-  const { list } = usePathologyImmunofluorescenceResultResource()
-  const { data, isLoading } = list()
+  const { useList } = usePathologyImmunofluorescenceResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

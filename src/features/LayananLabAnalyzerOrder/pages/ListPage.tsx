@@ -6,8 +6,8 @@ import { useLabAnalyzerVendorResource } from '../api'
 const COLUMNS = ["id","visit_id","vendor_id","test_code","ordered_by","ordered_at","status","raw_result_text","verified_by","verified_at","visit","id","visit_number","status","vendor","id","vendor_name","created_at"] as const
 
 export function LabAnalyzerVendorListPage() {
-  const { list, remove } = useLabAnalyzerVendorResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLabAnalyzerVendorResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useRegistrationResource } from '../api'
 const COLUMNS = ["id","registration_number","patient_id","registered_at","admission_diagnosis_id","referral_id","package_id","is_emergency","has_fall_risk","newborn_weight_grams","newborn_length_cm","birth_time","found_location","found_at","satu_sehat_consent","registered_by","status","created_at","updated_at"] as const
 
 export function RegistrationListPage() {
-  const { list, remove } = useRegistrationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRegistrationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

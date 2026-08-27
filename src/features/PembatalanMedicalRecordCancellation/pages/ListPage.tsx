@@ -6,8 +6,8 @@ import { usePembatalanMedicalRecordCancellationResource } from '../api'
 const COLUMNS = ["id","medical_record_id","reason","cancellation_date","requested_by","status"] as const
 
 export function PembatalanMedicalRecordCancellationListPage() {
-  const { list, remove } = usePembatalanMedicalRecordCancellationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePembatalanMedicalRecordCancellationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

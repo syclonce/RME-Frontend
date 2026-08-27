@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInterventionRecommendationResource } from '../api'
 import type { InterventionRecommendationFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function InterventionRecommendationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInterventionRecommendationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInterventionRecommendationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InterventionRecommendationFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function InterventionRecommendationFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} InterventionRecommendation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="source">Source</Label>
@@ -46,7 +51,11 @@ export function InterventionRecommendationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recommended_by">Recommended By *</Label>
-        <Input id="recommended_by" type="number" value={values.recommended_by ?? ''} onChange={(e) => setValues({ ...values, recommended_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.recommended_by ?? null}
+          onChange={(v) => setValues({ ...values, recommended_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recommended_at">Recommended At *</Label>

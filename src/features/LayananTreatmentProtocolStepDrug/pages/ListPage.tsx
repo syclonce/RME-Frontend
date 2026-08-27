@@ -6,8 +6,8 @@ import { useTreatmentProtocolStepDrugResource } from '../api'
 const COLUMNS = ["id","treatment_protocol_step_id","drug_name","dosage","frequency","route","created_at","updated_at"] as const
 
 export function TreatmentProtocolStepDrugListPage() {
-  const { list, remove } = useTreatmentProtocolStepDrugResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTreatmentProtocolStepDrugResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

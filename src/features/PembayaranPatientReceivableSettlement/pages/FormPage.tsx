@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientReceivableSettlementResource } from '../api'
 import type { PatientReceivableSettlementFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function PatientReceivableSettlementFormPage() {
       <h1 className="text-lg font-semibold">Tambah PatientReceivableSettlement</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_receivable_id">Patient Receivable *</Label>
-        <Input id="patient_receivable_id" type="number" value={values.patient_receivable_id ?? ''} onChange={(e) => setValues({ ...values, patient_receivable_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patient-receivables"
+          value={values.patient_receivable_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_receivable_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="paid_amount">Paid Amount *</Label>

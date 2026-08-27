@@ -6,8 +6,8 @@ import { useWardQueueResource } from '../api'
 const COLUMNS = ["id","ward_id","queue_number","visit_id","called_at","status","created_at"] as const
 
 export function WardQueueListPage() {
-  const { list } = useWardQueueResource()
-  const { data, isLoading } = list()
+  const { useList } = useWardQueueResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

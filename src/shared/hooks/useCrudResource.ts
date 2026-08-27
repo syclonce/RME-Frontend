@@ -12,7 +12,7 @@ export function useCrudResource<T extends { id: number | string }>(endpoint: str
   const queryClient = useQueryClient()
   const listKey = [endpoint, 'list']
 
-  const list = (params?: Record<string, unknown>) =>
+  const useList = (params?: Record<string, unknown>) =>
     useQuery({
       queryKey: [...listKey, params],
       queryFn: async () => {
@@ -21,7 +21,7 @@ export function useCrudResource<T extends { id: number | string }>(endpoint: str
       },
     })
 
-  const detail = (id: T['id'] | undefined) =>
+  const useDetail = (id: T['id'] | undefined) =>
     useQuery({
       queryKey: [endpoint, 'detail', id],
       queryFn: async () => {
@@ -56,5 +56,5 @@ export function useCrudResource<T extends { id: number | string }>(endpoint: str
     onSuccess: invalidate,
   })
 
-  return { list, detail, create, update, remove }
+  return { useList, useDetail, create, update, remove }
 }

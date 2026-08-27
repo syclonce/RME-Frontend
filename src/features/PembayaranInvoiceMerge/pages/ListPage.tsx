@@ -6,8 +6,8 @@ import { useInvoiceMergeResource } from '../api'
 const COLUMNS = ["id","merge_number","payment_id","invoice_id","allocated_amount","merged_by","merged_at","notes","created_at","updated_at"] as const
 
 export function InvoiceMergeListPage() {
-  const { list, remove } = useInvoiceMergeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInvoiceMergeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

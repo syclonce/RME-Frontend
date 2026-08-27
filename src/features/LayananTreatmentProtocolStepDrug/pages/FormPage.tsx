@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useTreatmentProtocolStepDrugResource } from '../api'
 import type { TreatmentProtocolStepDrugFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function TreatmentProtocolStepDrugFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useTreatmentProtocolStepDrugResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useTreatmentProtocolStepDrugResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<TreatmentProtocolStepDrugFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function TreatmentProtocolStepDrugFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} TreatmentProtocolStepDrug</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="treatment_protocol_step_id">Treatment Protocol Step *</Label>
-        <Input id="treatment_protocol_step_id" type="number" value={values.treatment_protocol_step_id ?? ''} onChange={(e) => setValues({ ...values, treatment_protocol_step_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/treatment-protocol-steps"
+          value={values.treatment_protocol_step_id ?? null}
+          onChange={(v) => setValues({ ...values, treatment_protocol_step_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="drug_name">Drug Name *</Label>

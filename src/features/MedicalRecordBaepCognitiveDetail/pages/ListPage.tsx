@@ -6,8 +6,8 @@ import { useBaepCognitiveDetailResource } from '../api'
 const COLUMNS = ["id","baep_protocol_id","scale_used","score","domains_affected","created_at"] as const
 
 export function BaepCognitiveDetailListPage() {
-  const { list } = useBaepCognitiveDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepCognitiveDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useInventoryUnitOfMeasureResource } from '../api'
 const COLUMNS = ["id","name","code","abbreviation","is_active"] as const
 
 export function InventoryUnitOfMeasureListPage() {
-  const { list, remove } = useInventoryUnitOfMeasureResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInventoryUnitOfMeasureResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

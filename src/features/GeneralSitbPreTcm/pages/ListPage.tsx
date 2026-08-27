@@ -6,8 +6,8 @@ import { useSitbPreTcmResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function SitbPreTcmListPage() {
-  const { list, remove } = useSitbPreTcmResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSitbPreTcmResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

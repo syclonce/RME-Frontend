@@ -6,8 +6,8 @@ import { useFluidBalanceAssessmentDetailResource } from '../api'
 const COLUMNS = ["id","fluid_balance_assessment_id","type","category","amount_ml","recorded_at","created_at","updated_at"] as const
 
 export function FluidBalanceAssessmentDetailListPage() {
-  const { list, remove } = useFluidBalanceAssessmentDetailResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFluidBalanceAssessmentDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

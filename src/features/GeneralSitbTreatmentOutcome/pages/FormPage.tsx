@@ -11,8 +11,8 @@ export function SitbTreatmentOutcomeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSitbTreatmentOutcomeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSitbTreatmentOutcomeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SitbTreatmentOutcomeFormValues>({})
 
   useEffect(() => {

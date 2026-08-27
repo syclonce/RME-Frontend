@@ -6,8 +6,8 @@ import { useKipResource } from '../api'
 const COLUMNS = ["id","patient_norm","card_type","card_number","address","rt","rw","postal_code","region_code"] as const
 
 export function KipListPage() {
-  const { list, remove } = useKipResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useKipResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useInventoryItemSerialNumberResource } from '../api'
 const COLUMNS = ["id","ward_item_stock_id","serial_number","expiry_date","created_at"] as const
 
 export function InventoryItemSerialNumberListPage() {
-  const { list, remove } = useInventoryItemSerialNumberResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInventoryItemSerialNumberResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

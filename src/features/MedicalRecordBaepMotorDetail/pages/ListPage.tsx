@@ -6,8 +6,8 @@ import { useBaepMotorDetailResource } from '../api'
 const COLUMNS = ["id","baep_protocol_id","muscle_strength_score","spasticity_level","gait_status","created_at"] as const
 
 export function BaepMotorDetailListPage() {
-  const { list } = useBaepMotorDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepMotorDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

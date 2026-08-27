@@ -6,8 +6,8 @@ import { useDeviceDayResource } from '../api'
 const COLUMNS = ["id","visit_id","device_type","inserted_at","removed_at"] as const
 
 export function DeviceDayListPage() {
-  const { list, remove } = useDeviceDayResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDeviceDayResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

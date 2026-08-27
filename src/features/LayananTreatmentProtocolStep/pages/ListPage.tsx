@@ -6,8 +6,8 @@ import { useTreatmentProtocolStepResource } from '../api'
 const COLUMNS = ["id","treatment_protocol_id","sequence","instruction","scheduled_at","status","created_at","updated_at"] as const
 
 export function TreatmentProtocolStepListPage() {
-  const { list, remove } = useTreatmentProtocolStepResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTreatmentProtocolStepResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

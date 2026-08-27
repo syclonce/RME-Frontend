@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInventoryPharmacyPackageResource } from '../api'
 import type { InventoryPharmacyPackageFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function InventoryPharmacyPackageFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInventoryPharmacyPackageResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInventoryPharmacyPackageResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InventoryPharmacyPackageFormValues>({})
 
   useEffect(() => {
@@ -39,7 +40,11 @@ export function InventoryPharmacyPackageFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="pharmacy_service_room_id">Pharmacy Service Room</Label>
-        <Input id="pharmacy_service_room_id" type="number" value={values.pharmacy_service_room_id ?? ''} onChange={(e) => setValues({ ...values, pharmacy_service_room_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/pharmacy-service-rooms"
+          value={values.pharmacy_service_room_id ?? null}
+          onChange={(v) => setValues({ ...values, pharmacy_service_room_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="category">Category *</Label>

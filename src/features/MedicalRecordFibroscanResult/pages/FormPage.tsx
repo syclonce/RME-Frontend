@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useFibroscanResultResource } from '../api'
 import type { FibroscanResultFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function FibroscanResultFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useFibroscanResultResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useFibroscanResultResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<FibroscanResultFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function FibroscanResultFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} FibroscanResult</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="examination_date">Examination Date *</Label>
@@ -50,7 +55,11 @@ export function FibroscanResultFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="examined_by">Examined By *</Label>
-        <Input id="examined_by" type="number" value={values.examined_by ?? ''} onChange={(e) => setValues({ ...values, examined_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.examined_by ?? null}
+          onChange={(v) => setValues({ ...values, examined_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="notes">Notes</Label>

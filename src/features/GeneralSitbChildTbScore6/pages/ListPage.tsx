@@ -6,8 +6,8 @@ import { useSitbChildTbScore6Resource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function SitbChildTbScore6ListPage() {
-  const { list, remove } = useSitbChildTbScore6Resource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSitbChildTbScore6Resource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useEmployeeIdentityCardResource } from '../api'
 const COLUMNS = ["id","employee_id","id_type","id_number","issued_at","created_at"] as const
 
 export function EmployeeIdentityCardListPage() {
-  const { list, remove } = useEmployeeIdentityCardResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEmployeeIdentityCardResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

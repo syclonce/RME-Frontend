@@ -6,8 +6,8 @@ import { useProviderServiceResource } from '../api'
 const COLUMNS = ["id","payment_provider_id","service_code","service_name","service_type","admin_fee_type","admin_fee_amount","is_active","created_at","updated_at"] as const
 
 export function ProviderServiceListPage() {
-  const { list, remove } = useProviderServiceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useProviderServiceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

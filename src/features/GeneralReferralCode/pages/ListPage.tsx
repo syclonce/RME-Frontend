@@ -6,8 +6,8 @@ import { useReferralCodeResource } from '../api'
 const COLUMNS = ["id","code","name","category","is_active","created_at"] as const
 
 export function ReferralCodeListPage() {
-  const { list, remove } = useReferralCodeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useReferralCodeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

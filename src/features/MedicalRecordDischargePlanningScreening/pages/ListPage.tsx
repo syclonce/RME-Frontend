@@ -6,8 +6,8 @@ import { useDischargePlanningScreeningResource } from '../api'
 const COLUMNS = ["id","visit_id","screening_criteria","total_score","requires_planning","screened_by","screened_at","created_at","updated_at"] as const
 
 export function DischargePlanningScreeningListPage() {
-  const { list, remove } = useDischargePlanningScreeningResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDischargePlanningScreeningResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

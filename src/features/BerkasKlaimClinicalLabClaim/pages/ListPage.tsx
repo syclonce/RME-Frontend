@@ -6,8 +6,8 @@ import { useClinicalLabClaimResource } from '../api'
 const COLUMNS = ["id","claim_file_id","order_id","submitted_at","status","created_at"] as const
 
 export function ClinicalLabClaimListPage() {
-  const { list } = useClinicalLabClaimResource()
-  const { data, isLoading } = list()
+  const { useList } = useClinicalLabClaimResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

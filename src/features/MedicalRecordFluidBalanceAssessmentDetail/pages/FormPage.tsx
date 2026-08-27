@@ -10,8 +10,8 @@ export function FluidBalanceAssessmentDetailFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useFluidBalanceAssessmentDetailResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useFluidBalanceAssessmentDetailResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<FluidBalanceAssessmentDetailFormValues>({})
 
   useEffect(() => {

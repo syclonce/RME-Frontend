@@ -6,8 +6,8 @@ import { useInventoryWardStockTransactionResource } from '../api'
 const COLUMNS = ["id","ward_id","item_id","type","quantity","performed_by","performed_at","notes","created_at"] as const
 
 export function InventoryWardStockTransactionListPage() {
-  const { list } = useInventoryWardStockTransactionResource()
-  const { data, isLoading } = list()
+  const { useList } = useInventoryWardStockTransactionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

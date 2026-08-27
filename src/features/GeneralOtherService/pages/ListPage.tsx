@@ -6,8 +6,8 @@ import { useOtherServiceResource } from '../api'
 const COLUMNS = ["id","name","code","description","unit","is_active"] as const
 
 export function OtherServiceListPage() {
-  const { list, remove } = useOtherServiceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useOtherServiceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

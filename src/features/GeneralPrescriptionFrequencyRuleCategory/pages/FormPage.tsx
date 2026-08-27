@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePrescriptionFrequencyRuleCategoryResource } from '../api'
 import type { PrescriptionFrequencyRuleCategoryFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function PrescriptionFrequencyRuleCategoryFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePrescriptionFrequencyRuleCategoryResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePrescriptionFrequencyRuleCategoryResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PrescriptionFrequencyRuleCategoryFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function PrescriptionFrequencyRuleCategoryFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PrescriptionFrequencyRuleCategory</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_frequency_rule_id">Prescription Frequency Rule *</Label>
-        <Input id="prescription_frequency_rule_id" type="number" value={values.prescription_frequency_rule_id ?? ''} onChange={(e) => setValues({ ...values, prescription_frequency_rule_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/prescription-frequency-rules"
+          value={values.prescription_frequency_rule_id ?? null}
+          onChange={(v) => setValues({ ...values, prescription_frequency_rule_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="category_name">Category Name *</Label>

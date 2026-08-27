@@ -6,8 +6,8 @@ import { useMaternalPregnancyHistoryResource } from '../api'
 const COLUMNS = ["id","visit_id","created_by","gravida","para","abortus","pregnancy_complications","delivery_method_history","created_at"] as const
 
 export function MaternalPregnancyHistoryListPage() {
-  const { list } = useMaternalPregnancyHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = useMaternalPregnancyHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

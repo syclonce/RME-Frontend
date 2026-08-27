@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useSurgicalSafetyEvaluationResultResource } from '../api'
 import type { SurgicalSafetyEvaluationResultFormValues } from '../types'
 
@@ -23,15 +24,27 @@ export function SurgicalSafetyEvaluationResultFormPage() {
       <h1 className="text-lg font-semibold">Tambah SurgicalSafetyEvaluationResult</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="operating_room_id">Operating Room</Label>
-        <Input id="operating_room_id" type="number" value={values.operating_room_id ?? ''} onChange={(e) => setValues({ ...values, operating_room_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/operating-rooms"
+          value={values.operating_room_id ?? null}
+          onChange={(v) => setValues({ ...values, operating_room_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="evaluator_id">Evaluator</Label>
-        <Input id="evaluator_id" type="number" value={values.evaluator_id ?? ''} onChange={(e) => setValues({ ...values, evaluator_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.evaluator_id ?? null}
+          onChange={(v) => setValues({ ...values, evaluator_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="checklist_score">Checklist Score *</Label>

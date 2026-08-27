@@ -6,8 +6,8 @@ import { useEyeExamDocumentUploadResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","doctor_id","exam_date","file_path","eye_side","findings","created_by","created_at","updated_at"] as const
 
 export function EyeExamDocumentUploadListPage() {
-  const { list, remove } = useEyeExamDocumentUploadResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEyeExamDocumentUploadResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

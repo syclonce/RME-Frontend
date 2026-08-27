@@ -6,8 +6,8 @@ import { useSitbDiagnosisTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function SitbDiagnosisTypeListPage() {
-  const { list, remove } = useSitbDiagnosisTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSitbDiagnosisTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

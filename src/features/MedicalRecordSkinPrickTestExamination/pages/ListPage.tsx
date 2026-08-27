@@ -6,8 +6,8 @@ import { useSkinPrickTestExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","allergen","wheal_size_mm","flare_size_mm","result","reaction_onset_minutes","notes","tested_at","created_at","updated_at"] as const
 
 export function SkinPrickTestExaminationListPage() {
-  const { list, remove } = useSkinPrickTestExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSkinPrickTestExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

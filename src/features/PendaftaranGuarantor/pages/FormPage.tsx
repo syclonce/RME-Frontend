@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useGuarantorResource } from '../api'
 import type { GuarantorFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function GuarantorFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useGuarantorResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useGuarantorResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<GuarantorFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function GuarantorFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Guarantor</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="registration_id">Registration *</Label>
-        <Input id="registration_id" type="number" value={values.registration_id ?? ''} onChange={(e) => setValues({ ...values, registration_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/registrations"
+          value={values.registration_id ?? null}
+          onChange={(v) => setValues({ ...values, registration_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="payer_type">Payer Type *</Label>
@@ -42,7 +47,11 @@ export function GuarantorFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="room_class_id">Room Class</Label>
-        <Input id="room_class_id" type="number" value={values.room_class_id ?? ''} onChange={(e) => setValues({ ...values, room_class_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/room-classes"
+          value={values.room_class_id ?? null}
+          onChange={(v) => setValues({ ...values, room_class_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reference_letter_number">Reference Letter Number</Label>

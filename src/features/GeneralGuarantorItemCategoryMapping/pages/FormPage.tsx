@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useGuarantorItemCategoryMappingResource } from '../api'
 import type { GuarantorItemCategoryMappingFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function GuarantorItemCategoryMappingFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useGuarantorItemCategoryMappingResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useGuarantorItemCategoryMappingResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<GuarantorItemCategoryMappingFormValues>({})
 
   useEffect(() => {
@@ -31,11 +32,19 @@ export function GuarantorItemCategoryMappingFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} GuarantorItemCategoryMapping</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="guarantor_id">Guarantor *</Label>
-        <Input id="guarantor_id" type="number" value={values.guarantor_id ?? ''} onChange={(e) => setValues({ ...values, guarantor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/guarantors"
+          value={values.guarantor_id ?? null}
+          onChange={(v) => setValues({ ...values, guarantor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_category_id">Item Category *</Label>
-        <Input id="item_category_id" type="number" value={values.item_category_id ?? ''} onChange={(e) => setValues({ ...values, item_category_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/inventoryitemcategories"
+          value={values.item_category_id ?? null}
+          onChange={(v) => setValues({ ...values, item_category_id: v })}
+        />
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="is_covered" checked={!!values.is_covered} onCheckedChange={(v) => setValues({ ...values, is_covered: !!v })} />

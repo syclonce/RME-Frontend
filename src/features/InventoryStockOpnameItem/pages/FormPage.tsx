@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInventoryStockOpnameItemResource } from '../api'
 import type { InventoryStockOpnameItemFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function InventoryStockOpnameItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah InventoryStockOpnameItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="stock_opname_id">Stock Opname *</Label>
-        <Input id="stock_opname_id" type="number" value={values.stock_opname_id ?? ''} onChange={(e) => setValues({ ...values, stock_opname_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/inventorystockopnames"
+          value={values.stock_opname_id ?? null}
+          onChange={(v) => setValues({ ...values, stock_opname_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id">Item *</Label>
-        <Input id="item_id" type="number" value={values.item_id ?? ''} onChange={(e) => setValues({ ...values, item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id ?? null}
+          onChange={(v) => setValues({ ...values, item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="system_quantity">System Quantity *</Label>

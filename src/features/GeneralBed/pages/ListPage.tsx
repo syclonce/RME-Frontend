@@ -6,8 +6,8 @@ import { useBedResource } from '../api'
 const COLUMNS = ["id","room_id","bed_number","is_active"] as const
 
 export function BedListPage() {
-  const { list, remove } = useBedResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBedResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

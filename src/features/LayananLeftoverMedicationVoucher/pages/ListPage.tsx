@@ -6,8 +6,8 @@ import { useLeftoverMedicationVoucherResource } from '../api'
 const COLUMNS = ["id","voucher_number","visit_id","patient_id","prescription_id","status","issued_at","redeemed_at","notes","created_at"] as const
 
 export function LeftoverMedicationVoucherListPage() {
-  const { list } = useLeftoverMedicationVoucherResource()
-  const { data, isLoading } = list()
+  const { useList } = useLeftoverMedicationVoucherResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -10,8 +10,8 @@ export function ImageMarkerPointFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useImageMarkerPointResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useImageMarkerPointResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ImageMarkerPointFormValues>({})
 
   useEffect(() => {

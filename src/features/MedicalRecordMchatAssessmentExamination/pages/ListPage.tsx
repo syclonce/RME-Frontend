@@ -6,8 +6,8 @@ import { useMchatAssessmentExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","total_score","risk_level","responses_json","recommendation","assessed_at","created_at","updated_at"] as const
 
 export function MchatAssessmentExaminationListPage() {
-  const { list, remove } = useMchatAssessmentExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMchatAssessmentExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { usePackageInvoiceItemResource } from '../api'
 const COLUMNS = ["id","invoice_id","package_id","quantity","unit_price","subtotal","notes","created_at","updated_at"] as const
 
 export function PackageInvoiceItemListPage() {
-  const { list, remove } = usePackageInvoiceItemResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePackageInvoiceItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

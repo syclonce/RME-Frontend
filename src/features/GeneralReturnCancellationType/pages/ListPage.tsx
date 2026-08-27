@@ -6,8 +6,8 @@ import { useReturnCancellationTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function ReturnCancellationTypeListPage() {
-  const { list, remove } = useReturnCancellationTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useReturnCancellationTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

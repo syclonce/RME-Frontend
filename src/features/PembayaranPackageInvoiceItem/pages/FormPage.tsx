@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePackageInvoiceItemResource } from '../api'
 import type { PackageInvoiceItemFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PackageInvoiceItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePackageInvoiceItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePackageInvoiceItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PackageInvoiceItemFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function PackageInvoiceItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PackageInvoiceItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <Input id="invoice_id" type="number" value={values.invoice_id ?? ''} onChange={(e) => setValues({ ...values, invoice_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/invoices"
+          value={values.invoice_id ?? null}
+          onChange={(v) => setValues({ ...values, invoice_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="package_id">Package *</Label>
-        <Input id="package_id" type="number" value={values.package_id ?? ''} onChange={(e) => setValues({ ...values, package_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/packages"
+          value={values.package_id ?? null}
+          onChange={(v) => setValues({ ...values, package_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity">Quantity</Label>

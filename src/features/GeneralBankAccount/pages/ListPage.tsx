@@ -6,8 +6,8 @@ import { useBankAccountResource } from '../api'
 const COLUMNS = ["id","bank_name","account_number","account_holder","account_type","is_active"] as const
 
 export function BankAccountListPage() {
-  const { list, remove } = useBankAccountResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBankAccountResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

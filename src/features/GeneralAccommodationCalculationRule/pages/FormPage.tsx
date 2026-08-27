@@ -11,8 +11,8 @@ export function AccommodationCalculationRuleFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useAccommodationCalculationRuleResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useAccommodationCalculationRuleResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<AccommodationCalculationRuleFormValues>({})
 
   useEffect(() => {

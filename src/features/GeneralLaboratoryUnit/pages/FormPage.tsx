@@ -11,8 +11,8 @@ export function LaboratoryUnitFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useLaboratoryUnitResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useLaboratoryUnitResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LaboratoryUnitFormValues>({})
 
   useEffect(() => {

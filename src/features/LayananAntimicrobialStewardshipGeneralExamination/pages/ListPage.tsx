@@ -6,8 +6,8 @@ import { useAntimicrobialStewardshipGeneralExaminationResource } from '../api'
 const COLUMNS = ["id","antimicrobial_stewardship_form_id","temperature","pulse","respiration_rate","blood_pressure","weight_kg","height_cm","examined_at","created_at"] as const
 
 export function AntimicrobialStewardshipGeneralExaminationListPage() {
-  const { list } = useAntimicrobialStewardshipGeneralExaminationResource()
-  const { data, isLoading } = list()
+  const { useList } = useAntimicrobialStewardshipGeneralExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

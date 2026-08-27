@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBerkasKlaimClaimCompletenessResource } from '../api'
 import type { BerkasKlaimClaimCompletenessFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function BerkasKlaimClaimCompletenessFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBerkasKlaimClaimCompletenessResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBerkasKlaimClaimCompletenessResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BerkasKlaimClaimCompletenessFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function BerkasKlaimClaimCompletenessFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BerkasKlaimClaimCompleteness</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="claim_file_id">Claim File *</Label>
-        <Input id="claim_file_id" type="number" value={values.claim_file_id ?? ''} onChange={(e) => setValues({ ...values, claim_file_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/claim-files"
+          value={values.claim_file_id ?? null}
+          onChange={(v) => setValues({ ...values, claim_file_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="checklist_item">Checklist Item *</Label>

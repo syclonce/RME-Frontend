@@ -6,8 +6,8 @@ import { useShiftScheduleResource } from '../api'
 const COLUMNS = ["id","staff_member_id","employee_id","ward_id","shift_type","shift_date","start_time","end_time","status"] as const
 
 export function ShiftScheduleListPage() {
-  const { list, remove } = useShiftScheduleResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useShiftScheduleResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

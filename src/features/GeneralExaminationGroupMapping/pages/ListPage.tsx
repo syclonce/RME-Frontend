@@ -6,8 +6,8 @@ import { useExaminationGroupMappingResource } from '../api'
 const COLUMNS = ["id","examination_group_id","mapping_category","external_code","is_active","created_at"] as const
 
 export function ExaminationGroupMappingListPage() {
-  const { list, remove } = useExaminationGroupMappingResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useExaminationGroupMappingResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

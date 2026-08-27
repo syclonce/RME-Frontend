@@ -6,8 +6,8 @@ import { useApplicantResource } from '../api'
 const COLUMNS = ["id","registration_id","full_name","relationship_to_patient","identity_number","phone_number","address","application_type","application_date","notes","status","created_at","updated_at"] as const
 
 export function ApplicantListPage() {
-  const { list, remove } = useApplicantResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useApplicantResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

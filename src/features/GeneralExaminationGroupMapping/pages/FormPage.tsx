@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useExaminationGroupMappingResource } from '../api'
 import type { ExaminationGroupMappingFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function ExaminationGroupMappingFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useExaminationGroupMappingResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useExaminationGroupMappingResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ExaminationGroupMappingFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function ExaminationGroupMappingFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ExaminationGroupMapping</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="examination_group_id">Examination Group *</Label>
-        <Input id="examination_group_id" type="number" value={values.examination_group_id ?? ''} onChange={(e) => setValues({ ...values, examination_group_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/examination-groups"
+          value={values.examination_group_id ?? null}
+          onChange={(v) => setValues({ ...values, examination_group_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="mapping_category">Mapping Category *</Label>

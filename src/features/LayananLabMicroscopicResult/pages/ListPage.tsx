@@ -6,8 +6,8 @@ import { useLabMicroscopicResultResource } from '../api'
 const COLUMNS = ["id","lab_order_id","specimen_type","findings","examined_by","examined_at","created_at"] as const
 
 export function LabMicroscopicResultListPage() {
-  const { list } = useLabMicroscopicResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useLabMicroscopicResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

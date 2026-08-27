@@ -6,8 +6,8 @@ import { useTriageResource } from '../api'
 const COLUMNS = ["id","visit_id","level","chief_complaint","assessed_by","assessed_at","notes","created_by","created_at"] as const
 
 export function TriageListPage() {
-  const { list } = useTriageResource()
-  const { data, isLoading } = list()
+  const { useList } = useTriageResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

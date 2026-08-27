@@ -6,8 +6,8 @@ import { useSocialConditionResource } from '../api'
 const COLUMNS = ["id","visit_id","living_situation","occupation_status","financial_status","support_system","recorded_by","recorded_at","created_at","updated_at"] as const
 
 export function SocialConditionListPage() {
-  const { list, remove } = useSocialConditionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSocialConditionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

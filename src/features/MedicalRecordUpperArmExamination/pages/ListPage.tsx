@@ -6,8 +6,8 @@ import { useUpperArmExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","side","muscle_strength","range_of_motion","deformity","findings","examined_at","created_at","updated_at"] as const
 
 export function UpperArmExaminationListPage() {
-  const { list, remove } = useUpperArmExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useUpperArmExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

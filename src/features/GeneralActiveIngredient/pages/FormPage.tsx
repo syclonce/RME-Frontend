@@ -11,8 +11,8 @@ export function ActiveIngredientFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useActiveIngredientResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useActiveIngredientResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ActiveIngredientFormValues>({})
 
   useEffect(() => {

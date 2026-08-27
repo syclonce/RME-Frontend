@@ -6,8 +6,8 @@ import { useSurgeryPerformerResource } from '../api'
 const COLUMNS = ["id","surgery_id","visit_id","doctor_id","role","notes","created_at","updated_at"] as const
 
 export function SurgeryPerformerListPage() {
-  const { list, remove } = useSurgeryPerformerResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSurgeryPerformerResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useLabOrderResource } from '../api'
 const COLUMNS = ["id","order_number","visit_id","ordered_by","ordered_at","destination","is_emergency","reason","notes","status","results","id","test_name","result_value","normal_range","unit","is_abnormal","created_at"] as const
 
 export function LabOrderListPage() {
-  const { list } = useLabOrderResource()
-  const { data, isLoading } = list()
+  const { useList } = useLabOrderResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

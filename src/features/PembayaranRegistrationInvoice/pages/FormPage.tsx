@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useRegistrationInvoiceResource } from '../api'
 import type { RegistrationInvoiceFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function RegistrationInvoiceFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useRegistrationInvoiceResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useRegistrationInvoiceResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<RegistrationInvoiceFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function RegistrationInvoiceFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} RegistrationInvoice</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="registration_id">Registration *</Label>
-        <Input id="registration_id" type="number" value={values.registration_id ?? ''} onChange={(e) => setValues({ ...values, registration_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/registrations"
+          value={values.registration_id ?? null}
+          onChange={(v) => setValues({ ...values, registration_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <Input id="invoice_id" type="number" value={values.invoice_id ?? ''} onChange={(e) => setValues({ ...values, invoice_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/invoices"
+          value={values.invoice_id ?? null}
+          onChange={(v) => setValues({ ...values, invoice_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_category">Invoice Category</Label>

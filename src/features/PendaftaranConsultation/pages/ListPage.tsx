@@ -6,8 +6,8 @@ import { useConsultationResource } from '../api'
 const COLUMNS = [] as const
 
 export function ConsultationListPage() {
-  const { list } = useConsultationResource()
-  const { data, isLoading } = list()
+  const { useList } = useConsultationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePrescriptionFulfillmentItemResource } from '../api'
 import type { PrescriptionFulfillmentItemFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function PrescriptionFulfillmentItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePrescriptionFulfillmentItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePrescriptionFulfillmentItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PrescriptionFulfillmentItemFormValues>({})
 
   useEffect(() => {
@@ -31,11 +32,19 @@ export function PrescriptionFulfillmentItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PrescriptionFulfillmentItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_fulfillment_id">Prescription Fulfillment *</Label>
-        <Input id="prescription_fulfillment_id" type="number" value={values.prescription_fulfillment_id ?? ''} onChange={(e) => setValues({ ...values, prescription_fulfillment_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/prescription-fulfillments"
+          value={values.prescription_fulfillment_id ?? null}
+          onChange={(v) => setValues({ ...values, prescription_fulfillment_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_item_id">Prescription Item *</Label>
-        <Input id="prescription_item_id" type="number" value={values.prescription_item_id ?? ''} onChange={(e) => setValues({ ...values, prescription_item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/prescription-items"
+          value={values.prescription_item_id ?? null}
+          onChange={(v) => setValues({ ...values, prescription_item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity_served">Quantity Served *</Label>

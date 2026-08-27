@@ -6,8 +6,8 @@ import { useBloodRequestItemResource } from '../api'
 const COLUMNS = ["id","blood_transfusion_id","blood_component","blood_type","bag_quantity","cross_match_result","status","notes","created_at","updated_at"] as const
 
 export function BloodRequestItemListPage() {
-  const { list, remove } = useBloodRequestItemResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBloodRequestItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

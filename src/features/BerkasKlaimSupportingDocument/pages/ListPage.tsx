@@ -6,8 +6,8 @@ import { useBerkasKlaimSupportingDocumentResource } from '../api'
 const COLUMNS = ["id","claim_file_id","document_type","file_path","uploaded_at"] as const
 
 export function BerkasKlaimSupportingDocumentListPage() {
-  const { list, remove } = useBerkasKlaimSupportingDocumentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBerkasKlaimSupportingDocumentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useTelemedicineSessionResource } from '../api'
 import type { TelemedicineSessionFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function TelemedicineSessionFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useTelemedicineSessionResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useTelemedicineSessionResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<TelemedicineSessionFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function TelemedicineSessionFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} TelemedicineSession</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="doctor_employee_id">Doctor Employee *</Label>
-        <Input id="doctor_employee_id" type="number" value={values.doctor_employee_id ?? ''} onChange={(e) => setValues({ ...values, doctor_employee_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.doctor_employee_id ?? null}
+          onChange={(v) => setValues({ ...values, doctor_employee_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="scheduled_at">Scheduled At *</Label>

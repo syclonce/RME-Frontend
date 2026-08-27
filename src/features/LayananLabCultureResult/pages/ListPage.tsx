@@ -6,8 +6,8 @@ import { useLabCultureResultResource } from '../api'
 const COLUMNS = ["id","lab_order_id","specimen_type","organism_found","colony_count","examined_at","result_status","created_at"] as const
 
 export function LabCultureResultListPage() {
-  const { list } = useLabCultureResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useLabCultureResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

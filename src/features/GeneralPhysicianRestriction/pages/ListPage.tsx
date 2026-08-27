@@ -6,8 +6,8 @@ import { usePhysicianRestrictionResource } from '../api'
 const COLUMNS = ["id","doctor_id","restricted_antibiotic_name","authorization_level","is_authorized_prescriber","notes","created_at"] as const
 
 export function PhysicianRestrictionListPage() {
-  const { list, remove } = usePhysicianRestrictionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePhysicianRestrictionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useCriticalLabValueResource } from '../api'
 const COLUMNS = ["id","lab_order_id","parameter_name","critical_value","notified_to","notified_at","acknowledged","created_at"] as const
 
 export function CriticalLabValueListPage() {
-  const { list } = useCriticalLabValueResource()
-  const { data, isLoading } = list()
+  const { useList } = useCriticalLabValueResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

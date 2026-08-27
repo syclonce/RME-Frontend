@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientEscortContactResource } from '../api'
 import type { PatientEscortContactFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function PatientEscortContactFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePatientEscortContactResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePatientEscortContactResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PatientEscortContactFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function PatientEscortContactFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientEscortContact</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_escort_id">Patient Escort *</Label>
-        <Input id="patient_escort_id" type="number" value={values.patient_escort_id ?? ''} onChange={(e) => setValues({ ...values, patient_escort_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patient-escorts"
+          value={values.patient_escort_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_escort_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="contact_type">Contact Type *</Label>

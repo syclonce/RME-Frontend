@@ -6,8 +6,8 @@ import { useLabSensitivityResultResource } from '../api'
 const COLUMNS = ["id","lab_order_id","organism","antibiotic_name","sensitivity_result","examined_at","created_at"] as const
 
 export function LabSensitivityResultListPage() {
-  const { list } = useLabSensitivityResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useLabSensitivityResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

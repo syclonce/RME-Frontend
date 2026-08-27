@@ -6,8 +6,8 @@ import { usePharynxExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","mucosa_color","exudate","post_nasal_drip","posterior_wall_condition","notes","examined_at","created_at","updated_at"] as const
 
 export function PharynxExaminationListPage() {
-  const { list, remove } = usePharynxExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePharynxExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useServiceTariffDistributionResource } from '../api'
 const COLUMNS = ["id","service_tariff_id","component_id","amount","is_active"] as const
 
 export function ServiceTariffDistributionListPage() {
-  const { list, remove } = useServiceTariffDistributionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useServiceTariffDistributionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

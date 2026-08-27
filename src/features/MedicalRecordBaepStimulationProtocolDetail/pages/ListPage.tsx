@@ -6,8 +6,8 @@ import { useBaepStimulationProtocolDetailResource } from '../api'
 const COLUMNS = ["id","baep_protocol_id","stimulation_site","stimulation_frequency_hz","stimulation_duration_minutes","intensity_ma","number_of_sessions","created_at"] as const
 
 export function BaepStimulationProtocolDetailListPage() {
-  const { list } = useBaepStimulationProtocolDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepStimulationProtocolDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

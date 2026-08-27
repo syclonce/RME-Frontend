@@ -6,8 +6,8 @@ import { useControlScheduleResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","medical_department_id","scheduled_date","purpose","scheduled_by","status","notes","created_at","updated_at"] as const
 
 export function ControlScheduleListPage() {
-  const { list, remove } = useControlScheduleResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useControlScheduleResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

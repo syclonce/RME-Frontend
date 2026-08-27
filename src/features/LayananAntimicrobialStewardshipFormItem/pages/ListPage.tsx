@@ -6,8 +6,8 @@ import { useAntimicrobialStewardshipFormItemResource } from '../api'
 const COLUMNS = ["id","antimicrobial_stewardship_form_id","item_id","dose","route","frequency","planned_duration_days","created_at"] as const
 
 export function AntimicrobialStewardshipFormItemListPage() {
-  const { list } = useAntimicrobialStewardshipFormItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useAntimicrobialStewardshipFormItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

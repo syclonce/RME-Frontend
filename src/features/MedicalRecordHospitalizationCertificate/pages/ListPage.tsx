@@ -6,8 +6,8 @@ import { useHospitalizationCertificateResource } from '../api'
 const COLUMNS = ["id","letter_number","patient_id","visit_id","doctor_id","issue_date","admission_date","estimated_duration_days","ward_name","diagnosis","remarks","created_by","created_at","updated_at"] as const
 
 export function HospitalizationCertificateListPage() {
-  const { list, remove } = useHospitalizationCertificateResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useHospitalizationCertificateResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -21,6 +21,14 @@ const FEATURES_ROOT = path.resolve(here, '../../src/features')
 
 const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf8'))
 
+/** Peta nama tabel DB -> endpoint API, dipakai utk resolve dropdown field relasi. */
+const TABLE_TO_ENDPOINT = new Map()
+for (const entry of catalog) {
+  if (entry.tableName && entry.route.apiResources?.length > 0) {
+    TABLE_TO_ENDPOINT.set(entry.tableName, `/${entry.route.apiResources[0].uri}`)
+  }
+}
+
 function pickStoreFields(entry) {
   const reqKeys = Object.keys(entry.requestFields)
   const storeKey = reqKeys.find((k) => /^Store/i.test(k)) ?? reqKeys[0]
@@ -150,8 +158,8 @@ import { use${entity}Resource } from '../api'
 const COLUMNS = ${JSON.stringify(columns)} as const
 
 export function ${entity}ListPage() {
-  const { list${hasDestroy ? ', remove' : ''} } = use${entity}Resource()
-  const { data, isLoading } = list()
+  const { useList${hasDestroy ? ', remove' : ''} } = use${entity}Resource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 
@@ -186,10 +194,26 @@ export function ${entity}ListPage() {
 }
 `
 
+function relationEndpoint(field) {
+  if (field.type !== 'relation' || !field.relation) return null
+  return TABLE_TO_ENDPOINT.get(field.relation.table) ?? null
+}
+
   const formFieldsJsx = fields
     .map((f) => {
       const label = toLabel(f.name)
       const type = inputType(f)
+      const endpoint = relationEndpoint(f)
+      if (endpoint) {
+        return `      <div className="grid gap-1.5">
+        <Label htmlFor="${f.name}">${label}${f.required ? ' *' : ''}</Label>
+        <RelationSelect
+          endpoint="${endpoint}"
+          value={values.${f.name} ?? null}
+          onChange={(v) => setValues({ ...values, ${f.name}: v })}
+        />
+      </div>`
+      }
       if (type === 'checkbox') {
         return `      <div className="flex items-center gap-2">
         <Checkbox id="${f.name}" checked={!!values.${f.name}} onCheckedChange={(v) => setValues({ ...values, ${f.name}: !!v })} />
@@ -208,22 +232,23 @@ export function ${entity}ListPage() {
     .join('\n')
 
   const hasCheckbox = fields.some((f) => inputType(f) === 'checkbox')
+  const hasRelationSelect = fields.some((f) => relationEndpoint(f) !== null)
+  const hasPlainInput = fields.some((f) => relationEndpoint(f) === null && inputType(f) !== 'checkbox')
 
   const formPageTsx = hasUpdate
     ? `import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { use${entity}Resource } from '../api'
+${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
+${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
 export function ${entity}FormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = use${entity}Resource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = use${entity}Resource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<${entity}FormValues>({})
 
   useEffect(() => {
@@ -251,9 +276,8 @@ ${formFieldsJsx}
     : `import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { use${entity}Resource } from '../api'
+${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
+${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
 export function ${entity}FormPage() {

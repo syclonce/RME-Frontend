@@ -6,8 +6,8 @@ import { useEmploymentStatusResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function EmploymentStatusListPage() {
-  const { list, remove } = useEmploymentStatusResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEmploymentStatusResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useClinicalNoteCoManagementResource } from '../api'
 import type { ClinicalNoteCoManagementFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function ClinicalNoteCoManagementFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useClinicalNoteCoManagementResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useClinicalNoteCoManagementResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ClinicalNoteCoManagementFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function ClinicalNoteCoManagementFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ClinicalNoteCoManagement</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="clinical_note_id">Clinical Note *</Label>
-        <Input id="clinical_note_id" type="number" value={values.clinical_note_id ?? ''} onChange={(e) => setValues({ ...values, clinical_note_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/clinical-notes"
+          value={values.clinical_note_id ?? null}
+          onChange={(v) => setValues({ ...values, clinical_note_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="medical_department_id">Medical Department *</Label>
-        <Input id="medical_department_id" type="number" value={values.medical_department_id ?? ''} onChange={(e) => setValues({ ...values, medical_department_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/medical-departments"
+          value={values.medical_department_id ?? null}
+          onChange={(v) => setValues({ ...values, medical_department_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="notes">Notes</Label>
@@ -42,7 +51,11 @@ export function ClinicalNoteCoManagementFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="author_id">Author *</Label>
-        <Input id="author_id" type="number" value={values.author_id ?? ''} onChange={(e) => setValues({ ...values, author_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.author_id ?? null}
+          onChange={(v) => setValues({ ...values, author_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recorded_at">Recorded At *</Label>

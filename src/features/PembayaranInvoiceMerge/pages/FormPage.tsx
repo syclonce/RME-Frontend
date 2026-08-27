@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInvoiceMergeResource } from '../api'
 import type { InvoiceMergeFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function InvoiceMergeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInvoiceMergeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInvoiceMergeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InvoiceMergeFormValues>({})
 
   useEffect(() => {
@@ -34,11 +35,19 @@ export function InvoiceMergeFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="payment_id">Payment *</Label>
-        <Input id="payment_id" type="number" value={values.payment_id ?? ''} onChange={(e) => setValues({ ...values, payment_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/payments"
+          value={values.payment_id ?? null}
+          onChange={(v) => setValues({ ...values, payment_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <Input id="invoice_id" type="number" value={values.invoice_id ?? ''} onChange={(e) => setValues({ ...values, invoice_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/invoices"
+          value={values.invoice_id ?? null}
+          onChange={(v) => setValues({ ...values, invoice_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="allocated_amount">Allocated Amount *</Label>

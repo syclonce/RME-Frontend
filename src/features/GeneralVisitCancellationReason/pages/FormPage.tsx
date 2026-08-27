@@ -11,8 +11,8 @@ export function VisitCancellationReasonFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useVisitCancellationReasonResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useVisitCancellationReasonResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<VisitCancellationReasonFormValues>({})
 
   useEffect(() => {

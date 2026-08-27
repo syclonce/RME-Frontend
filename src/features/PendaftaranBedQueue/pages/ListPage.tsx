@@ -6,8 +6,8 @@ import { useBedQueueResource } from '../api'
 const COLUMNS = ["id","bed_id","patient_id","queue_number","status","created_at"] as const
 
 export function BedQueueListPage() {
-  const { list } = useBedQueueResource()
-  const { data, isLoading } = list()
+  const { useList } = useBedQueueResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

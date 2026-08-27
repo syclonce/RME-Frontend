@@ -6,8 +6,8 @@ import { useReferralTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function ReferralTypeListPage() {
-  const { list, remove } = useReferralTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useReferralTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useAntimicrobialStewardshipMicrobiologyResultResource } from '../api'
 const COLUMNS = ["id","antimicrobial_stewardship_form_id","specimen_type","organism_found","sensitivity_result","examined_at","created_at"] as const
 
 export function AntimicrobialStewardshipMicrobiologyResultListPage() {
-  const { list } = useAntimicrobialStewardshipMicrobiologyResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useAntimicrobialStewardshipMicrobiologyResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

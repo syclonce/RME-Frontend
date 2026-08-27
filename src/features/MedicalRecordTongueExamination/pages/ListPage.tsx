@@ -6,8 +6,8 @@ import { useTongueExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","color","coating","moisture","lesions","movement","findings","examined_at","created_at","updated_at"] as const
 
 export function TongueExaminationListPage() {
-  const { list, remove } = useTongueExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTongueExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

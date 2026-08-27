@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useEmergencyEducationResource } from '../api'
 import type { EmergencyEducationFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function EmergencyEducationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useEmergencyEducationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useEmergencyEducationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<EmergencyEducationFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function EmergencyEducationFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} EmergencyEducation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="topic">Topic *</Label>
@@ -46,7 +51,11 @@ export function EmergencyEducationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="educator_id">Educator *</Label>
-        <Input id="educator_id" type="number" value={values.educator_id ?? ''} onChange={(e) => setValues({ ...values, educator_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.educator_id ?? null}
+          onChange={(v) => setValues({ ...values, educator_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="educated_at">Educated At *</Label>

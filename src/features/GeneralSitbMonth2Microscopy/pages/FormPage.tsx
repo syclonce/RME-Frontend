@@ -11,8 +11,8 @@ export function SitbMonth2MicroscopyFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSitbMonth2MicroscopyResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSitbMonth2MicroscopyResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SitbMonth2MicroscopyFormValues>({})
 
   useEffect(() => {

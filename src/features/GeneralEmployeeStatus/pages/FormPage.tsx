@@ -11,8 +11,8 @@ export function EmployeeStatusFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useEmployeeStatusResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useEmployeeStatusResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<EmployeeStatusFormValues>({})
 
   useEffect(() => {

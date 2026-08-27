@@ -6,8 +6,8 @@ import { useBloodTransfusionResource } from '../api'
 const COLUMNS = ["id","visit_id","blood_type_id","volume_ml","started_at","ended_at","administered_by","reaction_notes","status","created_by","created_at"] as const
 
 export function BloodTransfusionListPage() {
-  const { list } = useBloodTransfusionResource()
-  const { data, isLoading } = list()
+  const { useList } = useBloodTransfusionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

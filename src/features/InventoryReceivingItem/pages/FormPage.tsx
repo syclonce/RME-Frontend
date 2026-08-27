@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useReceivingItemResource } from '../api'
 import type { ReceivingItemFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function ReceivingItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah ReceivingItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="receiving_record_id">Receiving Record *</Label>
-        <Input id="receiving_record_id" type="number" value={values.receiving_record_id ?? ''} onChange={(e) => setValues({ ...values, receiving_record_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/receiving-records"
+          value={values.receiving_record_id ?? null}
+          onChange={(v) => setValues({ ...values, receiving_record_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id">Item *</Label>
-        <Input id="item_id" type="number" value={values.item_id ?? ''} onChange={(e) => setValues({ ...values, item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id ?? null}
+          onChange={(v) => setValues({ ...values, item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity">Quantity *</Label>

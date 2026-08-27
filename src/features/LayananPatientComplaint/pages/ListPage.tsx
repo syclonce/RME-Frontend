@@ -6,8 +6,8 @@ import { usePatientComplaintResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","category","description","submitted_at"] as const
 
 export function PatientComplaintListPage() {
-  const { list, remove } = usePatientComplaintResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientComplaintResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

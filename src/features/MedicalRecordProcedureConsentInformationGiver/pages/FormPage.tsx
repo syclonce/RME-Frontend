@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useProcedureConsentInformationGiverResource } from '../api'
 import type { ProcedureConsentInformationGiverFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function ProcedureConsentInformationGiverFormPage() {
       <h1 className="text-lg font-semibold">Tambah ProcedureConsentInformationGiver</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="consent_id">Consent *</Label>
-        <Input id="consent_id" type="number" value={values.consent_id ?? ''} onChange={(e) => setValues({ ...values, consent_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/doctor-procedure-consents"
+          value={values.consent_id ?? null}
+          onChange={(v) => setValues({ ...values, consent_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="giver_id">Giver *</Label>
-        <Input id="giver_id" type="number" value={values.giver_id ?? ''} onChange={(e) => setValues({ ...values, giver_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.giver_id ?? null}
+          onChange={(v) => setValues({ ...values, giver_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="giver_role">Giver Role</Label>

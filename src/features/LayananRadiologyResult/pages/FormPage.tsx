@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useRadiologyResultResource } from '../api'
 import type { RadiologyResultFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function RadiologyResultFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useRadiologyResultResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useRadiologyResultResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<RadiologyResultFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function RadiologyResultFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} RadiologyResult</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="radiology_order_id">Radiology Order *</Label>
-        <Input id="radiology_order_id" type="number" value={values.radiology_order_id ?? ''} onChange={(e) => setValues({ ...values, radiology_order_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/radiology-orders"
+          value={values.radiology_order_id ?? null}
+          onChange={(v) => setValues({ ...values, radiology_order_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="findings">Findings *</Label>
@@ -42,7 +47,11 @@ export function RadiologyResultFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="radiologist_id">Radiologist</Label>
-        <Input id="radiologist_id" type="number" value={values.radiologist_id ?? ''} onChange={(e) => setValues({ ...values, radiologist_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.radiologist_id ?? null}
+          onChange={(v) => setValues({ ...values, radiologist_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="examined_at">Examined At *</Label>

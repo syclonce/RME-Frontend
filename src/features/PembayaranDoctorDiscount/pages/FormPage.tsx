@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDoctorDiscountResource } from '../api'
 import type { DoctorDiscountFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function DoctorDiscountFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDoctorDiscountResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDoctorDiscountResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DoctorDiscountFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function DoctorDiscountFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DoctorDiscount</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="discount_id">Discount *</Label>
-        <Input id="discount_id" type="number" value={values.discount_id ?? ''} onChange={(e) => setValues({ ...values, discount_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/discounts"
+          value={values.discount_id ?? null}
+          onChange={(v) => setValues({ ...values, discount_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="employee_id">Employee *</Label>
-        <Input id="employee_id" type="number" value={values.employee_id ?? ''} onChange={(e) => setValues({ ...values, employee_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.employee_id ?? null}
+          onChange={(v) => setValues({ ...values, employee_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="percentage">Percentage *</Label>

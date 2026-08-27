@@ -6,8 +6,8 @@ import { useNoseExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","deformity","septum_deviation","turbinate_hypertrophy","nasal_discharge","polyp_present","notes","examined_at","created_at","updated_at"] as const
 
 export function NoseExaminationListPage() {
-  const { list, remove } = useNoseExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useNoseExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

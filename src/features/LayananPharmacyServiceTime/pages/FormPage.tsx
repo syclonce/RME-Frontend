@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePharmacyServiceTimeResource } from '../api'
 import type { PharmacyServiceTimeFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PharmacyServiceTimeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePharmacyServiceTimeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePharmacyServiceTimeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PharmacyServiceTimeFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function PharmacyServiceTimeFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PharmacyServiceTime</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription *</Label>
-        <Input id="prescription_id" type="number" value={values.prescription_id ?? ''} onChange={(e) => setValues({ ...values, prescription_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/prescriptions"
+          value={values.prescription_id ?? null}
+          onChange={(v) => setValues({ ...values, prescription_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="received_at">Received At</Label>

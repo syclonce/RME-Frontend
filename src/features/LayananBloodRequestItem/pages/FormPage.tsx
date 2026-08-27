@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBloodRequestItemResource } from '../api'
 import type { BloodRequestItemFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function BloodRequestItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBloodRequestItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBloodRequestItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BloodRequestItemFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function BloodRequestItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BloodRequestItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="blood_transfusion_id">Blood Transfusion *</Label>
-        <Input id="blood_transfusion_id" type="number" value={values.blood_transfusion_id ?? ''} onChange={(e) => setValues({ ...values, blood_transfusion_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/blood-transfusions"
+          value={values.blood_transfusion_id ?? null}
+          onChange={(v) => setValues({ ...values, blood_transfusion_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="blood_component">Blood Component *</Label>

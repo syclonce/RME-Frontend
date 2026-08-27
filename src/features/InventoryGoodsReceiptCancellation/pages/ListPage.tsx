@@ -6,8 +6,8 @@ import { useInventoryGoodsReceiptCancellationResource } from '../api'
 const COLUMNS = ["id","cancellation_number","goods_receipt_id","reason","cancelled_by","cancelled_at","created_at"] as const
 
 export function InventoryGoodsReceiptCancellationListPage() {
-  const { list } = useInventoryGoodsReceiptCancellationResource()
-  const { data, isLoading } = list()
+  const { useList } = useInventoryGoodsReceiptCancellationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useVisitResource } from '../api'
 import type { VisitFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function VisitFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useVisitResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useVisitResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<VisitFormValues>({})
 
   useEffect(() => {
@@ -35,19 +36,35 @@ export function VisitFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="registration_id">Registration *</Label>
-        <Input id="registration_id" type="number" value={values.registration_id ?? ''} onChange={(e) => setValues({ ...values, registration_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/registrations"
+          value={values.registration_id ?? null}
+          onChange={(v) => setValues({ ...values, registration_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="attending_physician_id">Attending Physician</Label>
-        <Input id="attending_physician_id" type="number" value={values.attending_physician_id ?? ''} onChange={(e) => setValues({ ...values, attending_physician_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.attending_physician_id ?? null}
+          onChange={(v) => setValues({ ...values, attending_physician_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="bed_id">Bed</Label>
-        <Input id="bed_id" type="number" value={values.bed_id ?? ''} onChange={(e) => setValues({ ...values, bed_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/beds"
+          value={values.bed_id ?? null}
+          onChange={(v) => setValues({ ...values, bed_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="admitted_at">Admitted At</Label>

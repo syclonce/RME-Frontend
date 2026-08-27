@@ -6,8 +6,8 @@ import { usePreAnesthesiaSedationAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","doctor_id","created_by","asa_classification","mallampati_class","npo_hours","comorbidities","planned_anesthesia_type","risk_notes","assessed_at","created_at"] as const
 
 export function PreAnesthesiaSedationAssessmentListPage() {
-  const { list } = usePreAnesthesiaSedationAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList } = usePreAnesthesiaSedationAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

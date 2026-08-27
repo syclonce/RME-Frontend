@@ -6,8 +6,8 @@ import { useSaleResource } from '../api'
 const COLUMNS = ["id","sale_number","patient_id","sold_by","sold_at","total_amount","status","created_at"] as const
 
 export function SaleListPage() {
-  const { list } = useSaleResource()
-  const { data, isLoading } = list()
+  const { useList } = useSaleResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

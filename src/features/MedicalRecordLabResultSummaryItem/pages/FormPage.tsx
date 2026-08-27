@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useLabResultSummaryItemResource } from '../api'
 import type { LabResultSummaryItemFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function LabResultSummaryItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah LabResultSummaryItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="summary_id">Summary *</Label>
-        <Input id="summary_id" type="number" value={values.summary_id ?? ''} onChange={(e) => setValues({ ...values, summary_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/lab-result-summaries"
+          value={values.summary_id ?? null}
+          onChange={(v) => setValues({ ...values, summary_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_test_name">Lab Test Name *</Label>

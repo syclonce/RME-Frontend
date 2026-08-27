@@ -6,8 +6,8 @@ import { useBerkasKlaimClaimCompletenessResource } from '../api'
 const COLUMNS = ["id","claim_file_id","checklist_item","is_complete","checked_by","checked_at"] as const
 
 export function BerkasKlaimClaimCompletenessListPage() {
-  const { list, remove } = useBerkasKlaimClaimCompletenessResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBerkasKlaimClaimCompletenessResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

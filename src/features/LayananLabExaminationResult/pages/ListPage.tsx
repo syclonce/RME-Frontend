@@ -6,8 +6,8 @@ import { useLabExaminationResultResource } from '../api'
 const COLUMNS = ["id","lab_order_id","parameter_name","result_value","unit","reference_range","is_abnormal","examined_at","created_at"] as const
 
 export function LabExaminationResultListPage() {
-  const { list } = useLabExaminationResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useLabExaminationResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

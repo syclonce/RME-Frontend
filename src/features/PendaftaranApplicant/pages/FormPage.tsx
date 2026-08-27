@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useApplicantResource } from '../api'
 import type { ApplicantFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function ApplicantFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useApplicantResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useApplicantResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ApplicantFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function ApplicantFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Applicant</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="registration_id">Registration *</Label>
-        <Input id="registration_id" type="number" value={values.registration_id ?? ''} onChange={(e) => setValues({ ...values, registration_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/registrations"
+          value={values.registration_id ?? null}
+          onChange={(v) => setValues({ ...values, registration_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="full_name">Full Name *</Label>

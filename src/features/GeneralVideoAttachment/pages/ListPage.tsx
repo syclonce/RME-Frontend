@@ -6,8 +6,8 @@ import { useVideoAttachmentResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","title","file_path","mime_type","duration_seconds","recorded_by","notes","is_active","created_at"] as const
 
 export function VideoAttachmentListPage() {
-  const { list, remove } = useVideoAttachmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useVideoAttachmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

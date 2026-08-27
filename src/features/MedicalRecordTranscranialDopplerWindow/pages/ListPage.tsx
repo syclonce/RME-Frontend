@@ -6,8 +6,8 @@ import { useTranscranialDopplerWindowResource } from '../api'
 const COLUMNS = ["id","transcranial_doppler_examination_id","window_site","signal_quality","depth_mm","velocity_cm_s","created_at","updated_at"] as const
 
 export function TranscranialDopplerWindowListPage() {
-  const { list, remove } = useTranscranialDopplerWindowResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTranscranialDopplerWindowResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

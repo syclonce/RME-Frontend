@@ -6,8 +6,8 @@ import { useBreastExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","side","inspection","palpation","lump_present","nipple_discharge","findings","examined_at","created_at","updated_at"] as const
 
 export function BreastExaminationListPage() {
-  const { list, remove } = useBreastExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBreastExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

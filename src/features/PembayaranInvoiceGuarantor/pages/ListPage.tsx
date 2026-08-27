@@ -6,8 +6,8 @@ import { useInvoiceGuarantorResource } from '../api'
 const COLUMNS = ["id","invoice_id","guarantor_id","sequence","room_class_id","covered_amount","coverage_percentage","verification_status","verified_by","verified_at","notes","created_at","updated_at"] as const
 
 export function InvoiceGuarantorListPage() {
-  const { list, remove } = useInvoiceGuarantorResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInvoiceGuarantorResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useRadiologyOrderItemResource } from '../api'
 import type { RadiologyOrderItemFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function RadiologyOrderItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah RadiologyOrderItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="radiology_order_id">Radiology Order *</Label>
-        <Input id="radiology_order_id" type="number" value={values.radiology_order_id ?? ''} onChange={(e) => setValues({ ...values, radiology_order_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/radiology-orders"
+          value={values.radiology_order_id ?? null}
+          onChange={(v) => setValues({ ...values, radiology_order_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="examination_name">Examination Name *</Label>

@@ -6,8 +6,8 @@ import { useBloodTransfusionObservationResource } from '../api'
 const COLUMNS = ["id","blood_transfusion_id","observed_at","temperature_c","pulse_rate","blood_pressure","reaction_signs","volume_transfused_ml","notes","created_at","updated_at"] as const
 
 export function BloodTransfusionObservationListPage() {
-  const { list, remove } = useBloodTransfusionObservationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBloodTransfusionObservationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useNurseWardAssignmentResource } from '../api'
 import type { NurseWardAssignmentFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function NurseWardAssignmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useNurseWardAssignmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useNurseWardAssignmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<NurseWardAssignmentFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function NurseWardAssignmentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} NurseWardAssignment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="nurse_id">Nurse *</Label>
-        <Input id="nurse_id" type="number" value={values.nurse_id ?? ''} onChange={(e) => setValues({ ...values, nurse_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/nurses"
+          value={values.nurse_id ?? null}
+          onChange={(v) => setValues({ ...values, nurse_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ward_id">Ward *</Label>
-        <Input id="ward_id" type="number" value={values.ward_id ?? ''} onChange={(e) => setValues({ ...values, ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.ward_id ?? null}
+          onChange={(v) => setValues({ ...values, ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="shift">Shift</Label>

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useCriticalLabValueResource } from '../api'
 import type { CriticalLabValueFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function CriticalLabValueFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useCriticalLabValueResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useCriticalLabValueResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<CriticalLabValueFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function CriticalLabValueFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} CriticalLabValue</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_order_id">Lab Order *</Label>
-        <Input id="lab_order_id" type="number" value={values.lab_order_id ?? ''} onChange={(e) => setValues({ ...values, lab_order_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/lab-orders"
+          value={values.lab_order_id ?? null}
+          onChange={(v) => setValues({ ...values, lab_order_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="parameter_name">Parameter Name *</Label>

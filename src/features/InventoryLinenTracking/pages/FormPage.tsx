@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useLinenItemResource } from '../api'
 import type { LinenItemFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function LinenItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useLinenItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useLinenItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LinenItemFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function LinenItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LinenItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="linen_item_id">Linen Item *</Label>
-        <Input id="linen_item_id" type="number" value={values.linen_item_id ?? ''} onChange={(e) => setValues({ ...values, linen_item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/linen-items"
+          value={values.linen_item_id ?? null}
+          onChange={(v) => setValues({ ...values, linen_item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="status">Status</Label>

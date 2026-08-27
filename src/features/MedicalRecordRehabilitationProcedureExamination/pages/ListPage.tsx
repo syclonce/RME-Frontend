@@ -6,8 +6,8 @@ import { useRehabilitationProcedureExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","procedure_name","therapist_id","diagnosis_summary","functional_goal","notes","examined_at","created_at","updated_at"] as const
 
 export function RehabilitationProcedureExaminationListPage() {
-  const { list, remove } = useRehabilitationProcedureExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRehabilitationProcedureExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

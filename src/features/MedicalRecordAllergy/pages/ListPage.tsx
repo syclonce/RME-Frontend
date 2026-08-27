@@ -6,8 +6,8 @@ import { useAllergyResource } from '../api'
 const COLUMNS = ["id","patient_id","category","allergen","reaction","severity","is_active","recorded_by","created_by","created_at"] as const
 
 export function AllergyListPage() {
-  const { list } = useAllergyResource()
-  const { data, isLoading } = list()
+  const { useList } = useAllergyResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

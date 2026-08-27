@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useProcedureConsentInformationResource } from '../api'
 import type { ProcedureConsentInformationFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function ProcedureConsentInformationFormPage() {
       <h1 className="text-lg font-semibold">Tambah ProcedureConsentInformation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="consent_id">Consent *</Label>
-        <Input id="consent_id" type="number" value={values.consent_id ?? ''} onChange={(e) => setValues({ ...values, consent_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/doctor-procedure-consents"
+          value={values.consent_id ?? null}
+          onChange={(v) => setValues({ ...values, consent_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="explained_by">Explained By *</Label>
-        <Input id="explained_by" type="number" value={values.explained_by ?? ''} onChange={(e) => setValues({ ...values, explained_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.explained_by ?? null}
+          onChange={(v) => setValues({ ...values, explained_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="diagnosis_explanation">Diagnosis Explanation</Label>

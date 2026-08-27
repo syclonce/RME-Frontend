@@ -6,8 +6,8 @@ import { useGeneralRadiologyRoomResource } from '../api'
 const COLUMNS = ["id","ward_id","radiology_type","is_active"] as const
 
 export function GeneralRadiologyRoomListPage() {
-  const { list, remove } = useGeneralRadiologyRoomResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGeneralRadiologyRoomResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useDischargeMedicationReconciliationItemResource } from '../api'
 const COLUMNS = ["id","reconciliation_id","drug_name","dose","frequency","route","action","reason","patient_education_given","created_at"] as const
 
 export function DischargeMedicationReconciliationItemListPage() {
-  const { list } = useDischargeMedicationReconciliationItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useDischargeMedicationReconciliationItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

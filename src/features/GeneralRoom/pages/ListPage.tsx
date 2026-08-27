@@ -6,8 +6,8 @@ import { useRoomResource } from '../api'
 const COLUMNS = ["id","ward_id","room_number","class_id","is_active"] as const
 
 export function RoomListPage() {
-  const { list, remove } = useRoomResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRoomResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

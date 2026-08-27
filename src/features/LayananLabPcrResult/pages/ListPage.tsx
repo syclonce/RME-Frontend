@@ -6,8 +6,8 @@ import { useLabPcrResultResource } from '../api'
 const COLUMNS = ["id","lab_order_id","target_gene","result","ct_value","examined_at","created_at"] as const
 
 export function LabPcrResultListPage() {
-  const { list } = useLabPcrResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useLabPcrResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

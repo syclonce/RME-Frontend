@@ -6,8 +6,8 @@ import { useMedicineDeliveryResource } from '../api'
 const COLUMNS = ["id","pharmacy_dispense_id","patient_address","courier_employee_id","status","requested_at","delivered_at","created_at"] as const
 
 export function MedicineDeliveryListPage() {
-  const { list, remove } = useMedicineDeliveryResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMedicineDeliveryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

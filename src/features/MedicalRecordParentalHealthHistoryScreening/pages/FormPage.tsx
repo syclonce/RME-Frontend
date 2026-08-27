@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useParentalHealthHistoryScreeningResource } from '../api'
 import type { ParentalHealthHistoryScreeningFormValues } from '../types'
 
@@ -23,15 +24,27 @@ export function ParentalHealthHistoryScreeningFormPage() {
       <h1 className="text-lg font-semibold">Tambah ParentalHealthHistoryScreening</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="screened_by">Screened By *</Label>
-        <Input id="screened_by" type="number" value={values.screened_by ?? ''} onChange={(e) => setValues({ ...values, screened_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.screened_by ?? null}
+          onChange={(v) => setValues({ ...values, screened_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="created_by">Created By</Label>
-        <Input id="created_by" type="number" value={values.created_by ?? ''} onChange={(e) => setValues({ ...values, created_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/users"
+          value={values.created_by ?? null}
+          onChange={(v) => setValues({ ...values, created_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="father_health_conditions">Father Health Conditions</Label>

@@ -6,8 +6,8 @@ import { usePatientResource } from '../api'
 const COLUMNS = ["id","medical_record_number","name","nickname","title_prefix","title_suffix","birth_place","birth_date","gender_id","religion_id","address","rt","rw","postal_code","village_id","education_id","occupation_id","marital_status_id","blood_type_id","nationality_id","ethnicity_id","language_id","is_unidentified","registered_by","is_active","created_at","updated_at"] as const
 
 export function PatientListPage() {
-  const { list, remove } = usePatientResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

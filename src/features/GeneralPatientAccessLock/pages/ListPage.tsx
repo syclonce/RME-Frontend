@@ -6,8 +6,8 @@ import { usePatientAccessLockResource } from '../api'
 const COLUMNS = ["id","patient_id","locked_by","reason","locked_at","unlocked_at","is_active","created_at"] as const
 
 export function PatientAccessLockListPage() {
-  const { list, remove } = usePatientAccessLockResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientAccessLockResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

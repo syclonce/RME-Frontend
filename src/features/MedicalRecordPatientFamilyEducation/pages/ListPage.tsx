@@ -6,8 +6,8 @@ import { usePatientFamilyEducationResource } from '../api'
 const COLUMNS = ["id","visit_id","topic","method","barrier","understanding_level","re_education_needed","educator_id","educated_at","created_at","updated_at"] as const
 
 export function PatientFamilyEducationListPage() {
-  const { list, remove } = usePatientFamilyEducationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientFamilyEducationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useMedicalSupplyUsageResource } from '../api'
 const COLUMNS = ["id","visit_id","recorded_by","used_at","status","created_at"] as const
 
 export function MedicalSupplyUsageListPage() {
-  const { list } = useMedicalSupplyUsageResource()
-  const { data, isLoading } = list()
+  const { useList } = useMedicalSupplyUsageResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

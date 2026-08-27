@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePharmacyServiceTimeStageResource } from '../api'
 import type { PharmacyServiceTimeStageFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function PharmacyServiceTimeStageFormPage() {
       <h1 className="text-lg font-semibold">Tambah PharmacyServiceTimeStage</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="pharmacy_service_time_id">Pharmacy Service Time *</Label>
-        <Input id="pharmacy_service_time_id" type="number" value={values.pharmacy_service_time_id ?? ''} onChange={(e) => setValues({ ...values, pharmacy_service_time_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/pharmacy-service-times"
+          value={values.pharmacy_service_time_id ?? null}
+          onChange={(v) => setValues({ ...values, pharmacy_service_time_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="stage_name">Stage Name *</Label>
@@ -34,7 +39,11 @@ export function PharmacyServiceTimeStageFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recorded_by">Recorded By</Label>
-        <Input id="recorded_by" type="number" value={values.recorded_by ?? ''} onChange={(e) => setValues({ ...values, recorded_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.recorded_by ?? null}
+          onChange={(v) => setValues({ ...values, recorded_by: v })}
+        />
       </div>
       <Button type="submit" disabled={create.isPending}>
         Simpan

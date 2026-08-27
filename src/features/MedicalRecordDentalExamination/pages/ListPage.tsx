@@ -6,8 +6,8 @@ import { useDentalExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","decayed_teeth_count","missing_teeth_count","filled_teeth_count","odontogram_json","occlusion_status","notes","examined_at","created_at","updated_at"] as const
 
 export function DentalExaminationListPage() {
-  const { list, remove } = useDentalExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDentalExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

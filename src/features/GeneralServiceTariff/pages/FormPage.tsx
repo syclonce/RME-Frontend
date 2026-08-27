@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useServiceTariffResource } from '../api'
 import type { ServiceTariffFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function ServiceTariffFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useServiceTariffResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useServiceTariffResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ServiceTariffFormValues>({})
 
   useEffect(() => {
@@ -31,11 +32,19 @@ export function ServiceTariffFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ServiceTariff</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="service_id">Service *</Label>
-        <Input id="service_id" type="number" value={values.service_id ?? ''} onChange={(e) => setValues({ ...values, service_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/services"
+          value={values.service_id ?? null}
+          onChange={(v) => setValues({ ...values, service_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="room_class_id">Room Class</Label>
-        <Input id="room_class_id" type="number" value={values.room_class_id ?? ''} onChange={(e) => setValues({ ...values, room_class_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/room-classes"
+          value={values.room_class_id ?? null}
+          onChange={(v) => setValues({ ...values, room_class_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="price">Price *</Label>

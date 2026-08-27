@@ -6,8 +6,8 @@ import { useMedicalPersonnelTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function MedicalPersonnelTypeListPage() {
-  const { list, remove } = useMedicalPersonnelTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMedicalPersonnelTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useInventoryItemPriceResource } from '../api'
 const COLUMNS = ["id","item_id","price","effective_date","is_active","created_at"] as const
 
 export function InventoryItemPriceListPage() {
-  const { list } = useInventoryItemPriceResource()
-  const { data, isLoading } = list()
+  const { useList } = useInventoryItemPriceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

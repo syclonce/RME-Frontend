@@ -11,8 +11,8 @@ export function ServiceTariffDistributionFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useServiceTariffDistributionResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useServiceTariffDistributionResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ServiceTariffDistributionFormValues>({})
 
   useEffect(() => {

@@ -6,8 +6,8 @@ import { usePatientDischargeRecordResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","discharged_at","discharge_method","discharged_by","follow_up_notes","created_at"] as const
 
 export function PatientDischargeRecordListPage() {
-  const { list } = usePatientDischargeRecordResource()
-  const { data, isLoading } = list()
+  const { useList } = usePatientDischargeRecordResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

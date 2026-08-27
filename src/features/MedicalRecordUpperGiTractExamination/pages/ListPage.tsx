@@ -6,8 +6,8 @@ import { useUpperGiTractExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","procedure_type","esophagus_findings","stomach_findings","duodenum_findings","hpylori_result","examined_at","created_at","updated_at"] as const
 
 export function UpperGiTractExaminationListPage() {
-  const { list, remove } = useUpperGiTractExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useUpperGiTractExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

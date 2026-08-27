@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useLeftoverMedicationVoucherItemResource } from '../api'
 import type { LeftoverMedicationVoucherItemFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function LeftoverMedicationVoucherItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah LeftoverMedicationVoucherItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="leftover_medication_voucher_id">Leftover Medication Voucher *</Label>
-        <Input id="leftover_medication_voucher_id" type="number" value={values.leftover_medication_voucher_id ?? ''} onChange={(e) => setValues({ ...values, leftover_medication_voucher_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/leftover-medication-vouchers"
+          value={values.leftover_medication_voucher_id ?? null}
+          onChange={(v) => setValues({ ...values, leftover_medication_voucher_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id">Item *</Label>
-        <Input id="item_id" type="number" value={values.item_id ?? ''} onChange={(e) => setValues({ ...values, item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id ?? null}
+          onChange={(v) => setValues({ ...values, item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity">Quantity *</Label>

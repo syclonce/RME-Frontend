@@ -6,8 +6,8 @@ import { useImplementationNoteResource } from '../api'
 const COLUMNS = ["id","visit_id","note_type","content","recorded_by","recorded_at","created_at","updated_at"] as const
 
 export function ImplementationNoteListPage() {
-  const { list, remove } = useImplementationNoteResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useImplementationNoteResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

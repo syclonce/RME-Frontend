@@ -6,8 +6,8 @@ import { usePharmacyReturnResource } from '../api'
 const COLUMNS = ["id","prescription_item_id","quantity_returned","reason","returned_by","returned_at","status","created_at","updated_at"] as const
 
 export function PharmacyReturnListPage() {
-  const { list, remove } = usePharmacyReturnResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePharmacyReturnResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

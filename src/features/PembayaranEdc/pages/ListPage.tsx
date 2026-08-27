@@ -6,8 +6,8 @@ import { useEdcResource } from '../api'
 const COLUMNS = ["id","payment_id","edc_reference_number","bank_name","card_type","card_last_four","approval_code","amount","transaction_at","status","created_at","updated_at"] as const
 
 export function EdcListPage() {
-  const { list } = useEdcResource()
-  const { data, isLoading } = list()
+  const { useList } = useEdcResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

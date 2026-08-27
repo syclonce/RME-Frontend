@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBerkasKlaimClaimFileResource } from '../api'
 import type { BerkasKlaimClaimFileFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function BerkasKlaimClaimFileFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBerkasKlaimClaimFileResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBerkasKlaimClaimFileResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BerkasKlaimClaimFileFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function BerkasKlaimClaimFileFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BerkasKlaimClaimFile</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice</Label>
-        <Input id="invoice_id" type="number" value={values.invoice_id ?? ''} onChange={(e) => setValues({ ...values, invoice_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/invoices"
+          value={values.invoice_id ?? null}
+          onChange={(v) => setValues({ ...values, invoice_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="status">Status</Label>

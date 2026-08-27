@@ -6,8 +6,8 @@ import { useGuarantorWardAccessResource } from '../api'
 const COLUMNS = ["id","guarantor_id","ward_id","is_allowed","notes","created_at"] as const
 
 export function GuarantorWardAccessListPage() {
-  const { list, remove } = useGuarantorWardAccessResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGuarantorWardAccessResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

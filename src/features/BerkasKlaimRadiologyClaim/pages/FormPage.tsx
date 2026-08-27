@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useRadiologyClaimResource } from '../api'
 import type { RadiologyClaimFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function RadiologyClaimFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useRadiologyClaimResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useRadiologyClaimResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<RadiologyClaimFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function RadiologyClaimFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} RadiologyClaim</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="claim_file_id">Claim File *</Label>
-        <Input id="claim_file_id" type="number" value={values.claim_file_id ?? ''} onChange={(e) => setValues({ ...values, claim_file_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/claim-files"
+          value={values.claim_file_id ?? null}
+          onChange={(v) => setValues({ ...values, claim_file_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="order_id">Order</Label>
-        <Input id="order_id" type="number" value={values.order_id ?? ''} onChange={(e) => setValues({ ...values, order_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/lab-orders"
+          value={values.order_id ?? null}
+          onChange={(v) => setValues({ ...values, order_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="submitted_at">Submitted At</Label>

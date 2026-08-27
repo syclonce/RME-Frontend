@@ -6,8 +6,8 @@ import { useDoctorProcedureConsentResource } from '../api'
 const COLUMNS = ["id","visit_id","doctor_id","created_by","procedure_name","indication","consent_decision","signed_at","created_at"] as const
 
 export function DoctorProcedureConsentListPage() {
-  const { list } = useDoctorProcedureConsentResource()
-  const { data, isLoading } = list()
+  const { useList } = useDoctorProcedureConsentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { usePackageTariffDistributionItemResource } from '../api'
 const COLUMNS = ["id","package_tariff_distribution_id","recipient_type","recipient_id","percentage","amount","notes","created_at","updated_at"] as const
 
 export function PackageTariffDistributionItemListPage() {
-  const { list, remove } = usePackageTariffDistributionItemResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePackageTariffDistributionItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

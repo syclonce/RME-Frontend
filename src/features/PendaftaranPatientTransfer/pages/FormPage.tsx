@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientTransferResource } from '../api'
 import type { PatientTransferFormValues } from '../types'
 
@@ -22,15 +23,27 @@ export function PatientTransferFormPage() {
       <h1 className="text-lg font-semibold">Tambah PatientTransfer</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="from_ward_id">From Ward *</Label>
-        <Input id="from_ward_id" type="number" value={values.from_ward_id ?? ''} onChange={(e) => setValues({ ...values, from_ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.from_ward_id ?? null}
+          onChange={(v) => setValues({ ...values, from_ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="to_ward_id">To Ward *</Label>
-        <Input id="to_ward_id" type="number" value={values.to_ward_id ?? ''} onChange={(e) => setValues({ ...values, to_ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.to_ward_id ?? null}
+          onChange={(v) => setValues({ ...values, to_ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="transferred_at">Transferred At</Label>

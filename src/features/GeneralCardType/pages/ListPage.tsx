@@ -6,8 +6,8 @@ import { useCardTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function CardTypeListPage() {
-  const { list, remove } = useCardTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useCardTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

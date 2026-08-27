@@ -6,8 +6,8 @@ import { usePharmacyOutpatientQueueResource } from '../api'
 const COLUMNS = ["id","prescription_id","queue_number","status","called_at","completed_at","created_at"] as const
 
 export function PharmacyOutpatientQueueListPage() {
-  const { list } = usePharmacyOutpatientQueueResource()
-  const { data, isLoading } = list()
+  const { useList } = usePharmacyOutpatientQueueResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

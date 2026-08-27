@@ -6,8 +6,8 @@ import { usePhysicalExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","general_condition","consciousness_gcs","head_to_toe_notes","examined_by","examined_at","created_at","updated_at"] as const
 
 export function PhysicalExaminationListPage() {
-  const { list, remove } = usePhysicalExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePhysicalExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

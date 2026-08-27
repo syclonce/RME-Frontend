@@ -6,8 +6,8 @@ import { useAbciProcedureResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","doctor_id","procedure_date","indication","procedure_details","outcome","notes","created_by","created_at","updated_at"] as const
 
 export function AbciProcedureListPage() {
-  const { list, remove } = useAbciProcedureResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAbciProcedureResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

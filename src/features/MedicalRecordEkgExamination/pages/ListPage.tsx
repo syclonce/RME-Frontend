@@ -6,8 +6,8 @@ import { useEkgExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","heart_rate_bpm","rhythm","p_wave","pr_interval_ms","qrs_duration_ms","st_segment","t_wave","conclusion","examined_at","created_at","updated_at"] as const
 
 export function EkgExaminationListPage() {
-  const { list, remove } = useEkgExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEkgExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

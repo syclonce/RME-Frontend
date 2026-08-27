@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useMedicalProcedureResource } from '../api'
 import type { MedicalProcedureFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function MedicalProcedureFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useMedicalProcedureResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useMedicalProcedureResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MedicalProcedureFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function MedicalProcedureFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} MedicalProcedure</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="service_id">Service *</Label>
-        <Input id="service_id" type="number" value={values.service_id ?? ''} onChange={(e) => setValues({ ...values, service_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/services"
+          value={values.service_id ?? null}
+          onChange={(v) => setValues({ ...values, service_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_at">Performed At</Label>
@@ -42,7 +51,11 @@ export function MedicalProcedureFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_by">Performed By *</Label>
-        <Input id="performed_by" type="number" value={values.performed_by ?? ''} onChange={(e) => setValues({ ...values, performed_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.performed_by ?? null}
+          onChange={(v) => setValues({ ...values, performed_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="notes">Notes</Label>

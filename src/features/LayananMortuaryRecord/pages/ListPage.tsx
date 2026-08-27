@@ -6,8 +6,8 @@ import { useMortuaryRecordResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","admitted_at","released_at","cause_of_death_notes","released_to_name","released_to_relationship","released_by","status","created_at"] as const
 
 export function MortuaryRecordListPage() {
-  const { list, remove } = useMortuaryRecordResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMortuaryRecordResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

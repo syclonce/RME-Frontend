@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientGuardianIdentityCardResource } from '../api'
 import type { PatientGuardianIdentityCardFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PatientGuardianIdentityCardFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePatientGuardianIdentityCardResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePatientGuardianIdentityCardResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PatientGuardianIdentityCardFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function PatientGuardianIdentityCardFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientGuardianIdentityCard</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_guardian_id">Patient Guardian *</Label>
-        <Input id="patient_guardian_id" type="number" value={values.patient_guardian_id ?? ''} onChange={(e) => setValues({ ...values, patient_guardian_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patient-guardians"
+          value={values.patient_guardian_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_guardian_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="card_type">Card Type *</Label>

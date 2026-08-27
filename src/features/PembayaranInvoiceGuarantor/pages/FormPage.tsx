@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInvoiceGuarantorResource } from '../api'
 import type { InvoiceGuarantorFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function InvoiceGuarantorFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInvoiceGuarantorResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInvoiceGuarantorResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InvoiceGuarantorFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function InvoiceGuarantorFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} InvoiceGuarantor</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <Input id="invoice_id" type="number" value={values.invoice_id ?? ''} onChange={(e) => setValues({ ...values, invoice_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/invoices"
+          value={values.invoice_id ?? null}
+          onChange={(v) => setValues({ ...values, invoice_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="guarantor_id">Guarantor *</Label>
-        <Input id="guarantor_id" type="number" value={values.guarantor_id ?? ''} onChange={(e) => setValues({ ...values, guarantor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/guarantors"
+          value={values.guarantor_id ?? null}
+          onChange={(v) => setValues({ ...values, guarantor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="covered_amount">Covered Amount</Label>

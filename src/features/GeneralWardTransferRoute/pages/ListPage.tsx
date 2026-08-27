@@ -6,8 +6,8 @@ import { useWardTransferRouteResource } from '../api'
 const COLUMNS = ["id","from_ward_id","to_ward_id","requires_approval","is_active","created_at"] as const
 
 export function WardTransferRouteListPage() {
-  const { list, remove } = useWardTransferRouteResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useWardTransferRouteResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

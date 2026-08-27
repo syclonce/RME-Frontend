@@ -6,8 +6,8 @@ import { useDrugInteractionRuleResource } from '../api'
 const COLUMNS = ["id","item_id_a","item_id_b","severity","clinical_note"] as const
 
 export function DrugInteractionRuleListPage() {
-  const { list, remove } = useDrugInteractionRuleResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDrugInteractionRuleResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

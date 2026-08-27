@@ -6,8 +6,8 @@ import { useGynecologyUltrasoundResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","doctor_id","exam_date","uterus_findings","right_ovary_findings","left_ovary_findings","endometrial_thickness_mm","conclusion","created_by","created_at","updated_at"] as const
 
 export function GynecologyUltrasoundListPage() {
-  const { list, remove } = useGynecologyUltrasoundResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGynecologyUltrasoundResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

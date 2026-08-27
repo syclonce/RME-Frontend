@@ -11,8 +11,8 @@ export function Icd10CauseOfDeathCodeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useIcd10CauseOfDeathCodeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useIcd10CauseOfDeathCodeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<Icd10CauseOfDeathCodeFormValues>({})
 
   useEffect(() => {

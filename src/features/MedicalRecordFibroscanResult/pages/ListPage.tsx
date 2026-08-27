@@ -6,8 +6,8 @@ import { useFibroscanResultResource } from '../api'
 const COLUMNS = ["id","visit_id","examination_date","liver_stiffness_kpa","cap_score","fibrosis_stage","examined_by","notes","created_at","updated_at"] as const
 
 export function FibroscanResultListPage() {
-  const { list, remove } = useFibroscanResultResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFibroscanResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

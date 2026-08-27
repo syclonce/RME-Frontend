@@ -6,8 +6,8 @@ import { usePathologyMolecularResultResource } from '../api'
 const COLUMNS = ["id","pathology_anatomy_result_id","test_name","result","examined_at","created_at"] as const
 
 export function PathologyMolecularResultListPage() {
-  const { list } = usePathologyMolecularResultResource()
-  const { data, isLoading } = list()
+  const { useList } = usePathologyMolecularResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

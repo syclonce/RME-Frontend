@@ -6,8 +6,8 @@ import { useInventoryStockRequestItemResource } from '../api'
 const COLUMNS = ["id","stock_request_id","item_id","quantity","created_at"] as const
 
 export function InventoryStockRequestItemListPage() {
-  const { list } = useInventoryStockRequestItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useInventoryStockRequestItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useFamilyMedicalHistoryResource } from '../api'
 const COLUMNS = ["id","visit_id","created_by","relation","condition","diagnosed_age","notes","created_at"] as const
 
 export function FamilyMedicalHistoryListPage() {
-  const { list } = useFamilyMedicalHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = useFamilyMedicalHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

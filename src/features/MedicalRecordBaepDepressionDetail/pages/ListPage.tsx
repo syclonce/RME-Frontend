@@ -6,8 +6,8 @@ import { useBaepDepressionDetailResource } from '../api'
 const COLUMNS = ["id","baep_protocol_id","scale_used","score","severity_level","symptoms_observed","created_at"] as const
 
 export function BaepDepressionDetailListPage() {
-  const { list } = useBaepDepressionDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepDepressionDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

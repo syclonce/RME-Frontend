@@ -6,8 +6,8 @@ import { useQualityIndicatorResource } from '../api'
 const COLUMNS = ["id","indicator_id","period_month","period_year","numerator","denominator","recorded_by"] as const
 
 export function QualityIndicatorListPage() {
-  const { list, remove } = useQualityIndicatorResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useQualityIndicatorResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

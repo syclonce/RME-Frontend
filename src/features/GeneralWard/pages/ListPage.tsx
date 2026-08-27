@@ -6,8 +6,8 @@ import { useWardResource } from '../api'
 const COLUMNS = ["id","name","type_id","visit_type_id","allows_request","is_active"] as const
 
 export function WardListPage() {
-  const { list, remove } = useWardResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useWardResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

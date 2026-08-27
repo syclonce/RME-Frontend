@@ -6,8 +6,8 @@ import { useInterventionProtocolDetailResource } from '../api'
 const COLUMNS = ["id","protocol_id","performed_by","step_number","step_description","result_notes","performed_at","created_at"] as const
 
 export function InterventionProtocolDetailListPage() {
-  const { list } = useInterventionProtocolDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useInterventionProtocolDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

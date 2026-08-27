@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBaepDysphagiaDetailResource } from '../api'
 import type { BaepDysphagiaDetailFormValues } from '../types'
 
@@ -23,7 +24,11 @@ export function BaepDysphagiaDetailFormPage() {
       <h1 className="text-lg font-semibold">Tambah BaepDysphagiaDetail</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="baep_protocol_id">Baep Protocol *</Label>
-        <Input id="baep_protocol_id" type="number" value={values.baep_protocol_id ?? ''} onChange={(e) => setValues({ ...values, baep_protocol_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/baep-intervention-protocols"
+          value={values.baep_protocol_id ?? null}
+          onChange={(v) => setValues({ ...values, baep_protocol_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="swallowing_test_used">Swallowing Test Used</Label>

@@ -6,8 +6,8 @@ import { useStaffMemberResource } from '../api'
 const COLUMNS = ["id","employee_id","staff_role","is_active","created_at","updated_at"] as const
 
 export function StaffMemberListPage() {
-  const { list, remove } = useStaffMemberResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useStaffMemberResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

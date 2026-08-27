@@ -6,8 +6,8 @@ import { useMedicalCheckupResultResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","checkup_date","category","summary","recommendation","examined_by","status","created_at","updated_at"] as const
 
 export function MedicalCheckupResultListPage() {
-  const { list, remove } = useMedicalCheckupResultResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useMedicalCheckupResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

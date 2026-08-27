@@ -6,8 +6,8 @@ import { usePatientPickupStatusResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function PatientPickupStatusListPage() {
-  const { list, remove } = usePatientPickupStatusResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientPickupStatusResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

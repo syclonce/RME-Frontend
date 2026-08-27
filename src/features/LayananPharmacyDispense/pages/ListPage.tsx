@@ -6,8 +6,8 @@ import { usePharmacyDispenseResource } from '../api'
 const COLUMNS = ["id","prescription_id","dispensed_by","dispensed_at","quantity","status","created_at"] as const
 
 export function PharmacyDispenseListPage() {
-  const { list } = usePharmacyDispenseResource()
-  const { data, isLoading } = list()
+  const { useList } = usePharmacyDispenseResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

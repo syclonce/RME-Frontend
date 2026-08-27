@@ -6,8 +6,8 @@ import { useDocumentUploadResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","document_name","document_type","file_path","file_size_bytes","uploaded_at","notes","created_by","created_at","updated_at"] as const
 
 export function DocumentUploadListPage() {
-  const { list, remove } = useDocumentUploadResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDocumentUploadResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

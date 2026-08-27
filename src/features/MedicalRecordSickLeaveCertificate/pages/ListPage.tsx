@@ -6,8 +6,8 @@ import { useSickLeaveCertificateResource } from '../api'
 const COLUMNS = ["id","letter_number","patient_id","visit_id","doctor_id","issue_date","start_date","end_date","duration_days","diagnosis","remarks","created_by","created_at","updated_at"] as const
 
 export function SickLeaveCertificateListPage() {
-  const { list, remove } = useSickLeaveCertificateResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useSickLeaveCertificateResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

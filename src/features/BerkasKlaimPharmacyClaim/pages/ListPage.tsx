@@ -6,8 +6,8 @@ import { usePharmacyClaimResource } from '../api'
 const COLUMNS = ["id","claim_file_id","prescription_id","submitted_at","status","created_at"] as const
 
 export function PharmacyClaimListPage() {
-  const { list } = usePharmacyClaimResource()
-  const { data, isLoading } = list()
+  const { useList } = usePharmacyClaimResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

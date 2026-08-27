@@ -6,8 +6,8 @@ import { useCaseManagerAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","case_manager_id","screening_criteria","risk_level","care_plan","follow_up_needed","assessed_at","created_at","updated_at"] as const
 
 export function CaseManagerAssessmentListPage() {
-  const { list, remove } = useCaseManagerAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useCaseManagerAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

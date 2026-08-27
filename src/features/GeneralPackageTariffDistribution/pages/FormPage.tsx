@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePackageTariffDistributionResource } from '../api'
 import type { PackageTariffDistributionFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function PackageTariffDistributionFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePackageTariffDistributionResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePackageTariffDistributionResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PackageTariffDistributionFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function PackageTariffDistributionFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PackageTariffDistribution</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="package_id">Package *</Label>
-        <Input id="package_id" type="number" value={values.package_id ?? ''} onChange={(e) => setValues({ ...values, package_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/packages"
+          value={values.package_id ?? null}
+          onChange={(v) => setValues({ ...values, package_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="component_name">Component Name *</Label>

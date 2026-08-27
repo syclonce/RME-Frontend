@@ -6,8 +6,8 @@ import { useNurseResource } from '../api'
 const COLUMNS = ["id","employee_id","nurse_license_number","is_active","created_at","updated_at"] as const
 
 export function NurseListPage() {
-  const { list, remove } = useNurseResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useNurseResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

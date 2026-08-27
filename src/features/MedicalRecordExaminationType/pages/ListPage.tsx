@@ -6,8 +6,8 @@ import { useExaminationTypeResource } from '../api'
 const COLUMNS = ["id","name","category","description","is_active","created_at","updated_at"] as const
 
 export function ExaminationTypeListPage() {
-  const { list, remove } = useExaminationTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useExaminationTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

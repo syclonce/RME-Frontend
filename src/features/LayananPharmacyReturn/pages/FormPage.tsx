@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePharmacyReturnResource } from '../api'
 import type { PharmacyReturnFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PharmacyReturnFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePharmacyReturnResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePharmacyReturnResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PharmacyReturnFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function PharmacyReturnFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PharmacyReturn</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_item_id">Prescription Item *</Label>
-        <Input id="prescription_item_id" type="number" value={values.prescription_item_id ?? ''} onChange={(e) => setValues({ ...values, prescription_item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/prescription-items"
+          value={values.prescription_item_id ?? null}
+          onChange={(v) => setValues({ ...values, prescription_item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity_returned">Quantity Returned *</Label>
@@ -42,7 +47,11 @@ export function PharmacyReturnFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="returned_by">Returned By *</Label>
-        <Input id="returned_by" type="number" value={values.returned_by ?? ''} onChange={(e) => setValues({ ...values, returned_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.returned_by ?? null}
+          onChange={(v) => setValues({ ...values, returned_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="returned_at">Returned At *</Label>

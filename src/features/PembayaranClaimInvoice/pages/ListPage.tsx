@@ -6,8 +6,8 @@ import { useClaimInvoiceResource } from '../api'
 const COLUMNS = ["id","claim_number","invoice_id","guarantor_id","claim_amount","verified_amount","submitted_at","status","rejection_reason","created_at","updated_at"] as const
 
 export function ClaimInvoiceListPage() {
-  const { list, remove } = useClaimInvoiceResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useClaimInvoiceResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

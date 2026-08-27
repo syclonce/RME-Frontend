@@ -6,8 +6,8 @@ import { useInventoryPharmacyPackageResource } from '../api'
 const COLUMNS = ["id","package_code","name","pharmacy_service_room_id","category","price","description","is_active","created_at","updated_at"] as const
 
 export function InventoryPharmacyPackageListPage() {
-  const { list, remove } = useInventoryPharmacyPackageResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInventoryPharmacyPackageResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

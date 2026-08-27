@@ -6,8 +6,8 @@ import { useVisitStatusResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function VisitStatusListPage() {
-  const { list, remove } = useVisitStatusResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useVisitStatusResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

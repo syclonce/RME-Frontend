@@ -6,8 +6,8 @@ import { useQuantityRestrictionResource } from '../api'
 const COLUMNS = ["id","drug_name","max_quantity_per_prescription","unit","notes","is_active","created_at"] as const
 
 export function QuantityRestrictionListPage() {
-  const { list, remove } = useQuantityRestrictionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useQuantityRestrictionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

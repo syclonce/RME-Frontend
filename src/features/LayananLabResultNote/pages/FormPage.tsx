@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useLabResultNoteResource } from '../api'
 import type { LabResultNoteFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function LabResultNoteFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useLabResultNoteResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useLabResultNoteResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LabResultNoteFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function LabResultNoteFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LabResultNote</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_result_id">Lab Result *</Label>
-        <Input id="lab_result_id" type="number" value={values.lab_result_id ?? ''} onChange={(e) => setValues({ ...values, lab_result_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/lab-results"
+          value={values.lab_result_id ?? null}
+          onChange={(v) => setValues({ ...values, lab_result_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="note">Note *</Label>
@@ -38,7 +43,11 @@ export function LabResultNoteFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="created_by">Created By</Label>
-        <Input id="created_by" type="number" value={values.created_by ?? ''} onChange={(e) => setValues({ ...values, created_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/users"
+          value={values.created_by ?? null}
+          onChange={(v) => setValues({ ...values, created_by: v })}
+        />
       </div>
       <Button type="submit" disabled={create.isPending || update.isPending}>
         Simpan

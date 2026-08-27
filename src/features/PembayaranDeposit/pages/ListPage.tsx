@@ -6,8 +6,8 @@ import { useDepositResource } from '../api'
 const COLUMNS = ["id","deposit_number","visit_id","amount","paid_at","received_by","notes","status","created_at"] as const
 
 export function DepositListPage() {
-  const { list } = useDepositResource()
-  const { data, isLoading } = list()
+  const { useList } = useDepositResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

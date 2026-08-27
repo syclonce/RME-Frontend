@@ -66,7 +66,8 @@
           "uri": "settings/{key}"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "AuditActivityLog",
@@ -97,7 +98,8 @@
           "uri": "activity-logs"
         }
       ]
-    }
+    },
+    "tableName": "activity_logs"
   },
   {
     "module": "AuditIncidentReport",
@@ -325,7 +327,8 @@
           "uri": "incident-reports/{incident_report}/close"
         }
       ]
-    }
+    },
+    "tableName": "incident_reports"
   },
   {
     "module": "AuditInfectionSurveillance",
@@ -511,7 +514,8 @@
           "uri": "infection-surveillance/rate"
         }
       ]
-    }
+    },
+    "tableName": "device_days"
   },
   {
     "module": "AuditQualityIndicator",
@@ -769,7 +773,8 @@
           "uri": "quality-indicators/{quality_indicator}/trend"
         }
       ]
-    }
+    },
+    "tableName": "quality_indicators"
   },
   {
     "module": "AuditRequestLog",
@@ -800,7 +805,8 @@
           "uri": "request-logs"
         }
       ]
-    }
+    },
+    "tableName": "request_logs"
   },
   {
     "module": "Auth",
@@ -981,7 +987,8 @@
           "uri": "me"
         }
       ]
-    }
+    },
+    "tableName": "users"
   },
   {
     "module": "Authorization",
@@ -1091,7 +1098,8 @@
           "uri": "users/{user}/roles"
         }
       ]
-    }
+    },
+    "tableName": "route_permissions"
   },
   {
     "module": "BerkasKlaimClaimCompleteness",
@@ -1204,7 +1212,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "claim_completeness"
   },
   {
     "module": "BerkasKlaimClaimCompletenessComment",
@@ -1299,7 +1308,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "claim_completeness_comments"
   },
   {
     "module": "BerkasKlaimClaimFile",
@@ -1391,7 +1401,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "claim_files"
   },
   {
     "module": "BerkasKlaimClinicalLabClaim",
@@ -1471,7 +1482,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "clinical_lab_claims"
   },
   {
     "module": "BerkasKlaimClinicalLabClaimItem",
@@ -1536,7 +1548,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "clinical_lab_claim_items"
   },
   {
     "module": "BerkasKlaimPathologyClaim",
@@ -1616,7 +1629,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pathology_claims"
   },
   {
     "module": "BerkasKlaimPathologyClaimItem",
@@ -1681,7 +1695,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pathology_claim_items"
   },
   {
     "module": "BerkasKlaimPharmacyClaim",
@@ -1761,7 +1776,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_claims"
   },
   {
     "module": "BerkasKlaimPharmacyClaimItem",
@@ -1846,7 +1862,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_claim_items"
   },
   {
     "module": "BerkasKlaimRadiologyClaim",
@@ -1926,7 +1943,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_claims"
   },
   {
     "module": "BerkasKlaimRadiologyClaimItem",
@@ -1991,7 +2009,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_claim_items"
   },
   {
     "module": "BerkasKlaimSupportingDocument",
@@ -2086,7 +2105,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "supporting_documents"
   },
   {
     "module": "Bpjs",
@@ -2099,7 +2119,8 @@
     "route": {
       "apiResources": [],
       "verbs": []
-    }
+    },
+    "tableName": null
   },
   {
     "module": "BpjsAntreanFktp",
@@ -2770,7 +2791,8 @@
           "uri": "jadwal-operasi/{norm}"
         }
       ]
-    }
+    },
+    "tableName": "antrean_fktp_antreans"
   },
   {
     "module": "BpjsAntreanRs",
@@ -3441,7 +3463,8 @@
           "uri": "jadwal-operasi/{norm}"
         }
       ]
-    }
+    },
+    "tableName": "antrean_rs_antreans"
   },
   {
     "module": "BpjsAplicares",
@@ -3505,7 +3528,8 @@
           "uri": "rooms/{aplicares_room_sync}/beds"
         }
       ]
-    }
+    },
+    "tableName": "aplicares_room_syncs"
   },
   {
     "module": "BpjsApotek",
@@ -3824,7 +3848,8 @@
           "uri": "prb"
         }
       ]
-    }
+    },
+    "tableName": "apotek_reseps"
   },
   {
     "module": "BpjsICare",
@@ -3842,7 +3867,8 @@
           "uri": "riwayat-pelayanan/validate"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "BpjsPCare",
@@ -4788,7 +4814,8 @@
           "uri": "pendaftarans/provider"
         }
       ]
-    }
+    },
+    "tableName": "pendaftarans"
   },
   {
     "module": "BpjsRekamMedis",
@@ -4953,7 +4980,8 @@
           "uri": "klaims/{klaim}"
         }
       ]
-    }
+    },
+    "tableName": "klaims"
   },
   {
     "module": "BpjsSmartClaim",
@@ -4966,7 +4994,8 @@
     "route": {
       "apiResources": [],
       "verbs": []
-    }
+    },
+    "tableName": "smart_claim_id_mappings"
   },
   {
     "module": "BpjsVClaim",
@@ -5883,7 +5912,8 @@
           "uri": "monitoring/kunjungan"
         }
       ]
-    }
+    },
+    "tableName": "seps"
   },
   {
     "module": "CetakanPrintDocument",
@@ -5909,7 +5939,8 @@
           "uri": "print-documents/issue"
         }
       ]
-    }
+    },
+    "tableName": "print_documents"
   },
   {
     "module": "DashboardCore",
@@ -5927,7 +5958,8 @@
           "uri": "dashboard/core"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "EKlaim",
@@ -5974,7 +6006,8 @@
           "uri": "calls"
         }
       ]
-    }
+    },
+    "tableName": "eklaim_calls"
   },
   {
     "module": "FinanceGeneralLedger",
@@ -6024,7 +6057,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "accounts"
   },
   {
     "module": "GeneralAbsenceType",
@@ -6102,7 +6136,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "absence_types"
   },
   {
     "module": "GeneralAccidentGuarantorType",
@@ -6185,7 +6220,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "accident_guarantor_types"
   },
   {
     "module": "GeneralAccommodationCalculationRule",
@@ -6268,7 +6304,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "accommodation_calculation_rules"
   },
   {
     "module": "GeneralActiveIngredient",
@@ -6351,7 +6388,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "active_ingredients"
   },
   {
     "module": "GeneralAdministration",
@@ -6434,7 +6472,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "administrations"
   },
   {
     "module": "GeneralAdministrationTariff",
@@ -6553,7 +6592,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "administration_tariffs"
   },
   {
     "module": "GeneralAdmissionDiagnosis",
@@ -6673,7 +6713,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "admission_diagnoses"
   },
   {
     "module": "GeneralAgeGroup",
@@ -6756,7 +6797,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "age_groups"
   },
   {
     "module": "GeneralAmbulanceFleet",
@@ -6992,7 +7034,8 @@
           "uri": "ambulance-trips/{trip}/complete"
         }
       ]
-    }
+    },
+    "tableName": "ambulances"
   },
   {
     "module": "GeneralAnatomyTemplate",
@@ -7093,7 +7136,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "anatomy_templates"
   },
   {
     "module": "GeneralAnesthesiaType",
@@ -7176,7 +7220,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "anesthesia_types"
   },
   {
     "module": "GeneralAntibioticBacteriaMapping",
@@ -7277,7 +7322,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antibiotic_bacteria_mappings"
   },
   {
     "module": "GeneralAntibioticRestriction",
@@ -7397,7 +7443,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antibiotic_restrictions"
   },
   {
     "module": "GeneralAudioAttachment",
@@ -7620,7 +7667,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "audio_attachments"
   },
   {
     "module": "GeneralBank",
@@ -7703,7 +7751,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "banks"
   },
   {
     "module": "GeneralBankAccount",
@@ -7822,7 +7871,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "bank_accounts"
   },
   {
     "module": "GeneralBed",
@@ -7903,7 +7953,8 @@
           "uri": "beds/{bed}/release-reservation"
         }
       ]
-    }
+    },
+    "tableName": "beds"
   },
   {
     "module": "GeneralBedStatus",
@@ -7986,7 +8037,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "bed_statuses"
   },
   {
     "module": "GeneralBirthplace",
@@ -8077,7 +8129,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "birthplaces"
   },
   {
     "module": "GeneralBridgeType",
@@ -8160,7 +8213,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "bridge_types"
   },
   {
     "module": "GeneralCardType",
@@ -8243,7 +8297,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "card_types"
   },
   {
     "module": "GeneralConsultationRoom",
@@ -8332,7 +8387,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "consultation_rooms"
   },
   {
     "module": "GeneralContactType",
@@ -8415,7 +8471,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "contact_types"
   },
   {
     "module": "GeneralCountry",
@@ -8498,7 +8555,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "countries"
   },
   {
     "module": "GeneralDepositType",
@@ -8581,7 +8639,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "deposit_types"
   },
   {
     "module": "GeneralDiagnosisCode",
@@ -8664,7 +8723,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "diagnosis_codes"
   },
   {
     "module": "GeneralDiagnosisRestriction",
@@ -8778,7 +8838,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "diagnosis_restrictions"
   },
   {
     "module": "GeneralDischargeCondition",
@@ -8861,7 +8922,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discharge_conditions"
   },
   {
     "module": "GeneralDiscountType",
@@ -8944,7 +9006,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discount_types"
   },
   {
     "module": "GeneralDoctor",
@@ -9061,7 +9124,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "doctors"
   },
   {
     "module": "GeneralDoctorMedicalDepartment",
@@ -9165,7 +9229,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "doctor_medical_departments"
   },
   {
     "module": "GeneralDoctorWardAssignment",
@@ -9288,7 +9353,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "doctor_ward_assignments"
   },
   {
     "module": "GeneralDosageInstruction",
@@ -9371,7 +9437,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "dosage_instructions"
   },
   {
     "module": "GeneralDurationRestriction",
@@ -9510,7 +9577,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "duration_restrictions"
   },
   {
     "module": "GeneralEducation",
@@ -9593,7 +9661,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "educations"
   },
   {
     "module": "GeneralEmployee",
@@ -10001,7 +10070,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "employees"
   },
   {
     "module": "GeneralEmployeePhoto",
@@ -10078,7 +10148,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "employee_photos"
   },
   {
     "module": "GeneralEmployeeStatus",
@@ -10161,7 +10232,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "employee_statuses"
   },
   {
     "module": "GeneralEmploymentStatus",
@@ -10244,7 +10316,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "employment_statuses"
   },
   {
     "module": "GeneralEthnicity",
@@ -10327,7 +10400,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ethnicities"
   },
   {
     "module": "GeneralExaminationGroup",
@@ -10410,7 +10484,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "examination_groups"
   },
   {
     "module": "GeneralExaminationGroupMapping",
@@ -10514,7 +10589,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "examination_group_mappings"
   },
   {
     "module": "GeneralFacilityMaintenance",
@@ -10753,7 +10829,8 @@
           "uri": "work-orders/{wo}/complete"
         }
       ]
-    }
+    },
+    "tableName": "maintenance_assets"
   },
   {
     "module": "GeneralFacilityOwnershipType",
@@ -10836,7 +10913,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "facility_ownership_types"
   },
   {
     "module": "GeneralFamilyRelationship",
@@ -10919,7 +10997,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "family_relationships"
   },
   {
     "module": "GeneralFlow",
@@ -11002,7 +11081,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "flows"
   },
   {
     "module": "GeneralFormularyRestriction",
@@ -11141,7 +11221,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "formulary_restrictions"
   },
   {
     "module": "GeneralGender",
@@ -11224,7 +11305,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "genders"
   },
   {
     "module": "GeneralGoodsReceiptCancellationReason",
@@ -11307,7 +11389,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "goods_receipt_cancellation_reasons"
   },
   {
     "module": "GeneralGoodsReceiptType",
@@ -11390,7 +11473,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "goods_receipt_types"
   },
   {
     "module": "GeneralGuarantorItemCategoryMapping",
@@ -11507,7 +11591,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "guarantor_item_category_mappings"
   },
   {
     "module": "GeneralGuarantorParticipantType",
@@ -11626,7 +11711,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "guarantor_participant_types"
   },
   {
     "module": "GeneralGuarantorSubspecialty",
@@ -11730,7 +11816,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "guarantor_subspecialties"
   },
   {
     "module": "GeneralGuarantorWardAccess",
@@ -11828,7 +11915,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "guarantor_ward_accesses"
   },
   {
     "module": "GeneralHealthProviderType",
@@ -11911,7 +11999,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "health_provider_types"
   },
   {
     "module": "GeneralHealthcareServiceType",
@@ -11994,7 +12083,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "healthcare_service_types"
   },
   {
     "module": "GeneralIcdOMorphology",
@@ -12077,7 +12167,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "icd_o_morphologies"
   },
   {
     "module": "GeneralIcdOTopography",
@@ -12160,7 +12251,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "icd_o_topographies"
   },
   {
     "module": "GeneralIcdSnomedCtMapping",
@@ -12279,7 +12371,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "icd_snomed_ct_mappings"
   },
   {
     "module": "GeneralIcdType",
@@ -12362,7 +12455,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "icd_types"
   },
   {
     "module": "GeneralIdentityCardType",
@@ -12445,7 +12539,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "identity_card_types"
   },
   {
     "module": "GeneralInpatientType",
@@ -12528,7 +12623,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "inpatient_types"
   },
   {
     "module": "GeneralInstitution",
@@ -12611,7 +12707,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "institutions"
   },
   {
     "module": "GeneralInsuranceCardType",
@@ -12694,7 +12791,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "insurance_card_types"
   },
   {
     "module": "GeneralInvoiceType",
@@ -12777,7 +12875,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "invoice_types"
   },
   {
     "module": "GeneralKap",
@@ -12860,7 +12959,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "kaps"
   },
   {
     "module": "GeneralKip",
@@ -13033,7 +13133,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "kips"
   },
   {
     "module": "GeneralLabGroup",
@@ -13116,7 +13217,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_groups"
   },
   {
     "module": "GeneralLabReferenceValue",
@@ -13321,7 +13423,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_reference_values"
   },
   {
     "module": "GeneralLabServiceGroup",
@@ -13404,7 +13507,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_service_groups"
   },
   {
     "module": "GeneralLabServiceParameter",
@@ -13529,7 +13633,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_service_parameters"
   },
   {
     "module": "GeneralLaboratoryRoom",
@@ -13618,7 +13723,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "laboratory_rooms"
   },
   {
     "module": "GeneralLaboratoryUnit",
@@ -13701,7 +13807,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "laboratory_units"
   },
   {
     "module": "GeneralLanguage",
@@ -13784,7 +13891,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "languages"
   },
   {
     "module": "GeneralManufacturer",
@@ -13867,7 +13975,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "manufacturers"
   },
   {
     "module": "GeneralMaritalStatus",
@@ -13950,7 +14059,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "marital_statuses"
   },
   {
     "module": "GeneralMedicalDepartment",
@@ -14033,7 +14143,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_departments"
   },
   {
     "module": "GeneralMedicalDepartmentWardAssignment",
@@ -14131,7 +14242,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_department_ward_assignments"
   },
   {
     "module": "GeneralMedicalPersonnel",
@@ -14304,7 +14416,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_personnel"
   },
   {
     "module": "GeneralMedicalPersonnelType",
@@ -14387,7 +14500,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_personnel_types"
   },
   {
     "module": "GeneralMedicationAdministrationType",
@@ -14470,7 +14584,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medication_administration_types"
   },
   {
     "module": "GeneralMedicationUsageType",
@@ -14553,7 +14668,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medication_usage_types"
   },
   {
     "module": "GeneralMixtureInstruction",
@@ -14636,7 +14752,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "mixture_instructions"
   },
   {
     "module": "GeneralMixturePackagingType",
@@ -14719,7 +14836,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "mixture_packaging_types"
   },
   {
     "module": "GeneralMixtureType",
@@ -14802,7 +14920,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "mixture_types"
   },
   {
     "module": "GeneralMonthName",
@@ -14885,7 +15004,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "month_names"
   },
   {
     "module": "GeneralNurse",
@@ -14983,7 +15103,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nurses"
   },
   {
     "module": "GeneralNurseWardAssignment",
@@ -15106,7 +15227,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nurse_ward_assignments"
   },
   {
     "module": "GeneralOccupation",
@@ -15189,7 +15311,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "occupations"
   },
   {
     "module": "GeneralOperatingRoom",
@@ -15296,7 +15419,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "operating_rooms"
   },
   {
     "module": "GeneralOperationClass",
@@ -15379,7 +15503,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "operation_classes"
   },
   {
     "module": "GeneralOperationGroup",
@@ -15462,7 +15587,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "operation_groups"
   },
   {
     "module": "GeneralOperationType",
@@ -15545,7 +15671,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "operation_types"
   },
   {
     "module": "GeneralOtherService",
@@ -15664,7 +15791,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "other_services"
   },
   {
     "module": "GeneralOtherServiceTariff",
@@ -15805,7 +15933,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "other_service_tariffs"
   },
   {
     "module": "GeneralOtherStatus",
@@ -15888,7 +16017,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "other_statuses"
   },
   {
     "module": "GeneralOxygenTariff",
@@ -16007,7 +16137,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "oxygen_tariffs"
   },
   {
     "module": "GeneralPackage",
@@ -16136,7 +16267,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "packages"
   },
   {
     "module": "GeneralPackageItem",
@@ -16237,7 +16369,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "package_items"
   },
   {
     "module": "GeneralPackageItemType",
@@ -16320,7 +16453,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "package_item_types"
   },
   {
     "module": "GeneralPackageService",
@@ -16421,7 +16555,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "package_services"
   },
   {
     "module": "GeneralPackageTariffDistribution",
@@ -16545,7 +16680,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "package_tariff_distributions"
   },
   {
     "module": "GeneralPackageTariffDistributionItem",
@@ -16688,7 +16824,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "package_tariff_distribution_items"
   },
   {
     "module": "GeneralPainOnsetType",
@@ -16771,7 +16908,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pain_onset_types"
   },
   {
     "module": "GeneralPainScaleMethod",
@@ -16854,7 +16992,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pain_scale_methods"
   },
   {
     "module": "GeneralPathologyExaminationType",
@@ -16937,7 +17076,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pathology_examination_types"
   },
   {
     "module": "GeneralPatient",
@@ -17470,7 +17610,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patients"
   },
   {
     "module": "GeneralPatientAccessLock",
@@ -17579,7 +17720,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_access_locks"
   },
   {
     "module": "GeneralPatientContact",
@@ -17693,7 +17835,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_contacts"
   },
   {
     "module": "GeneralPatientFamily",
@@ -17797,7 +17940,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_families"
   },
   {
     "module": "GeneralPatientFamilyContact",
@@ -17901,7 +18045,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_family_contacts"
   },
   {
     "module": "GeneralPatientFamilyIdentityCard",
@@ -18005,7 +18150,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_family_identity_cards"
   },
   {
     "module": "GeneralPatientPhoto",
@@ -18082,7 +18228,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_photos"
   },
   {
     "module": "GeneralPatientPickupStatus",
@@ -18165,7 +18312,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_pickup_statuses"
   },
   {
     "module": "GeneralPatientStatus",
@@ -18248,7 +18396,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_statuses"
   },
   {
     "module": "GeneralPatientType",
@@ -18331,7 +18480,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_types"
   },
   {
     "module": "GeneralPaymentTransactionType",
@@ -18414,7 +18564,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "payment_transaction_types"
   },
   {
     "module": "GeneralPaymentType",
@@ -18497,7 +18648,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "payment_types"
   },
   {
     "module": "GeneralPayrollAddition",
@@ -18580,7 +18732,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "payroll_additions"
   },
   {
     "module": "GeneralPayrollDeduction",
@@ -18663,7 +18816,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "payroll_deductions"
   },
   {
     "module": "GeneralPharmacyDepot",
@@ -18798,7 +18952,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_depots"
   },
   {
     "module": "GeneralPharmacyGuarantorMargin",
@@ -18902,7 +19057,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_guarantor_margins"
   },
   {
     "module": "GeneralPharmacyRoom",
@@ -18991,7 +19147,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_rooms"
   },
   {
     "module": "GeneralPharmacyServiceRoom",
@@ -19076,7 +19233,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_service_rooms"
   },
   {
     "module": "GeneralPharmacyStatusType",
@@ -19159,7 +19317,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_status_types"
   },
   {
     "module": "GeneralPharmacyTariffByRoomClass",
@@ -19278,7 +19437,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_tariff_by_room_classes"
   },
   {
     "module": "GeneralPhysicianRestriction",
@@ -19392,7 +19552,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "physician_restrictions"
   },
   {
     "module": "GeneralPlanningPeriod",
@@ -19475,7 +19636,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "planning_periods"
   },
   {
     "module": "GeneralPositionTitle",
@@ -19558,7 +19720,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "position_titles"
   },
   {
     "module": "GeneralPpk",
@@ -19582,7 +19745,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ppks"
   },
   {
     "module": "GeneralPrescriptionFrequencyRule",
@@ -19711,7 +19875,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_frequency_rules"
   },
   {
     "module": "GeneralPrescriptionFrequencyRuleCategory",
@@ -19827,7 +19992,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_frequency_rule_categories"
   },
   {
     "module": "GeneralPrescriptionOriginUnitRestriction",
@@ -19968,7 +20134,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_origin_unit_restrictions"
   },
   {
     "module": "GeneralPrescriptionType",
@@ -20051,7 +20218,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_types"
   },
   {
     "module": "GeneralPrintType",
@@ -20134,7 +20302,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "print_types"
   },
   {
     "module": "GeneralProcedure",
@@ -20217,7 +20386,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "procedures"
   },
   {
     "module": "GeneralProfession",
@@ -20300,7 +20470,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "professions"
   },
   {
     "module": "GeneralQuantityRestriction",
@@ -20420,7 +20591,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "quantity_restrictions"
   },
   {
     "module": "GeneralQuarter",
@@ -20503,7 +20675,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "quarters"
   },
   {
     "module": "GeneralRadiologyRoom",
@@ -20592,7 +20765,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_rooms"
   },
   {
     "module": "GeneralReferralCode",
@@ -20702,7 +20876,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "referral_codes"
   },
   {
     "module": "GeneralReferralRoom",
@@ -20785,7 +20960,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "referral_rooms"
   },
   {
     "module": "GeneralReferralStatus",
@@ -20868,7 +21044,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "referral_statuses"
   },
   {
     "module": "GeneralReferralType",
@@ -20951,7 +21128,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "referral_types"
   },
   {
     "module": "GeneralRegion",
@@ -20981,7 +21159,8 @@
           "uri": "districts/{district}/villages"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "GeneralRegionType",
@@ -21082,7 +21261,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "region_types"
   },
   {
     "module": "GeneralReligion",
@@ -21165,7 +21345,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "religions"
   },
   {
     "module": "GeneralReportType",
@@ -21284,7 +21465,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "report_types"
   },
   {
     "module": "GeneralReportTypeItem",
@@ -21407,7 +21589,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "report_type_items"
   },
   {
     "module": "GeneralReservationStatus",
@@ -21490,7 +21673,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "reservation_statuses"
   },
   {
     "module": "GeneralReturnCancellationReason",
@@ -21573,7 +21757,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "return_cancellation_reasons"
   },
   {
     "module": "GeneralReturnCancellationType",
@@ -21656,7 +21841,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "return_cancellation_types"
   },
   {
     "module": "GeneralRoom",
@@ -21752,7 +21938,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "rooms"
   },
   {
     "module": "GeneralRoomClass",
@@ -21835,7 +22022,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "room_classes"
   },
   {
     "module": "GeneralRoomClassReferenceGroup",
@@ -21918,7 +22106,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "room_class_reference_groups"
   },
   {
     "module": "GeneralSalesTax",
@@ -22019,7 +22208,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sales_taxes"
   },
   {
     "module": "GeneralScannedDocument",
@@ -22107,7 +22297,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "scanned_documents"
   },
   {
     "module": "GeneralService",
@@ -22238,7 +22429,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "services"
   },
   {
     "module": "GeneralServiceTariff",
@@ -22407,7 +22599,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "service_tariffs"
   },
   {
     "module": "GeneralServiceTariffDistribution",
@@ -22508,7 +22701,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "service_tariff_distributions"
   },
   {
     "module": "GeneralServiceType",
@@ -22591,7 +22785,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "service_types"
   },
   {
     "module": "GeneralSitbAnatomyClassification",
@@ -22674,7 +22869,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_anatomy_classifications"
   },
   {
     "module": "GeneralSitbArt",
@@ -22757,7 +22953,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_arts"
   },
   {
     "module": "GeneralSitbChestXrayResult",
@@ -22840,7 +23037,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_chest_xray_results"
   },
   {
     "module": "GeneralSitbChildTbScore0To13",
@@ -22923,7 +23121,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_child_tb_score0_to13s"
   },
   {
     "module": "GeneralSitbChildTbScore5",
@@ -23006,7 +23205,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_child_tb_score5s"
   },
   {
     "module": "GeneralSitbChildTbScore6",
@@ -23089,7 +23289,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_child_tb_score6s"
   },
   {
     "module": "GeneralSitbDiagnosisType",
@@ -23172,7 +23373,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_diagnosis_types"
   },
   {
     "module": "GeneralSitbDm",
@@ -23255,7 +23457,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_dms"
   },
   {
     "module": "GeneralSitbDmTherapy",
@@ -23338,7 +23541,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_dm_therapies"
   },
   {
     "module": "GeneralSitbDrugSource",
@@ -23421,7 +23625,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_drug_sources"
   },
   {
     "module": "GeneralSitbEndMicroscopy",
@@ -23504,7 +23709,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_end_microscopies"
   },
   {
     "module": "GeneralSitbHivStatusClassification",
@@ -23587,7 +23793,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_hiv_status_classifications"
   },
   {
     "module": "GeneralSitbHivTestResult",
@@ -23670,7 +23877,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_hiv_test_results"
   },
   {
     "module": "GeneralSitbMonth2Microscopy",
@@ -23753,7 +23961,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_month2_microscopies"
   },
   {
     "module": "GeneralSitbMonth3Microscopy",
@@ -23836,7 +24045,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_month3_microscopies"
   },
   {
     "module": "GeneralSitbMonth5Microscopy",
@@ -23919,7 +24129,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_month5_microscopies"
   },
   {
     "module": "GeneralSitbOatGuideline",
@@ -24002,7 +24213,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_oat_guidelines"
   },
   {
     "module": "GeneralSitbPpk",
@@ -24085,7 +24297,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_ppks"
   },
   {
     "module": "GeneralSitbPreCulture",
@@ -24168,7 +24381,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_pre_cultures"
   },
   {
     "module": "GeneralSitbPreMicroscopy",
@@ -24251,7 +24465,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_pre_microscopies"
   },
   {
     "module": "GeneralSitbPreTcm",
@@ -24334,7 +24549,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_pre_tcms"
   },
   {
     "module": "GeneralSitbReferrerType",
@@ -24417,7 +24633,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_referrer_types"
   },
   {
     "module": "GeneralSitbTb03RoTransfer",
@@ -24500,7 +24717,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_tb03_ro_transfers"
   },
   {
     "module": "GeneralSitbThoraxNotDone",
@@ -24583,7 +24801,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_thorax_not_dones"
   },
   {
     "module": "GeneralSitbTreatmentHistoryClassification",
@@ -24666,7 +24885,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_treatment_history_classifications"
   },
   {
     "module": "GeneralSitbTreatmentOutcome",
@@ -24749,7 +24969,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_treatment_outcomes"
   },
   {
     "module": "GeneralSitbTreatmentStatus",
@@ -24832,7 +25053,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sitb_treatment_statuses"
   },
   {
     "module": "GeneralStaffMember",
@@ -24930,7 +25152,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "staff_members"
   },
   {
     "module": "GeneralStaffWardAssignment",
@@ -25034,7 +25257,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "staff_ward_assignments"
   },
   {
     "module": "GeneralTariffType",
@@ -25117,7 +25341,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "tariff_types"
   },
   {
     "module": "GeneralTbPatientCategory",
@@ -25200,7 +25425,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "tb_patient_categories"
   },
   {
     "module": "GeneralTreatmentCategory",
@@ -25283,7 +25509,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "treatment_categories"
   },
   {
     "module": "GeneralUserGroup",
@@ -25366,7 +25593,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "user_groups"
   },
   {
     "module": "GeneralUserType",
@@ -25449,7 +25677,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "user_types"
   },
   {
     "module": "GeneralVideoAttachment",
@@ -25672,7 +25901,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "video_attachments"
   },
   {
     "module": "GeneralVisitActivityStatus",
@@ -25755,7 +25985,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "visit_activity_statuses"
   },
   {
     "module": "GeneralVisitCancellationReason",
@@ -25838,7 +26069,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "visit_cancellation_reasons"
   },
   {
     "module": "GeneralVisitStatus",
@@ -25921,7 +26153,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "visit_statuses"
   },
   {
     "module": "GeneralVisitType",
@@ -26004,7 +26237,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "visit_types"
   },
   {
     "module": "GeneralWard",
@@ -26123,7 +26357,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "wards"
   },
   {
     "module": "GeneralWardClassAssignment",
@@ -26200,7 +26435,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_class_assignments"
   },
   {
     "module": "GeneralWardService",
@@ -26303,7 +26539,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_services"
   },
   {
     "module": "GeneralWardTariff",
@@ -26417,7 +26654,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_tariffs"
   },
   {
     "module": "GeneralWardTransferRoute",
@@ -26539,7 +26777,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_transfer_routes"
   },
   {
     "module": "GeneralWardType",
@@ -26622,7 +26861,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_types"
   },
   {
     "module": "GeneralWardVisitType",
@@ -26705,7 +26945,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_visit_types"
   },
   {
     "module": "GeneralYesNoOption",
@@ -26788,7 +27029,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "yes_no_options"
   },
   {
     "module": "InventoryBloodBag",
@@ -27018,7 +27260,8 @@
           "uri": "crossmatch-tests/{crossmatch_test}/release"
         }
       ]
-    }
+    },
+    "tableName": "blood_bags"
   },
   {
     "module": "InventoryDietOrder",
@@ -27191,7 +27434,8 @@
           "uri": "diet-orders/{diet_order}/status"
         }
       ]
-    }
+    },
+    "tableName": "diet_orders"
   },
   {
     "module": "InventoryGoodsReceipt",
@@ -27291,7 +27535,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "goods_receipts"
   },
   {
     "module": "InventoryGoodsReceiptCancellation",
@@ -27358,7 +27603,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "goods_receipt_cancellations"
   },
   {
     "module": "InventoryGoodsReturn",
@@ -27437,7 +27683,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "goods_returns"
   },
   {
     "module": "InventoryGoodsReturnItem",
@@ -27525,7 +27772,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "goods_return_items"
   },
   {
     "module": "InventoryItem",
@@ -27786,7 +28034,8 @@
           "uri": "items/{item}/adjust-stock"
         }
       ]
-    }
+    },
+    "tableName": "items"
   },
   {
     "module": "InventoryItemCategory",
@@ -27869,7 +28118,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "item_categories"
   },
   {
     "module": "InventoryItemClassification",
@@ -27952,7 +28202,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "item_classifications"
   },
   {
     "module": "InventoryItemPrice",
@@ -28029,7 +28280,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "item_prices"
   },
   {
     "module": "InventoryItemSerialNumber",
@@ -28114,7 +28366,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "item_serial_numbers"
   },
   {
     "module": "InventoryLinenTracking",
@@ -28321,7 +28574,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "linen_items"
   },
   {
     "module": "InventoryMinimumStockLevel",
@@ -28425,7 +28679,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "minimum_stock_levels"
   },
   {
     "module": "InventoryPharmacyPackage",
@@ -28607,7 +28862,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_packages"
   },
   {
     "module": "InventoryReceivingItem",
@@ -28685,7 +28941,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "receiving_items"
   },
   {
     "module": "InventoryReceivingRecord",
@@ -28763,7 +29020,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "receiving_records"
   },
   {
     "module": "InventoryShipment",
@@ -28856,7 +29114,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "shipments"
   },
   {
     "module": "InventoryShipmentItem",
@@ -28924,7 +29183,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "shipment_items"
   },
   {
     "module": "InventorySterilizationCycle",
@@ -29180,7 +29440,8 @@
           "uri": "sterilized-items/{sterilized_item}/check-expiry"
         }
       ]
-    }
+    },
+    "tableName": "sterilization_cycles"
   },
   {
     "module": "InventoryStockOpname",
@@ -29279,7 +29540,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "stock_opnames"
   },
   {
     "module": "InventoryStockOpnameItem",
@@ -29358,7 +29620,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "stock_opname_items"
   },
   {
     "module": "InventoryStockRequest",
@@ -29464,7 +29727,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "stock_requests"
   },
   {
     "module": "InventoryStockRequestItem",
@@ -29532,7 +29796,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "stock_request_items"
   },
   {
     "module": "InventorySupplier",
@@ -29699,7 +29964,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "suppliers"
   },
   {
     "module": "InventoryUnitOfMeasure",
@@ -29800,7 +30066,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "unit_of_measures"
   },
   {
     "module": "InventoryWardItemStock",
@@ -29875,7 +30142,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_item_stocks"
   },
   {
     "module": "InventoryWardStockTransaction",
@@ -29974,7 +30242,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_stock_transactions"
   },
   {
     "module": "KemkesBloodType",
@@ -30057,7 +30326,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "blood_types"
   },
   {
     "module": "KemkesReport",
@@ -30083,7 +30353,8 @@
           "uri": "kemkes-reports/inpatient-visits-by-class"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "LayananAntimicrobialStewardshipApproval",
@@ -30171,7 +30442,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_approvals"
   },
   {
     "module": "LayananAntimicrobialStewardshipForm",
@@ -30362,7 +30634,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_forms"
   },
   {
     "module": "LayananAntimicrobialStewardshipFormItem",
@@ -30460,7 +30733,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_form_items"
   },
   {
     "module": "LayananAntimicrobialStewardshipGeneralExamination",
@@ -30575,7 +30849,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_general_examinations"
   },
   {
     "module": "LayananAntimicrobialStewardshipLabResult",
@@ -30663,7 +30938,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_lab_results"
   },
   {
     "module": "LayananAntimicrobialStewardshipMicrobiologyResult",
@@ -30748,7 +31024,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_microbiology_results"
   },
   {
     "module": "LayananAntimicrobialStewardshipOtherSupportResult",
@@ -30823,7 +31100,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_other_support_results"
   },
   {
     "module": "LayananAntimicrobialStewardshipPriorHistory",
@@ -30918,7 +31196,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_prior_histories"
   },
   {
     "module": "LayananAntimicrobialStewardshipRadiologyResult",
@@ -30993,7 +31272,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "antimicrobial_stewardship_radiology_results"
   },
   {
     "module": "LayananBirthRecord",
@@ -31241,7 +31521,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "birth_records"
   },
   {
     "module": "LayananBloodRequestItem",
@@ -31415,7 +31696,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "blood_request_items"
   },
   {
     "module": "LayananCriticalLabValue",
@@ -31569,7 +31851,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "critical_lab_values"
   },
   {
     "module": "LayananDrugInteractionCheck",
@@ -31687,7 +31970,8 @@
           "uri": "prescriptions/{prescription}/interaction-check"
         }
       ]
-    }
+    },
+    "tableName": "drug_interaction_rules"
   },
   {
     "module": "LayananEarlyWarningScore",
@@ -31803,7 +32087,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "vital_sign_observations"
   },
   {
     "module": "LayananExaminationResultStatus",
@@ -31964,7 +32249,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "examination_result_statuses"
   },
   {
     "module": "LayananImagingOrder",
@@ -32223,7 +32509,8 @@
           "uri": "imaging-orders/{imaging_order}/cancel"
         }
       ]
-    }
+    },
+    "tableName": "imaging_orders"
   },
   {
     "module": "LayananLabAnalyzerOrder",
@@ -32428,7 +32715,8 @@
           "uri": "lab-analyzer-orders/{order}/verify"
         }
       ]
-    }
+    },
+    "tableName": "lab_analyzer_vendors"
   },
   {
     "module": "LayananLabCultureResult",
@@ -32582,7 +32870,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_culture_results"
   },
   {
     "module": "LayananLabExaminationResult",
@@ -32687,7 +32976,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_examination_results"
   },
   {
     "module": "LayananLabMicroscopicResult",
@@ -32775,7 +33065,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_microscopic_results"
   },
   {
     "module": "LayananLabMicroscopicResultItem",
@@ -32840,7 +33131,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_microscopic_result_items"
   },
   {
     "module": "LayananLabOrder",
@@ -32977,7 +33269,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_orders"
   },
   {
     "module": "LayananLabOrderItem",
@@ -33055,7 +33348,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_order_items"
   },
   {
     "module": "LayananLabPcrResult",
@@ -33140,7 +33434,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_pcr_results"
   },
   {
     "module": "LayananLabResult",
@@ -33256,7 +33551,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_results"
   },
   {
     "module": "LayananLabResultNote",
@@ -33359,7 +33655,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_result_notes"
   },
   {
     "module": "LayananLabSensitivityResult",
@@ -33444,7 +33741,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_sensitivity_results"
   },
   {
     "module": "LayananLeftoverMedicationVoucher",
@@ -33639,7 +33937,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "leftover_medication_vouchers"
   },
   {
     "module": "LayananLeftoverMedicationVoucherItem",
@@ -33717,7 +34016,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "leftover_medication_voucher_items"
   },
   {
     "module": "LayananMedicalProcedure",
@@ -33845,7 +34145,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_procedures"
   },
   {
     "module": "LayananMedicalProcedureStaff",
@@ -33968,7 +34269,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_procedure_staff"
   },
   {
     "module": "LayananMedicalSupplyUsage",
@@ -34090,7 +34392,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_supply_usages"
   },
   {
     "module": "LayananMedicalSupplyUsageItem",
@@ -34168,7 +34471,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_supply_usage_items"
   },
   {
     "module": "LayananMedicationIteration",
@@ -34303,7 +34607,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medication_iterations"
   },
   {
     "module": "LayananMedicationServiceLimit",
@@ -34438,7 +34743,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medication_service_limits"
   },
   {
     "module": "LayananMedicineDelivery",
@@ -34541,7 +34847,8 @@
           "uri": "medicine-deliveries/{delivery}/mark-delivered"
         }
       ]
-    }
+    },
+    "tableName": "medicine_deliveries"
   },
   {
     "module": "LayananMortuaryRecord",
@@ -34714,7 +35021,8 @@
           "uri": "mortuary-records/{record}/release"
         }
       ]
-    }
+    },
+    "tableName": "mortuary_records"
   },
   {
     "module": "LayananOxygenUsage",
@@ -34874,7 +35182,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "oxygen_usages"
   },
   {
     "module": "LayananPathologyAnatomyResult",
@@ -35097,7 +35406,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pathology_anatomy_results"
   },
   {
     "module": "LayananPathologyImmunofluorescenceResult",
@@ -35182,7 +35492,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pathology_immunofluorescence_results"
   },
   {
     "module": "LayananPathologyMolecularResult",
@@ -35257,7 +35568,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pathology_molecular_results"
   },
   {
     "module": "LayananPatientComplaint",
@@ -35523,7 +35835,8 @@
           "uri": "patient-complaints/summary"
         }
       ]
-    }
+    },
+    "tableName": "patient_complaints"
   },
   {
     "module": "LayananPatientDeathRecord",
@@ -35689,7 +36002,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_death_records"
   },
   {
     "module": "LayananPatientDischargeRecord",
@@ -35855,7 +36169,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_discharge_records"
   },
   {
     "module": "LayananPharmacyDispense",
@@ -35962,7 +36277,8 @@
           "uri": "prescriptions/{prescription}/dispense"
         }
       ]
-    }
+    },
+    "tableName": "pharmacy_dispenses"
   },
   {
     "module": "LayananPharmacyOutpatientQueue",
@@ -36097,7 +36413,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_outpatient_queues"
   },
   {
     "module": "LayananPharmacyReturn",
@@ -36258,7 +36575,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_returns"
   },
   {
     "module": "LayananPharmacyServiceFee",
@@ -36374,7 +36692,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_service_fees"
   },
   {
     "module": "LayananPharmacyServiceTime",
@@ -36510,7 +36829,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_service_times"
   },
   {
     "module": "LayananPharmacyServiceTimeStage",
@@ -36589,7 +36909,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_service_time_stages"
   },
   {
     "module": "LayananPrescription",
@@ -36769,7 +37090,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescriptions"
   },
   {
     "module": "LayananPrescriptionFulfillment",
@@ -36911,7 +37233,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_fulfillments"
   },
   {
     "module": "LayananPrescriptionFulfillmentItem",
@@ -37053,7 +37376,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_fulfillment_items"
   },
   {
     "module": "LayananPrescriptionInitialReview",
@@ -37233,7 +37557,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_initial_reviews"
   },
   {
     "module": "LayananPrescriptionItem",
@@ -37361,7 +37686,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "prescription_items"
   },
   {
     "module": "LayananRadiologyOrder",
@@ -37527,7 +37853,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_orders"
   },
   {
     "module": "LayananRadiologyOrderItem",
@@ -37602,7 +37929,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_order_items"
   },
   {
     "module": "LayananRadiologyResult",
@@ -37762,7 +38090,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_results"
   },
   {
     "module": "LayananRadiologyViewerLog",
@@ -37861,7 +38190,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_viewer_logs"
   },
   {
     "module": "LayananSurgicalSafetyEvaluationResult",
@@ -37972,7 +38302,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "surgical_safety_evaluation_results"
   },
   {
     "module": "LayananTelemedicineSession",
@@ -38126,7 +38457,8 @@
           "uri": "telemedicine-sessions/{session}/complete"
         }
       ]
-    }
+    },
+    "tableName": "telemedicine_sessions"
   },
   {
     "module": "LayananTreatmentProtocol",
@@ -38331,7 +38663,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "treatment_protocols"
   },
   {
     "module": "LayananTreatmentProtocolStep",
@@ -38467,7 +38800,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "treatment_protocol_steps"
   },
   {
     "module": "LayananTreatmentProtocolStepDrug",
@@ -38603,7 +38937,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "treatment_protocol_step_drugs"
   },
   {
     "module": "MedicalRecordAbciProcedure",
@@ -38726,7 +39061,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "abci_procedures"
   },
   {
     "module": "MedicalRecordAbdomenExamination",
@@ -38951,7 +39287,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "abdomen_examinations"
   },
   {
     "module": "MedicalRecordAdmissionMedicationReconciliation",
@@ -39065,7 +39402,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "admission_medication_reconciliations"
   },
   {
     "module": "MedicalRecordAdmissionMedicationReconciliationItem",
@@ -39186,7 +39524,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "admission_medication_reconciliation_items"
   },
   {
     "module": "MedicalRecordAllergy",
@@ -39349,7 +39688,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "allergies"
   },
   {
     "module": "MedicalRecordAnalExamination",
@@ -39536,7 +39876,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "anal_examinations"
   },
   {
     "module": "MedicalRecordAnamnesis",
@@ -39735,7 +40076,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "anamneses"
   },
   {
     "module": "MedicalRecordAnamnesisSource",
@@ -39871,7 +40213,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "anamnesis_sources"
   },
   {
     "module": "MedicalRecordAnesthesiaPreparation",
@@ -40002,7 +40345,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "anesthesia_preparations"
   },
   {
     "module": "MedicalRecordBackExamination",
@@ -40189,7 +40533,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "back_examinations"
   },
   {
     "module": "MedicalRecordBaepAnxietyDetail",
@@ -40268,7 +40613,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_anxiety_details"
   },
   {
     "module": "MedicalRecordBaepCognitiveDetail",
@@ -40343,7 +40689,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_cognitive_details"
   },
   {
     "module": "MedicalRecordBaepDepressionDetail",
@@ -40433,7 +40780,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_depression_details"
   },
   {
     "module": "MedicalRecordBaepDysphagiaDetail",
@@ -40523,7 +40871,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_dysphagia_details"
   },
   {
     "module": "MedicalRecordBaepInsomniaDetail",
@@ -40608,7 +40957,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_insomnia_details"
   },
   {
     "module": "MedicalRecordBaepInterventionProtocol",
@@ -40786,7 +41136,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_intervention_protocols"
   },
   {
     "module": "MedicalRecordBaepMotorDetail",
@@ -40868,7 +41219,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_motor_details"
   },
   {
     "module": "MedicalRecordBaepSensoryDetail",
@@ -40948,7 +41300,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_sensory_details"
   },
   {
     "module": "MedicalRecordBaepStimulationProtocolDetail",
@@ -41043,7 +41396,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "baep_stimulation_protocol_details"
   },
   {
     "module": "MedicalRecordBarthelIndexAssessment",
@@ -41344,7 +41698,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "barthel_index_assessments"
   },
   {
     "module": "MedicalRecordBirthCertificateLetter",
@@ -41510,7 +41865,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "birth_certificate_letters"
   },
   {
     "module": "MedicalRecordBloodTransfusion",
@@ -41648,7 +42004,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "blood_transfusions"
   },
   {
     "module": "MedicalRecordBloodTransfusionDetail",
@@ -41765,7 +42122,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "blood_transfusion_details"
   },
   {
     "module": "MedicalRecordBloodTransfusionObservation",
@@ -41952,7 +42310,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "blood_transfusion_observations"
   },
   {
     "module": "MedicalRecordBreastExamination",
@@ -42147,7 +42506,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "breast_examinations"
   },
   {
     "module": "MedicalRecordCaseManagerAssessment",
@@ -42323,7 +42683,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "case_manager_assessments"
   },
   {
     "module": "MedicalRecordCatClamsExamination",
@@ -42510,7 +42871,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "cat_clams_examinations"
   },
   {
     "module": "MedicalRecordChestExamination",
@@ -42697,7 +43059,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "chest_examinations"
   },
   {
     "module": "MedicalRecordChiefComplaint",
@@ -42858,7 +43221,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "chief_complaints"
   },
   {
     "module": "MedicalRecordClinicalNote",
@@ -43018,7 +43382,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "clinical_notes"
   },
   {
     "module": "MedicalRecordClinicalNoteCoManagement",
@@ -43166,7 +43531,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "clinical_note_co_managements"
   },
   {
     "module": "MedicalRecordClinicalNoteVerification",
@@ -43256,7 +43622,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "clinical_note_verifications"
   },
   {
     "module": "MedicalRecordControlSchedule",
@@ -43467,7 +43834,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "control_schedules"
   },
   {
     "module": "MedicalRecordCoughAssessment",
@@ -43666,7 +44034,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "cough_assessments"
   },
   {
     "module": "MedicalRecordDentalExamination",
@@ -43853,7 +44222,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "dental_examinations"
   },
   {
     "module": "MedicalRecordDiagnosis",
@@ -43933,7 +44303,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "diagnoses"
   },
   {
     "module": "MedicalRecordDiagnosisIndicatorMapping",
@@ -44082,7 +44453,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "diagnosis_indicator_mappings"
   },
   {
     "module": "MedicalRecordDifferentialDiagnosis",
@@ -44268,7 +44640,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "differential_diagnoses"
   },
   {
     "module": "MedicalRecordDischargeMedicationReconciliation",
@@ -44382,7 +44755,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discharge_medication_reconciliations"
   },
   {
     "module": "MedicalRecordDischargeMedicationReconciliationItem",
@@ -44503,7 +44877,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discharge_medication_reconciliation_items"
   },
   {
     "module": "MedicalRecordDischargePlanningRiskFactor",
@@ -44645,7 +45020,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discharge_planning_risk_factors"
   },
   {
     "module": "MedicalRecordDischargePlanningScreening",
@@ -44806,7 +45182,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discharge_planning_screenings"
   },
   {
     "module": "MedicalRecordDischargeSummary",
@@ -44941,7 +45318,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discharge_summaries"
   },
   {
     "module": "MedicalRecordDoctorProcedureConsent",
@@ -45056,7 +45434,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "doctor_procedure_consents"
   },
   {
     "module": "MedicalRecordDocumentUpload",
@@ -45176,7 +45555,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "document_uploads"
   },
   {
     "module": "MedicalRecordEarExamination",
@@ -45371,7 +45751,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ear_examinations"
   },
   {
     "module": "MedicalRecordEegExamination",
@@ -45558,7 +45939,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "eeg_examinations"
   },
   {
     "module": "MedicalRecordEkgExamination",
@@ -45802,7 +46184,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ekg_examinations"
   },
   {
     "module": "MedicalRecordEmergencyEducation",
@@ -45982,7 +46365,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "emergency_educations"
   },
   {
     "module": "MedicalRecordEmgExamination",
@@ -46169,7 +46553,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "emg_examinations"
   },
   {
     "module": "MedicalRecordEndOfLifeEducation",
@@ -46330,7 +46715,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "end_of_life_educations"
   },
   {
     "module": "MedicalRecordEndOfLifePsychosocialRelationship",
@@ -46510,7 +46896,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "end_of_life_psychosocial_relationships"
   },
   {
     "module": "MedicalRecordEpfraAssessment",
@@ -46667,7 +47054,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "epfra_assessments"
   },
   {
     "module": "MedicalRecordExaminationType",
@@ -46778,7 +47166,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "examination_types"
   },
   {
     "module": "MedicalRecordExternalRiskFactor",
@@ -46939,7 +47328,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "external_risk_factors"
   },
   {
     "module": "MedicalRecordEyeExamDocumentUpload",
@@ -47052,7 +47442,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "eye_exam_document_uploads"
   },
   {
     "module": "MedicalRecordEyeExamination",
@@ -47266,7 +47657,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "eye_examinations"
   },
   {
     "module": "MedicalRecordFamilyMedicalHistory",
@@ -47364,7 +47756,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "family_medical_histories"
   },
   {
     "module": "MedicalRecordFamilyPlanningObstetrics",
@@ -47551,7 +47944,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "family_planning_obstetrics"
   },
   {
     "module": "MedicalRecordFibroscanResult",
@@ -47731,7 +48125,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "fibroscan_results"
   },
   {
     "module": "MedicalRecordFingerExamination",
@@ -47918,7 +48313,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "finger_examinations"
   },
   {
     "module": "MedicalRecordFingernailExamination",
@@ -48105,7 +48501,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "fingernail_examinations"
   },
   {
     "module": "MedicalRecordFluidBalanceAssessment",
@@ -48262,7 +48659,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "fluid_balance_assessments"
   },
   {
     "module": "MedicalRecordFluidBalanceAssessmentDetail",
@@ -48398,7 +48796,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "fluid_balance_assessment_details"
   },
   {
     "module": "MedicalRecordFluidFinalBalance",
@@ -48578,7 +48977,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "fluid_final_balances"
   },
   {
     "module": "MedicalRecordFoodAllergenExamination",
@@ -48765,7 +49165,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "food_allergen_examinations"
   },
   {
     "module": "MedicalRecordForearmExamination",
@@ -48941,7 +49342,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "forearm_examinations"
   },
   {
     "module": "MedicalRecordFunctionalAssessment",
@@ -49121,7 +49523,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "functional_assessments"
   },
   {
     "module": "MedicalRecordFunctionalStatusAssessment",
@@ -49282,7 +49685,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "functional_status_assessments"
   },
   {
     "module": "MedicalRecordGeneralExamination",
@@ -49450,7 +49854,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "general_examinations"
   },
   {
     "module": "MedicalRecordGenitalExamination",
@@ -49599,7 +50004,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "genital_examinations"
   },
   {
     "module": "MedicalRecordGetUpAndGoTestAssessment",
@@ -49756,7 +50162,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "get_up_and_go_test_assessments"
   },
   {
     "module": "MedicalRecordGraceRiskScoreAssessment",
@@ -50027,7 +50434,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "grace_risk_score_assessments"
   },
   {
     "module": "MedicalRecordGynecologyHistory",
@@ -50135,7 +50543,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "gynecology_histories"
   },
   {
     "module": "MedicalRecordGynecologyUltrasound",
@@ -50268,7 +50677,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "gynecology_ultrasounds"
   },
   {
     "module": "MedicalRecordHairExamination",
@@ -50455,7 +50865,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "hair_examinations"
   },
   {
     "module": "MedicalRecordHandJointExamination",
@@ -50650,7 +51061,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "hand_joint_examinations"
   },
   {
     "module": "MedicalRecordHeadExamination",
@@ -50818,7 +51230,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "head_examinations"
   },
   {
     "module": "MedicalRecordHealthCertificate",
@@ -50971,7 +51384,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "health_certificates"
   },
   {
     "module": "MedicalRecordHemodialysisLetter",
@@ -51104,7 +51518,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "hemodialysis_letters"
   },
   {
     "module": "MedicalRecordHospitalizationCertificate",
@@ -51247,7 +51662,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "hospitalization_certificates"
   },
   {
     "module": "MedicalRecordHumptyDumptyFallScaleAssessment",
@@ -51421,7 +51837,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "humpty_dumpty_fall_scale_assessments"
   },
   {
     "module": "MedicalRecordIcd10CauseOfDeathCode",
@@ -51532,7 +51949,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "icd10_cause_of_death_codes"
   },
   {
     "module": "MedicalRecordIcd10Code",
@@ -51643,7 +52061,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "icd10_codes"
   },
   {
     "module": "MedicalRecordIcd9CmCode",
@@ -51754,7 +52173,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "icd9_cm_codes"
   },
   {
     "module": "MedicalRecordIllnessProgressionHistory",
@@ -51842,7 +52262,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "illness_progression_histories"
   },
   {
     "module": "MedicalRecordImageMarker",
@@ -51972,7 +52393,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "image_markers"
   },
   {
     "module": "MedicalRecordImageMarkerPoint",
@@ -52102,7 +52524,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "image_marker_points"
   },
   {
     "module": "MedicalRecordImmunizationVaccination",
@@ -52364,7 +52787,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "immunization_vaccinations"
   },
   {
     "module": "MedicalRecordImplementation",
@@ -52525,7 +52949,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "implementations"
   },
   {
     "module": "MedicalRecordImplementationChecklistItem",
@@ -52655,7 +53080,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "implementation_checklist_items"
   },
   {
     "module": "MedicalRecordImplementationNote",
@@ -52797,7 +53223,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "implementation_notes"
   },
   {
     "module": "MedicalRecordInhalantAllergenExamination",
@@ -52984,7 +53411,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "inhalant_allergen_examinations"
   },
   {
     "module": "MedicalRecordInpatientCarePlan",
@@ -53109,7 +53537,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "inpatient_care_plans"
   },
   {
     "module": "MedicalRecordInterventionIndicatorMapping",
@@ -53258,7 +53687,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "intervention_indicator_mappings"
   },
   {
     "module": "MedicalRecordInterventionProtocol",
@@ -53373,7 +53803,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "intervention_protocols"
   },
   {
     "module": "MedicalRecordInterventionProtocolDetail",
@@ -53471,7 +53902,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "intervention_protocol_details"
   },
   {
     "module": "MedicalRecordInterventionRecommendation",
@@ -53651,7 +54083,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "intervention_recommendations"
   },
   {
     "module": "MedicalRecordIntradialyticHdMonitoring",
@@ -53914,7 +54347,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "intradialytic_hd_monitorings"
   },
   {
     "module": "MedicalRecordKillipClassAssessment",
@@ -54055,7 +54489,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "killip_class_assessments"
   },
   {
     "module": "MedicalRecordLabResultSummary",
@@ -54146,7 +54581,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_result_summaries"
   },
   {
     "module": "MedicalRecordLabResultSummaryItem",
@@ -54256,7 +54692,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lab_result_summary_items"
   },
   {
     "module": "MedicalRecordLegJointExamination",
@@ -54453,7 +54890,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "leg_joint_examinations"
   },
   {
     "module": "MedicalRecordLipExamination",
@@ -54621,7 +55059,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lip_examinations"
   },
   {
     "module": "MedicalRecordLowerGiTractExamination",
@@ -54789,7 +55228,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lower_gi_tract_examinations"
   },
   {
     "module": "MedicalRecordLowerLegExamination",
@@ -54984,7 +55424,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "lower_leg_examinations"
   },
   {
     "module": "MedicalRecordMaternalPregnancyHistory",
@@ -55092,7 +55533,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "maternal_pregnancy_histories"
   },
   {
     "module": "MedicalRecordMchatAssessmentExamination",
@@ -55260,7 +55702,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "mchat_assessment_examinations"
   },
   {
     "module": "MedicalRecordMedicalCheckupResult",
@@ -55465,7 +55908,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_checkup_results"
   },
   {
     "module": "MedicalRecordMedicationAdministrationHistory",
@@ -55586,7 +56030,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medication_administration_histories"
   },
   {
     "module": "MedicalRecordMmpiTest",
@@ -55729,7 +56174,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "mmpi_tests"
   },
   {
     "module": "MedicalRecordModifiedBarthelIndexAssessment",
@@ -56030,7 +56476,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "modified_barthel_index_assessments"
   },
   {
     "module": "MedicalRecordMorseFallScaleAssessment",
@@ -56215,7 +56662,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "morse_fall_scale_assessments"
   },
   {
     "module": "MedicalRecordNeckExamination",
@@ -56402,7 +56850,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "neck_examinations"
   },
   {
     "module": "MedicalRecordNoseExamination",
@@ -56589,7 +57038,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nose_examinations"
   },
   {
     "module": "MedicalRecordNursingCarePlan",
@@ -56788,7 +57238,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nursing_care_plans"
   },
   {
     "module": "MedicalRecordNursingCarePlanImplementation",
@@ -56930,7 +57381,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nursing_care_plan_implementations"
   },
   {
     "module": "MedicalRecordNursingDiagnosis",
@@ -57129,7 +57581,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nursing_diagnoses"
   },
   {
     "module": "MedicalRecordNursingImplementation",
@@ -57271,7 +57724,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nursing_implementations"
   },
   {
     "module": "MedicalRecordNursingIndicator",
@@ -57426,7 +57880,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nursing_indicators"
   },
   {
     "module": "MedicalRecordNursingIndicatorImplementation",
@@ -57528,7 +57983,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nursing_indicator_implementations"
   },
   {
     "module": "MedicalRecordNursingIndicatorType",
@@ -57620,7 +58076,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nursing_indicator_types"
   },
   {
     "module": "MedicalRecordNutritionDietPattern",
@@ -57755,7 +58212,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "nutrition_diet_patterns"
   },
   {
     "module": "MedicalRecordObstetricHistory",
@@ -57878,7 +58336,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "obstetric_histories"
   },
   {
     "module": "MedicalRecordObstetrics",
@@ -58141,7 +58600,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "obstetrics_records"
   },
   {
     "module": "MedicalRecordOtherHistory",
@@ -58242,7 +58702,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "other_histories"
   },
   {
     "module": "MedicalRecordPainScoreAssessment",
@@ -58378,7 +58839,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pain_score_assessments"
   },
   {
     "module": "MedicalRecordPalateExamination",
@@ -58546,7 +59008,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "palate_examinations"
   },
   {
     "module": "MedicalRecordParentalHealthHistoryScreening",
@@ -58667,7 +59130,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "parental_health_history_screenings"
   },
   {
     "module": "MedicalRecordPatientFamilyEducation",
@@ -58866,7 +59330,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_family_educations"
   },
   {
     "module": "MedicalRecordPatientNutritionProblem",
@@ -58991,7 +59456,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_nutrition_problems"
   },
   {
     "module": "MedicalRecordPatientTransferSheet",
@@ -59178,7 +59644,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_transfer_sheets"
   },
   {
     "module": "MedicalRecordPediatricStatus",
@@ -59318,7 +59785,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pediatric_statuses"
   },
   {
     "module": "MedicalRecordPharmacyDiagnosis",
@@ -59523,7 +59991,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharmacy_diagnoses"
   },
   {
     "module": "MedicalRecordPharynxExamination",
@@ -59691,7 +60160,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pharynx_examinations"
   },
   {
     "module": "MedicalRecordPhysicalAssessment",
@@ -59886,7 +60356,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "physical_assessments"
   },
   {
     "module": "MedicalRecordPhysicalExamination",
@@ -60035,7 +60506,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "physical_examinations"
   },
   {
     "module": "MedicalRecordPlanAndTherapy",
@@ -60170,7 +60642,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "plan_and_therapies"
   },
   {
     "module": "MedicalRecordPreAnesthesiaSedationAssessment",
@@ -60318,7 +60791,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pre_anesthesia_sedation_assessments"
   },
   {
     "module": "MedicalRecordPressureUlcerRiskAssessment",
@@ -60553,7 +61027,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pressure_ulcer_risk_assessments"
   },
   {
     "module": "MedicalRecordProcedureConsentInformation",
@@ -60681,7 +61156,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "procedure_consent_information"
   },
   {
     "module": "MedicalRecordProcedureConsentInformationGiver",
@@ -60759,7 +61235,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "procedure_consent_information_givers"
   },
   {
     "module": "MedicalRecordProcedureConsentInformationItem",
@@ -60834,7 +61311,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "procedure_consent_information_items"
   },
   {
     "module": "MedicalRecordProcedureConsentInformationReceiver",
@@ -60909,7 +61387,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "procedure_consent_information_receivers"
   },
   {
     "module": "MedicalRecordProcedureConsentPatientAcknowledgement",
@@ -60997,7 +61476,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "procedure_consent_patient_acknowledgements"
   },
   {
     "module": "MedicalRecordProcedureSurgery",
@@ -61165,7 +61645,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "procedure_surgeries"
   },
   {
     "module": "MedicalRecordRadiologyResultSummary",
@@ -61256,7 +61737,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_result_summaries"
   },
   {
     "module": "MedicalRecordRadiologyResultSummaryItem",
@@ -61341,7 +61823,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "radiology_result_summary_items"
   },
   {
     "module": "MedicalRecordRavenTestExamination",
@@ -61517,7 +62000,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "raven_test_examinations"
   },
   {
     "module": "MedicalRecordRecordFileLoan",
@@ -61712,7 +62196,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "record_file_loans"
   },
   {
     "module": "MedicalRecordRehabilitationProcedureExamination",
@@ -61880,7 +62365,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "rehabilitation_procedure_examinations"
   },
   {
     "module": "MedicalRecordRehabilitationProcedureExaminationItem",
@@ -62010,7 +62496,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "rehabilitation_procedure_examination_items"
   },
   {
     "module": "MedicalRecordRetentionSchedule",
@@ -62043,7 +62530,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "retention_schedules"
   },
   {
     "module": "MedicalRecordRiskFactor",
@@ -62223,7 +62711,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "risk_factors"
   },
   {
     "module": "MedicalRecordSickLeaveCertificate",
@@ -62366,7 +62855,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sick_leave_certificates"
   },
   {
     "module": "MedicalRecordSkinPrickTestExamination",
@@ -62561,7 +63051,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "skin_prick_test_examinations"
   },
   {
     "module": "MedicalRecordSocialCondition",
@@ -62741,7 +63232,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "social_conditions"
   },
   {
     "module": "MedicalRecordSurgery",
@@ -62898,7 +63390,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "surgeries"
   },
   {
     "module": "MedicalRecordSurgeryPerformer",
@@ -63028,7 +63521,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "surgery_performers"
   },
   {
     "module": "MedicalRecordSurgicalProcedureHistory",
@@ -63136,7 +63630,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "surgical_procedure_histories"
   },
   {
     "module": "MedicalRecordTbDiseaseHistory",
@@ -63249,7 +63744,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "tb_disease_histories"
   },
   {
     "module": "MedicalRecordThighExamination",
@@ -63425,7 +63921,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "thigh_examinations"
   },
   {
     "module": "MedicalRecordThroatExamination",
@@ -63593,7 +64090,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "throat_examinations"
   },
   {
     "module": "MedicalRecordToeExamination",
@@ -63780,7 +64278,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "toe_examinations"
   },
   {
     "module": "MedicalRecordToenailExamination",
@@ -63967,7 +64466,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "toenail_examinations"
   },
   {
     "module": "MedicalRecordTongueExamination",
@@ -64154,7 +64654,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "tongue_examinations"
   },
   {
     "module": "MedicalRecordTonsilExamination",
@@ -64330,7 +64831,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "tonsil_examinations"
   },
   {
     "module": "MedicalRecordTranscranialDopplerExamination",
@@ -64512,7 +65014,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "transcranial_doppler_examinations"
   },
   {
     "module": "MedicalRecordTranscranialDopplerWindow",
@@ -64662,7 +65165,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "transcranial_doppler_windows"
   },
   {
     "module": "MedicalRecordTransferMedicationReconciliation",
@@ -64789,7 +65293,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "transfer_medication_reconciliations"
   },
   {
     "module": "MedicalRecordTransferMedicationReconciliationItem",
@@ -64900,7 +65405,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "transfer_medication_reconciliation_items"
   },
   {
     "module": "MedicalRecordTreatmentHistory",
@@ -64998,7 +65504,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "treatment_histories"
   },
   {
     "module": "MedicalRecordTriage",
@@ -65097,7 +65604,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "triages"
   },
   {
     "module": "MedicalRecordTumorAssessment",
@@ -65261,7 +65769,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "tumor_assessments"
   },
   {
     "module": "MedicalRecordUltrasoundGuidedProcedure",
@@ -65394,7 +65903,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ultrasound_guided_procedures"
   },
   {
     "module": "MedicalRecordUpperArmExamination",
@@ -65570,7 +66080,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "upper_arm_examinations"
   },
   {
     "module": "MedicalRecordUpperGiTractExamination",
@@ -65746,7 +66257,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "upper_gi_tract_examinations"
   },
   {
     "module": "MedicalRecordVitalSign",
@@ -65885,7 +66397,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "vital_signs"
   },
   {
     "module": "PasienPatientPortalAccount",
@@ -66020,7 +66533,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_portal_accounts"
   },
   {
     "module": "PegawaiEmployeeContact",
@@ -66113,7 +66627,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "employee_contacts"
   },
   {
     "module": "PegawaiEmployeeIdentityCard",
@@ -66225,7 +66740,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "employee_identity_cards"
   },
   {
     "module": "PegawaiJadwalShift",
@@ -66421,7 +66937,8 @@
           "uri": "shift-schedules-by-ward"
         }
       ]
-    }
+    },
+    "tableName": "shift_schedules"
   },
   {
     "module": "PegawaiPracticeLicense",
@@ -66539,7 +67056,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "practice_licenses"
   },
   {
     "module": "PegawaiRemunerasiJasaMedis",
@@ -66741,7 +67259,8 @@
           "uri": "remuneration-entries/summary"
         }
       ]
-    }
+    },
+    "tableName": "remuneration_entries"
   },
   {
     "module": "PembatalanDocumentCancellation",
@@ -66851,7 +67370,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "document_cancellations"
   },
   {
     "module": "PembatalanFinalResult",
@@ -66955,7 +67475,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "final_result_cancellations"
   },
   {
     "module": "PembatalanMedicalRecordCancellation",
@@ -67056,7 +67577,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "medical_record_cancellations"
   },
   {
     "module": "PembatalanReturnCancellation",
@@ -67157,7 +67679,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "return_cancellations"
   },
   {
     "module": "PembatalanVisitCancellation",
@@ -67235,7 +67758,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "pembatalan_visit_cancellations"
   },
   {
     "module": "PembayaranCashier",
@@ -67342,7 +67866,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "cashiers"
   },
   {
     "module": "PembayaranCashierTransaction",
@@ -67432,7 +67957,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "cashier_transactions"
   },
   {
     "module": "PembayaranClaimInvoice",
@@ -67553,7 +68079,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "claim_invoices"
   },
   {
     "module": "PembayaranCorporateReceivable",
@@ -67645,7 +68172,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "corporate_receivables"
   },
   {
     "module": "PembayaranCorporateReceivableSettlement",
@@ -67711,7 +68239,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "corporate_receivable_settlements"
   },
   {
     "module": "PembayaranDeposit",
@@ -67802,7 +68331,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "deposits"
   },
   {
     "module": "PembayaranDepositRefund",
@@ -67859,7 +68389,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "deposit_refunds"
   },
   {
     "module": "PembayaranDiscount",
@@ -67982,7 +68513,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discounts"
   },
   {
     "module": "PembayaranDoctorDiscount",
@@ -68077,7 +68609,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "doctor_discounts"
   },
   {
     "module": "PembayaranEdc",
@@ -68214,7 +68747,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "edc_transactions"
   },
   {
     "module": "PembayaranInvoice",
@@ -68362,7 +68896,8 @@
           "uri": "invoices/{invoice}/unlock"
         }
       ]
-    }
+    },
+    "tableName": "invoices"
   },
   {
     "module": "PembayaranInvoiceCancellation",
@@ -68419,7 +68954,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "invoice_cancellations"
   },
   {
     "module": "PembayaranInvoiceGuarantor",
@@ -68560,7 +69096,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "invoice_guarantors"
   },
   {
     "module": "PembayaranInvoiceItem",
@@ -68684,7 +69221,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "invoice_items"
   },
   {
     "module": "PembayaranInvoiceMerge",
@@ -68804,7 +69342,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "invoice_merges"
   },
   {
     "module": "PembayaranInvoiceSubsidy",
@@ -68930,7 +69469,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "invoice_subsidies"
   },
   {
     "module": "PembayaranPackageInvoiceItem",
@@ -69049,7 +69589,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "package_invoice_items"
   },
   {
     "module": "PembayaranPatientReceivable",
@@ -69141,7 +69682,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_receivables"
   },
   {
     "module": "PembayaranPatientReceivableSettlement",
@@ -69207,7 +69749,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_receivable_settlements"
   },
   {
     "module": "PembayaranPayment",
@@ -69305,7 +69848,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "payments"
   },
   {
     "module": "PembayaranPaymentProvider",
@@ -69492,7 +70036,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "payment_providers"
   },
   {
     "module": "PembayaranProviderService",
@@ -69666,7 +70211,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "provider_services"
   },
   {
     "module": "PembayaranRegistrationInvoice",
@@ -69784,7 +70330,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "registration_invoices"
   },
   {
     "module": "PembayaranTransfer",
@@ -69921,7 +70468,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "bank_transfers"
   },
   {
     "module": "PendaftaranAccidentRecord",
@@ -69998,7 +70546,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "accident_records"
   },
   {
     "module": "PendaftaranApplicant",
@@ -70208,7 +70757,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "applicants"
   },
   {
     "module": "PendaftaranBedQueue",
@@ -70292,7 +70842,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "bed_queues"
   },
   {
     "module": "PendaftaranCoManagement",
@@ -70363,7 +70914,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "co_managements"
   },
   {
     "module": "PendaftaranConsultation",
@@ -70446,7 +70998,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "consultations"
   },
   {
     "module": "PendaftaranConsultationAnswer",
@@ -70517,7 +71070,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "consultation_answers"
   },
   {
     "module": "PendaftaranFunction",
@@ -70618,7 +71172,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "registration_functions"
   },
   {
     "module": "PendaftaranGuarantor",
@@ -70777,7 +71332,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "guarantors"
   },
   {
     "module": "PendaftaranHistory",
@@ -70863,7 +71419,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "registration_histories"
   },
   {
     "module": "PendaftaranPatientEscort",
@@ -71035,7 +71592,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_escorts"
   },
   {
     "module": "PendaftaranPatientEscortContact",
@@ -71140,7 +71698,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_escort_contacts"
   },
   {
     "module": "PendaftaranPatientEscortIdentityCard",
@@ -71340,7 +71899,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_escort_identity_cards"
   },
   {
     "module": "PendaftaranPatientGuardian",
@@ -71512,7 +72072,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_guardians"
   },
   {
     "module": "PendaftaranPatientGuardianContact",
@@ -71617,7 +72178,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_guardian_contacts"
   },
   {
     "module": "PendaftaranPatientGuardianIdentityCard",
@@ -71817,7 +72379,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_guardian_identity_cards"
   },
   {
     "module": "PendaftaranPatientPurpose",
@@ -71900,7 +72463,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_purposes"
   },
   {
     "module": "PendaftaranPatientTransfer",
@@ -71983,7 +72547,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "patient_transfers"
   },
   {
     "module": "PendaftaranQueueCall",
@@ -72040,7 +72605,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "queue_calls"
   },
   {
     "module": "PendaftaranReferral",
@@ -72146,7 +72712,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "referrals"
   },
   {
     "module": "PendaftaranReferralLetter",
@@ -72229,7 +72796,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "referral_letters"
   },
   {
     "module": "PendaftaranRegistration",
@@ -72541,7 +73109,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "registrations"
   },
   {
     "module": "PendaftaranReservation",
@@ -72642,7 +73211,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "reservations"
   },
   {
     "module": "PendaftaranSelfCheckin",
@@ -72722,7 +73292,8 @@
           "uri": "self-checkin-queues/{queue}/complete"
         }
       ]
-    }
+    },
+    "tableName": "self_checkin_queues"
   },
   {
     "module": "PendaftaranServiceHandover",
@@ -72837,7 +73408,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "service_handovers"
   },
   {
     "module": "PendaftaranVisit",
@@ -73098,7 +73670,8 @@
           "uri": "visits/{visit}/discharge"
         }
       ]
-    }
+    },
+    "tableName": "visits"
   },
   {
     "module": "PendaftaranVisitCancellation",
@@ -73157,7 +73730,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "visit_cancellations"
   },
   {
     "module": "PendaftaranVisitDateChange",
@@ -73225,7 +73799,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "visit_date_changes"
   },
   {
     "module": "PendaftaranWardQueue",
@@ -73311,7 +73886,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "ward_queues"
   },
   {
     "module": "PenjaminRSAttendingPhysician",
@@ -73412,7 +73988,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "attending_physicians"
   },
   {
     "module": "PenjaminRSClaimDriver",
@@ -73513,7 +74090,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "claim_drivers"
   },
   {
     "module": "PenjaminRSDischargeMethod",
@@ -73596,7 +74174,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "discharge_methods"
   },
   {
     "module": "PenjualanSale",
@@ -73691,7 +74270,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sales"
   },
   {
     "module": "PenjualanSaleItem",
@@ -73779,7 +74359,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sale_items"
   },
   {
     "module": "PenjualanSaleReturn",
@@ -73854,7 +74435,8 @@
         }
       ],
       "verbs": []
-    }
+    },
+    "tableName": "sale_returns"
   },
   {
     "module": "RsOnline",
@@ -73944,7 +74526,8 @@
           "uri": "referensi/faskes"
         }
       ]
-    }
+    },
+    "tableName": "rs_online_submissions"
   },
   {
     "module": "SatuSehat",
@@ -73957,7 +74540,8 @@
     "route": {
       "apiResources": [],
       "verbs": []
-    }
+    },
+    "tableName": "satu_sehat_staging_submissions"
   },
   {
     "module": "SatuSehatAnak",
@@ -74037,7 +74621,8 @@
           "uri": "imunisasi-covid19/bundle"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatFarmasi",
@@ -74392,7 +74977,8 @@
           "uri": "medication-requests"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatIbuAnak",
@@ -74476,7 +75062,8 @@
           "uri": "data-kelahiran/bundle"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatIgd",
@@ -74666,7 +75253,8 @@
           "uri": "triage-observations"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatKlaim",
@@ -74722,7 +75310,8 @@
           "uri": "{useCase}"
         }
       ]
-    }
+    },
+    "tableName": "klaim_submissions"
   },
   {
     "module": "SatuSehatKptl",
@@ -74760,7 +75349,8 @@
           "uri": "base-code-by-modifier"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatMasterData",
@@ -74802,7 +75392,8 @@
           "uri": "kfa/products/all"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatPenyakitMenular",
@@ -74858,7 +75449,8 @@
           "uri": "{useCase}"
         }
       ]
-    }
+    },
+    "tableName": "penyakit_menular_submissions"
   },
   {
     "module": "SatuSehatPtmRegistry",
@@ -74934,7 +75526,8 @@
           "uri": "uronefrologi/bundle"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatRawatInap",
@@ -75100,7 +75693,8 @@
           "uri": "encounters"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatRawatJalan",
@@ -75257,7 +75851,8 @@
           "uri": "encounters"
         }
       ]
-    }
+    },
+    "tableName": null
   },
   {
     "module": "SatuSehatSpesialistik",
@@ -75313,7 +75908,8 @@
           "uri": "{useCase}"
         }
       ]
-    }
+    },
+    "tableName": "spesialistik_submissions"
   },
   {
     "module": "SirsOnlineBor",
@@ -75476,7 +76072,8 @@
           "uri": "tempat-tidur/{tempatTidur}"
         }
       ]
-    }
+    },
+    "tableName": "sirs_online_bor_tempat_tidurs"
   },
   {
     "module": "Sisrute",
@@ -75562,7 +76159,8 @@
           "uri": "sisrute/referensi/kriteria-matneo"
         }
       ]
-    }
+    },
+    "tableName": "rujukans"
   },
   {
     "module": "SisruteResumeMedis",
@@ -75584,7 +76182,8 @@
           "uri": "resume"
         }
       ]
-    }
+    },
+    "tableName": "resume_medis"
   },
   {
     "module": "Sitb",
@@ -76169,7 +76768,8 @@
           "uri": "pasien-tb/{pasienTb}"
         }
       ]
-    }
+    },
+    "tableName": "pasien_tb"
   },
   {
     "module": "SystemLicenseGuard",
@@ -76255,7 +76855,8 @@
           "uri": "/webhook"
         }
       ]
-    }
+    },
+    "tableName": "system_licenses"
   },
   {
     "module": "SystemTteDocument",
@@ -76337,6 +76938,7 @@
           "uri": "tte-documents/{tteDocument}/lock"
         }
       ]
-    }
+    },
+    "tableName": "tte_documents"
   }
 ]

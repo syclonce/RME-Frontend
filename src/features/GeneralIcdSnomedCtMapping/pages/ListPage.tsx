@@ -6,8 +6,8 @@ import { useIcdSnomedCtMappingResource } from '../api'
 const COLUMNS = ["id","icd_code","snomed_code","icd_description","snomed_description","is_active"] as const
 
 export function IcdSnomedCtMappingListPage() {
-  const { list, remove } = useIcdSnomedCtMappingResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useIcdSnomedCtMappingResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

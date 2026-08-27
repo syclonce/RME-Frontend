@@ -6,8 +6,8 @@ import { useThighExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","side","muscle_strength","circumference_cm","swelling","findings","examined_at","created_at","updated_at"] as const
 
 export function ThighExaminationListPage() {
-  const { list, remove } = useThighExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useThighExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useDifferentialDiagnosisResource } from '../api'
 const COLUMNS = ["id","visit_id","diagnosis_code_id","description","rank","recorded_by","recorded_at","status","created_at","updated_at"] as const
 
 export function DifferentialDiagnosisListPage() {
-  const { list, remove } = useDifferentialDiagnosisResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDifferentialDiagnosisResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

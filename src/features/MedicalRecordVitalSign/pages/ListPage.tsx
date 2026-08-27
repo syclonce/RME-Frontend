@@ -6,8 +6,8 @@ import { useVitalSignResource } from '../api'
 const COLUMNS = ["id","visit_id","recorded_at","temperature","pulse","respiratory_rate","systolic","diastolic","oxygen_saturation","pain_scale","recorded_by","created_by","created_at"] as const
 
 export function VitalSignListPage() {
-  const { list } = useVitalSignResource()
-  const { data, isLoading } = list()
+  const { useList } = useVitalSignResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

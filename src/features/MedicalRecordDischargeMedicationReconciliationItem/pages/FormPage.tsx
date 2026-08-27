@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDischargeMedicationReconciliationItemResource } from '../api'
 import type { DischargeMedicationReconciliationItemFormValues } from '../types'
 
@@ -23,7 +24,11 @@ export function DischargeMedicationReconciliationItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah DischargeMedicationReconciliationItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="reconciliation_id">Reconciliation *</Label>
-        <Input id="reconciliation_id" type="number" value={values.reconciliation_id ?? ''} onChange={(e) => setValues({ ...values, reconciliation_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/discharge-med-reconciliations"
+          value={values.reconciliation_id ?? null}
+          onChange={(v) => setValues({ ...values, reconciliation_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="drug_name">Drug Name *</Label>

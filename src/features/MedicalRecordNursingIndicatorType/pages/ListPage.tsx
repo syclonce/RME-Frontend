@@ -6,8 +6,8 @@ import { useNursingIndicatorTypeResource } from '../api'
 const COLUMNS = ["id","name","description","is_active","created_at","updated_at"] as const
 
 export function NursingIndicatorTypeListPage() {
-  const { list, remove } = useNursingIndicatorTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useNursingIndicatorTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

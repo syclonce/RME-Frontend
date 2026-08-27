@@ -11,8 +11,8 @@ export function SitbTb03RoTransferFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSitbTb03RoTransferResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSitbTb03RoTransferResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SitbTb03RoTransferFormValues>({})
 
   useEffect(() => {

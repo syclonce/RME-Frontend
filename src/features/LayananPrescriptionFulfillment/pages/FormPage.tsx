@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePrescriptionFulfillmentResource } from '../api'
 import type { PrescriptionFulfillmentFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PrescriptionFulfillmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePrescriptionFulfillmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePrescriptionFulfillmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PrescriptionFulfillmentFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function PrescriptionFulfillmentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PrescriptionFulfillment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription *</Label>
-        <Input id="prescription_id" type="number" value={values.prescription_id ?? ''} onChange={(e) => setValues({ ...values, prescription_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/prescriptions"
+          value={values.prescription_id ?? null}
+          onChange={(v) => setValues({ ...values, prescription_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="served_by">Served By *</Label>
-        <Input id="served_by" type="number" value={values.served_by ?? ''} onChange={(e) => setValues({ ...values, served_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.served_by ?? null}
+          onChange={(v) => setValues({ ...values, served_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="served_at">Served At *</Label>

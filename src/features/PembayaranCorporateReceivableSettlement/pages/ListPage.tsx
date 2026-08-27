@@ -6,8 +6,8 @@ import { useCorporateReceivableSettlementResource } from '../api'
 const COLUMNS = ["id","corporate_receivable_id","paid_amount","paid_at","received_by","created_at"] as const
 
 export function CorporateReceivableSettlementListPage() {
-  const { list } = useCorporateReceivableSettlementResource()
-  const { data, isLoading } = list()
+  const { useList } = useCorporateReceivableSettlementResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

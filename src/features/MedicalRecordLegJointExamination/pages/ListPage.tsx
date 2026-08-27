@@ -6,8 +6,8 @@ import { useLegJointExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","joint","range_of_motion","swelling","tenderness","deformity","findings","examined_at","created_at","updated_at"] as const
 
 export function LegJointExaminationListPage() {
-  const { list, remove } = useLegJointExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLegJointExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useProcedureConsentPatientAcknowledgementResource } from '../api'
 const COLUMNS = ["id","consent_id","acknowledger_name","relationship_to_patient","decision","signed_at","created_at"] as const
 
 export function ProcedureConsentPatientAcknowledgementListPage() {
-  const { list } = useProcedureConsentPatientAcknowledgementResource()
-  const { data, isLoading } = list()
+  const { useList } = useProcedureConsentPatientAcknowledgementResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePathologyMolecularResultResource } from '../api'
 import type { PathologyMolecularResultFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function PathologyMolecularResultFormPage() {
       <h1 className="text-lg font-semibold">Tambah PathologyMolecularResult</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="pathology_anatomy_result_id">Pathology Anatomy Result *</Label>
-        <Input id="pathology_anatomy_result_id" type="number" value={values.pathology_anatomy_result_id ?? ''} onChange={(e) => setValues({ ...values, pathology_anatomy_result_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/pathology-anatomy-results"
+          value={values.pathology_anatomy_result_id ?? null}
+          onChange={(v) => setValues({ ...values, pathology_anatomy_result_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="test_name">Test Name *</Label>

@@ -6,8 +6,8 @@ import { useObstetricsResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","gravida","para","abortus","gestational_age_weeks","fundal_height_cm","fetal_heart_rate","fetal_presentation","estimated_fetal_weight","notes","examined_at","created_at","updated_at"] as const
 
 export function ObstetricsListPage() {
-  const { list, remove } = useObstetricsResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useObstetricsResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

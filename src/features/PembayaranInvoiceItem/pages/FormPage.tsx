@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInvoiceItemResource } from '../api'
 import type { InvoiceItemFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function InvoiceItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useInvoiceItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useInvoiceItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<InvoiceItemFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function InvoiceItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} InvoiceItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <Input id="invoice_id" type="number" value={values.invoice_id ?? ''} onChange={(e) => setValues({ ...values, invoice_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/invoices"
+          value={values.invoice_id ?? null}
+          onChange={(v) => setValues({ ...values, invoice_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="service_id">Service</Label>
-        <Input id="service_id" type="number" value={values.service_id ?? ''} onChange={(e) => setValues({ ...values, service_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/services"
+          value={values.service_id ?? null}
+          onChange={(v) => setValues({ ...values, service_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="description">Description *</Label>

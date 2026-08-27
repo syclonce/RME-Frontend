@@ -6,8 +6,8 @@ import { useEmployeeResource } from '../api'
 const COLUMNS = ["id","user_id","employee_number","name","nickname","title_prefix","title_suffix","birth_place","birth_date","religion_id","gender_id","profession_id","smf_id","address","rt","rw","postal_code","village_id","is_non_employee","is_active","created_at","updated_at"] as const
 
 export function EmployeeListPage() {
-  const { list, remove } = useEmployeeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEmployeeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

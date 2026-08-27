@@ -6,8 +6,8 @@ import { usePharmacyDepotResource } from '../api'
 const COLUMNS = ["id","code","name","ward_id","phone","is_active","created_at"] as const
 
 export function PharmacyDepotListPage() {
-  const { list, remove } = usePharmacyDepotResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePharmacyDepotResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

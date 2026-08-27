@@ -6,8 +6,8 @@ import { useSurgicalSafetyEvaluationResultResource } from '../api'
 const COLUMNS = ["id","visit_id","operating_room_id","evaluator_id","checklist_score","compliant","evaluated_at","notes","created_at"] as const
 
 export function SurgicalSafetyEvaluationResultListPage() {
-  const { list } = useSurgicalSafetyEvaluationResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useSurgicalSafetyEvaluationResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

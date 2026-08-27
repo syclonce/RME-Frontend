@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDepositRefundResource } from '../api'
 import type { DepositRefundFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function DepositRefundFormPage() {
       <h1 className="text-lg font-semibold">Tambah DepositRefund</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="deposit_id">Deposit *</Label>
-        <Input id="deposit_id" type="number" value={values.deposit_id ?? ''} onChange={(e) => setValues({ ...values, deposit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/deposits"
+          value={values.deposit_id ?? null}
+          onChange={(v) => setValues({ ...values, deposit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="refunded_amount">Refunded Amount *</Label>

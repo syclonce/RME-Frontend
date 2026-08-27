@@ -6,8 +6,8 @@ import { useCashierTransactionResource } from '../api'
 const COLUMNS = ["id","cashier_id","invoice_id","amount","transaction_type","transacted_at","created_at"] as const
 
 export function CashierTransactionListPage() {
-  const { list } = useCashierTransactionResource()
-  const { data, isLoading } = list()
+  const { useList } = useCashierTransactionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

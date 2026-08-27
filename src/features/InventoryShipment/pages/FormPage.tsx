@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useShipmentResource } from '../api'
 import type { ShipmentFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function ShipmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useShipmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useShipmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ShipmentFormValues>({})
 
   useEffect(() => {
@@ -30,15 +31,27 @@ export function ShipmentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Shipment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="from_ward_id">From Ward *</Label>
-        <Input id="from_ward_id" type="number" value={values.from_ward_id ?? ''} onChange={(e) => setValues({ ...values, from_ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.from_ward_id ?? null}
+          onChange={(v) => setValues({ ...values, from_ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="to_ward_id">To Ward *</Label>
-        <Input id="to_ward_id" type="number" value={values.to_ward_id ?? ''} onChange={(e) => setValues({ ...values, to_ward_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/wards"
+          value={values.to_ward_id ?? null}
+          onChange={(v) => setValues({ ...values, to_ward_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="shipped_by">Shipped By *</Label>
-        <Input id="shipped_by" type="number" value={values.shipped_by ?? ''} onChange={(e) => setValues({ ...values, shipped_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.shipped_by ?? null}
+          onChange={(v) => setValues({ ...values, shipped_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="shipped_at">Shipped At</Label>

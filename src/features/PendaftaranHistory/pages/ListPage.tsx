@@ -6,8 +6,8 @@ import { usePendaftaranHistoryResource } from '../api'
 const COLUMNS = ["id","registration_id","old_status","new_status","changed_by","changed_at","notes","created_at"] as const
 
 export function PendaftaranHistoryListPage() {
-  const { list } = usePendaftaranHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = usePendaftaranHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

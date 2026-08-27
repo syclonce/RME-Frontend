@@ -6,8 +6,8 @@ import { usePatientReceivableSettlementResource } from '../api'
 const COLUMNS = ["id","patient_receivable_id","paid_amount","paid_at","received_by","created_at"] as const
 
 export function PatientReceivableSettlementListPage() {
-  const { list } = usePatientReceivableSettlementResource()
-  const { data, isLoading } = list()
+  const { useList } = usePatientReceivableSettlementResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

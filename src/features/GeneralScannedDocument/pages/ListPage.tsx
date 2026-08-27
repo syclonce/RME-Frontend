@@ -6,8 +6,8 @@ import { useGeneralScannedDocumentResource } from '../api'
 const COLUMNS = ["id","patient_id","document_type","file_path","scanned_at","scanned_by","created_at"] as const
 
 export function GeneralScannedDocumentListPage() {
-  const { list } = useGeneralScannedDocumentResource()
-  const { data, isLoading } = list()
+  const { useList } = useGeneralScannedDocumentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

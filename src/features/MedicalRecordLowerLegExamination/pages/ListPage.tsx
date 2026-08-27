@@ -6,8 +6,8 @@ import { useLowerLegExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","side","muscle_strength","edema","pulses","skin_condition","findings","examined_at","created_at","updated_at"] as const
 
 export function LowerLegExaminationListPage() {
-  const { list, remove } = useLowerLegExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useLowerLegExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

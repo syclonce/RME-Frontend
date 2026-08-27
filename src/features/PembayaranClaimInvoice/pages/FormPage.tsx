@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useClaimInvoiceResource } from '../api'
 import type { ClaimInvoiceFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function ClaimInvoiceFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useClaimInvoiceResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useClaimInvoiceResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ClaimInvoiceFormValues>({})
 
   useEffect(() => {
@@ -34,11 +35,19 @@ export function ClaimInvoiceFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <Input id="invoice_id" type="number" value={values.invoice_id ?? ''} onChange={(e) => setValues({ ...values, invoice_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/invoices"
+          value={values.invoice_id ?? null}
+          onChange={(v) => setValues({ ...values, invoice_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="guarantor_id">Guarantor</Label>
-        <Input id="guarantor_id" type="number" value={values.guarantor_id ?? ''} onChange={(e) => setValues({ ...values, guarantor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/guarantors"
+          value={values.guarantor_id ?? null}
+          onChange={(v) => setValues({ ...values, guarantor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="claim_amount">Claim Amount *</Label>

@@ -6,8 +6,8 @@ import { useShipmentResource } from '../api'
 const COLUMNS = ["id","from_ward_id","to_ward_id","shipped_by","shipped_at","status","created_at"] as const
 
 export function ShipmentListPage() {
-  const { list } = useShipmentResource()
-  const { data, isLoading } = list()
+  const { useList } = useShipmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

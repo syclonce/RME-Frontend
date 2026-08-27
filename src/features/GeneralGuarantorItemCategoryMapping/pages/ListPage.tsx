@@ -6,8 +6,8 @@ import { useGuarantorItemCategoryMappingResource } from '../api'
 const COLUMNS = ["id","guarantor_id","item_category_id","is_covered","coverage_percentage","notes","created_at"] as const
 
 export function GuarantorItemCategoryMappingListPage() {
-  const { list, remove } = useGuarantorItemCategoryMappingResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGuarantorItemCategoryMappingResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

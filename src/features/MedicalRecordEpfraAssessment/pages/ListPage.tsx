@@ -6,8 +6,8 @@ import { useEpfraAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","assessor_id","criteria_notes","score","risk_level","assessed_at","created_at","updated_at"] as const
 
 export function EpfraAssessmentListPage() {
-  const { list, remove } = useEpfraAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useEpfraAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

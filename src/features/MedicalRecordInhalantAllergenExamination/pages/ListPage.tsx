@@ -6,8 +6,8 @@ import { useInhalantAllergenExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","allergen_name","reaction_grade","wheal_diameter_mm","erythema_diameter_mm","interpretation","examined_at","created_at","updated_at"] as const
 
 export function InhalantAllergenExaminationListPage() {
-  const { list, remove } = useInhalantAllergenExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInhalantAllergenExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

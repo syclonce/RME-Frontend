@@ -6,8 +6,8 @@ import { useBaepSensoryDetailResource } from '../api'
 const COLUMNS = ["id","baep_protocol_id","sensory_modality","sensory_score","affected_region","created_at"] as const
 
 export function BaepSensoryDetailListPage() {
-  const { list } = useBaepSensoryDetailResource()
-  const { data, isLoading } = list()
+  const { useList } = useBaepSensoryDetailResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

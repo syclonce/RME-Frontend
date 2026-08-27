@@ -6,8 +6,8 @@ import { useTbDiseaseHistoryResource } from '../api'
 const COLUMNS = ["id","visit_id","created_by","previous_tb_treatment","treatment_year","treatment_outcome","tb_category","notes","created_at"] as const
 
 export function TbDiseaseHistoryListPage() {
-  const { list } = useTbDiseaseHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = useTbDiseaseHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

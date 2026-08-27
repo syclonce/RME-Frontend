@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useAntimicrobialStewardshipFormResource } from '../api'
 import type { AntimicrobialStewardshipFormFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function AntimicrobialStewardshipFormFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useAntimicrobialStewardshipFormResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useAntimicrobialStewardshipFormResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<AntimicrobialStewardshipFormFormValues>({})
 
   useEffect(() => {
@@ -30,19 +31,35 @@ export function AntimicrobialStewardshipFormFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} AntimicrobialStewardshipForm</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <Input id="patient_id" type="number" value={values.patient_id ?? ''} onChange={(e) => setValues({ ...values, patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patients"
+          value={values.patient_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="requesting_doctor_id">Requesting Doctor</Label>
-        <Input id="requesting_doctor_id" type="number" value={values.requesting_doctor_id ?? ''} onChange={(e) => setValues({ ...values, requesting_doctor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.requesting_doctor_id ?? null}
+          onChange={(v) => setValues({ ...values, requesting_doctor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="antibiotic_restriction_id">Antibiotic Restriction</Label>
-        <Input id="antibiotic_restriction_id" type="number" value={values.antibiotic_restriction_id ?? ''} onChange={(e) => setValues({ ...values, antibiotic_restriction_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/antibiotic-restrictions"
+          value={values.antibiotic_restriction_id ?? null}
+          onChange={(v) => setValues({ ...values, antibiotic_restriction_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="indication">Indication *</Label>

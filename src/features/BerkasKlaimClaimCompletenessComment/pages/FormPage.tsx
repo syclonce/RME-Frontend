@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBerkasKlaimClaimCompletenessCommentResource } from '../api'
 import type { BerkasKlaimClaimCompletenessCommentFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function BerkasKlaimClaimCompletenessCommentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBerkasKlaimClaimCompletenessCommentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBerkasKlaimClaimCompletenessCommentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BerkasKlaimClaimCompletenessCommentFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function BerkasKlaimClaimCompletenessCommentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BerkasKlaimClaimCompletenessComment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="claim_completeness_id">Claim Completeness *</Label>
-        <Input id="claim_completeness_id" type="number" value={values.claim_completeness_id ?? ''} onChange={(e) => setValues({ ...values, claim_completeness_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/claim-completeness"
+          value={values.claim_completeness_id ?? null}
+          onChange={(v) => setValues({ ...values, claim_completeness_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="comment">Comment *</Label>

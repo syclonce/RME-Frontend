@@ -6,8 +6,8 @@ import { useDiagnosisIndicatorMappingResource } from '../api'
 const COLUMNS = ["id","diagnosis_id","indicator_code","indicator_name","target_score","description","is_active","created_at","updated_at"] as const
 
 export function DiagnosisIndicatorMappingListPage() {
-  const { list, remove } = useDiagnosisIndicatorMappingResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useDiagnosisIndicatorMappingResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

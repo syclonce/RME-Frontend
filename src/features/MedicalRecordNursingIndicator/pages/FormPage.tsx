@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useNursingIndicatorResource } from '../api'
 import type { NursingIndicatorFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function NursingIndicatorFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useNursingIndicatorResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useNursingIndicatorResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<NursingIndicatorFormValues>({})
 
   useEffect(() => {
@@ -39,7 +40,11 @@ export function NursingIndicatorFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="nursing_indicator_type_id">Nursing Indicator Type</Label>
-        <Input id="nursing_indicator_type_id" type="number" value={values.nursing_indicator_type_id ?? ''} onChange={(e) => setValues({ ...values, nursing_indicator_type_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/nursing-indicator-types"
+          value={values.nursing_indicator_type_id ?? null}
+          onChange={(v) => setValues({ ...values, nursing_indicator_type_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="unit">Unit</Label>

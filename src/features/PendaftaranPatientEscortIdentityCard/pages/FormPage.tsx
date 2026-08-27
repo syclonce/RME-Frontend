@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientEscortIdentityCardResource } from '../api'
 import type { PatientEscortIdentityCardFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function PatientEscortIdentityCardFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePatientEscortIdentityCardResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePatientEscortIdentityCardResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PatientEscortIdentityCardFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function PatientEscortIdentityCardFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientEscortIdentityCard</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_escort_id">Patient Escort *</Label>
-        <Input id="patient_escort_id" type="number" value={values.patient_escort_id ?? ''} onChange={(e) => setValues({ ...values, patient_escort_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patient-escorts"
+          value={values.patient_escort_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_escort_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="card_type">Card Type *</Label>

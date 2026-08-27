@@ -6,8 +6,8 @@ import { useGoodsReceiptResource } from '../api'
 const COLUMNS = ["id","receipt_number","supplier_id","item_id","quantity","unit_price","received_by","received_at","notes","created_at"] as const
 
 export function GoodsReceiptListPage() {
-  const { list } = useGoodsReceiptResource()
-  const { data, isLoading } = list()
+  const { useList } = useGoodsReceiptResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useProcedureConsentInformationReceiverResource } from '../api'
 const COLUMNS = ["id","consent_id","receiver_name","receiver_relationship","signed_at","created_at"] as const
 
 export function ProcedureConsentInformationReceiverListPage() {
-  const { list } = useProcedureConsentInformationReceiverResource()
-  const { data, isLoading } = list()
+  const { useList } = useProcedureConsentInformationReceiverResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

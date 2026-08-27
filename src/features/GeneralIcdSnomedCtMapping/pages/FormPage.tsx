@@ -11,8 +11,8 @@ export function IcdSnomedCtMappingFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useIcdSnomedCtMappingResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useIcdSnomedCtMappingResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<IcdSnomedCtMappingFormValues>({})
 
   useEffect(() => {

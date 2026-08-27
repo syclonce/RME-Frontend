@@ -6,8 +6,8 @@ import { useMedicationIterationResource } from '../api'
 const COLUMNS = ["id","prescription_id","iteration_number","quantity","dispensed_at","status","created_at"] as const
 
 export function MedicationIterationListPage() {
-  const { list } = useMedicationIterationResource()
-  const { data, isLoading } = list()
+  const { useList } = useMedicationIterationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

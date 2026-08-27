@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useReportTypeItemResource } from '../api'
 import type { ReportTypeItemFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function ReportTypeItemFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useReportTypeItemResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useReportTypeItemResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ReportTypeItemFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function ReportTypeItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ReportTypeItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="report_type_id">Report Type *</Label>
-        <Input id="report_type_id" type="number" value={values.report_type_id ?? ''} onChange={(e) => setValues({ ...values, report_type_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/report-types"
+          value={values.report_type_id ?? null}
+          onChange={(v) => setValues({ ...values, report_type_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="name">Name *</Label>

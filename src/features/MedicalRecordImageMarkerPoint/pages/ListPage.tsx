@@ -6,8 +6,8 @@ import { useImageMarkerPointResource } from '../api'
 const COLUMNS = ["id","image_marker_id","x_coordinate","y_coordinate","label","description","created_at","updated_at"] as const
 
 export function ImageMarkerPointListPage() {
-  const { list, remove } = useImageMarkerPointResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useImageMarkerPointResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

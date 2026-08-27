@@ -6,8 +6,8 @@ import { usePatientEscortResource } from '../api'
 const COLUMNS = ["id","registration_id","full_name","relationship_to_patient","phone_number","address","arrival_mode","notes","status","created_at","updated_at"] as const
 
 export function PatientEscortListPage() {
-  const { list, remove } = usePatientEscortResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientEscortResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

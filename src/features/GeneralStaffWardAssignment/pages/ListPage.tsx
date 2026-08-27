@@ -6,8 +6,8 @@ import { useStaffWardAssignmentResource } from '../api'
 const COLUMNS = ["id","staff_member_id","ward_id","assigned_at","created_at","updated_at"] as const
 
 export function StaffWardAssignmentListPage() {
-  const { list, remove } = useStaffWardAssignmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useStaffWardAssignmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

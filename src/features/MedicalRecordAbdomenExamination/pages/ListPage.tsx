@@ -6,8 +6,8 @@ import { useAbdomenExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","inspection","auscultation_bowel_sounds","palpation","percussion","tenderness","distension","liver_span_cm","findings","examined_at","created_at","updated_at"] as const
 
 export function AbdomenExaminationListPage() {
-  const { list, remove } = useAbdomenExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAbdomenExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

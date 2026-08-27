@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useLabReferenceValueResource } from '../api'
 import type { LabReferenceValueFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function LabReferenceValueFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useLabReferenceValueResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useLabReferenceValueResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<LabReferenceValueFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function LabReferenceValueFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LabReferenceValue</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_service_parameter_id">Lab Service Parameter *</Label>
-        <Input id="lab_service_parameter_id" type="number" value={values.lab_service_parameter_id ?? ''} onChange={(e) => setValues({ ...values, lab_service_parameter_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/lab-service-parameters"
+          value={values.lab_service_parameter_id ?? null}
+          onChange={(v) => setValues({ ...values, lab_service_parameter_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="gender">Gender</Label>

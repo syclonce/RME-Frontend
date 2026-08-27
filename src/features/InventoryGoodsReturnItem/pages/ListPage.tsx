@@ -6,8 +6,8 @@ import { useInventoryGoodsReturnItemResource } from '../api'
 const COLUMNS = ["id","goods_return_id","item_id","quantity","unit_price","reason","created_at"] as const
 
 export function InventoryGoodsReturnItemListPage() {
-  const { list } = useInventoryGoodsReturnItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useInventoryGoodsReturnItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

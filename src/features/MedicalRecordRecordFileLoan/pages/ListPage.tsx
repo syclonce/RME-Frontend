@@ -6,8 +6,8 @@ import { useRecordFileLoanResource } from '../api'
 const COLUMNS = ["id","patient_id","borrower_name","borrower_unit","purpose","loaned_at","due_at","returned_at","status","created_at","updated_at"] as const
 
 export function RecordFileLoanListPage() {
-  const { list, remove } = useRecordFileLoanResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRecordFileLoanResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

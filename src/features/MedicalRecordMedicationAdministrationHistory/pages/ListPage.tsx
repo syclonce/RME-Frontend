@@ -6,8 +6,8 @@ import { useMedicationAdministrationHistoryResource } from '../api'
 const COLUMNS = ["id","visit_id","administered_by","created_by","drug_name","dose","route","administered_at","notes","created_at"] as const
 
 export function MedicationAdministrationHistoryListPage() {
-  const { list } = useMedicationAdministrationHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = useMedicationAdministrationHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

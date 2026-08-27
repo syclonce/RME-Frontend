@@ -6,8 +6,8 @@ import { useTranscranialDopplerExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","indication","vessel","mean_velocity_cm_s","pulsatility_index","findings","examined_at","created_at","updated_at"] as const
 
 export function TranscranialDopplerExaminationListPage() {
-  const { list, remove } = useTranscranialDopplerExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useTranscranialDopplerExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

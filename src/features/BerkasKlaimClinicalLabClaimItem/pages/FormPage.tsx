@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useClinicalLabClaimItemResource } from '../api'
 import type { ClinicalLabClaimItemFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function ClinicalLabClaimItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah ClinicalLabClaimItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="clinical_lab_claim_id">Clinical Lab Claim *</Label>
-        <Input id="clinical_lab_claim_id" type="number" value={values.clinical_lab_claim_id ?? ''} onChange={(e) => setValues({ ...values, clinical_lab_claim_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/clinical-lab-claims"
+          value={values.clinical_lab_claim_id ?? null}
+          onChange={(v) => setValues({ ...values, clinical_lab_claim_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="test_name">Test Name *</Label>

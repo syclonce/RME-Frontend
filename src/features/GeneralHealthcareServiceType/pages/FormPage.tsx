@@ -11,8 +11,8 @@ export function HealthcareServiceTypeFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useHealthcareServiceTypeResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useHealthcareServiceTypeResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<HealthcareServiceTypeFormValues>({})
 
   useEffect(() => {

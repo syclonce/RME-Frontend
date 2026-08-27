@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInventoryGoodsReceiptCancellationResource } from '../api'
 import type { InventoryGoodsReceiptCancellationFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function InventoryGoodsReceiptCancellationFormPage() {
       <h1 className="text-lg font-semibold">Tambah InventoryGoodsReceiptCancellation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="goods_receipt_id">Goods Receipt *</Label>
-        <Input id="goods_receipt_id" type="number" value={values.goods_receipt_id ?? ''} onChange={(e) => setValues({ ...values, goods_receipt_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/goods-receipts"
+          value={values.goods_receipt_id ?? null}
+          onChange={(v) => setValues({ ...values, goods_receipt_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reason">Reason *</Label>

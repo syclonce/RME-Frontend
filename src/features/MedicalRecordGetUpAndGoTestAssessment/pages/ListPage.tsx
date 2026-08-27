@@ -6,8 +6,8 @@ import { useGetUpAndGoTestAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","time_seconds","assistive_device","fall_risk","notes","assessed_at","created_at","updated_at"] as const
 
 export function GetUpAndGoTestAssessmentListPage() {
-  const { list, remove } = useGetUpAndGoTestAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGetUpAndGoTestAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

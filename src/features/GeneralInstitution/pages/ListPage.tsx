@@ -6,8 +6,8 @@ import { useInstitutionResource } from '../api'
 const COLUMNS = ["id","ppk_id","email","website"] as const
 
 export function InstitutionListPage() {
-  const { list, remove } = useInstitutionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInstitutionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

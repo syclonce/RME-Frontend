@@ -6,8 +6,8 @@ import { useReportTypeResource } from '../api'
 const COLUMNS = ["id","name","class_name","module","level","is_active"] as const
 
 export function ReportTypeListPage() {
-  const { list, remove } = useReportTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useReportTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

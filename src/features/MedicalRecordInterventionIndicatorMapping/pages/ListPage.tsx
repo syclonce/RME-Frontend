@@ -6,8 +6,8 @@ import { useInterventionIndicatorMappingResource } from '../api'
 const COLUMNS = ["id","intervention_code","intervention_name","indicator_code","indicator_name","evaluation_criteria","is_active","created_at","updated_at"] as const
 
 export function InterventionIndicatorMappingListPage() {
-  const { list, remove } = useInterventionIndicatorMappingResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInterventionIndicatorMappingResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

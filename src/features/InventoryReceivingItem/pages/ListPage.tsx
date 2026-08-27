@@ -6,8 +6,8 @@ import { useReceivingItemResource } from '../api'
 const COLUMNS = ["id","receiving_record_id","item_id","quantity","unit_price","created_at"] as const
 
 export function ReceivingItemListPage() {
-  const { list } = useReceivingItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useReceivingItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useClinicalNoteVerificationResource } from '../api'
 const COLUMNS = ["id","clinical_note_id","verifier_doctor_id","verification_status","verified_at","notes","created_by","created_at","updated_at"] as const
 
 export function ClinicalNoteVerificationListPage() {
-  const { list, remove } = useClinicalNoteVerificationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useClinicalNoteVerificationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

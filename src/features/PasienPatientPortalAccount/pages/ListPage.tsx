@@ -6,8 +6,8 @@ import { usePatientPortalAccountResource } from '../api'
 const COLUMNS = ["id","patient_id","username","email","phone","is_active","created_at"] as const
 
 export function PatientPortalAccountListPage() {
-  const { list, remove } = usePatientPortalAccountResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientPortalAccountResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBloodBagResource } from '../api'
 import type { BloodBagFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function BloodBagFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBloodBagResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBloodBagResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BloodBagFormValues>({})
 
   useEffect(() => {
@@ -34,7 +35,11 @@ export function BloodBagFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="blood_type_id">Blood Type *</Label>
-        <Input id="blood_type_id" type="number" value={values.blood_type_id ?? ''} onChange={(e) => setValues({ ...values, blood_type_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/blood_types"
+          value={values.blood_type_id ?? null}
+          onChange={(v) => setValues({ ...values, blood_type_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="volume_ml">Volume Ml *</Label>

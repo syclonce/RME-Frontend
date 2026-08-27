@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePenjaminRSAttendingPhysicianResource } from '../api'
 import type { PenjaminRSAttendingPhysicianFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function PenjaminRSAttendingPhysicianFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePenjaminRSAttendingPhysicianResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePenjaminRSAttendingPhysicianResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PenjaminRSAttendingPhysicianFormValues>({})
 
   useEffect(() => {
@@ -31,11 +32,19 @@ export function PenjaminRSAttendingPhysicianFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PenjaminRSAttendingPhysician</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="employee_id">Employee *</Label>
-        <Input id="employee_id" type="number" value={values.employee_id ?? ''} onChange={(e) => setValues({ ...values, employee_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.employee_id ?? null}
+          onChange={(v) => setValues({ ...values, employee_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assigned_at">Assigned At</Label>

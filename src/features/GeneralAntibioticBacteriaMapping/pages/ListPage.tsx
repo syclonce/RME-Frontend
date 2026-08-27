@@ -6,8 +6,8 @@ import { useAntibioticBacteriaMappingResource } from '../api'
 const COLUMNS = ["id","antibiotic_name","bacteria_name","sensitivity_category","is_active"] as const
 
 export function AntibioticBacteriaMappingListPage() {
-  const { list, remove } = useAntibioticBacteriaMappingResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAntibioticBacteriaMappingResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

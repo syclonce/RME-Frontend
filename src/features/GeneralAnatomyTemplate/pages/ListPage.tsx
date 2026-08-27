@@ -6,8 +6,8 @@ import { useAnatomyTemplateResource } from '../api'
 const COLUMNS = ["id","code","name","description","is_active"] as const
 
 export function AnatomyTemplateListPage() {
-  const { list, remove } = useAnatomyTemplateResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useAnatomyTemplateResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

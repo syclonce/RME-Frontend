@@ -6,8 +6,8 @@ import { usePackageItemTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function PackageItemTypeListPage() {
-  const { list, remove } = usePackageItemTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePackageItemTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

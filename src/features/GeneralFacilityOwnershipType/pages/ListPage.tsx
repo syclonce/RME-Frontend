@@ -6,8 +6,8 @@ import { useFacilityOwnershipTypeResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function FacilityOwnershipTypeListPage() {
-  const { list, remove } = useFacilityOwnershipTypeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFacilityOwnershipTypeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

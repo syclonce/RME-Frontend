@@ -6,8 +6,8 @@ import { useTumorAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","diagnosis_id","assessed_by","created_by","tumor_location","size_cm","tnm_t","tnm_n","tnm_m","grade","notes","assessed_at","created_at"] as const
 
 export function TumorAssessmentListPage() {
-  const { list } = useTumorAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList } = useTumorAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

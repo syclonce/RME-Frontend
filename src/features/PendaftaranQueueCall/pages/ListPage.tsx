@@ -6,8 +6,8 @@ import { useQueueCallResource } from '../api'
 const COLUMNS = ["id","ward_queue_id","called_at","called_by","counter","created_at"] as const
 
 export function QueueCallListPage() {
-  const { list } = useQueueCallResource()
-  const { data, isLoading } = list()
+  const { useList } = useQueueCallResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

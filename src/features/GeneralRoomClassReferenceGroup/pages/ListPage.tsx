@@ -6,8 +6,8 @@ import { useRoomClassReferenceGroupResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function RoomClassReferenceGroupListPage() {
-  const { list, remove } = useRoomClassReferenceGroupResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRoomClassReferenceGroupResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

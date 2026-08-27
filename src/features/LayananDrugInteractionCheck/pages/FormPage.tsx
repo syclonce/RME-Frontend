@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useDrugInteractionRuleResource } from '../api'
 import type { DrugInteractionRuleFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function DrugInteractionRuleFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useDrugInteractionRuleResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useDrugInteractionRuleResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<DrugInteractionRuleFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function DrugInteractionRuleFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DrugInteractionRule</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id_a">Item Id A *</Label>
-        <Input id="item_id_a" type="number" value={values.item_id_a ?? ''} onChange={(e) => setValues({ ...values, item_id_a: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id_a ?? null}
+          onChange={(v) => setValues({ ...values, item_id_a: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id_b">Item Id B *</Label>
-        <Input id="item_id_b" type="number" value={values.item_id_b ?? ''} onChange={(e) => setValues({ ...values, item_id_b: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id_b ?? null}
+          onChange={(v) => setValues({ ...values, item_id_b: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="severity">Severity *</Label>

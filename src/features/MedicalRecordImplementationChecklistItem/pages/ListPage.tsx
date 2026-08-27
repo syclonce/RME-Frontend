@@ -6,8 +6,8 @@ import { useImplementationChecklistItemResource } from '../api'
 const COLUMNS = ["id","code","name","category","description","is_active","created_at","updated_at"] as const
 
 export function ImplementationChecklistItemListPage() {
-  const { list, remove } = useImplementationChecklistItemResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useImplementationChecklistItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

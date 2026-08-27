@@ -11,8 +11,8 @@ export function ExaminationGroupFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useExaminationGroupResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useExaminationGroupResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ExaminationGroupFormValues>({})
 
   useEffect(() => {

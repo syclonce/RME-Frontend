@@ -6,8 +6,8 @@ import { useNursingCarePlanImplementationResource } from '../api'
 const COLUMNS = ["id","nursing_care_plan_id","action_taken","performed_by","performed_at","evaluation","created_at","updated_at"] as const
 
 export function NursingCarePlanImplementationListPage() {
-  const { list, remove } = useNursingCarePlanImplementationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useNursingCarePlanImplementationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

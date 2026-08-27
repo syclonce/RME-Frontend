@@ -6,8 +6,8 @@ import { useRadiologyClaimItemResource } from '../api'
 const COLUMNS = ["id","radiology_claim_id","exam_name","amount","created_at"] as const
 
 export function RadiologyClaimItemListPage() {
-  const { list } = useRadiologyClaimItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useRadiologyClaimItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

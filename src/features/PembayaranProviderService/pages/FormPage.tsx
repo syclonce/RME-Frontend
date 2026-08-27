@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useProviderServiceResource } from '../api'
 import type { ProviderServiceFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function ProviderServiceFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useProviderServiceResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useProviderServiceResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<ProviderServiceFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function ProviderServiceFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ProviderService</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="payment_provider_id">Payment Provider *</Label>
-        <Input id="payment_provider_id" type="number" value={values.payment_provider_id ?? ''} onChange={(e) => setValues({ ...values, payment_provider_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/payment-providers"
+          value={values.payment_provider_id ?? null}
+          onChange={(v) => setValues({ ...values, payment_provider_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="service_code">Service Code</Label>

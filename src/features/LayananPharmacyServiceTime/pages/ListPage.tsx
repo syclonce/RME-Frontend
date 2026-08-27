@@ -6,8 +6,8 @@ import { usePharmacyServiceTimeResource } from '../api'
 const COLUMNS = ["id","prescription_id","received_at","prepared_at","dispensed_at","status","created_at","updated_at"] as const
 
 export function PharmacyServiceTimeListPage() {
-  const { list, remove } = usePharmacyServiceTimeResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePharmacyServiceTimeResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

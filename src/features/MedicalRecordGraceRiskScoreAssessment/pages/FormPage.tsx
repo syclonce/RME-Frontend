@@ -11,8 +11,8 @@ export function GraceRiskScoreAssessmentFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useGraceRiskScoreAssessmentResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useGraceRiskScoreAssessmentResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<GraceRiskScoreAssessmentFormValues>({})
 
   useEffect(() => {

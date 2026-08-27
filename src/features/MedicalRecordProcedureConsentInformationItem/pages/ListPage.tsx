@@ -6,8 +6,8 @@ import { useProcedureConsentInformationItemResource } from '../api'
 const COLUMNS = ["id","information_id","item_name","is_explained","is_understood","created_at"] as const
 
 export function ProcedureConsentInformationItemListPage() {
-  const { list } = useProcedureConsentInformationItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useProcedureConsentInformationItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useRadiologyViewerLogResource } from '../api'
 const COLUMNS = ["id","visit_id","accession_number","viewed_by","viewed_at","ip_address","notes","created_at","updated_at"] as const
 
 export function RadiologyViewerLogListPage() {
-  const { list, remove } = useRadiologyViewerLogResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useRadiologyViewerLogResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

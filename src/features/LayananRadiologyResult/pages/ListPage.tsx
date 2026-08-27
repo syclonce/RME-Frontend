@@ -6,8 +6,8 @@ import { useRadiologyResultResource } from '../api'
 const COLUMNS = ["id","radiology_order_id","findings","impression","radiologist_id","examined_at","status","created_at"] as const
 
 export function RadiologyResultListPage() {
-  const { list } = useRadiologyResultResource()
-  const { data, isLoading } = list()
+  const { useList } = useRadiologyResultResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

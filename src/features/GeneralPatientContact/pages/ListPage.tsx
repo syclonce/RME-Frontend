@@ -6,8 +6,8 @@ import { usePatientContactResource } from '../api'
 const COLUMNS = ["id","patient_id","contact_type","contact_value","is_primary","is_active","created_at"] as const
 
 export function PatientContactListPage() {
-  const { list, remove } = usePatientContactResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePatientContactResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

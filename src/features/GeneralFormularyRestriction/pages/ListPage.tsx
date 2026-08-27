@@ -6,8 +6,8 @@ import { useFormularyRestrictionResource } from '../api'
 const COLUMNS = ["id","drug_name","formulary_category","requires_substitution","substitution_drug_name","notes","is_active","created_at"] as const
 
 export function FormularyRestrictionListPage() {
-  const { list, remove } = useFormularyRestrictionResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFormularyRestrictionResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

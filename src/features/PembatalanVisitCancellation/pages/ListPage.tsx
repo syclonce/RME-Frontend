@@ -6,8 +6,8 @@ import { useVisitCancellationResource } from '../api'
 const COLUMNS = ["id","visit_id","cancelled_by","reason","cancelled_at","created_at"] as const
 
 export function VisitCancellationListPage() {
-  const { list } = useVisitCancellationResource()
-  const { data, isLoading } = list()
+  const { useList } = useVisitCancellationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBirthRecordResource } from '../api'
 import type { BirthRecordFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function BirthRecordFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBirthRecordResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBirthRecordResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BirthRecordFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function BirthRecordFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BirthRecord</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="mother_patient_id">Mother Patient *</Label>
-        <Input id="mother_patient_id" type="number" value={values.mother_patient_id ?? ''} onChange={(e) => setValues({ ...values, mother_patient_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patients"
+          value={values.mother_patient_id ?? null}
+          onChange={(v) => setValues({ ...values, mother_patient_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="baby_name">Baby Name</Label>
@@ -42,7 +51,11 @@ export function BirthRecordFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="gender_id">Gender</Label>
-        <Input id="gender_id" type="number" value={values.gender_id ?? ''} onChange={(e) => setValues({ ...values, gender_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/genders"
+          value={values.gender_id ?? null}
+          onChange={(v) => setValues({ ...values, gender_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="birth_date">Birth Date *</Label>
@@ -62,7 +75,11 @@ export function BirthRecordFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="attending_doctor_id">Attending Doctor</Label>
-        <Input id="attending_doctor_id" type="number" value={values.attending_doctor_id ?? ''} onChange={(e) => setValues({ ...values, attending_doctor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.attending_doctor_id ?? null}
+          onChange={(v) => setValues({ ...values, attending_doctor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="notes">Notes</Label>

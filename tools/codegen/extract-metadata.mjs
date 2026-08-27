@@ -137,6 +137,17 @@ function extractResourceFields(moduleDir) {
   return byFile
 }
 
+function extractTableName(moduleDir) {
+  const files = findFiles(path.join(moduleDir, 'database/migrations'), (n) => n.endsWith('.php'))
+  for (const f of files) {
+    const src = readIfExists(f)
+    if (!src) continue
+    const m = src.match(/Schema::create\(\s*'([a-zA-Z0-9_]+)'/)
+    if (m) return m[1]
+  }
+  return null
+}
+
 function extractRouteInfo(moduleDir) {
   const src = readIfExists(path.join(moduleDir, 'routes/api.php'))
   if (!src) return { hasApiResource: false, verbs: [], uris: [] }
@@ -157,6 +168,7 @@ function main() {
     const inlineFields = extractInlineValidate(moduleDir)
     const resourceFields = extractResourceFields(moduleDir)
     const routeInfo = extractRouteInfo(moduleDir)
+    const tableName = extractTableName(moduleDir)
 
     const hasRequests = Object.keys(requestFields).length > 0
     const hasInline = Object.keys(inlineFields).length > 0
@@ -171,6 +183,7 @@ function main() {
       inlineFields,
       resourceFields,
       route: routeInfo,
+      tableName,
     })
   }
 

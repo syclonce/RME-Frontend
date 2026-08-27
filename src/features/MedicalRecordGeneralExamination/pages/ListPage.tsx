@@ -6,8 +6,8 @@ import { useGeneralExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","general_appearance","consciousness_level","nutritional_status","posture","gait","examined_at","created_at","updated_at"] as const
 
 export function GeneralExaminationListPage() {
-  const { list, remove } = useGeneralExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGeneralExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

@@ -6,8 +6,8 @@ import { useCatClamsExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","cat_score","clams_score","developmental_quotient","developmental_age_months","interpretation","examined_at","created_at","updated_at"] as const
 
 export function CatClamsExaminationListPage() {
-  const { list, remove } = useCatClamsExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useCatClamsExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

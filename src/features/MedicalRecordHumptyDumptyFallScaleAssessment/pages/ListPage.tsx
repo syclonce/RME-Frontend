@@ -6,8 +6,8 @@ import { useHumptyDumptyFallScaleAssessmentResource } from '../api'
 const COLUMNS = ["id","visit_id","assessed_by","created_by","age_score","gender_score","diagnosis_score","cognitive_impairment_score","environmental_score","surgery_sedation_score","medication_score","total_score","risk_level","assessed_at","created_at"] as const
 
 export function HumptyDumptyFallScaleAssessmentListPage() {
-  const { list } = useHumptyDumptyFallScaleAssessmentResource()
-  const { data, isLoading } = list()
+  const { useList } = useHumptyDumptyFallScaleAssessmentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

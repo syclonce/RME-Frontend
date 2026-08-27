@@ -6,8 +6,8 @@ import { usePrescriptionFulfillmentItemResource } from '../api'
 const COLUMNS = ["id","prescription_fulfillment_id","prescription_item_id","quantity_served","is_substituted","notes","created_at","updated_at"] as const
 
 export function PrescriptionFulfillmentItemListPage() {
-  const { list, remove } = usePrescriptionFulfillmentItemResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePrescriptionFulfillmentItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

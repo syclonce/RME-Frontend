@@ -6,8 +6,8 @@ import { useFoodAllergenExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","patient_id","food_item","reaction_grade","wheal_diameter_mm","symptoms_observed","interpretation","examined_at","created_at","updated_at"] as const
 
 export function FoodAllergenExaminationListPage() {
-  const { list, remove } = useFoodAllergenExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useFoodAllergenExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

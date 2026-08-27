@@ -6,8 +6,8 @@ import { useReservationStatusResource } from '../api'
 const COLUMNS = ["id","name","code","is_active"] as const
 
 export function ReservationStatusListPage() {
-  const { list, remove } = useReservationStatusResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useReservationStatusResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

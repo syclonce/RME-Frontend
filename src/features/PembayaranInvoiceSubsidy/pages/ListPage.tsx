@@ -6,8 +6,8 @@ import { useInvoiceSubsidyResource } from '../api'
 const COLUMNS = ["id","invoice_id","subsidy_source","subsidy_amount","approved_by","approved_at","status","notes","created_at","updated_at"] as const
 
 export function InvoiceSubsidyListPage() {
-  const { list, remove } = useInvoiceSubsidyResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useInvoiceSubsidyResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

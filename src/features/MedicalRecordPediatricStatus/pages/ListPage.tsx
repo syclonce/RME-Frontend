@@ -6,8 +6,8 @@ import { usePediatricStatusResource } from '../api'
 const COLUMNS = ["id","patient_id","visit_id","birth_weight_grams","birth_length_cm","head_circumference_cm","gestational_age_weeks","immunization_status","developmental_milestones","notes","recorded_at","created_by","created_at","updated_at"] as const
 
 export function PediatricStatusListPage() {
-  const { list, remove } = usePediatricStatusResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = usePediatricStatusResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

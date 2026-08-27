@@ -6,8 +6,8 @@ import { useBerkasKlaimClaimCompletenessCommentResource } from '../api'
 const COLUMNS = ["id","claim_completeness_id","comment","commented_by","commented_at"] as const
 
 export function BerkasKlaimClaimCompletenessCommentListPage() {
-  const { list, remove } = useBerkasKlaimClaimCompletenessCommentResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBerkasKlaimClaimCompletenessCommentResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

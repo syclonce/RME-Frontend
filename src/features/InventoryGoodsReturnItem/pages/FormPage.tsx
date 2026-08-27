@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInventoryGoodsReturnItemResource } from '../api'
 import type { InventoryGoodsReturnItemFormValues } from '../types'
 
@@ -22,11 +23,19 @@ export function InventoryGoodsReturnItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah InventoryGoodsReturnItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="goods_return_id">Goods Return *</Label>
-        <Input id="goods_return_id" type="number" value={values.goods_return_id ?? ''} onChange={(e) => setValues({ ...values, goods_return_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/goods-returns"
+          value={values.goods_return_id ?? null}
+          onChange={(v) => setValues({ ...values, goods_return_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="item_id">Item *</Label>
-        <Input id="item_id" type="number" value={values.item_id ?? ''} onChange={(e) => setValues({ ...values, item_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/items"
+          value={values.item_id ?? null}
+          onChange={(v) => setValues({ ...values, item_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity">Quantity *</Label>

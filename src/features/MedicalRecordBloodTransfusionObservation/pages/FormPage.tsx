@@ -10,8 +10,8 @@ export function BloodTransfusionObservationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useBloodTransfusionObservationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useBloodTransfusionObservationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<BloodTransfusionObservationFormValues>({})
 
   useEffect(() => {

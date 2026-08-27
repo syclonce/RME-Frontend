@@ -6,8 +6,8 @@ import { useBackExaminationResource } from '../api'
 const COLUMNS = ["id","visit_id","spine_alignment","scoliosis","kyphosis","lordosis","tenderness","findings","examined_at","created_at","updated_at"] as const
 
 export function BackExaminationListPage() {
-  const { list, remove } = useBackExaminationResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useBackExaminationResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

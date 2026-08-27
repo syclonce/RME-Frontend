@@ -11,8 +11,8 @@ export function SitbChildTbScore0To13FormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useSitbChildTbScore0To13Resource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useSitbChildTbScore0To13Resource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<SitbChildTbScore0To13FormValues>({})
 
   useEffect(() => {

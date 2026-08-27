@@ -6,8 +6,8 @@ import { useIllnessProgressionHistoryResource } from '../api'
 const COLUMNS = ["id","visit_id","created_by","symptom_onset_date","progression_description","prior_treatment","created_at"] as const
 
 export function IllnessProgressionHistoryListPage() {
-  const { list } = useIllnessProgressionHistoryResource()
-  const { data, isLoading } = list()
+  const { useList } = useIllnessProgressionHistoryResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

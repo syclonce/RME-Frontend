@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useMedicalProcedureStaffResource } from '../api'
 import type { MedicalProcedureStaffFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function MedicalProcedureStaffFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useMedicalProcedureStaffResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useMedicalProcedureStaffResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<MedicalProcedureStaffFormValues>({})
 
   useEffect(() => {
@@ -30,11 +31,19 @@ export function MedicalProcedureStaffFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} MedicalProcedureStaff</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="medical_procedure_id">Medical Procedure *</Label>
-        <Input id="medical_procedure_id" type="number" value={values.medical_procedure_id ?? ''} onChange={(e) => setValues({ ...values, medical_procedure_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/medical-procedures"
+          value={values.medical_procedure_id ?? null}
+          onChange={(v) => setValues({ ...values, medical_procedure_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="employee_id">Employee *</Label>
-        <Input id="employee_id" type="number" value={values.employee_id ?? ''} onChange={(e) => setValues({ ...values, employee_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.employee_id ?? null}
+          onChange={(v) => setValues({ ...values, employee_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="role">Role *</Label>

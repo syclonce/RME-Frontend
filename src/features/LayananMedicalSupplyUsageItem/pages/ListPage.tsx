@@ -6,8 +6,8 @@ import { useMedicalSupplyUsageItemResource } from '../api'
 const COLUMNS = ["id","medical_supply_usage_id","item_id","quantity","unit","created_at"] as const
 
 export function MedicalSupplyUsageItemListPage() {
-  const { list } = useMedicalSupplyUsageItemResource()
-  const { data, isLoading } = list()
+  const { useList } = useMedicalSupplyUsageItemResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

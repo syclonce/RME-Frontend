@@ -11,8 +11,8 @@ export function RoomClassReferenceGroupFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useRoomClassReferenceGroupResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useRoomClassReferenceGroupResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<RoomClassReferenceGroupFormValues>({})
 
   useEffect(() => {

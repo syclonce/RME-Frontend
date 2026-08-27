@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientGuardianContactResource } from '../api'
 import type { PatientGuardianContactFormValues } from '../types'
 
@@ -11,8 +12,8 @@ export function PatientGuardianContactFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = usePatientGuardianContactResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = usePatientGuardianContactResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<PatientGuardianContactFormValues>({})
 
   useEffect(() => {
@@ -31,7 +32,11 @@ export function PatientGuardianContactFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientGuardianContact</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_guardian_id">Patient Guardian *</Label>
-        <Input id="patient_guardian_id" type="number" value={values.patient_guardian_id ?? ''} onChange={(e) => setValues({ ...values, patient_guardian_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patient-guardians"
+          value={values.patient_guardian_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_guardian_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="contact_type">Contact Type *</Label>

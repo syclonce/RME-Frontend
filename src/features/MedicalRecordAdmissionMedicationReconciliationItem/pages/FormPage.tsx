@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useAdmissionMedicationReconciliationItemResource } from '../api'
 import type { AdmissionMedicationReconciliationItemFormValues } from '../types'
 
@@ -22,7 +23,11 @@ export function AdmissionMedicationReconciliationItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah AdmissionMedicationReconciliationItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="reconciliation_id">Reconciliation *</Label>
-        <Input id="reconciliation_id" type="number" value={values.reconciliation_id ?? ''} onChange={(e) => setValues({ ...values, reconciliation_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/admission-med-reconciliations"
+          value={values.reconciliation_id ?? null}
+          onChange={(v) => setValues({ ...values, reconciliation_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="drug_name">Drug Name *</Label>

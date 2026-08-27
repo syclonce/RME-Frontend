@@ -6,8 +6,8 @@ import { useStockRequestResource } from '../api'
 const COLUMNS = ["id","request_number","ward_id","item_id","quantity","requested_by","requested_at","fulfilled_at","notes","status","created_at"] as const
 
 export function StockRequestListPage() {
-  const { list } = useStockRequestResource()
-  const { data, isLoading } = list()
+  const { useList } = useStockRequestResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

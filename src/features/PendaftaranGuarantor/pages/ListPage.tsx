@@ -6,8 +6,8 @@ import { useGuarantorResource } from '../api'
 const COLUMNS = ["id","registration_id","payer_type","member_number","room_class_id","reference_letter_number","notes","status","created_at","updated_at"] as const
 
 export function GuarantorListPage() {
-  const { list, remove } = useGuarantorResource()
-  const { data, isLoading } = list()
+  const { useList, remove } = useGuarantorResource()
+  const { data, isLoading } = useList()
 
   if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
 

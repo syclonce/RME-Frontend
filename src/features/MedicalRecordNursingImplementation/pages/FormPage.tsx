@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useNursingImplementationResource } from '../api'
 import type { NursingImplementationFormValues } from '../types'
 
@@ -10,8 +11,8 @@ export function NursingImplementationFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = id !== undefined
-  const { create, update, detail } = useNursingImplementationResource()
-  const existing = detail(isEdit ? Number(id) : undefined)
+  const { create, update, useDetail } = useNursingImplementationResource()
+  const existing = useDetail(isEdit ? Number(id) : undefined)
   const [values, setValues] = useState<NursingImplementationFormValues>({})
 
   useEffect(() => {
@@ -30,7 +31,11 @@ export function NursingImplementationFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} NursingImplementation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="nursing_diagnosis_id">Nursing Diagnosis *</Label>
-        <Input id="nursing_diagnosis_id" type="number" value={values.nursing_diagnosis_id ?? ''} onChange={(e) => setValues({ ...values, nursing_diagnosis_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/nursing-diagnoses"
+          value={values.nursing_diagnosis_id ?? null}
+          onChange={(v) => setValues({ ...values, nursing_diagnosis_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="action_taken">Action Taken</Label>
@@ -38,7 +43,11 @@ export function NursingImplementationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_by">Performed By *</Label>
-        <Input id="performed_by" type="number" value={values.performed_by ?? ''} onChange={(e) => setValues({ ...values, performed_by: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/employees"
+          value={values.performed_by ?? null}
+          onChange={(v) => setValues({ ...values, performed_by: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_at">Performed At *</Label>
