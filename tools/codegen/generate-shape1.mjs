@@ -32,10 +32,14 @@ for (const entry of catalog) {
 function pickStoreFields(entry) {
   const reqKeys = Object.keys(entry.requestFields)
   const storeKey = reqKeys.find((k) => /^Store/i.test(k)) ?? reqKeys[0]
-  if (storeKey) return entry.requestFields[storeKey]
+  if (storeKey && entry.requestFields[storeKey].length > 0) return entry.requestFields[storeKey]
   const inlineKeys = Object.keys(entry.inlineFields)
-  const storeInline = inlineKeys.find((k) => k.endsWith('::store')) ?? inlineKeys[0]
-  if (storeInline) return entry.inlineFields[storeInline]
+  const storeInline = inlineKeys.find((k) => k.endsWith('::store')) ?? inlineKeys.find((k) => k.endsWith('::rules')) ?? inlineKeys[0]
+  if (storeInline && entry.inlineFields[storeInline].length > 0) return entry.inlineFields[storeInline]
+  // FormRequest class ADA tapi rules() kosong (validasi didelegasikan ke tempat
+  // lain, mis. Rule dinamis) - fallback ke apa pun yang ditemukan, biar tidak
+  // salah dianggap "tanpa field" padahal cuma parser regex yang tak menjangkau.
+  if (storeKey) return entry.requestFields[storeKey]
   return null
 }
 

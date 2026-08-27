@@ -19726,10 +19726,175 @@
   {
     "module": "GeneralPpk",
     "hasRequests": false,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {},
-    "inlineFields": {},
+    "inlineFields": {
+      "PpkController::rules": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 10
+        },
+        {
+          "name": "bpjs_code",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 8
+        },
+        {
+          "name": "type",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "ownership",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "jpk",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 75
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 1
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 150
+        },
+        {
+          "name": "rt",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 3
+        },
+        {
+          "name": "rw",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 3
+        },
+        {
+          "name": "postal_code",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 5
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 25
+        },
+        {
+          "name": "fax",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 25
+        },
+        {
+          "name": "region_code",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 10
+        },
+        {
+          "name": "region_name",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "started_at",
+          "type": "date",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "ended_at",
+          "type": "date",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [

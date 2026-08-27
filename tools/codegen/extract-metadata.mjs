@@ -123,6 +123,19 @@ function extractInlineValidate(moduleDir) {
   return byMethod
 }
 
+function extractControllerRulesMethod(moduleDir) {
+  const files = findFiles(path.join(moduleDir, 'app/Http/Controllers'), (n) => n.endsWith('.php'))
+  const byKey = {}
+  for (const f of files) {
+    const src = readIfExists(f)
+    if (!src) continue
+    const m = src.match(/(?:private|protected|public)\s+function\s+rules\s*\([^)]*\)\s*:\s*array\s*\{([\s\S]*?)\n\s{4}\}/)
+    if (!m) continue
+    byKey[`${path.basename(f, '.php')}::rules`] = parseRulesBlock(m[1])
+  }
+  return byKey
+}
+
 function extractResourceFields(moduleDir) {
   const files = findFiles(path.join(moduleDir, 'app/Http/Resources'), (n) => n.endsWith('.php'))
   const byFile = {}
@@ -165,7 +178,7 @@ function main() {
   for (const name of moduleNames) {
     const moduleDir = path.join(BACKEND_ROOT, name)
     const requestFields = extractFieldsFromRequests(moduleDir)
-    const inlineFields = extractInlineValidate(moduleDir)
+    const inlineFields = { ...extractInlineValidate(moduleDir), ...extractControllerRulesMethod(moduleDir) }
     const resourceFields = extractResourceFields(moduleDir)
     const routeInfo = extractRouteInfo(moduleDir)
     const tableName = extractTableName(moduleDir)
