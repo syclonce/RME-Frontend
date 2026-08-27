@@ -41,7 +41,7 @@ export function AppLayout() {
   const navigate = useNavigate()
 
   const grouped = useMemo(() => {
-    const listRoutes = generatedRoutes.filter((r) => !r.path.includes('/tambah') && !r.path.includes(':id'))
+    const listRoutes = generatedRoutes.filter((r) => !r.path.includes('/tambah') && !r.path.includes('/:'))
     const byDomain = new Map<string, typeof listRoutes>()
     for (const r of listRoutes) {
       const domain = domainOf(r.module)

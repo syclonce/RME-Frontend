@@ -17,6 +17,11 @@ const modules = readdirSync(FEATURES_ROOT).filter((n) => statSync(path.join(FEAT
 const readonlyManifest = existsSync(READONLY_MANIFEST) ? JSON.parse(readFileSync(READONLY_MANIFEST, 'utf8')) : []
 const readonlyFiles = new Set(readonlyManifest.map((e) => `${e.module}/${e.fileName}`))
 
+// Modul dengan identifier rute bukan angka `:id` (mis. AplikasiSetting pakai
+// `:key` string) - override manual, generator tak bisa menyimpulkan ini
+// otomatis dari metadata Laravel yang dibaca extract-metadata.mjs.
+const PARAM_OVERRIDES = { AplikasiSetting: 'key' }
+
 // Bentuk #1 (CRUD): pages/ListPage.tsx sebagai file utama, punya FormPage.tsx pendamping.
 const crudEntries = modules
   .filter((m) => existsSync(path.join(FEATURES_ROOT, m, 'pages/ListPage.tsx')))
@@ -44,8 +49,9 @@ for (const e of crudEntries) {
     importLines.push(
       `const Form_${i} = lazy(() => import('@/features/${e.module}/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))`,
     )
+    const param = PARAM_OVERRIDES[e.module] ?? 'id'
     routeLines.push(`  { path: '/modul/${e.slug}/tambah', module: '${e.module}', element: <Form_${i} /> },`)
-    routeLines.push(`  { path: '/modul/${e.slug}/:id/edit', module: '${e.module}', element: <Form_${i} /> },`)
+    routeLines.push(`  { path: '/modul/${e.slug}/:${param}/edit', module: '${e.module}', element: <Form_${i} /> },`)
   }
 }
 
