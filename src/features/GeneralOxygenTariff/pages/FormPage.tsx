@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useOxygenTariffResource } from '../api'
 import type { OxygenTariffFormValues } from '../types'
 
@@ -35,7 +36,11 @@ export function OxygenTariffFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="room_class_id">Room Class</Label>
-        <Input id="room_class_id" type="number" value={values.room_class_id ?? ''} onChange={(e) => setValues({ ...values, room_class_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/room-classes"
+          value={values.room_class_id ?? null}
+          onChange={(v) => setValues({ ...values, room_class_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="price">Price *</Label>

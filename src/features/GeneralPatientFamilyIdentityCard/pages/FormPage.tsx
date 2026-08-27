@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientFamilyIdentityCardResource } from '../api'
 import type { PatientFamilyIdentityCardFormValues } from '../types'
 
@@ -31,7 +32,11 @@ export function PatientFamilyIdentityCardFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientFamilyIdentityCard</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_family_id">Patient Family *</Label>
-        <Input id="patient_family_id" type="number" value={values.patient_family_id ?? ''} onChange={(e) => setValues({ ...values, patient_family_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patientfamilies"
+          value={values.patient_family_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_family_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="identity_type">Identity Type *</Label>

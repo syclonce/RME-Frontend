@@ -198,9 +198,26 @@ export function ${entity}ListPage() {
 }
 `
 
+function pluralizeGuess(word) {
+  if (/(s|ss|sh|ch|x|z)$/.test(word)) return `${word}es`
+  if (/[^aeiou]y$/.test(word)) return `${word.slice(0, -1)}ies`
+  return `${word}s`
+}
+
+/**
+ * Sebagian field FK di RME-Backend TIDAK punya rule `exists:table,id`
+ * (gap validasi backend, bukan sesuatu yang bisa diperbaiki dari sisi
+ * ekstraktor - datanya memang tidak ada di kode) - fallback tebak nama
+ * tabel dari konvensi penamaan field `xxx_id` -> tabel `xxxs`, dicek
+ * balik ke katalog supaya tidak asal tebak endpoint yang tidak ada.
+ */
 function relationEndpoint(field) {
-  if (field.type !== 'relation' || !field.relation) return null
-  return TABLE_TO_ENDPOINT.get(field.relation.table) ?? null
+  if (field.relation) return TABLE_TO_ENDPOINT.get(field.relation.table) ?? null
+  if (field.type === 'number' && field.name.endsWith('_id')) {
+    const guess = pluralizeGuess(field.name.slice(0, -3))
+    return TABLE_TO_ENDPOINT.get(guess) ?? null
+  }
+  return null
 }
 
   const formFieldsJsx = fields

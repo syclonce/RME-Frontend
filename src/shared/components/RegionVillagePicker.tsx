@@ -44,7 +44,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
     <div className="grid gap-2">
       {value !== null && <p className="text-muted-foreground text-xs">Desa terpilih saat ini (ID: {value})</p>}
       <Select
-        value={provinceCode ?? undefined}
+        value={provinceCode ?? ''}
         onValueChange={(v) => {
           setProvinceCode(v)
           setCityCode(null)
@@ -64,7 +64,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
         </SelectContent>
       </Select>
       <Select
-        value={cityCode ?? undefined}
+        value={cityCode ?? ''}
         onValueChange={(v) => {
           setCityCode(v)
           setDistrictCode(null)
@@ -84,7 +84,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
         </SelectContent>
       </Select>
       <Select
-        value={districtCode ?? undefined}
+        value={districtCode ?? ''}
         onValueChange={(v) => {
           setDistrictCode(v)
           onChange(null)
@@ -103,7 +103,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
         </SelectContent>
       </Select>
       <Select
-        value={value !== null ? String(value) : undefined}
+        value={value !== null ? String(value) : ''}
         onValueChange={(v) => onChange(Number(v))}
         disabled={districtCode === null}
       >

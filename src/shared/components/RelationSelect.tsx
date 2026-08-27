@@ -11,10 +11,7 @@ export function RelationSelect({ endpoint, value, onChange }: RelationSelectProp
   const { data: options, isLoading } = useOptions(endpoint)
 
   return (
-    <Select
-      value={value !== null ? String(value) : undefined}
-      onValueChange={(v) => onChange(v ? Number(v) : null)}
-    >
+    <Select value={value !== null ? String(value) : ''} onValueChange={(v) => onChange(v ? Number(v) : null)}>
       <SelectTrigger>
         <SelectValue placeholder={isLoading ? 'Memuat...' : 'Pilih...'} />
       </SelectTrigger>

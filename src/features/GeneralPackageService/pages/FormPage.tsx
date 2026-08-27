@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePackageServiceResource } from '../api'
 import type { PackageServiceFormValues } from '../types'
 
@@ -31,11 +32,19 @@ export function PackageServiceFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PackageService</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="package_id">Package</Label>
-        <Input id="package_id" type="number" value={values.package_id ?? ''} onChange={(e) => setValues({ ...values, package_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/packages"
+          value={values.package_id ?? null}
+          onChange={(v) => setValues({ ...values, package_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="service_id">Service</Label>
-        <Input id="service_id" type="number" value={values.service_id ?? ''} onChange={(e) => setValues({ ...values, service_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/services"
+          value={values.service_id ?? null}
+          onChange={(v) => setValues({ ...values, service_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="quantity">Quantity *</Label>

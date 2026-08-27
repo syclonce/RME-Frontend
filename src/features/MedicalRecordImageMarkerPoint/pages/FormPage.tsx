@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useImageMarkerPointResource } from '../api'
 import type { ImageMarkerPointFormValues } from '../types'
 
@@ -30,7 +31,11 @@ export function ImageMarkerPointFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ImageMarkerPoint</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="image_marker_id">Image Marker *</Label>
-        <Input id="image_marker_id" type="number" value={values.image_marker_id ?? ''} onChange={(e) => setValues({ ...values, image_marker_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/image-markers"
+          value={values.image_marker_id ?? null}
+          onChange={(v) => setValues({ ...values, image_marker_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="x_coordinate">X Coordinate *</Label>

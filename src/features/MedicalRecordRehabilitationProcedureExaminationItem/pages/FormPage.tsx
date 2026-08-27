@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useRehabilitationProcedureExaminationItemResource } from '../api'
 import type { RehabilitationProcedureExaminationItemFormValues } from '../types'
 
@@ -30,7 +31,11 @@ export function RehabilitationProcedureExaminationItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} RehabilitationProcedureExaminationItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="rehabilitation_procedure_examination_id">Rehabilitation Procedure Examination *</Label>
-        <Input id="rehabilitation_procedure_examination_id" type="number" value={values.rehabilitation_procedure_examination_id ?? ''} onChange={(e) => setValues({ ...values, rehabilitation_procedure_examination_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/rehab-procedure-examinations"
+          value={values.rehabilitation_procedure_examination_id ?? null}
+          onChange={(v) => setValues({ ...values, rehabilitation_procedure_examination_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="step_name">Step Name *</Label>

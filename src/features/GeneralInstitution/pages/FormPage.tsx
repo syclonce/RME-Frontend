@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useInstitutionResource } from '../api'
 import type { InstitutionFormValues } from '../types'
 
@@ -30,7 +31,11 @@ export function InstitutionFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Institution</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="ppk_id">Ppk</Label>
-        <Input id="ppk_id" type="number" value={values.ppk_id ?? ''} onChange={(e) => setValues({ ...values, ppk_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/ppks"
+          value={values.ppk_id ?? null}
+          onChange={(v) => setValues({ ...values, ppk_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="email">Email *</Label>

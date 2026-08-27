@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useTranscranialDopplerWindowResource } from '../api'
 import type { TranscranialDopplerWindowFormValues } from '../types'
 
@@ -30,7 +31,11 @@ export function TranscranialDopplerWindowFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} TranscranialDopplerWindow</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="transcranial_doppler_examination_id">Transcranial Doppler Examination *</Label>
-        <Input id="transcranial_doppler_examination_id" type="number" value={values.transcranial_doppler_examination_id ?? ''} onChange={(e) => setValues({ ...values, transcranial_doppler_examination_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/tcd-examinations"
+          value={values.transcranial_doppler_examination_id ?? null}
+          onChange={(v) => setValues({ ...values, transcranial_doppler_examination_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="window_site">Window Site *</Label>

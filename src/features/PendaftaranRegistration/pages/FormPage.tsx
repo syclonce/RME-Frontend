@@ -56,11 +56,19 @@ export function RegistrationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="referral_id">Referral</Label>
-        <Input id="referral_id" type="number" value={values.referral_id ?? ''} onChange={(e) => setValues({ ...values, referral_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/referrals"
+          value={values.referral_id ?? null}
+          onChange={(v) => setValues({ ...values, referral_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="package_id">Package</Label>
-        <Input id="package_id" type="number" value={values.package_id ?? ''} onChange={(e) => setValues({ ...values, package_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/packages"
+          value={values.package_id ?? null}
+          onChange={(v) => setValues({ ...values, package_id: v })}
+        />
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="is_emergency" checked={!!values.is_emergency} onCheckedChange={(v) => setValues({ ...values, is_emergency: !!v })} />

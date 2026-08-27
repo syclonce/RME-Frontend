@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { usePatientFamilyContactResource } from '../api'
 import type { PatientFamilyContactFormValues } from '../types'
 
@@ -31,7 +32,11 @@ export function PatientFamilyContactFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientFamilyContact</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_family_id">Patient Family *</Label>
-        <Input id="patient_family_id" type="number" value={values.patient_family_id ?? ''} onChange={(e) => setValues({ ...values, patient_family_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/patientfamilies"
+          value={values.patient_family_id ?? null}
+          onChange={(v) => setValues({ ...values, patient_family_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="contact_type">Contact Type *</Label>

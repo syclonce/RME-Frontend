@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useServiceTariffDistributionResource } from '../api'
 import type { ServiceTariffDistributionFormValues } from '../types'
 
@@ -31,7 +32,11 @@ export function ServiceTariffDistributionFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ServiceTariffDistribution</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="service_tariff_id">Service Tariff</Label>
-        <Input id="service_tariff_id" type="number" value={values.service_tariff_id ?? ''} onChange={(e) => setValues({ ...values, service_tariff_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/service-tariffs"
+          value={values.service_tariff_id ?? null}
+          onChange={(v) => setValues({ ...values, service_tariff_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="component_id">Component</Label>

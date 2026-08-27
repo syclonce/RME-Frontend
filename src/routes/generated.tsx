@@ -1029,98 +1029,100 @@ const List_511 = lazy(() => import('@/features/PembayaranDoctorDiscount/pages/Li
 const Form_511 = lazy(() => import('@/features/PembayaranDoctorDiscount/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const List_512 = lazy(() => import('@/features/PembayaranEdc/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const Form_512 = lazy(() => import('@/features/PembayaranEdc/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_513 = lazy(() => import('@/features/PembayaranInvoiceCancellation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_513 = lazy(() => import('@/features/PembayaranInvoiceCancellation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_514 = lazy(() => import('@/features/PembayaranInvoiceGuarantor/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_514 = lazy(() => import('@/features/PembayaranInvoiceGuarantor/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_515 = lazy(() => import('@/features/PembayaranInvoiceItem/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_515 = lazy(() => import('@/features/PembayaranInvoiceItem/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_516 = lazy(() => import('@/features/PembayaranInvoiceMerge/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_516 = lazy(() => import('@/features/PembayaranInvoiceMerge/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_517 = lazy(() => import('@/features/PembayaranInvoiceSubsidy/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_517 = lazy(() => import('@/features/PembayaranInvoiceSubsidy/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_518 = lazy(() => import('@/features/PembayaranPackageInvoiceItem/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_518 = lazy(() => import('@/features/PembayaranPackageInvoiceItem/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_519 = lazy(() => import('@/features/PembayaranPatientReceivable/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_519 = lazy(() => import('@/features/PembayaranPatientReceivable/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_520 = lazy(() => import('@/features/PembayaranPatientReceivableSettlement/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_520 = lazy(() => import('@/features/PembayaranPatientReceivableSettlement/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_521 = lazy(() => import('@/features/PembayaranPayment/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_521 = lazy(() => import('@/features/PembayaranPayment/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_522 = lazy(() => import('@/features/PembayaranPaymentProvider/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_522 = lazy(() => import('@/features/PembayaranPaymentProvider/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_523 = lazy(() => import('@/features/PembayaranProviderService/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_523 = lazy(() => import('@/features/PembayaranProviderService/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_524 = lazy(() => import('@/features/PembayaranRegistrationInvoice/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_524 = lazy(() => import('@/features/PembayaranRegistrationInvoice/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_525 = lazy(() => import('@/features/PembayaranTransfer/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_525 = lazy(() => import('@/features/PembayaranTransfer/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_526 = lazy(() => import('@/features/PendaftaranAccidentRecord/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_526 = lazy(() => import('@/features/PendaftaranAccidentRecord/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_527 = lazy(() => import('@/features/PendaftaranApplicant/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_527 = lazy(() => import('@/features/PendaftaranApplicant/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_528 = lazy(() => import('@/features/PendaftaranBedQueue/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_528 = lazy(() => import('@/features/PendaftaranBedQueue/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_529 = lazy(() => import('@/features/PendaftaranCoManagement/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_529 = lazy(() => import('@/features/PendaftaranCoManagement/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_530 = lazy(() => import('@/features/PendaftaranConsultation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_530 = lazy(() => import('@/features/PendaftaranConsultation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_531 = lazy(() => import('@/features/PendaftaranConsultationAnswer/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_531 = lazy(() => import('@/features/PendaftaranConsultationAnswer/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_532 = lazy(() => import('@/features/PendaftaranFunction/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_532 = lazy(() => import('@/features/PendaftaranFunction/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_533 = lazy(() => import('@/features/PendaftaranGuarantor/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_533 = lazy(() => import('@/features/PendaftaranGuarantor/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_534 = lazy(() => import('@/features/PendaftaranHistory/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_534 = lazy(() => import('@/features/PendaftaranHistory/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_535 = lazy(() => import('@/features/PendaftaranPatientEscort/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_535 = lazy(() => import('@/features/PendaftaranPatientEscort/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_536 = lazy(() => import('@/features/PendaftaranPatientEscortContact/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_536 = lazy(() => import('@/features/PendaftaranPatientEscortContact/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_537 = lazy(() => import('@/features/PendaftaranPatientEscortIdentityCard/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_537 = lazy(() => import('@/features/PendaftaranPatientEscortIdentityCard/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_538 = lazy(() => import('@/features/PendaftaranPatientGuardian/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_538 = lazy(() => import('@/features/PendaftaranPatientGuardian/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_539 = lazy(() => import('@/features/PendaftaranPatientGuardianContact/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_539 = lazy(() => import('@/features/PendaftaranPatientGuardianContact/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_540 = lazy(() => import('@/features/PendaftaranPatientGuardianIdentityCard/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_540 = lazy(() => import('@/features/PendaftaranPatientGuardianIdentityCard/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_541 = lazy(() => import('@/features/PendaftaranPatientPurpose/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_541 = lazy(() => import('@/features/PendaftaranPatientPurpose/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_542 = lazy(() => import('@/features/PendaftaranPatientTransfer/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_542 = lazy(() => import('@/features/PendaftaranPatientTransfer/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_543 = lazy(() => import('@/features/PendaftaranQueueCall/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_543 = lazy(() => import('@/features/PendaftaranQueueCall/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_544 = lazy(() => import('@/features/PendaftaranReferral/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_544 = lazy(() => import('@/features/PendaftaranReferral/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_545 = lazy(() => import('@/features/PendaftaranReferralLetter/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_545 = lazy(() => import('@/features/PendaftaranReferralLetter/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_546 = lazy(() => import('@/features/PendaftaranRegistration/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_546 = lazy(() => import('@/features/PendaftaranRegistration/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_547 = lazy(() => import('@/features/PendaftaranReservation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_547 = lazy(() => import('@/features/PendaftaranReservation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_548 = lazy(() => import('@/features/PendaftaranServiceHandover/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_548 = lazy(() => import('@/features/PendaftaranServiceHandover/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_549 = lazy(() => import('@/features/PendaftaranVisit/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_549 = lazy(() => import('@/features/PendaftaranVisit/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_550 = lazy(() => import('@/features/PendaftaranVisitCancellation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_550 = lazy(() => import('@/features/PendaftaranVisitCancellation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_551 = lazy(() => import('@/features/PendaftaranVisitDateChange/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_551 = lazy(() => import('@/features/PendaftaranVisitDateChange/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_552 = lazy(() => import('@/features/PendaftaranWardQueue/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_552 = lazy(() => import('@/features/PendaftaranWardQueue/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_553 = lazy(() => import('@/features/PenjaminRSAttendingPhysician/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_553 = lazy(() => import('@/features/PenjaminRSAttendingPhysician/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_554 = lazy(() => import('@/features/PenjaminRSClaimDriver/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_554 = lazy(() => import('@/features/PenjaminRSClaimDriver/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_555 = lazy(() => import('@/features/PenjaminRSDischargeMethod/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_555 = lazy(() => import('@/features/PenjaminRSDischargeMethod/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_556 = lazy(() => import('@/features/PenjualanSale/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_556 = lazy(() => import('@/features/PenjualanSale/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_557 = lazy(() => import('@/features/PenjualanSaleItem/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_557 = lazy(() => import('@/features/PenjualanSaleItem/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_558 = lazy(() => import('@/features/PenjualanSaleReturn/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const Form_558 = lazy(() => import('@/features/PenjualanSaleReturn/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_513 = lazy(() => import('@/features/PembayaranInvoice/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_513 = lazy(() => import('@/features/PembayaranInvoice/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_514 = lazy(() => import('@/features/PembayaranInvoiceCancellation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_514 = lazy(() => import('@/features/PembayaranInvoiceCancellation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_515 = lazy(() => import('@/features/PembayaranInvoiceGuarantor/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_515 = lazy(() => import('@/features/PembayaranInvoiceGuarantor/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_516 = lazy(() => import('@/features/PembayaranInvoiceItem/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_516 = lazy(() => import('@/features/PembayaranInvoiceItem/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_517 = lazy(() => import('@/features/PembayaranInvoiceMerge/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_517 = lazy(() => import('@/features/PembayaranInvoiceMerge/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_518 = lazy(() => import('@/features/PembayaranInvoiceSubsidy/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_518 = lazy(() => import('@/features/PembayaranInvoiceSubsidy/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_519 = lazy(() => import('@/features/PembayaranPackageInvoiceItem/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_519 = lazy(() => import('@/features/PembayaranPackageInvoiceItem/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_520 = lazy(() => import('@/features/PembayaranPatientReceivable/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_520 = lazy(() => import('@/features/PembayaranPatientReceivable/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_521 = lazy(() => import('@/features/PembayaranPatientReceivableSettlement/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_521 = lazy(() => import('@/features/PembayaranPatientReceivableSettlement/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_522 = lazy(() => import('@/features/PembayaranPayment/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_522 = lazy(() => import('@/features/PembayaranPayment/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_523 = lazy(() => import('@/features/PembayaranPaymentProvider/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_523 = lazy(() => import('@/features/PembayaranPaymentProvider/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_524 = lazy(() => import('@/features/PembayaranProviderService/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_524 = lazy(() => import('@/features/PembayaranProviderService/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_525 = lazy(() => import('@/features/PembayaranRegistrationInvoice/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_525 = lazy(() => import('@/features/PembayaranRegistrationInvoice/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_526 = lazy(() => import('@/features/PembayaranTransfer/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_526 = lazy(() => import('@/features/PembayaranTransfer/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_527 = lazy(() => import('@/features/PendaftaranAccidentRecord/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_527 = lazy(() => import('@/features/PendaftaranAccidentRecord/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_528 = lazy(() => import('@/features/PendaftaranApplicant/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_528 = lazy(() => import('@/features/PendaftaranApplicant/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_529 = lazy(() => import('@/features/PendaftaranBedQueue/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_529 = lazy(() => import('@/features/PendaftaranBedQueue/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_530 = lazy(() => import('@/features/PendaftaranCoManagement/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_530 = lazy(() => import('@/features/PendaftaranCoManagement/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_531 = lazy(() => import('@/features/PendaftaranConsultation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_531 = lazy(() => import('@/features/PendaftaranConsultation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_532 = lazy(() => import('@/features/PendaftaranConsultationAnswer/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_532 = lazy(() => import('@/features/PendaftaranConsultationAnswer/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_533 = lazy(() => import('@/features/PendaftaranFunction/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_533 = lazy(() => import('@/features/PendaftaranFunction/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_534 = lazy(() => import('@/features/PendaftaranGuarantor/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_534 = lazy(() => import('@/features/PendaftaranGuarantor/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_535 = lazy(() => import('@/features/PendaftaranHistory/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_535 = lazy(() => import('@/features/PendaftaranHistory/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_536 = lazy(() => import('@/features/PendaftaranPatientEscort/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_536 = lazy(() => import('@/features/PendaftaranPatientEscort/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_537 = lazy(() => import('@/features/PendaftaranPatientEscortContact/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_537 = lazy(() => import('@/features/PendaftaranPatientEscortContact/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_538 = lazy(() => import('@/features/PendaftaranPatientEscortIdentityCard/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_538 = lazy(() => import('@/features/PendaftaranPatientEscortIdentityCard/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_539 = lazy(() => import('@/features/PendaftaranPatientGuardian/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_539 = lazy(() => import('@/features/PendaftaranPatientGuardian/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_540 = lazy(() => import('@/features/PendaftaranPatientGuardianContact/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_540 = lazy(() => import('@/features/PendaftaranPatientGuardianContact/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_541 = lazy(() => import('@/features/PendaftaranPatientGuardianIdentityCard/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_541 = lazy(() => import('@/features/PendaftaranPatientGuardianIdentityCard/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_542 = lazy(() => import('@/features/PendaftaranPatientPurpose/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_542 = lazy(() => import('@/features/PendaftaranPatientPurpose/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_543 = lazy(() => import('@/features/PendaftaranPatientTransfer/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_543 = lazy(() => import('@/features/PendaftaranPatientTransfer/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_544 = lazy(() => import('@/features/PendaftaranQueueCall/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_544 = lazy(() => import('@/features/PendaftaranQueueCall/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_545 = lazy(() => import('@/features/PendaftaranReferral/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_545 = lazy(() => import('@/features/PendaftaranReferral/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_546 = lazy(() => import('@/features/PendaftaranReferralLetter/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_546 = lazy(() => import('@/features/PendaftaranReferralLetter/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_547 = lazy(() => import('@/features/PendaftaranRegistration/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_547 = lazy(() => import('@/features/PendaftaranRegistration/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_548 = lazy(() => import('@/features/PendaftaranReservation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_548 = lazy(() => import('@/features/PendaftaranReservation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_549 = lazy(() => import('@/features/PendaftaranServiceHandover/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_549 = lazy(() => import('@/features/PendaftaranServiceHandover/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_550 = lazy(() => import('@/features/PendaftaranVisit/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_550 = lazy(() => import('@/features/PendaftaranVisit/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_551 = lazy(() => import('@/features/PendaftaranVisitCancellation/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_551 = lazy(() => import('@/features/PendaftaranVisitCancellation/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_552 = lazy(() => import('@/features/PendaftaranVisitDateChange/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_552 = lazy(() => import('@/features/PendaftaranVisitDateChange/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_553 = lazy(() => import('@/features/PendaftaranWardQueue/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_553 = lazy(() => import('@/features/PendaftaranWardQueue/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_554 = lazy(() => import('@/features/PenjaminRSAttendingPhysician/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_554 = lazy(() => import('@/features/PenjaminRSAttendingPhysician/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_555 = lazy(() => import('@/features/PenjaminRSClaimDriver/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_555 = lazy(() => import('@/features/PenjaminRSClaimDriver/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_556 = lazy(() => import('@/features/PenjaminRSDischargeMethod/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_556 = lazy(() => import('@/features/PenjaminRSDischargeMethod/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_557 = lazy(() => import('@/features/PenjualanSale/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_557 = lazy(() => import('@/features/PenjualanSale/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_558 = lazy(() => import('@/features/PenjualanSaleItem/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_558 = lazy(() => import('@/features/PenjualanSaleItem/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_559 = lazy(() => import('@/features/PenjualanSaleReturn/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const Form_559 = lazy(() => import('@/features/PenjualanSaleReturn/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 
 export interface GeneratedRoute {
   path: string
@@ -2668,142 +2670,145 @@ export const generatedRoutes: GeneratedRoute[] = [
   { path: '/modul/pembayaran-edc', module: 'PembayaranEdc', element: <List_512 /> },
   { path: '/modul/pembayaran-edc/tambah', module: 'PembayaranEdc', element: <Form_512 /> },
   { path: '/modul/pembayaran-edc/:id/edit', module: 'PembayaranEdc', element: <Form_512 /> },
-  { path: '/modul/pembayaran-invoice-cancellation', module: 'PembayaranInvoiceCancellation', element: <List_513 /> },
-  { path: '/modul/pembayaran-invoice-cancellation/tambah', module: 'PembayaranInvoiceCancellation', element: <Form_513 /> },
-  { path: '/modul/pembayaran-invoice-cancellation/:id/edit', module: 'PembayaranInvoiceCancellation', element: <Form_513 /> },
-  { path: '/modul/pembayaran-invoice-guarantor', module: 'PembayaranInvoiceGuarantor', element: <List_514 /> },
-  { path: '/modul/pembayaran-invoice-guarantor/tambah', module: 'PembayaranInvoiceGuarantor', element: <Form_514 /> },
-  { path: '/modul/pembayaran-invoice-guarantor/:id/edit', module: 'PembayaranInvoiceGuarantor', element: <Form_514 /> },
-  { path: '/modul/pembayaran-invoice-item', module: 'PembayaranInvoiceItem', element: <List_515 /> },
-  { path: '/modul/pembayaran-invoice-item/tambah', module: 'PembayaranInvoiceItem', element: <Form_515 /> },
-  { path: '/modul/pembayaran-invoice-item/:id/edit', module: 'PembayaranInvoiceItem', element: <Form_515 /> },
-  { path: '/modul/pembayaran-invoice-merge', module: 'PembayaranInvoiceMerge', element: <List_516 /> },
-  { path: '/modul/pembayaran-invoice-merge/tambah', module: 'PembayaranInvoiceMerge', element: <Form_516 /> },
-  { path: '/modul/pembayaran-invoice-merge/:id/edit', module: 'PembayaranInvoiceMerge', element: <Form_516 /> },
-  { path: '/modul/pembayaran-invoice-subsidy', module: 'PembayaranInvoiceSubsidy', element: <List_517 /> },
-  { path: '/modul/pembayaran-invoice-subsidy/tambah', module: 'PembayaranInvoiceSubsidy', element: <Form_517 /> },
-  { path: '/modul/pembayaran-invoice-subsidy/:id/edit', module: 'PembayaranInvoiceSubsidy', element: <Form_517 /> },
-  { path: '/modul/pembayaran-package-invoice-item', module: 'PembayaranPackageInvoiceItem', element: <List_518 /> },
-  { path: '/modul/pembayaran-package-invoice-item/tambah', module: 'PembayaranPackageInvoiceItem', element: <Form_518 /> },
-  { path: '/modul/pembayaran-package-invoice-item/:id/edit', module: 'PembayaranPackageInvoiceItem', element: <Form_518 /> },
-  { path: '/modul/pembayaran-patient-receivable', module: 'PembayaranPatientReceivable', element: <List_519 /> },
-  { path: '/modul/pembayaran-patient-receivable/tambah', module: 'PembayaranPatientReceivable', element: <Form_519 /> },
-  { path: '/modul/pembayaran-patient-receivable/:id/edit', module: 'PembayaranPatientReceivable', element: <Form_519 /> },
-  { path: '/modul/pembayaran-patient-receivable-settlement', module: 'PembayaranPatientReceivableSettlement', element: <List_520 /> },
-  { path: '/modul/pembayaran-patient-receivable-settlement/tambah', module: 'PembayaranPatientReceivableSettlement', element: <Form_520 /> },
-  { path: '/modul/pembayaran-patient-receivable-settlement/:id/edit', module: 'PembayaranPatientReceivableSettlement', element: <Form_520 /> },
-  { path: '/modul/pembayaran-payment', module: 'PembayaranPayment', element: <List_521 /> },
-  { path: '/modul/pembayaran-payment/tambah', module: 'PembayaranPayment', element: <Form_521 /> },
-  { path: '/modul/pembayaran-payment/:id/edit', module: 'PembayaranPayment', element: <Form_521 /> },
-  { path: '/modul/pembayaran-payment-provider', module: 'PembayaranPaymentProvider', element: <List_522 /> },
-  { path: '/modul/pembayaran-payment-provider/tambah', module: 'PembayaranPaymentProvider', element: <Form_522 /> },
-  { path: '/modul/pembayaran-payment-provider/:id/edit', module: 'PembayaranPaymentProvider', element: <Form_522 /> },
-  { path: '/modul/pembayaran-provider-service', module: 'PembayaranProviderService', element: <List_523 /> },
-  { path: '/modul/pembayaran-provider-service/tambah', module: 'PembayaranProviderService', element: <Form_523 /> },
-  { path: '/modul/pembayaran-provider-service/:id/edit', module: 'PembayaranProviderService', element: <Form_523 /> },
-  { path: '/modul/pembayaran-registration-invoice', module: 'PembayaranRegistrationInvoice', element: <List_524 /> },
-  { path: '/modul/pembayaran-registration-invoice/tambah', module: 'PembayaranRegistrationInvoice', element: <Form_524 /> },
-  { path: '/modul/pembayaran-registration-invoice/:id/edit', module: 'PembayaranRegistrationInvoice', element: <Form_524 /> },
-  { path: '/modul/pembayaran-transfer', module: 'PembayaranTransfer', element: <List_525 /> },
-  { path: '/modul/pembayaran-transfer/tambah', module: 'PembayaranTransfer', element: <Form_525 /> },
-  { path: '/modul/pembayaran-transfer/:id/edit', module: 'PembayaranTransfer', element: <Form_525 /> },
-  { path: '/modul/pendaftaran-accident-record', module: 'PendaftaranAccidentRecord', element: <List_526 /> },
-  { path: '/modul/pendaftaran-accident-record/tambah', module: 'PendaftaranAccidentRecord', element: <Form_526 /> },
-  { path: '/modul/pendaftaran-accident-record/:id/edit', module: 'PendaftaranAccidentRecord', element: <Form_526 /> },
-  { path: '/modul/pendaftaran-applicant', module: 'PendaftaranApplicant', element: <List_527 /> },
-  { path: '/modul/pendaftaran-applicant/tambah', module: 'PendaftaranApplicant', element: <Form_527 /> },
-  { path: '/modul/pendaftaran-applicant/:id/edit', module: 'PendaftaranApplicant', element: <Form_527 /> },
-  { path: '/modul/pendaftaran-bed-queue', module: 'PendaftaranBedQueue', element: <List_528 /> },
-  { path: '/modul/pendaftaran-bed-queue/tambah', module: 'PendaftaranBedQueue', element: <Form_528 /> },
-  { path: '/modul/pendaftaran-bed-queue/:id/edit', module: 'PendaftaranBedQueue', element: <Form_528 /> },
-  { path: '/modul/pendaftaran-co-management', module: 'PendaftaranCoManagement', element: <List_529 /> },
-  { path: '/modul/pendaftaran-co-management/tambah', module: 'PendaftaranCoManagement', element: <Form_529 /> },
-  { path: '/modul/pendaftaran-co-management/:id/edit', module: 'PendaftaranCoManagement', element: <Form_529 /> },
-  { path: '/modul/pendaftaran-consultation', module: 'PendaftaranConsultation', element: <List_530 /> },
-  { path: '/modul/pendaftaran-consultation/tambah', module: 'PendaftaranConsultation', element: <Form_530 /> },
-  { path: '/modul/pendaftaran-consultation/:id/edit', module: 'PendaftaranConsultation', element: <Form_530 /> },
-  { path: '/modul/pendaftaran-consultation-answer', module: 'PendaftaranConsultationAnswer', element: <List_531 /> },
-  { path: '/modul/pendaftaran-consultation-answer/tambah', module: 'PendaftaranConsultationAnswer', element: <Form_531 /> },
-  { path: '/modul/pendaftaran-consultation-answer/:id/edit', module: 'PendaftaranConsultationAnswer', element: <Form_531 /> },
-  { path: '/modul/pendaftaran-function', module: 'PendaftaranFunction', element: <List_532 /> },
-  { path: '/modul/pendaftaran-function/tambah', module: 'PendaftaranFunction', element: <Form_532 /> },
-  { path: '/modul/pendaftaran-function/:id/edit', module: 'PendaftaranFunction', element: <Form_532 /> },
-  { path: '/modul/pendaftaran-guarantor', module: 'PendaftaranGuarantor', element: <List_533 /> },
-  { path: '/modul/pendaftaran-guarantor/tambah', module: 'PendaftaranGuarantor', element: <Form_533 /> },
-  { path: '/modul/pendaftaran-guarantor/:id/edit', module: 'PendaftaranGuarantor', element: <Form_533 /> },
-  { path: '/modul/pendaftaran-history', module: 'PendaftaranHistory', element: <List_534 /> },
-  { path: '/modul/pendaftaran-history/tambah', module: 'PendaftaranHistory', element: <Form_534 /> },
-  { path: '/modul/pendaftaran-history/:id/edit', module: 'PendaftaranHistory', element: <Form_534 /> },
-  { path: '/modul/pendaftaran-patient-escort', module: 'PendaftaranPatientEscort', element: <List_535 /> },
-  { path: '/modul/pendaftaran-patient-escort/tambah', module: 'PendaftaranPatientEscort', element: <Form_535 /> },
-  { path: '/modul/pendaftaran-patient-escort/:id/edit', module: 'PendaftaranPatientEscort', element: <Form_535 /> },
-  { path: '/modul/pendaftaran-patient-escort-contact', module: 'PendaftaranPatientEscortContact', element: <List_536 /> },
-  { path: '/modul/pendaftaran-patient-escort-contact/tambah', module: 'PendaftaranPatientEscortContact', element: <Form_536 /> },
-  { path: '/modul/pendaftaran-patient-escort-contact/:id/edit', module: 'PendaftaranPatientEscortContact', element: <Form_536 /> },
-  { path: '/modul/pendaftaran-patient-escort-identity-card', module: 'PendaftaranPatientEscortIdentityCard', element: <List_537 /> },
-  { path: '/modul/pendaftaran-patient-escort-identity-card/tambah', module: 'PendaftaranPatientEscortIdentityCard', element: <Form_537 /> },
-  { path: '/modul/pendaftaran-patient-escort-identity-card/:id/edit', module: 'PendaftaranPatientEscortIdentityCard', element: <Form_537 /> },
-  { path: '/modul/pendaftaran-patient-guardian', module: 'PendaftaranPatientGuardian', element: <List_538 /> },
-  { path: '/modul/pendaftaran-patient-guardian/tambah', module: 'PendaftaranPatientGuardian', element: <Form_538 /> },
-  { path: '/modul/pendaftaran-patient-guardian/:id/edit', module: 'PendaftaranPatientGuardian', element: <Form_538 /> },
-  { path: '/modul/pendaftaran-patient-guardian-contact', module: 'PendaftaranPatientGuardianContact', element: <List_539 /> },
-  { path: '/modul/pendaftaran-patient-guardian-contact/tambah', module: 'PendaftaranPatientGuardianContact', element: <Form_539 /> },
-  { path: '/modul/pendaftaran-patient-guardian-contact/:id/edit', module: 'PendaftaranPatientGuardianContact', element: <Form_539 /> },
-  { path: '/modul/pendaftaran-patient-guardian-identity-card', module: 'PendaftaranPatientGuardianIdentityCard', element: <List_540 /> },
-  { path: '/modul/pendaftaran-patient-guardian-identity-card/tambah', module: 'PendaftaranPatientGuardianIdentityCard', element: <Form_540 /> },
-  { path: '/modul/pendaftaran-patient-guardian-identity-card/:id/edit', module: 'PendaftaranPatientGuardianIdentityCard', element: <Form_540 /> },
-  { path: '/modul/pendaftaran-patient-purpose', module: 'PendaftaranPatientPurpose', element: <List_541 /> },
-  { path: '/modul/pendaftaran-patient-purpose/tambah', module: 'PendaftaranPatientPurpose', element: <Form_541 /> },
-  { path: '/modul/pendaftaran-patient-purpose/:id/edit', module: 'PendaftaranPatientPurpose', element: <Form_541 /> },
-  { path: '/modul/pendaftaran-patient-transfer', module: 'PendaftaranPatientTransfer', element: <List_542 /> },
-  { path: '/modul/pendaftaran-patient-transfer/tambah', module: 'PendaftaranPatientTransfer', element: <Form_542 /> },
-  { path: '/modul/pendaftaran-patient-transfer/:id/edit', module: 'PendaftaranPatientTransfer', element: <Form_542 /> },
-  { path: '/modul/pendaftaran-queue-call', module: 'PendaftaranQueueCall', element: <List_543 /> },
-  { path: '/modul/pendaftaran-queue-call/tambah', module: 'PendaftaranQueueCall', element: <Form_543 /> },
-  { path: '/modul/pendaftaran-queue-call/:id/edit', module: 'PendaftaranQueueCall', element: <Form_543 /> },
-  { path: '/modul/pendaftaran-referral', module: 'PendaftaranReferral', element: <List_544 /> },
-  { path: '/modul/pendaftaran-referral/tambah', module: 'PendaftaranReferral', element: <Form_544 /> },
-  { path: '/modul/pendaftaran-referral/:id/edit', module: 'PendaftaranReferral', element: <Form_544 /> },
-  { path: '/modul/pendaftaran-referral-letter', module: 'PendaftaranReferralLetter', element: <List_545 /> },
-  { path: '/modul/pendaftaran-referral-letter/tambah', module: 'PendaftaranReferralLetter', element: <Form_545 /> },
-  { path: '/modul/pendaftaran-referral-letter/:id/edit', module: 'PendaftaranReferralLetter', element: <Form_545 /> },
-  { path: '/modul/pendaftaran-registration', module: 'PendaftaranRegistration', element: <List_546 /> },
-  { path: '/modul/pendaftaran-registration/tambah', module: 'PendaftaranRegistration', element: <Form_546 /> },
-  { path: '/modul/pendaftaran-registration/:id/edit', module: 'PendaftaranRegistration', element: <Form_546 /> },
-  { path: '/modul/pendaftaran-reservation', module: 'PendaftaranReservation', element: <List_547 /> },
-  { path: '/modul/pendaftaran-reservation/tambah', module: 'PendaftaranReservation', element: <Form_547 /> },
-  { path: '/modul/pendaftaran-reservation/:id/edit', module: 'PendaftaranReservation', element: <Form_547 /> },
-  { path: '/modul/pendaftaran-service-handover', module: 'PendaftaranServiceHandover', element: <List_548 /> },
-  { path: '/modul/pendaftaran-service-handover/tambah', module: 'PendaftaranServiceHandover', element: <Form_548 /> },
-  { path: '/modul/pendaftaran-service-handover/:id/edit', module: 'PendaftaranServiceHandover', element: <Form_548 /> },
-  { path: '/modul/pendaftaran-visit', module: 'PendaftaranVisit', element: <List_549 /> },
-  { path: '/modul/pendaftaran-visit/tambah', module: 'PendaftaranVisit', element: <Form_549 /> },
-  { path: '/modul/pendaftaran-visit/:id/edit', module: 'PendaftaranVisit', element: <Form_549 /> },
-  { path: '/modul/pendaftaran-visit-cancellation', module: 'PendaftaranVisitCancellation', element: <List_550 /> },
-  { path: '/modul/pendaftaran-visit-cancellation/tambah', module: 'PendaftaranVisitCancellation', element: <Form_550 /> },
-  { path: '/modul/pendaftaran-visit-cancellation/:id/edit', module: 'PendaftaranVisitCancellation', element: <Form_550 /> },
-  { path: '/modul/pendaftaran-visit-date-change', module: 'PendaftaranVisitDateChange', element: <List_551 /> },
-  { path: '/modul/pendaftaran-visit-date-change/tambah', module: 'PendaftaranVisitDateChange', element: <Form_551 /> },
-  { path: '/modul/pendaftaran-visit-date-change/:id/edit', module: 'PendaftaranVisitDateChange', element: <Form_551 /> },
-  { path: '/modul/pendaftaran-ward-queue', module: 'PendaftaranWardQueue', element: <List_552 /> },
-  { path: '/modul/pendaftaran-ward-queue/tambah', module: 'PendaftaranWardQueue', element: <Form_552 /> },
-  { path: '/modul/pendaftaran-ward-queue/:id/edit', module: 'PendaftaranWardQueue', element: <Form_552 /> },
-  { path: '/modul/penjamin-rsattending-physician', module: 'PenjaminRSAttendingPhysician', element: <List_553 /> },
-  { path: '/modul/penjamin-rsattending-physician/tambah', module: 'PenjaminRSAttendingPhysician', element: <Form_553 /> },
-  { path: '/modul/penjamin-rsattending-physician/:id/edit', module: 'PenjaminRSAttendingPhysician', element: <Form_553 /> },
-  { path: '/modul/penjamin-rsclaim-driver', module: 'PenjaminRSClaimDriver', element: <List_554 /> },
-  { path: '/modul/penjamin-rsclaim-driver/tambah', module: 'PenjaminRSClaimDriver', element: <Form_554 /> },
-  { path: '/modul/penjamin-rsclaim-driver/:id/edit', module: 'PenjaminRSClaimDriver', element: <Form_554 /> },
-  { path: '/modul/penjamin-rsdischarge-method', module: 'PenjaminRSDischargeMethod', element: <List_555 /> },
-  { path: '/modul/penjamin-rsdischarge-method/tambah', module: 'PenjaminRSDischargeMethod', element: <Form_555 /> },
-  { path: '/modul/penjamin-rsdischarge-method/:id/edit', module: 'PenjaminRSDischargeMethod', element: <Form_555 /> },
-  { path: '/modul/penjualan-sale', module: 'PenjualanSale', element: <List_556 /> },
-  { path: '/modul/penjualan-sale/tambah', module: 'PenjualanSale', element: <Form_556 /> },
-  { path: '/modul/penjualan-sale/:id/edit', module: 'PenjualanSale', element: <Form_556 /> },
-  { path: '/modul/penjualan-sale-item', module: 'PenjualanSaleItem', element: <List_557 /> },
-  { path: '/modul/penjualan-sale-item/tambah', module: 'PenjualanSaleItem', element: <Form_557 /> },
-  { path: '/modul/penjualan-sale-item/:id/edit', module: 'PenjualanSaleItem', element: <Form_557 /> },
-  { path: '/modul/penjualan-sale-return', module: 'PenjualanSaleReturn', element: <List_558 /> },
-  { path: '/modul/penjualan-sale-return/tambah', module: 'PenjualanSaleReturn', element: <Form_558 /> },
-  { path: '/modul/penjualan-sale-return/:id/edit', module: 'PenjualanSaleReturn', element: <Form_558 /> },
+  { path: '/modul/pembayaran-invoice', module: 'PembayaranInvoice', element: <List_513 /> },
+  { path: '/modul/pembayaran-invoice/tambah', module: 'PembayaranInvoice', element: <Form_513 /> },
+  { path: '/modul/pembayaran-invoice/:id/edit', module: 'PembayaranInvoice', element: <Form_513 /> },
+  { path: '/modul/pembayaran-invoice-cancellation', module: 'PembayaranInvoiceCancellation', element: <List_514 /> },
+  { path: '/modul/pembayaran-invoice-cancellation/tambah', module: 'PembayaranInvoiceCancellation', element: <Form_514 /> },
+  { path: '/modul/pembayaran-invoice-cancellation/:id/edit', module: 'PembayaranInvoiceCancellation', element: <Form_514 /> },
+  { path: '/modul/pembayaran-invoice-guarantor', module: 'PembayaranInvoiceGuarantor', element: <List_515 /> },
+  { path: '/modul/pembayaran-invoice-guarantor/tambah', module: 'PembayaranInvoiceGuarantor', element: <Form_515 /> },
+  { path: '/modul/pembayaran-invoice-guarantor/:id/edit', module: 'PembayaranInvoiceGuarantor', element: <Form_515 /> },
+  { path: '/modul/pembayaran-invoice-item', module: 'PembayaranInvoiceItem', element: <List_516 /> },
+  { path: '/modul/pembayaran-invoice-item/tambah', module: 'PembayaranInvoiceItem', element: <Form_516 /> },
+  { path: '/modul/pembayaran-invoice-item/:id/edit', module: 'PembayaranInvoiceItem', element: <Form_516 /> },
+  { path: '/modul/pembayaran-invoice-merge', module: 'PembayaranInvoiceMerge', element: <List_517 /> },
+  { path: '/modul/pembayaran-invoice-merge/tambah', module: 'PembayaranInvoiceMerge', element: <Form_517 /> },
+  { path: '/modul/pembayaran-invoice-merge/:id/edit', module: 'PembayaranInvoiceMerge', element: <Form_517 /> },
+  { path: '/modul/pembayaran-invoice-subsidy', module: 'PembayaranInvoiceSubsidy', element: <List_518 /> },
+  { path: '/modul/pembayaran-invoice-subsidy/tambah', module: 'PembayaranInvoiceSubsidy', element: <Form_518 /> },
+  { path: '/modul/pembayaran-invoice-subsidy/:id/edit', module: 'PembayaranInvoiceSubsidy', element: <Form_518 /> },
+  { path: '/modul/pembayaran-package-invoice-item', module: 'PembayaranPackageInvoiceItem', element: <List_519 /> },
+  { path: '/modul/pembayaran-package-invoice-item/tambah', module: 'PembayaranPackageInvoiceItem', element: <Form_519 /> },
+  { path: '/modul/pembayaran-package-invoice-item/:id/edit', module: 'PembayaranPackageInvoiceItem', element: <Form_519 /> },
+  { path: '/modul/pembayaran-patient-receivable', module: 'PembayaranPatientReceivable', element: <List_520 /> },
+  { path: '/modul/pembayaran-patient-receivable/tambah', module: 'PembayaranPatientReceivable', element: <Form_520 /> },
+  { path: '/modul/pembayaran-patient-receivable/:id/edit', module: 'PembayaranPatientReceivable', element: <Form_520 /> },
+  { path: '/modul/pembayaran-patient-receivable-settlement', module: 'PembayaranPatientReceivableSettlement', element: <List_521 /> },
+  { path: '/modul/pembayaran-patient-receivable-settlement/tambah', module: 'PembayaranPatientReceivableSettlement', element: <Form_521 /> },
+  { path: '/modul/pembayaran-patient-receivable-settlement/:id/edit', module: 'PembayaranPatientReceivableSettlement', element: <Form_521 /> },
+  { path: '/modul/pembayaran-payment', module: 'PembayaranPayment', element: <List_522 /> },
+  { path: '/modul/pembayaran-payment/tambah', module: 'PembayaranPayment', element: <Form_522 /> },
+  { path: '/modul/pembayaran-payment/:id/edit', module: 'PembayaranPayment', element: <Form_522 /> },
+  { path: '/modul/pembayaran-payment-provider', module: 'PembayaranPaymentProvider', element: <List_523 /> },
+  { path: '/modul/pembayaran-payment-provider/tambah', module: 'PembayaranPaymentProvider', element: <Form_523 /> },
+  { path: '/modul/pembayaran-payment-provider/:id/edit', module: 'PembayaranPaymentProvider', element: <Form_523 /> },
+  { path: '/modul/pembayaran-provider-service', module: 'PembayaranProviderService', element: <List_524 /> },
+  { path: '/modul/pembayaran-provider-service/tambah', module: 'PembayaranProviderService', element: <Form_524 /> },
+  { path: '/modul/pembayaran-provider-service/:id/edit', module: 'PembayaranProviderService', element: <Form_524 /> },
+  { path: '/modul/pembayaran-registration-invoice', module: 'PembayaranRegistrationInvoice', element: <List_525 /> },
+  { path: '/modul/pembayaran-registration-invoice/tambah', module: 'PembayaranRegistrationInvoice', element: <Form_525 /> },
+  { path: '/modul/pembayaran-registration-invoice/:id/edit', module: 'PembayaranRegistrationInvoice', element: <Form_525 /> },
+  { path: '/modul/pembayaran-transfer', module: 'PembayaranTransfer', element: <List_526 /> },
+  { path: '/modul/pembayaran-transfer/tambah', module: 'PembayaranTransfer', element: <Form_526 /> },
+  { path: '/modul/pembayaran-transfer/:id/edit', module: 'PembayaranTransfer', element: <Form_526 /> },
+  { path: '/modul/pendaftaran-accident-record', module: 'PendaftaranAccidentRecord', element: <List_527 /> },
+  { path: '/modul/pendaftaran-accident-record/tambah', module: 'PendaftaranAccidentRecord', element: <Form_527 /> },
+  { path: '/modul/pendaftaran-accident-record/:id/edit', module: 'PendaftaranAccidentRecord', element: <Form_527 /> },
+  { path: '/modul/pendaftaran-applicant', module: 'PendaftaranApplicant', element: <List_528 /> },
+  { path: '/modul/pendaftaran-applicant/tambah', module: 'PendaftaranApplicant', element: <Form_528 /> },
+  { path: '/modul/pendaftaran-applicant/:id/edit', module: 'PendaftaranApplicant', element: <Form_528 /> },
+  { path: '/modul/pendaftaran-bed-queue', module: 'PendaftaranBedQueue', element: <List_529 /> },
+  { path: '/modul/pendaftaran-bed-queue/tambah', module: 'PendaftaranBedQueue', element: <Form_529 /> },
+  { path: '/modul/pendaftaran-bed-queue/:id/edit', module: 'PendaftaranBedQueue', element: <Form_529 /> },
+  { path: '/modul/pendaftaran-co-management', module: 'PendaftaranCoManagement', element: <List_530 /> },
+  { path: '/modul/pendaftaran-co-management/tambah', module: 'PendaftaranCoManagement', element: <Form_530 /> },
+  { path: '/modul/pendaftaran-co-management/:id/edit', module: 'PendaftaranCoManagement', element: <Form_530 /> },
+  { path: '/modul/pendaftaran-consultation', module: 'PendaftaranConsultation', element: <List_531 /> },
+  { path: '/modul/pendaftaran-consultation/tambah', module: 'PendaftaranConsultation', element: <Form_531 /> },
+  { path: '/modul/pendaftaran-consultation/:id/edit', module: 'PendaftaranConsultation', element: <Form_531 /> },
+  { path: '/modul/pendaftaran-consultation-answer', module: 'PendaftaranConsultationAnswer', element: <List_532 /> },
+  { path: '/modul/pendaftaran-consultation-answer/tambah', module: 'PendaftaranConsultationAnswer', element: <Form_532 /> },
+  { path: '/modul/pendaftaran-consultation-answer/:id/edit', module: 'PendaftaranConsultationAnswer', element: <Form_532 /> },
+  { path: '/modul/pendaftaran-function', module: 'PendaftaranFunction', element: <List_533 /> },
+  { path: '/modul/pendaftaran-function/tambah', module: 'PendaftaranFunction', element: <Form_533 /> },
+  { path: '/modul/pendaftaran-function/:id/edit', module: 'PendaftaranFunction', element: <Form_533 /> },
+  { path: '/modul/pendaftaran-guarantor', module: 'PendaftaranGuarantor', element: <List_534 /> },
+  { path: '/modul/pendaftaran-guarantor/tambah', module: 'PendaftaranGuarantor', element: <Form_534 /> },
+  { path: '/modul/pendaftaran-guarantor/:id/edit', module: 'PendaftaranGuarantor', element: <Form_534 /> },
+  { path: '/modul/pendaftaran-history', module: 'PendaftaranHistory', element: <List_535 /> },
+  { path: '/modul/pendaftaran-history/tambah', module: 'PendaftaranHistory', element: <Form_535 /> },
+  { path: '/modul/pendaftaran-history/:id/edit', module: 'PendaftaranHistory', element: <Form_535 /> },
+  { path: '/modul/pendaftaran-patient-escort', module: 'PendaftaranPatientEscort', element: <List_536 /> },
+  { path: '/modul/pendaftaran-patient-escort/tambah', module: 'PendaftaranPatientEscort', element: <Form_536 /> },
+  { path: '/modul/pendaftaran-patient-escort/:id/edit', module: 'PendaftaranPatientEscort', element: <Form_536 /> },
+  { path: '/modul/pendaftaran-patient-escort-contact', module: 'PendaftaranPatientEscortContact', element: <List_537 /> },
+  { path: '/modul/pendaftaran-patient-escort-contact/tambah', module: 'PendaftaranPatientEscortContact', element: <Form_537 /> },
+  { path: '/modul/pendaftaran-patient-escort-contact/:id/edit', module: 'PendaftaranPatientEscortContact', element: <Form_537 /> },
+  { path: '/modul/pendaftaran-patient-escort-identity-card', module: 'PendaftaranPatientEscortIdentityCard', element: <List_538 /> },
+  { path: '/modul/pendaftaran-patient-escort-identity-card/tambah', module: 'PendaftaranPatientEscortIdentityCard', element: <Form_538 /> },
+  { path: '/modul/pendaftaran-patient-escort-identity-card/:id/edit', module: 'PendaftaranPatientEscortIdentityCard', element: <Form_538 /> },
+  { path: '/modul/pendaftaran-patient-guardian', module: 'PendaftaranPatientGuardian', element: <List_539 /> },
+  { path: '/modul/pendaftaran-patient-guardian/tambah', module: 'PendaftaranPatientGuardian', element: <Form_539 /> },
+  { path: '/modul/pendaftaran-patient-guardian/:id/edit', module: 'PendaftaranPatientGuardian', element: <Form_539 /> },
+  { path: '/modul/pendaftaran-patient-guardian-contact', module: 'PendaftaranPatientGuardianContact', element: <List_540 /> },
+  { path: '/modul/pendaftaran-patient-guardian-contact/tambah', module: 'PendaftaranPatientGuardianContact', element: <Form_540 /> },
+  { path: '/modul/pendaftaran-patient-guardian-contact/:id/edit', module: 'PendaftaranPatientGuardianContact', element: <Form_540 /> },
+  { path: '/modul/pendaftaran-patient-guardian-identity-card', module: 'PendaftaranPatientGuardianIdentityCard', element: <List_541 /> },
+  { path: '/modul/pendaftaran-patient-guardian-identity-card/tambah', module: 'PendaftaranPatientGuardianIdentityCard', element: <Form_541 /> },
+  { path: '/modul/pendaftaran-patient-guardian-identity-card/:id/edit', module: 'PendaftaranPatientGuardianIdentityCard', element: <Form_541 /> },
+  { path: '/modul/pendaftaran-patient-purpose', module: 'PendaftaranPatientPurpose', element: <List_542 /> },
+  { path: '/modul/pendaftaran-patient-purpose/tambah', module: 'PendaftaranPatientPurpose', element: <Form_542 /> },
+  { path: '/modul/pendaftaran-patient-purpose/:id/edit', module: 'PendaftaranPatientPurpose', element: <Form_542 /> },
+  { path: '/modul/pendaftaran-patient-transfer', module: 'PendaftaranPatientTransfer', element: <List_543 /> },
+  { path: '/modul/pendaftaran-patient-transfer/tambah', module: 'PendaftaranPatientTransfer', element: <Form_543 /> },
+  { path: '/modul/pendaftaran-patient-transfer/:id/edit', module: 'PendaftaranPatientTransfer', element: <Form_543 /> },
+  { path: '/modul/pendaftaran-queue-call', module: 'PendaftaranQueueCall', element: <List_544 /> },
+  { path: '/modul/pendaftaran-queue-call/tambah', module: 'PendaftaranQueueCall', element: <Form_544 /> },
+  { path: '/modul/pendaftaran-queue-call/:id/edit', module: 'PendaftaranQueueCall', element: <Form_544 /> },
+  { path: '/modul/pendaftaran-referral', module: 'PendaftaranReferral', element: <List_545 /> },
+  { path: '/modul/pendaftaran-referral/tambah', module: 'PendaftaranReferral', element: <Form_545 /> },
+  { path: '/modul/pendaftaran-referral/:id/edit', module: 'PendaftaranReferral', element: <Form_545 /> },
+  { path: '/modul/pendaftaran-referral-letter', module: 'PendaftaranReferralLetter', element: <List_546 /> },
+  { path: '/modul/pendaftaran-referral-letter/tambah', module: 'PendaftaranReferralLetter', element: <Form_546 /> },
+  { path: '/modul/pendaftaran-referral-letter/:id/edit', module: 'PendaftaranReferralLetter', element: <Form_546 /> },
+  { path: '/modul/pendaftaran-registration', module: 'PendaftaranRegistration', element: <List_547 /> },
+  { path: '/modul/pendaftaran-registration/tambah', module: 'PendaftaranRegistration', element: <Form_547 /> },
+  { path: '/modul/pendaftaran-registration/:id/edit', module: 'PendaftaranRegistration', element: <Form_547 /> },
+  { path: '/modul/pendaftaran-reservation', module: 'PendaftaranReservation', element: <List_548 /> },
+  { path: '/modul/pendaftaran-reservation/tambah', module: 'PendaftaranReservation', element: <Form_548 /> },
+  { path: '/modul/pendaftaran-reservation/:id/edit', module: 'PendaftaranReservation', element: <Form_548 /> },
+  { path: '/modul/pendaftaran-service-handover', module: 'PendaftaranServiceHandover', element: <List_549 /> },
+  { path: '/modul/pendaftaran-service-handover/tambah', module: 'PendaftaranServiceHandover', element: <Form_549 /> },
+  { path: '/modul/pendaftaran-service-handover/:id/edit', module: 'PendaftaranServiceHandover', element: <Form_549 /> },
+  { path: '/modul/pendaftaran-visit', module: 'PendaftaranVisit', element: <List_550 /> },
+  { path: '/modul/pendaftaran-visit/tambah', module: 'PendaftaranVisit', element: <Form_550 /> },
+  { path: '/modul/pendaftaran-visit/:id/edit', module: 'PendaftaranVisit', element: <Form_550 /> },
+  { path: '/modul/pendaftaran-visit-cancellation', module: 'PendaftaranVisitCancellation', element: <List_551 /> },
+  { path: '/modul/pendaftaran-visit-cancellation/tambah', module: 'PendaftaranVisitCancellation', element: <Form_551 /> },
+  { path: '/modul/pendaftaran-visit-cancellation/:id/edit', module: 'PendaftaranVisitCancellation', element: <Form_551 /> },
+  { path: '/modul/pendaftaran-visit-date-change', module: 'PendaftaranVisitDateChange', element: <List_552 /> },
+  { path: '/modul/pendaftaran-visit-date-change/tambah', module: 'PendaftaranVisitDateChange', element: <Form_552 /> },
+  { path: '/modul/pendaftaran-visit-date-change/:id/edit', module: 'PendaftaranVisitDateChange', element: <Form_552 /> },
+  { path: '/modul/pendaftaran-ward-queue', module: 'PendaftaranWardQueue', element: <List_553 /> },
+  { path: '/modul/pendaftaran-ward-queue/tambah', module: 'PendaftaranWardQueue', element: <Form_553 /> },
+  { path: '/modul/pendaftaran-ward-queue/:id/edit', module: 'PendaftaranWardQueue', element: <Form_553 /> },
+  { path: '/modul/penjamin-rsattending-physician', module: 'PenjaminRSAttendingPhysician', element: <List_554 /> },
+  { path: '/modul/penjamin-rsattending-physician/tambah', module: 'PenjaminRSAttendingPhysician', element: <Form_554 /> },
+  { path: '/modul/penjamin-rsattending-physician/:id/edit', module: 'PenjaminRSAttendingPhysician', element: <Form_554 /> },
+  { path: '/modul/penjamin-rsclaim-driver', module: 'PenjaminRSClaimDriver', element: <List_555 /> },
+  { path: '/modul/penjamin-rsclaim-driver/tambah', module: 'PenjaminRSClaimDriver', element: <Form_555 /> },
+  { path: '/modul/penjamin-rsclaim-driver/:id/edit', module: 'PenjaminRSClaimDriver', element: <Form_555 /> },
+  { path: '/modul/penjamin-rsdischarge-method', module: 'PenjaminRSDischargeMethod', element: <List_556 /> },
+  { path: '/modul/penjamin-rsdischarge-method/tambah', module: 'PenjaminRSDischargeMethod', element: <Form_556 /> },
+  { path: '/modul/penjamin-rsdischarge-method/:id/edit', module: 'PenjaminRSDischargeMethod', element: <Form_556 /> },
+  { path: '/modul/penjualan-sale', module: 'PenjualanSale', element: <List_557 /> },
+  { path: '/modul/penjualan-sale/tambah', module: 'PenjualanSale', element: <Form_557 /> },
+  { path: '/modul/penjualan-sale/:id/edit', module: 'PenjualanSale', element: <Form_557 /> },
+  { path: '/modul/penjualan-sale-item', module: 'PenjualanSaleItem', element: <List_558 /> },
+  { path: '/modul/penjualan-sale-item/tambah', module: 'PenjualanSaleItem', element: <Form_558 /> },
+  { path: '/modul/penjualan-sale-item/:id/edit', module: 'PenjualanSaleItem', element: <Form_558 /> },
+  { path: '/modul/penjualan-sale-return', module: 'PenjualanSaleReturn', element: <List_559 /> },
+  { path: '/modul/penjualan-sale-return/tambah', module: 'PenjualanSaleReturn', element: <Form_559 /> },
+  { path: '/modul/penjualan-sale-return/:id/edit', module: 'PenjualanSaleReturn', element: <Form_559 /> },
 ]

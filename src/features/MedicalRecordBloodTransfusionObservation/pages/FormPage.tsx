@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useBloodTransfusionObservationResource } from '../api'
 import type { BloodTransfusionObservationFormValues } from '../types'
 
@@ -30,7 +31,11 @@ export function BloodTransfusionObservationFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BloodTransfusionObservation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="blood_transfusion_id">Blood Transfusion *</Label>
-        <Input id="blood_transfusion_id" type="number" value={values.blood_transfusion_id ?? ''} onChange={(e) => setValues({ ...values, blood_transfusion_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/blood-transfusions"
+          value={values.blood_transfusion_id ?? null}
+          onChange={(v) => setValues({ ...values, blood_transfusion_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="observed_at">Observed At *</Label>

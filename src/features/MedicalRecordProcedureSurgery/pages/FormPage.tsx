@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useProcedureSurgeryResource } from '../api'
 import type { ProcedureSurgeryFormValues } from '../types'
 
@@ -30,11 +31,19 @@ export function ProcedureSurgeryFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ProcedureSurgery</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="procedure_id">Procedure</Label>
-        <Input id="procedure_id" type="number" value={values.procedure_id ?? ''} onChange={(e) => setValues({ ...values, procedure_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/procedures"
+          value={values.procedure_id ?? null}
+          onChange={(v) => setValues({ ...values, procedure_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="surgery_name">Surgery Name *</Label>

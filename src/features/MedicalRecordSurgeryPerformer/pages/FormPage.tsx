@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useSurgeryPerformerResource } from '../api'
 import type { SurgeryPerformerFormValues } from '../types'
 
@@ -30,15 +31,27 @@ export function SurgeryPerformerFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} SurgeryPerformer</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="surgery_id">Surgery</Label>
-        <Input id="surgery_id" type="number" value={values.surgery_id ?? ''} onChange={(e) => setValues({ ...values, surgery_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/surgeries"
+          value={values.surgery_id ?? null}
+          onChange={(v) => setValues({ ...values, surgery_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit</Label>
-        <Input id="visit_id" type="number" value={values.visit_id ?? ''} onChange={(e) => setValues({ ...values, visit_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/visits"
+          value={values.visit_id ?? null}
+          onChange={(v) => setValues({ ...values, visit_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="doctor_id">Doctor</Label>
-        <Input id="doctor_id" type="number" value={values.doctor_id ?? ''} onChange={(e) => setValues({ ...values, doctor_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/doctors"
+          value={values.doctor_id ?? null}
+          onChange={(v) => setValues({ ...values, doctor_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="role">Role</Label>

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RelationSelect } from '@/shared/components/RelationSelect'
 import { useFluidBalanceAssessmentDetailResource } from '../api'
 import type { FluidBalanceAssessmentDetailFormValues } from '../types'
 
@@ -30,7 +31,11 @@ export function FluidBalanceAssessmentDetailFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} FluidBalanceAssessmentDetail</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="fluid_balance_assessment_id">Fluid Balance Assessment *</Label>
-        <Input id="fluid_balance_assessment_id" type="number" value={values.fluid_balance_assessment_id ?? ''} onChange={(e) => setValues({ ...values, fluid_balance_assessment_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/fluid-balance-assessments"
+          value={values.fluid_balance_assessment_id ?? null}
+          onChange={(v) => setValues({ ...values, fluid_balance_assessment_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="type">Type *</Label>

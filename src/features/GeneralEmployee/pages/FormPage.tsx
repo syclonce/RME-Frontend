@@ -69,15 +69,27 @@ export function EmployeeFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="religion_id">Religion</Label>
-        <Input id="religion_id" type="number" value={values.religion_id ?? ''} onChange={(e) => setValues({ ...values, religion_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/religions"
+          value={values.religion_id ?? null}
+          onChange={(v) => setValues({ ...values, religion_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="gender_id">Gender</Label>
-        <Input id="gender_id" type="number" value={values.gender_id ?? ''} onChange={(e) => setValues({ ...values, gender_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/genders"
+          value={values.gender_id ?? null}
+          onChange={(v) => setValues({ ...values, gender_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="profession_id">Profession</Label>
-        <Input id="profession_id" type="number" value={values.profession_id ?? ''} onChange={(e) => setValues({ ...values, profession_id: e.target.value === '' ? null : Number(e.target.value) })} />
+        <RelationSelect
+          endpoint="/professions"
+          value={values.profession_id ?? null}
+          onChange={(v) => setValues({ ...values, profession_id: v })}
+        />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="smf_id">Smf</Label>
