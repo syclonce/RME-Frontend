@@ -1,0 +1,74 @@
+[
+  {
+    "module": "AuditActivityLog",
+    "uri": "activity-logs",
+    "fileName": "ListPage.tsx",
+    "entityName": "ActivityLogs"
+  },
+  {
+    "module": "AuditRequestLog",
+    "uri": "request-logs",
+    "fileName": "ListPage.tsx",
+    "entityName": "RequestLogs"
+  },
+  {
+    "module": "FinanceGeneralLedger",
+    "uri": "accounts",
+    "fileName": "ListPage.tsx",
+    "entityName": "Account"
+  },
+  {
+    "module": "FinanceGeneralLedger",
+    "uri": "journal-entries",
+    "fileName": "ListPage1.tsx",
+    "entityName": "JournalEntry"
+  },
+  {
+    "module": "MedicalRecordRetentionSchedule",
+    "uri": "retention-schedules",
+    "fileName": "ListPage.tsx",
+    "entityName": "RetentionSchedule"
+  },
+  {
+    "module": "SatuSehatMasterData",
+    "uri": "provinces",
+    "fileName": "ListPage.tsx",
+    "entityName": "Provinces"
+  },
+  {
+    "module": "SatuSehatMasterData",
+    "uri": "cities",
+    "fileName": "ListPage1.tsx",
+    "entityName": "Cities"
+  },
+  {
+    "module": "SatuSehatMasterData",
+    "uri": "districts",
+    "fileName": "ListPage2.tsx",
+    "entityName": "Districts"
+  },
+  {
+    "module": "SatuSehatMasterData",
+    "uri": "sub-districts",
+    "fileName": "ListPage3.tsx",
+    "entityName": "SubDistricts"
+  },
+  {
+    "module": "SatuSehatMasterData",
+    "uri": "sarana",
+    "fileName": "ListPage4.tsx",
+    "entityName": "Sarana"
+  },
+  {
+    "module": "SatuSehatMasterData",
+    "uri": "kfa/products",
+    "fileName": "ListPage5.tsx",
+    "entityName": "KfaProducts"
+  },
+  {
+    "module": "SatuSehatMasterData",
+    "uri": "kfa/products/all",
+    "fileName": "ListPage6.tsx",
+    "entityName": "KfaProductsAll"
+  }
+]

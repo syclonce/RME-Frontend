@@ -1123,6 +1123,18 @@ const List_558 = lazy(() => import('@/features/PenjualanSaleItem/pages/ListPage'
 const Form_558 = lazy(() => import('@/features/PenjualanSaleItem/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const List_559 = lazy(() => import('@/features/PenjualanSaleReturn/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const Form_559 = lazy(() => import('@/features/PenjualanSaleReturn/pages/FormPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_560 = lazy(() => import('@/features/AuditActivityLog/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_561 = lazy(() => import('@/features/AuditRequestLog/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_562 = lazy(() => import('@/features/FinanceGeneralLedger/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_563 = lazy(() => import('@/features/FinanceGeneralLedger/pages/ListPage1').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_564 = lazy(() => import('@/features/MedicalRecordRetentionSchedule/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_565 = lazy(() => import('@/features/SatuSehatMasterData/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_566 = lazy(() => import('@/features/SatuSehatMasterData/pages/ListPage1').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_567 = lazy(() => import('@/features/SatuSehatMasterData/pages/ListPage2').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_568 = lazy(() => import('@/features/SatuSehatMasterData/pages/ListPage3').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_569 = lazy(() => import('@/features/SatuSehatMasterData/pages/ListPage4').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_570 = lazy(() => import('@/features/SatuSehatMasterData/pages/ListPage5').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
+const List_571 = lazy(() => import('@/features/SatuSehatMasterData/pages/ListPage6').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 
 export interface GeneratedRoute {
   path: string
@@ -2811,4 +2823,16 @@ export const generatedRoutes: GeneratedRoute[] = [
   { path: '/modul/penjualan-sale-return', module: 'PenjualanSaleReturn', element: <List_559 /> },
   { path: '/modul/penjualan-sale-return/tambah', module: 'PenjualanSaleReturn', element: <Form_559 /> },
   { path: '/modul/penjualan-sale-return/:id/edit', module: 'PenjualanSaleReturn', element: <Form_559 /> },
+  { path: '/modul/audit-activity-log-activity-logs', module: 'AuditActivityLog', element: <List_560 /> },
+  { path: '/modul/audit-request-log-request-logs', module: 'AuditRequestLog', element: <List_561 /> },
+  { path: '/modul/finance-general-ledger-account', module: 'FinanceGeneralLedger', element: <List_562 /> },
+  { path: '/modul/finance-general-ledger-journal-entry', module: 'FinanceGeneralLedger', element: <List_563 /> },
+  { path: '/modul/medical-record-retention-schedule-retention-schedule', module: 'MedicalRecordRetentionSchedule', element: <List_564 /> },
+  { path: '/modul/satu-sehat-master-data-provinces', module: 'SatuSehatMasterData', element: <List_565 /> },
+  { path: '/modul/satu-sehat-master-data-cities', module: 'SatuSehatMasterData', element: <List_566 /> },
+  { path: '/modul/satu-sehat-master-data-districts', module: 'SatuSehatMasterData', element: <List_567 /> },
+  { path: '/modul/satu-sehat-master-data-sub-districts', module: 'SatuSehatMasterData', element: <List_568 /> },
+  { path: '/modul/satu-sehat-master-data-sarana', module: 'SatuSehatMasterData', element: <List_569 /> },
+  { path: '/modul/satu-sehat-master-data-kfa-products', module: 'SatuSehatMasterData', element: <List_570 /> },
+  { path: '/modul/satu-sehat-master-data-kfa-products-all', module: 'SatuSehatMasterData', element: <List_571 /> },
 ]
