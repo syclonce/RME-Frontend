@@ -16,6 +16,12 @@ export interface NormalizedList<T> {
 
 export function normalizeList<T>(raw: unknown): NormalizedList<T> {
   const r = raw as Record<string, unknown>
+  // Bentuk paginator dibungkus sekali lagi: { data: { current_page, data: [...], last_page, total } }
+  // (pola controller manual `response()->json(['data' => $query->paginate(...)])`,
+  // beda dari Resource::collection() yang menghasilkan { data: [...], meta }).
+  if (r?.data && typeof r.data === 'object' && !Array.isArray(r.data) && 'current_page' in (r.data as object)) {
+    return normalizeList<T>(r.data)
+  }
   // Bentuk Resource::collection() paginated: { data: [...], meta: { current_page, last_page, total } }
   if (Array.isArray(r?.data) && r?.meta && typeof r.meta === 'object') {
     const meta = r.meta as Record<string, unknown>
