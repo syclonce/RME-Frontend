@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePatientPortalAccountResource } from '../api'
 import type { PatientPortalAccountFormValues } from '../types'
 
@@ -32,7 +32,7 @@ export function PatientPortalAccountFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientPortalAccount</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/patients"
           value={values.patient_id ?? null}
           onChange={(v) => setValues({ ...values, patient_id: v })}

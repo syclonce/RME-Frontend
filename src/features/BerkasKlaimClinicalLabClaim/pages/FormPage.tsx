@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useClinicalLabClaimResource } from '../api'
 import type { ClinicalLabClaimFormValues } from '../types'
 
@@ -39,7 +40,7 @@ export function ClinicalLabClaimFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="order_id">Order</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/lab-orders"
           value={values.order_id ?? null}
           onChange={(v) => setValues({ ...values, order_id: v })}

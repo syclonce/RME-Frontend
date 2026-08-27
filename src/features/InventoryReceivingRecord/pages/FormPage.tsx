@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useReceivingRecordResource } from '../api'
 import type { ReceivingRecordFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function ReceivingRecordFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="received_by">Received By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.received_by ?? null}
           onChange={(v) => setValues({ ...values, received_by: v })}

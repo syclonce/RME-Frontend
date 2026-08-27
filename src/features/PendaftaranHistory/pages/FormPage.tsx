@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePendaftaranHistoryResource } from '../api'
 import type { PendaftaranHistoryFormValues } from '../types'
 
@@ -23,7 +23,7 @@ export function PendaftaranHistoryFormPage() {
       <h1 className="text-lg font-semibold">Tambah PendaftaranHistory</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="registration_id">Registration *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/registrations"
           value={values.registration_id ?? null}
           onChange={(v) => setValues({ ...values, registration_id: v })}

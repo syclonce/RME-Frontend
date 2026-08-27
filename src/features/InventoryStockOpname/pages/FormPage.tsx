@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useInventoryStockOpnameResource } from '../api'
 import type { InventoryStockOpnameFormValues } from '../types'
 
@@ -43,7 +44,7 @@ export function InventoryStockOpnameFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="conducted_by">Conducted By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.conducted_by ?? null}
           onChange={(v) => setValues({ ...values, conducted_by: v })}

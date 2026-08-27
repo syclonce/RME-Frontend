@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePharmacyReturnResource } from '../api'
 import type { PharmacyReturnFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function PharmacyReturnFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PharmacyReturn</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_item_id">Prescription Item *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/prescription-items"
           value={values.prescription_item_id ?? null}
           onChange={(v) => setValues({ ...values, prescription_item_id: v })}
@@ -47,7 +47,7 @@ export function PharmacyReturnFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="returned_by">Returned By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.returned_by ?? null}
           onChange={(v) => setValues({ ...values, returned_by: v })}

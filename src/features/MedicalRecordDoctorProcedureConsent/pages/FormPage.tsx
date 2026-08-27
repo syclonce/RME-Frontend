@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useDoctorProcedureConsentResource } from '../api'
 import type { DoctorProcedureConsentFormValues } from '../types'
 
@@ -24,7 +25,7 @@ export function DoctorProcedureConsentFormPage() {
       <h1 className="text-lg font-semibold">Tambah DoctorProcedureConsent</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -40,7 +41,7 @@ export function DoctorProcedureConsentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="created_by">Created By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/users"
           value={values.created_by ?? null}
           onChange={(v) => setValues({ ...values, created_by: v })}

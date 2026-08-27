@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useClinicalNoteResource } from '../api'
 import type { ClinicalNoteFormValues } from '../types'
 
@@ -24,7 +24,7 @@ export function ClinicalNoteFormPage() {
       <h1 className="text-lg font-semibold">Tambah ClinicalNote</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -60,7 +60,7 @@ export function ClinicalNoteFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="author_id">Author *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.author_id ?? null}
           onChange={(v) => setValues({ ...values, author_id: v })}

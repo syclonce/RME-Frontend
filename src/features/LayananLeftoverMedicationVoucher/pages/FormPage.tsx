@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useLeftoverMedicationVoucherResource } from '../api'
 import type { LeftoverMedicationVoucherFormValues } from '../types'
 
@@ -35,7 +35,7 @@ export function LeftoverMedicationVoucherFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -43,7 +43,7 @@ export function LeftoverMedicationVoucherFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/patients"
           value={values.patient_id ?? null}
           onChange={(v) => setValues({ ...values, patient_id: v })}
@@ -51,7 +51,7 @@ export function LeftoverMedicationVoucherFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/prescriptions"
           value={values.prescription_id ?? null}
           onChange={(v) => setValues({ ...values, prescription_id: v })}

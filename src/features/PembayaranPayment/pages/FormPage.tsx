@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePaymentResource } from '../api'
 import type { PaymentFormValues } from '../types'
 
@@ -28,7 +28,7 @@ export function PaymentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/invoices"
           value={values.invoice_id ?? null}
           onChange={(v) => setValues({ ...values, invoice_id: v })}

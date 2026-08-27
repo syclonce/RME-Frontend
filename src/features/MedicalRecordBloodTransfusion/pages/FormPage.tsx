@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useBloodTransfusionResource } from '../api'
 import type { BloodTransfusionFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function BloodTransfusionFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BloodTransfusion</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -55,7 +56,7 @@ export function BloodTransfusionFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="administered_by">Administered By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.administered_by ?? null}
           onChange={(v) => setValues({ ...values, administered_by: v })}

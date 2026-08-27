@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePatientAccessLockResource } from '../api'
 import type { PatientAccessLockFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function PatientAccessLockFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientAccessLock</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/patients"
           value={values.patient_id ?? null}
           onChange={(v) => setValues({ ...values, patient_id: v })}
@@ -39,7 +39,7 @@ export function PatientAccessLockFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="locked_by">Locked By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.locked_by ?? null}
           onChange={(v) => setValues({ ...values, locked_by: v })}

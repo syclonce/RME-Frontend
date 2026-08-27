@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useControlScheduleResource } from '../api'
 import type { ControlScheduleFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function ControlScheduleFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ControlSchedule</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/patients"
           value={values.patient_id ?? null}
           onChange={(v) => setValues({ ...values, patient_id: v })}
@@ -39,7 +40,7 @@ export function ControlScheduleFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -63,7 +64,7 @@ export function ControlScheduleFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="scheduled_by">Scheduled By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.scheduled_by ?? null}
           onChange={(v) => setValues({ ...values, scheduled_by: v })}

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useConsultationAnswerResource } from '../api'
 import type { ConsultationAnswerFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function ConsultationAnswerFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="answered_by">Answered By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.answered_by ?? null}
           onChange={(v) => setValues({ ...values, answered_by: v })}

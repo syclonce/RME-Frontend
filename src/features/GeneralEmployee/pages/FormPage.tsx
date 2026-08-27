@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'
 import { useEmployeeResource } from '../api'
 import type { EmployeeFormValues } from '../types'
@@ -33,7 +34,7 @@ export function EmployeeFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Employee</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="user_id">User</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/users"
           value={values.user_id ?? null}
           onChange={(v) => setValues({ ...values, user_id: v })}

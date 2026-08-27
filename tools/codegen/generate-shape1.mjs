@@ -29,6 +29,16 @@ for (const entry of catalog) {
   }
 }
 
+/** Tabel yang dianggap "besar" (ribuan+ baris) — field FK ke sini pakai
+ * AsyncCombobox cari-sambil-ketik, bukan RelationSelect dropdown polos
+ * yang cuma muat 100 opsi pertama. */
+const LARGE_TABLES = new Set([
+  'patients', 'employees', 'visits', 'services', 'registrations',
+  'invoices', 'invoice_items', 'prescriptions', 'prescription_items',
+  'drugs', 'medication_stocks', 'bed_occupancies',
+  'lab_orders', 'radiology_orders', 'users',
+])
+
 function pickStoreFields(entry) {
   const reqKeys = Object.keys(entry.requestFields)
   const storeKey = reqKeys.find((k) => /^Store/i.test(k)) ?? reqKeys[0]
@@ -244,6 +254,17 @@ function relationEndpoint(field) {
       </div>`
       }
       if (endpoint) {
+        const isLarge = f.relation && LARGE_TABLES.has(f.relation.table)
+        if (isLarge) {
+          return `      <div className="grid gap-1.5">
+        <Label htmlFor="${f.name}">${label}${f.required ? ' *' : ''}</Label>
+        <AsyncCombobox
+          endpoint="${endpoint}"
+          value={values.${f.name} ?? null}
+          onChange={(v) => setValues({ ...values, ${f.name}: v })}
+        />
+      </div>`
+        }
         return `      <div className="grid gap-1.5">
         <Label htmlFor="${f.name}">${label}${f.required ? ' *' : ''}</Label>
         <RelationSelect
@@ -288,7 +309,10 @@ ${enumOptions}
 
   const hasCheckbox = fields.some((f) => inputType(f) === 'checkbox')
   const isVillageField = (f) => f.type === 'relation' && f.relation?.table === 'indonesia_villages'
-  const hasRelationSelect = fields.some((f) => relationEndpoint(f) !== null)
+  const isLargeFk = (f) => f.relation && LARGE_TABLES.has(f.relation.table) && relationEndpoint(f)
+  const isSmallFk = (f) => relationEndpoint(f) && !isLargeFk(f)
+  const hasRelationSelect = fields.some(isSmallFk)
+  const hasAsyncCombobox = fields.some(isLargeFk)
   const hasVillagePicker = fields.some(isVillageField)
   const hasEnumSelect = fields.some((f) => isEnumField(f))
   const hasPlainInput = fields.some((f) => relationEndpoint(f) === null && !isVillageField(f) && inputType(f) !== 'checkbox' && inputType(f) !== 'enum')
@@ -298,7 +322,7 @@ ${enumOptions}
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 ${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasEnumSelect ? "import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
-${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
+${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasAsyncCombobox ? "import { AsyncCombobox } from '@/shared/components/AsyncCombobox'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
 export function ${entity}FormPage() {
@@ -335,7 +359,7 @@ ${formFieldsJsx}
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 ${hasCheckbox ? "import { Checkbox } from '@/components/ui/checkbox'\n" : ''}${hasEnumSelect ? "import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'\n" : ''}${hasPlainInput ? "import { Input } from '@/components/ui/input'\n" : ''}import { Label } from '@/components/ui/label'
-${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
+${hasRelationSelect ? "import { RelationSelect } from '@/shared/components/RelationSelect'\n" : ''}${hasAsyncCombobox ? "import { AsyncCombobox } from '@/shared/components/AsyncCombobox'\n" : ''}${hasVillagePicker ? "import { RegionVillagePicker } from '@/shared/components/RegionVillagePicker'\n" : ''}import { use${entity}Resource } from '../api'
 import type { ${entity}FormValues } from '../types'
 
 export function ${entity}FormPage() {

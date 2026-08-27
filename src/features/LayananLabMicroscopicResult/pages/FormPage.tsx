@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useLabMicroscopicResultResource } from '../api'
 import type { LabMicroscopicResultFormValues } from '../types'
 
@@ -23,7 +23,7 @@ export function LabMicroscopicResultFormPage() {
       <h1 className="text-lg font-semibold">Tambah LabMicroscopicResult</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_order_id">Lab Order *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/lab-orders"
           value={values.lab_order_id ?? null}
           onChange={(v) => setValues({ ...values, lab_order_id: v })}
@@ -39,7 +39,7 @@ export function LabMicroscopicResultFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="examined_by">Examined By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.examined_by ?? null}
           onChange={(v) => setValues({ ...values, examined_by: v })}

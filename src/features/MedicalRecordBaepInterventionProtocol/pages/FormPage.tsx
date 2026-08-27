@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useBaepInterventionProtocolResource } from '../api'
 import type { BaepInterventionProtocolFormValues } from '../types'
 
@@ -24,7 +24,7 @@ export function BaepInterventionProtocolFormPage() {
       <h1 className="text-lg font-semibold">Tambah BaepInterventionProtocol</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -32,7 +32,7 @@ export function BaepInterventionProtocolFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_by">Performed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.performed_by ?? null}
           onChange={(v) => setValues({ ...values, performed_by: v })}
@@ -40,7 +40,7 @@ export function BaepInterventionProtocolFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="created_by">Created By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/users"
           value={values.created_by ?? null}
           onChange={(v) => setValues({ ...values, created_by: v })}

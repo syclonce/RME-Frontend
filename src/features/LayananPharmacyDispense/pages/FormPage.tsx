@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePharmacyDispenseResource } from '../api'
 import type { PharmacyDispenseFormValues } from '../types'
 
@@ -30,7 +30,7 @@ export function PharmacyDispenseFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PharmacyDispense</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/prescriptions"
           value={values.prescription_id ?? null}
           onChange={(v) => setValues({ ...values, prescription_id: v })}

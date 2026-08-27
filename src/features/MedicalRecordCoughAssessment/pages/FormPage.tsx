@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useCoughAssessmentResource } from '../api'
 import type { CoughAssessmentFormValues } from '../types'
 
@@ -32,7 +32,7 @@ export function CoughAssessmentFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} CoughAssessment</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -60,7 +60,7 @@ export function CoughAssessmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assessed_by">Assessed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.assessed_by ?? null}
           onChange={(v) => setValues({ ...values, assessed_by: v })}

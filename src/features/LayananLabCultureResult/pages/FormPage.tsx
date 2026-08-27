@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useLabCultureResultResource } from '../api'
 import type { LabCultureResultFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function LabCultureResultFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LabCultureResult</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="lab_order_id">Lab Order *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/lab-orders"
           value={values.lab_order_id ?? null}
           onChange={(v) => setValues({ ...values, lab_order_id: v })}

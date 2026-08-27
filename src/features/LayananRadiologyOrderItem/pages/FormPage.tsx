@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useRadiologyOrderItemResource } from '../api'
 import type { RadiologyOrderItemFormValues } from '../types'
 
@@ -23,7 +23,7 @@ export function RadiologyOrderItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah RadiologyOrderItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="radiology_order_id">Radiology Order *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/radiology-orders"
           value={values.radiology_order_id ?? null}
           onChange={(v) => setValues({ ...values, radiology_order_id: v })}

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePrescriptionInitialReviewResource } from '../api'
 import type { PrescriptionInitialReviewFormValues } from '../types'
 
@@ -32,7 +32,7 @@ export function PrescriptionInitialReviewFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PrescriptionInitialReview</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/prescriptions"
           value={values.prescription_id ?? null}
           onChange={(v) => setValues({ ...values, prescription_id: v })}
@@ -40,7 +40,7 @@ export function PrescriptionInitialReviewFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reviewed_by">Reviewed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.reviewed_by ?? null}
           onChange={(v) => setValues({ ...values, reviewed_by: v })}

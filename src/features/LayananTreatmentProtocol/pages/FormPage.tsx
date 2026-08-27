@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useTreatmentProtocolResource } from '../api'
 import type { TreatmentProtocolFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function TreatmentProtocolFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} TreatmentProtocol</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -43,7 +43,7 @@ export function TreatmentProtocolFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="prescribed_by">Prescribed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.prescribed_by ?? null}
           onChange={(v) => setValues({ ...values, prescribed_by: v })}
@@ -67,7 +67,7 @@ export function TreatmentProtocolFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="created_by">Created By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/users"
           value={values.created_by ?? null}
           onChange={(v) => setValues({ ...values, created_by: v })}

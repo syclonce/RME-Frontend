@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useShipmentResource } from '../api'
 import type { ShipmentFormValues } from '../types'
 
@@ -47,7 +48,7 @@ export function ShipmentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="shipped_by">Shipped By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.shipped_by ?? null}
           onChange={(v) => setValues({ ...values, shipped_by: v })}

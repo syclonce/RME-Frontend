@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useCoManagementResource } from '../api'
 import type { CoManagementFormValues } from '../types'
 
@@ -23,7 +23,7 @@ export function CoManagementFormPage() {
       <h1 className="text-lg font-semibold">Tambah CoManagement</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -31,7 +31,7 @@ export function CoManagementFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="employee_id">Employee *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.employee_id ?? null}
           onChange={(v) => setValues({ ...values, employee_id: v })}

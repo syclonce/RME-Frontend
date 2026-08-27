@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useServiceTariffResource } from '../api'
 import type { ServiceTariffFormValues } from '../types'
 
@@ -32,7 +33,7 @@ export function ServiceTariffFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} ServiceTariff</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="service_id">Service *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/services"
           value={values.service_id ?? null}
           onChange={(v) => setValues({ ...values, service_id: v })}

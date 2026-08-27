@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useIncidentReportResource } from '../api'
 import type { IncidentReportFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function IncidentReportFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} IncidentReport</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -39,7 +39,7 @@ export function IncidentReportFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/patients"
           value={values.patient_id ?? null}
           onChange={(v) => setValues({ ...values, patient_id: v })}
@@ -59,7 +59,7 @@ export function IncidentReportFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reported_by">Reported By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.reported_by ?? null}
           onChange={(v) => setValues({ ...values, reported_by: v })}

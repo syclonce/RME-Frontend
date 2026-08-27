@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useTransferMedicationReconciliationResource } from '../api'
 import type { TransferMedicationReconciliationFormValues } from '../types'
 
@@ -24,7 +25,7 @@ export function TransferMedicationReconciliationFormPage() {
       <h1 className="text-lg font-semibold">Tambah TransferMedicationReconciliation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -32,7 +33,7 @@ export function TransferMedicationReconciliationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="reconciled_by">Reconciled By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.reconciled_by ?? null}
           onChange={(v) => setValues({ ...values, reconciled_by: v })}
@@ -40,7 +41,7 @@ export function TransferMedicationReconciliationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="created_by">Created By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/users"
           value={values.created_by ?? null}
           onChange={(v) => setValues({ ...values, created_by: v })}

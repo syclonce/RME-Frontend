@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useLabResultNoteResource } from '../api'
 import type { LabResultNoteFormValues } from '../types'
 
@@ -43,7 +44,7 @@ export function LabResultNoteFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="created_by">Created By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/users"
           value={values.created_by ?? null}
           onChange={(v) => setValues({ ...values, created_by: v })}

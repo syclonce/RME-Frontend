@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePrescriptionItemResource } from '../api'
 import type { PrescriptionItemFormValues } from '../types'
 
@@ -23,7 +24,7 @@ export function PrescriptionItemFormPage() {
       <h1 className="text-lg font-semibold">Tambah PrescriptionItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/prescriptions"
           value={values.prescription_id ?? null}
           onChange={(v) => setValues({ ...values, prescription_id: v })}

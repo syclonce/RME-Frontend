@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useLabOrderResource } from '../api'
 import type { LabOrderFormValues } from '../types'
 
@@ -36,7 +36,7 @@ export function LabOrderFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -44,7 +44,7 @@ export function LabOrderFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ordered_by">Ordered By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.ordered_by ?? null}
           onChange={(v) => setValues({ ...values, ordered_by: v })}

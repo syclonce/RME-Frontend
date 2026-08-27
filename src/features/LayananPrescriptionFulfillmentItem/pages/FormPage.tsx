@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePrescriptionFulfillmentItemResource } from '../api'
 import type { PrescriptionFulfillmentItemFormValues } from '../types'
 
@@ -40,7 +41,7 @@ export function PrescriptionFulfillmentItemFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_item_id">Prescription Item *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/prescription-items"
           value={values.prescription_item_id ?? null}
           onChange={(v) => setValues({ ...values, prescription_item_id: v })}

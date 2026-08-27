@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useProcedureConsentInformationGiverResource } from '../api'
 import type { ProcedureConsentInformationGiverFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function ProcedureConsentInformationGiverFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="giver_id">Giver *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.giver_id ?? null}
           onChange={(v) => setValues({ ...values, giver_id: v })}

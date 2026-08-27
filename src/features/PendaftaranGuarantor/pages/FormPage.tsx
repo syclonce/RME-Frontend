@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useGuarantorResource } from '../api'
 import type { GuarantorFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function GuarantorFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Guarantor</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="registration_id">Registration *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/registrations"
           value={values.registration_id ?? null}
           onChange={(v) => setValues({ ...values, registration_id: v })}

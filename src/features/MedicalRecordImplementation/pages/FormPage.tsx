@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useImplementationResource } from '../api'
 import type { ImplementationFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function ImplementationFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Implementation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -47,7 +47,7 @@ export function ImplementationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_by">Performed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.performed_by ?? null}
           onChange={(v) => setValues({ ...values, performed_by: v })}

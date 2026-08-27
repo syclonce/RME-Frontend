@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useClinicalNoteCoManagementResource } from '../api'
 import type { ClinicalNoteCoManagementFormValues } from '../types'
 
@@ -51,7 +52,7 @@ export function ClinicalNoteCoManagementFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="author_id">Author *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.author_id ?? null}
           onChange={(v) => setValues({ ...values, author_id: v })}

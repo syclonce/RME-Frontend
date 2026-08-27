@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useRadiologyResultResource } from '../api'
 import type { RadiologyResultFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function RadiologyResultFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} RadiologyResult</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="radiology_order_id">Radiology Order *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/radiology-orders"
           value={values.radiology_order_id ?? null}
           onChange={(v) => setValues({ ...values, radiology_order_id: v })}
@@ -47,7 +47,7 @@ export function RadiologyResultFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="radiologist_id">Radiologist</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.radiologist_id ?? null}
           onChange={(v) => setValues({ ...values, radiologist_id: v })}

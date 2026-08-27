@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useRadiologyViewerLogResource } from '../api'
 import type { RadiologyViewerLogFormValues } from '../types'
 
@@ -23,7 +23,7 @@ export function RadiologyViewerLogFormPage() {
       <h1 className="text-lg font-semibold">Tambah RadiologyViewerLog</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -35,7 +35,7 @@ export function RadiologyViewerLogFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="viewed_by">Viewed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.viewed_by ?? null}
           onChange={(v) => setValues({ ...values, viewed_by: v })}

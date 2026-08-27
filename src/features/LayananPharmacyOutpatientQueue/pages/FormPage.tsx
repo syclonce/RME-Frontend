@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePharmacyOutpatientQueueResource } from '../api'
 import type { PharmacyOutpatientQueueFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function PharmacyOutpatientQueueFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PharmacyOutpatientQueue</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="prescription_id">Prescription *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/prescriptions"
           value={values.prescription_id ?? null}
           onChange={(v) => setValues({ ...values, prescription_id: v })}

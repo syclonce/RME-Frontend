@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useAntimicrobialStewardshipApprovalResource } from '../api'
 import type { AntimicrobialStewardshipApprovalFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function AntimicrobialStewardshipApprovalFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="approved_by">Approved By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.approved_by ?? null}
           onChange={(v) => setValues({ ...values, approved_by: v })}

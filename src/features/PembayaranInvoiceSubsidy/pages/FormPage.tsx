@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useInvoiceSubsidyResource } from '../api'
 import type { InvoiceSubsidyFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function InvoiceSubsidyFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} InvoiceSubsidy</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/invoices"
           value={values.invoice_id ?? null}
           onChange={(v) => setValues({ ...values, invoice_id: v })}

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useDoctorResource } from '../api'
 import type { DoctorFormValues } from '../types'
 
@@ -32,7 +32,7 @@ export function DoctorFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} Doctor</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="employee_id">Employee *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.employee_id ?? null}
           onChange={(v) => setValues({ ...values, employee_id: v })}

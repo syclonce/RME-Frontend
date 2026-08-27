@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useVisitResource } from '../api'
 import type { VisitFormValues } from '../types'
 
@@ -36,7 +37,7 @@ export function VisitFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="registration_id">Registration *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/registrations"
           value={values.registration_id ?? null}
           onChange={(v) => setValues({ ...values, registration_id: v })}
@@ -44,7 +45,7 @@ export function VisitFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="attending_physician_id">Attending Physician</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.attending_physician_id ?? null}
           onChange={(v) => setValues({ ...values, attending_physician_id: v })}

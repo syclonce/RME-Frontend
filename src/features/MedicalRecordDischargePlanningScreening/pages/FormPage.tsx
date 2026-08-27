@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useDischargePlanningScreeningResource } from '../api'
 import type { DischargePlanningScreeningFormValues } from '../types'
 
@@ -32,7 +32,7 @@ export function DischargePlanningScreeningFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DischargePlanningScreening</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -52,7 +52,7 @@ export function DischargePlanningScreeningFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="screened_by">Screened By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.screened_by ?? null}
           onChange={(v) => setValues({ ...values, screened_by: v })}

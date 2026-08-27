@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useEndOfLifePsychosocialRelationshipResource } from '../api'
 import type { EndOfLifePsychosocialRelationshipFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function EndOfLifePsychosocialRelationshipFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} EndOfLifePsychosocialRelationship</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -55,7 +55,7 @@ export function EndOfLifePsychosocialRelationshipFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="assessed_by">Assessed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.assessed_by ?? null}
           onChange={(v) => setValues({ ...values, assessed_by: v })}

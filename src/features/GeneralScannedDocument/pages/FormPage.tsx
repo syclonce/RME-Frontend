@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useGeneralScannedDocumentResource } from '../api'
 import type { GeneralScannedDocumentFormValues } from '../types'
 
@@ -23,7 +23,7 @@ export function GeneralScannedDocumentFormPage() {
       <h1 className="text-lg font-semibold">Tambah GeneralScannedDocument</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="patient_id">Patient</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/patients"
           value={values.patient_id ?? null}
           onChange={(v) => setValues({ ...values, patient_id: v })}
@@ -43,7 +43,7 @@ export function GeneralScannedDocumentFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="scanned_by">Scanned By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.scanned_by ?? null}
           onChange={(v) => setValues({ ...values, scanned_by: v })}

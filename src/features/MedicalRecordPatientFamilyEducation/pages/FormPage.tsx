@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { usePatientFamilyEducationResource } from '../api'
 import type { PatientFamilyEducationFormValues } from '../types'
 
@@ -32,7 +32,7 @@ export function PatientFamilyEducationFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} PatientFamilyEducation</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -60,7 +60,7 @@ export function PatientFamilyEducationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="educator_id">Educator *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.educator_id ?? null}
           onChange={(v) => setValues({ ...values, educator_id: v })}

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useWardServiceResource } from '../api'
 import type { WardServiceFormValues } from '../types'
 
@@ -39,7 +40,7 @@ export function WardServiceFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="service_id">Service *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/services"
           value={values.service_id ?? null}
           onChange={(v) => setValues({ ...values, service_id: v })}

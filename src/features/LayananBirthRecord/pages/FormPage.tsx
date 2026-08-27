@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useBirthRecordResource } from '../api'
 import type { BirthRecordFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function BirthRecordFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} BirthRecord</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -39,7 +40,7 @@ export function BirthRecordFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="mother_patient_id">Mother Patient *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/patients"
           value={values.mother_patient_id ?? null}
           onChange={(v) => setValues({ ...values, mother_patient_id: v })}
@@ -75,7 +76,7 @@ export function BirthRecordFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="attending_doctor_id">Attending Doctor</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.attending_doctor_id ?? null}
           onChange={(v) => setValues({ ...values, attending_doctor_id: v })}

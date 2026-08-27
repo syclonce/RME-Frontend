@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useDifferentialDiagnosisResource } from '../api'
 import type { DifferentialDiagnosisFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function DifferentialDiagnosisFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} DifferentialDiagnosis</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -55,7 +56,7 @@ export function DifferentialDiagnosisFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recorded_by">Recorded By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.recorded_by ?? null}
           onChange={(v) => setValues({ ...values, recorded_by: v })}

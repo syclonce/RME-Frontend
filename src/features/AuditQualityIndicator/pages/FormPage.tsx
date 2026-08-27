@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useQualityIndicatorResource } from '../api'
 import type { QualityIndicatorFormValues } from '../types'
 
@@ -55,7 +56,7 @@ export function QualityIndicatorFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="recorded_by">Recorded By</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.recorded_by ?? null}
           onChange={(v) => setValues({ ...values, recorded_by: v })}

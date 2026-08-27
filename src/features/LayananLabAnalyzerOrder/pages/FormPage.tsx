@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useLabAnalyzerVendorResource } from '../api'
 import type { LabAnalyzerVendorFormValues } from '../types'
 
@@ -31,7 +32,7 @@ export function LabAnalyzerVendorFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} LabAnalyzerVendor</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="visit_id">Visit *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/visits"
           value={values.visit_id ?? null}
           onChange={(v) => setValues({ ...values, visit_id: v })}
@@ -51,7 +52,7 @@ export function LabAnalyzerVendorFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ordered_by">Ordered By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.ordered_by ?? null}
           onChange={(v) => setValues({ ...values, ordered_by: v })}

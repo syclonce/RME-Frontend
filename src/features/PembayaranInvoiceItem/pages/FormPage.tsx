@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useInvoiceItemResource } from '../api'
 import type { InvoiceItemFormValues } from '../types'
 
@@ -31,7 +31,7 @@ export function InvoiceItemFormPage() {
       <h1 className="text-lg font-semibold">{isEdit ? 'Ubah' : 'Tambah'} InvoiceItem</h1>
       <div className="grid gap-1.5">
         <Label htmlFor="invoice_id">Invoice *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/invoices"
           value={values.invoice_id ?? null}
           onChange={(v) => setValues({ ...values, invoice_id: v })}
@@ -39,7 +39,7 @@ export function InvoiceItemFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="service_id">Service</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/services"
           value={values.service_id ?? null}
           onChange={(v) => setValues({ ...values, service_id: v })}

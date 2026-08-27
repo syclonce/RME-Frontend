@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RelationSelect } from '@/shared/components/RelationSelect'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { useNursingCarePlanImplementationResource } from '../api'
 import type { NursingCarePlanImplementationFormValues } from '../types'
 
@@ -43,7 +44,7 @@ export function NursingCarePlanImplementationFormPage() {
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="performed_by">Performed By *</Label>
-        <RelationSelect
+        <AsyncCombobox
           endpoint="/employees"
           value={values.performed_by ?? null}
           onChange={(v) => setValues({ ...values, performed_by: v })}
