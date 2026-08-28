@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/sidebar'
 import { useAuth } from '@/contexts/AuthContext'
 import { generatedRoutes } from '@/routes/generated'
+import { manualRoutes } from '@/routes/manual'
 
 function domainOf(moduleName: string): string {
   const match = moduleName.match(/^[A-Z][a-z0-9]*/)
@@ -37,11 +38,13 @@ function initials(name: string): string {
 
 export function AppLayout() {
   const [filter, setFilter] = useState('')
-  const { user, logout } = useAuth()
+  const { user, logout, hasModule } = useAuth()
   const navigate = useNavigate()
 
   const grouped = useMemo(() => {
-    const listRoutes = generatedRoutes.filter((r) => !r.path.includes('/tambah') && !r.path.includes('/:'))
+    const listRoutes = [...generatedRoutes, ...manualRoutes].filter(
+      (r) => !r.path.includes('/tambah') && !r.path.includes('/:') && hasModule(r.module),
+    )
     const byDomain = new Map<string, typeof listRoutes>()
     for (const r of listRoutes) {
       const domain = domainOf(r.module)
@@ -49,7 +52,7 @@ export function AppLayout() {
       byDomain.get(domain)!.push(r)
     }
     return [...byDomain.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-  }, [])
+  }, [hasModule])
 
   const q = filter.trim().toLowerCase()
 
