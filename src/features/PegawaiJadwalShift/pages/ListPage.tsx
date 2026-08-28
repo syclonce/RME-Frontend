@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useShiftScheduleResource } from '../api'
+import type { ShiftSchedule } from '../types'
 
-const COLUMNS = ["id","staff_member_id","employee_id","ward_id","shift_type","shift_date","start_time","end_time","status"] as const
+const columns: ColumnDef<ShiftSchedule, unknown>[] = [
+  {
+    header: humanizeField('staff_member_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/staff-members" id={(row.original as unknown as Record<string, unknown>).staff_member_id as number | null} />,
+  },
+  {
+    header: humanizeField('employee_id'),
+    accessorKey: 'employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('shift_type'),
+    accessorKey: 'shift_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).shift_type ?? '—'),
+  },
+  {
+    header: humanizeField('shift_date'),
+    accessorKey: 'shift_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).shift_date ?? '—'),
+  },
+  {
+    header: humanizeField('start_time'),
+    accessorKey: 'start_time',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).start_time ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'staff_member_id', label: humanizeField('staff_member_id'), type: 'relation', relationEndpoint: '/staff-members' },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number' },
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards' },
+  { key: 'shift_type', label: humanizeField('shift_type'), required: true },
+  { key: 'shift_date', label: humanizeField('shift_date'), type: 'date', required: true },
+  { key: 'start_time', label: humanizeField('start_time'), type: 'date', required: true },
+  { key: 'end_time', label: humanizeField('end_time'), type: 'date', required: true },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  staff_member_id: null,
+  employee_id: '',
+  ward_id: null,
+  shift_type: '',
+  shift_date: '',
+  start_time: '',
+  end_time: '',
+  status: '',
+}
 
 export function ShiftScheduleListPage() {
-  const { useList, remove } = useShiftScheduleResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useShiftScheduleResource()
+  const title = humanizeModuleName('PegawaiJadwalShift')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ShiftSchedule</h1>
-        <Button asChild>
-          <Link to="/modul/pegawai-jadwal-shift/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pegawai-jadwal-shift/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ShiftSchedule>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.shift_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useImageMarkerResource } from '../api'
+import type { ImageMarker } from '../types'
 
-const COLUMNS = ["id","visit_id","image_path","template_name","notes","marked_at","created_at","updated_at"] as const
+const columns: ColumnDef<ImageMarker, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('image_path'),
+    accessorKey: 'image_path',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).image_path ?? '—'),
+  },
+  {
+    header: humanizeField('template_name'),
+    accessorKey: 'template_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).template_name ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+  {
+    header: humanizeField('marked_at'),
+    accessorKey: 'marked_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).marked_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'image_path', label: humanizeField('image_path'), required: true },
+  { key: 'template_name', label: humanizeField('template_name') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'marked_at', label: humanizeField('marked_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  image_path: '',
+  template_name: '',
+  notes: '',
+  marked_at: '',
+}
 
 export function ImageMarkerListPage() {
-  const { useList, remove } = useImageMarkerResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useImageMarkerResource()
+  const title = humanizeModuleName('MedicalRecordImageMarker')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ImageMarker</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-image-marker/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-image-marker/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ImageMarker>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.image_path ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

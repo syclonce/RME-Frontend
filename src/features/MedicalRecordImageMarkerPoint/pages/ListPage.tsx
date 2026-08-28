@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useImageMarkerPointResource } from '../api'
+import type { ImageMarkerPoint } from '../types'
 
-const COLUMNS = ["id","image_marker_id","x_coordinate","y_coordinate","label","description","created_at","updated_at"] as const
+const columns: ColumnDef<ImageMarkerPoint, unknown>[] = [
+  {
+    header: humanizeField('image_marker_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/image-markers" id={(row.original as unknown as Record<string, unknown>).image_marker_id as number | null} />,
+  },
+  {
+    header: humanizeField('x_coordinate'),
+    accessorKey: 'x_coordinate',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).x_coordinate ?? '—'),
+  },
+  {
+    header: humanizeField('y_coordinate'),
+    accessorKey: 'y_coordinate',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).y_coordinate ?? '—'),
+  },
+  {
+    header: humanizeField('label'),
+    accessorKey: 'label',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).label ?? '—'),
+  },
+  {
+    header: humanizeField('description'),
+    accessorKey: 'description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).description ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'image_marker_id', label: humanizeField('image_marker_id'), type: 'relation', relationEndpoint: '/image-markers', required: true },
+  { key: 'x_coordinate', label: humanizeField('x_coordinate'), type: 'number', required: true },
+  { key: 'y_coordinate', label: humanizeField('y_coordinate'), type: 'number', required: true },
+  { key: 'label', label: humanizeField('label') },
+  { key: 'description', label: humanizeField('description') },
+]
+
+const emptyForm = {
+  image_marker_id: null,
+  x_coordinate: '',
+  y_coordinate: '',
+  label: '',
+  description: '',
+}
 
 export function ImageMarkerPointListPage() {
-  const { useList, remove } = useImageMarkerPointResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useImageMarkerPointResource()
+  const title = humanizeModuleName('MedicalRecordImageMarkerPoint')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ImageMarkerPoint</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-image-marker-point/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-image-marker-point/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ImageMarkerPoint>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.label ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

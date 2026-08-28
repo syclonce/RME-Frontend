@@ -1,58 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useSurgeryPerformerResource } from '../api'
+import type { SurgeryPerformer } from '../types'
 
-const COLUMNS = ["id","surgery_id","visit_id","doctor_id","role","notes","created_at","updated_at"] as const
+const columns: ColumnDef<SurgeryPerformer, unknown>[] = [
+  {
+    header: humanizeField('surgery_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/surgeries" id={(row.original as unknown as Record<string, unknown>).surgery_id as number | null} />,
+  },
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('role'),
+    accessorKey: 'role',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).role ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'surgery_id', label: humanizeField('surgery_id'), type: 'relation', relationEndpoint: '/surgeries' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits' },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors' },
+  { key: 'role', label: humanizeField('role') },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  surgery_id: null,
+  visit_id: null,
+  doctor_id: null,
+  role: '',
+  notes: '',
+}
 
 export function SurgeryPerformerListPage() {
-  const { useList, remove } = useSurgeryPerformerResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSurgeryPerformerResource()
+  const title = humanizeModuleName('MedicalRecordSurgeryPerformer')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">SurgeryPerformer</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-surgery-performer/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-surgery-performer/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<SurgeryPerformer>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.role ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

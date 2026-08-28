@@ -1,58 +1,50 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useDoctorMedicalDepartmentResource } from '../api'
+import type { DoctorMedicalDepartment } from '../types'
 
-const COLUMNS = ["id","doctor_id","medical_department_id","is_head","created_at","updated_at"] as const
+const columns: ColumnDef<DoctorMedicalDepartment, unknown>[] = [
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('medical_department_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/medical-departments" id={(row.original as unknown as Record<string, unknown>).medical_department_id as number | null} />,
+  },
+  {
+    header: humanizeField('is_head'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_head ? 'Ya' : 'Tidak'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors', required: true },
+  { key: 'medical_department_id', label: humanizeField('medical_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
+  { key: 'is_head', label: humanizeField('is_head'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  doctor_id: null,
+  medical_department_id: null,
+  is_head: false,
+}
 
 export function DoctorMedicalDepartmentListPage() {
-  const { useList, remove } = useDoctorMedicalDepartmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDoctorMedicalDepartmentResource()
+  const title = humanizeModuleName('GeneralDoctorMedicalDepartment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DoctorMedicalDepartment</h1>
-        <Button asChild>
-          <Link to="/modul/general-doctor-medical-department/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-doctor-medical-department/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<DoctorMedicalDepartment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      resource={resource}
+    />
   )
 }

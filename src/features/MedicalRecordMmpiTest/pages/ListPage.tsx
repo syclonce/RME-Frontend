@@ -1,58 +1,81 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useMmpiTestResource } from '../api'
+import type { MmpiTest } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","doctor_id","test_date","validity_scale_l","validity_scale_f","validity_scale_k","clinical_scales_summary","interpretation","conclusion","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<MmpiTest, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('test_date'),
+    accessorKey: 'test_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).test_date ?? '—'),
+  },
+  {
+    header: humanizeField('validity_scale_l'),
+    accessorKey: 'validity_scale_l',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).validity_scale_l ?? '—'),
+  },
+  {
+    header: humanizeField('validity_scale_f'),
+    accessorKey: 'validity_scale_f',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).validity_scale_f ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors' },
+  { key: 'test_date', label: humanizeField('test_date'), type: 'date', required: true },
+  { key: 'validity_scale_l', label: humanizeField('validity_scale_l'), type: 'number' },
+  { key: 'validity_scale_f', label: humanizeField('validity_scale_f'), type: 'number' },
+  { key: 'validity_scale_k', label: humanizeField('validity_scale_k'), type: 'number' },
+  { key: 'clinical_scales_summary', label: humanizeField('clinical_scales_summary') },
+  { key: 'interpretation', label: humanizeField('interpretation') },
+  { key: 'conclusion', label: humanizeField('conclusion') },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  doctor_id: null,
+  test_date: '',
+  validity_scale_l: '',
+  validity_scale_f: '',
+  validity_scale_k: '',
+  clinical_scales_summary: '',
+  interpretation: '',
+  conclusion: '',
+}
 
 export function MmpiTestListPage() {
-  const { useList, remove } = useMmpiTestResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useMmpiTestResource()
+  const title = humanizeModuleName('MedicalRecordMmpiTest')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">MmpiTest</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-mmpi-test/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-mmpi-test/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<MmpiTest>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.interpretation ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

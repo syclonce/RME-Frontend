@@ -1,58 +1,79 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useUltrasoundGuidedProcedureResource } from '../api'
+import type { UltrasoundGuidedProcedure } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","doctor_id","procedure_name","target_site","needle_gauge","findings_and_outcome","complications","performed_at","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<UltrasoundGuidedProcedure, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('procedure_name'),
+    accessorKey: 'procedure_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).procedure_name ?? '—'),
+  },
+  {
+    header: humanizeField('target_site'),
+    accessorKey: 'target_site',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).target_site ?? '—'),
+  },
+  {
+    header: humanizeField('needle_gauge'),
+    accessorKey: 'needle_gauge',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).needle_gauge ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors' },
+  { key: 'procedure_name', label: humanizeField('procedure_name'), required: true },
+  { key: 'target_site', label: humanizeField('target_site') },
+  { key: 'needle_gauge', label: humanizeField('needle_gauge') },
+  { key: 'findings_and_outcome', label: humanizeField('findings_and_outcome') },
+  { key: 'complications', label: humanizeField('complications') },
+  { key: 'performed_at', label: humanizeField('performed_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  doctor_id: null,
+  procedure_name: '',
+  target_site: '',
+  needle_gauge: '',
+  findings_and_outcome: '',
+  complications: '',
+  performed_at: '',
+}
 
 export function UltrasoundGuidedProcedureListPage() {
-  const { useList, remove } = useUltrasoundGuidedProcedureResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useUltrasoundGuidedProcedureResource()
+  const title = humanizeModuleName('MedicalRecordUltrasoundGuidedProcedure')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">UltrasoundGuidedProcedure</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-ultrasound-guided-procedure/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-ultrasound-guided-procedure/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<UltrasoundGuidedProcedure>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.procedure_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

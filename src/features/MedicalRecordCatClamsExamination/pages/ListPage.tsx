@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useCatClamsExaminationResource } from '../api'
+import type { CatClamsExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","cat_score","clams_score","developmental_quotient","developmental_age_months","interpretation","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<CatClamsExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('cat_score'),
+    accessorKey: 'cat_score',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cat_score ?? '—'),
+  },
+  {
+    header: humanizeField('clams_score'),
+    accessorKey: 'clams_score',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).clams_score ?? '—'),
+  },
+  {
+    header: humanizeField('developmental_quotient'),
+    accessorKey: 'developmental_quotient',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).developmental_quotient ?? '—'),
+  },
+  {
+    header: humanizeField('developmental_age_months'),
+    accessorKey: 'developmental_age_months',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).developmental_age_months ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true },
+  { key: 'cat_score', label: humanizeField('cat_score'), type: 'number' },
+  { key: 'clams_score', label: humanizeField('clams_score'), type: 'number' },
+  { key: 'developmental_quotient', label: humanizeField('developmental_quotient'), type: 'number' },
+  { key: 'developmental_age_months', label: humanizeField('developmental_age_months'), type: 'number' },
+  { key: 'interpretation', label: humanizeField('interpretation') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  patient_id: null,
+  cat_score: '',
+  clams_score: '',
+  developmental_quotient: '',
+  developmental_age_months: '',
+  interpretation: '',
+  examined_at: '',
+}
 
 export function CatClamsExaminationListPage() {
-  const { useList, remove } = useCatClamsExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useCatClamsExaminationResource()
+  const title = humanizeModuleName('MedicalRecordCatClamsExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">CatClamsExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-cat-clams-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-cat-clams-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<CatClamsExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.interpretation ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

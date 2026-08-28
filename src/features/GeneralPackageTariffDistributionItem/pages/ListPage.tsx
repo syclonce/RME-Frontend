@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePackageTariffDistributionItemResource } from '../api'
+import type { PackageTariffDistributionItem } from '../types'
 
-const COLUMNS = ["id","package_tariff_distribution_id","recipient_type","recipient_id","percentage","amount","notes","created_at","updated_at"] as const
+const columns: ColumnDef<PackageTariffDistributionItem, unknown>[] = [
+  {
+    header: humanizeField('package_tariff_distribution_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/package-tariff-distributions" id={(row.original as unknown as Record<string, unknown>).package_tariff_distribution_id as number | null} />,
+  },
+  {
+    header: humanizeField('recipient_type'),
+    accessorKey: 'recipient_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recipient_type ?? '—'),
+  },
+  {
+    header: humanizeField('recipient_id'),
+    accessorKey: 'recipient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recipient_id ?? '—'),
+  },
+  {
+    header: humanizeField('percentage'),
+    accessorKey: 'percentage',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).percentage ?? '—'),
+  },
+  {
+    header: humanizeField('amount'),
+    accessorKey: 'amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).amount ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'package_tariff_distribution_id', label: humanizeField('package_tariff_distribution_id'), type: 'relation', relationEndpoint: '/package-tariff-distributions', required: true },
+  { key: 'recipient_type', label: humanizeField('recipient_type'), required: true },
+  { key: 'recipient_id', label: humanizeField('recipient_id'), type: 'number' },
+  { key: 'percentage', label: humanizeField('percentage'), type: 'number' },
+  { key: 'amount', label: humanizeField('amount'), type: 'number', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  package_tariff_distribution_id: null,
+  recipient_type: '',
+  recipient_id: '',
+  percentage: '',
+  amount: '',
+  notes: '',
+}
 
 export function PackageTariffDistributionItemListPage() {
-  const { useList, remove } = usePackageTariffDistributionItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePackageTariffDistributionItemResource()
+  const title = humanizeModuleName('GeneralPackageTariffDistributionItem')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PackageTariffDistributionItem</h1>
-        <Button asChild>
-          <Link to="/modul/general-package-tariff-distribution-item/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-package-tariff-distribution-item/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PackageTariffDistributionItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.recipient_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

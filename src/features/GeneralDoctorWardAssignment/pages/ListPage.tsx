@@ -1,58 +1,58 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useDoctorWardAssignmentResource } from '../api'
+import type { DoctorWardAssignment } from '../types'
 
-const COLUMNS = ["id","doctor_id","ward_id","assigned_at","schedule_day","created_at","updated_at"] as const
+const columns: ColumnDef<DoctorWardAssignment, unknown>[] = [
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('assigned_at'),
+    accessorKey: 'assigned_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assigned_at ?? '—'),
+  },
+  {
+    header: humanizeField('schedule_day'),
+    accessorKey: 'schedule_day',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).schedule_day ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors', required: true },
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'assigned_at', label: humanizeField('assigned_at'), type: 'date' },
+  { key: 'schedule_day', label: humanizeField('schedule_day') },
+]
+
+const emptyForm = {
+  doctor_id: null,
+  ward_id: null,
+  assigned_at: '',
+  schedule_day: '',
+}
 
 export function DoctorWardAssignmentListPage() {
-  const { useList, remove } = useDoctorWardAssignmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDoctorWardAssignmentResource()
+  const title = humanizeModuleName('GeneralDoctorWardAssignment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DoctorWardAssignment</h1>
-        <Button asChild>
-          <Link to="/modul/general-doctor-ward-assignment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-doctor-ward-assignment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<DoctorWardAssignment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.schedule_day ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

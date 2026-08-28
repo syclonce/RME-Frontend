@@ -1,58 +1,81 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePressureUlcerRiskAssessmentResource } from '../api'
+import type { PressureUlcerRiskAssessment } from '../types'
 
-const COLUMNS = ["id","visit_id","sensory_perception","moisture","activity","mobility","nutrition","friction_shear","total_score","risk_level","assessed_at","created_at","updated_at"] as const
+const columns: ColumnDef<PressureUlcerRiskAssessment, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('sensory_perception'),
+    accessorKey: 'sensory_perception',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sensory_perception ?? '—'),
+  },
+  {
+    header: humanizeField('moisture'),
+    accessorKey: 'moisture',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).moisture ?? '—'),
+  },
+  {
+    header: humanizeField('activity'),
+    accessorKey: 'activity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).activity ?? '—'),
+  },
+  {
+    header: humanizeField('mobility'),
+    accessorKey: 'mobility',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).mobility ?? '—'),
+  },
+  {
+    header: humanizeField('nutrition'),
+    accessorKey: 'nutrition',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).nutrition ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'sensory_perception', label: humanizeField('sensory_perception'), type: 'number' },
+  { key: 'moisture', label: humanizeField('moisture'), type: 'number' },
+  { key: 'activity', label: humanizeField('activity'), type: 'number' },
+  { key: 'mobility', label: humanizeField('mobility'), type: 'number' },
+  { key: 'nutrition', label: humanizeField('nutrition'), type: 'number' },
+  { key: 'friction_shear', label: humanizeField('friction_shear'), type: 'number' },
+  { key: 'total_score', label: humanizeField('total_score'), type: 'number' },
+  { key: 'risk_level', label: humanizeField('risk_level'), type: 'select', options: [{"value":"no_risk","label":"No Risk"},{"value":"mild_risk","label":"Mild Risk"},{"value":"moderate_risk","label":"Moderate Risk"},{"value":"high_risk","label":"High Risk"}] },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  sensory_perception: '',
+  moisture: '',
+  activity: '',
+  mobility: '',
+  nutrition: '',
+  friction_shear: '',
+  total_score: '',
+  risk_level: '',
+  assessed_at: '',
+}
 
 export function PressureUlcerRiskAssessmentListPage() {
-  const { useList, remove } = usePressureUlcerRiskAssessmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePressureUlcerRiskAssessmentResource()
+  const title = humanizeModuleName('MedicalRecordPressureUlcerRiskAssessment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PressureUlcerRiskAssessment</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-pressure-ulcer-risk-assessment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-pressure-ulcer-risk-assessment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PressureUlcerRiskAssessment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.risk_level ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

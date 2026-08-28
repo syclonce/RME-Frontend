@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useEpfraAssessmentResource } from '../api'
+import type { EpfraAssessment } from '../types'
 
-const COLUMNS = ["id","visit_id","assessor_id","criteria_notes","score","risk_level","assessed_at","created_at","updated_at"] as const
+const columns: ColumnDef<EpfraAssessment, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('assessor_id'),
+    accessorKey: 'assessor_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessor_id ?? '—'),
+  },
+  {
+    header: humanizeField('criteria_notes'),
+    accessorKey: 'criteria_notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).criteria_notes ?? '—'),
+  },
+  {
+    header: humanizeField('score'),
+    accessorKey: 'score',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).score ?? '—'),
+  },
+  {
+    header: humanizeField('risk_level'),
+    accessorKey: 'risk_level',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).risk_level ?? '—'),
+  },
+  {
+    header: humanizeField('assessed_at'),
+    accessorKey: 'assessed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessed_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'assessor_id', label: humanizeField('assessor_id'), type: 'number' },
+  { key: 'criteria_notes', label: humanizeField('criteria_notes') },
+  { key: 'score', label: humanizeField('score'), type: 'number' },
+  { key: 'risk_level', label: humanizeField('risk_level'), type: 'select', options: [{"value":"low","label":"Low"},{"value":"medium","label":"Medium"},{"value":"high","label":"High"}] },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  assessor_id: '',
+  criteria_notes: '',
+  score: '',
+  risk_level: '',
+  assessed_at: '',
+}
 
 export function EpfraAssessmentListPage() {
-  const { useList, remove } = useEpfraAssessmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useEpfraAssessmentResource()
+  const title = humanizeModuleName('MedicalRecordEpfraAssessment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">EpfraAssessment</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-epfra-assessment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-epfra-assessment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<EpfraAssessment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.criteria_notes ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

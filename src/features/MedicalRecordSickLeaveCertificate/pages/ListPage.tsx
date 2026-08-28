@@ -1,58 +1,81 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useSickLeaveCertificateResource } from '../api'
+import type { SickLeaveCertificate } from '../types'
 
-const COLUMNS = ["id","letter_number","patient_id","visit_id","doctor_id","issue_date","start_date","end_date","duration_days","diagnosis","remarks","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<SickLeaveCertificate, unknown>[] = [
+  {
+    header: humanizeField('letter_number'),
+    accessorKey: 'letter_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).letter_number ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('issue_date'),
+    accessorKey: 'issue_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).issue_date ?? '—'),
+  },
+  {
+    header: humanizeField('start_date'),
+    accessorKey: 'start_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).start_date ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'letter_number', label: humanizeField('letter_number'), required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors', required: true },
+  { key: 'issue_date', label: humanizeField('issue_date'), type: 'date', required: true },
+  { key: 'start_date', label: humanizeField('start_date'), type: 'date', required: true },
+  { key: 'end_date', label: humanizeField('end_date'), type: 'date', required: true },
+  { key: 'duration_days', label: humanizeField('duration_days'), type: 'number', required: true },
+  { key: 'diagnosis', label: humanizeField('diagnosis') },
+  { key: 'remarks', label: humanizeField('remarks') },
+]
+
+const emptyForm = {
+  letter_number: '',
+  patient_id: '',
+  visit_id: '',
+  doctor_id: null,
+  issue_date: '',
+  start_date: '',
+  end_date: '',
+  duration_days: '',
+  diagnosis: '',
+  remarks: '',
+}
 
 export function SickLeaveCertificateListPage() {
-  const { useList, remove } = useSickLeaveCertificateResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSickLeaveCertificateResource()
+  const title = humanizeModuleName('MedicalRecordSickLeaveCertificate')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">SickLeaveCertificate</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-sick-leave-certificate/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-sick-leave-certificate/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<SickLeaveCertificate>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.letter_number ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

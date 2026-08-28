@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useFunctionalAssessmentResource } from '../api'
+import type { FunctionalAssessment } from '../types'
 
-const COLUMNS = ["id","visit_id","assessment_date","mobility_status","adl_score","assistive_device","assessed_by","notes","created_at","updated_at"] as const
+const columns: ColumnDef<FunctionalAssessment, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('assessment_date'),
+    accessorKey: 'assessment_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessment_date ?? '—'),
+  },
+  {
+    header: humanizeField('mobility_status'),
+    accessorKey: 'mobility_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).mobility_status ?? '—'),
+  },
+  {
+    header: humanizeField('adl_score'),
+    accessorKey: 'adl_score',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).adl_score ?? '—'),
+  },
+  {
+    header: humanizeField('assistive_device'),
+    accessorKey: 'assistive_device',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assistive_device ?? '—'),
+  },
+  {
+    header: humanizeField('assessed_by'),
+    accessorKey: 'assessed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessed_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'assessment_date', label: humanizeField('assessment_date'), type: 'date', required: true },
+  { key: 'mobility_status', label: humanizeField('mobility_status') },
+  { key: 'adl_score', label: humanizeField('adl_score'), type: 'number' },
+  { key: 'assistive_device', label: humanizeField('assistive_device') },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  assessment_date: '',
+  mobility_status: '',
+  adl_score: '',
+  assistive_device: '',
+  assessed_by: '',
+  notes: '',
+}
 
 export function FunctionalAssessmentListPage() {
-  const { useList, remove } = useFunctionalAssessmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useFunctionalAssessmentResource()
+  const title = humanizeModuleName('MedicalRecordFunctionalAssessment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">FunctionalAssessment</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-functional-assessment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-functional-assessment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<FunctionalAssessment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.mobility_status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

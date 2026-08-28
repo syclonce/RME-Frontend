@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useRiskFactorResource } from '../api'
+import type { RiskFactor } from '../types'
 
-const COLUMNS = ["id","visit_id","risk_category","description","risk_level","identified_by","identified_at","mitigation_plan","created_at","updated_at"] as const
+const columns: ColumnDef<RiskFactor, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('risk_category'),
+    accessorKey: 'risk_category',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).risk_category ?? '—'),
+  },
+  {
+    header: humanizeField('description'),
+    accessorKey: 'description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).description ?? '—'),
+  },
+  {
+    header: humanizeField('risk_level'),
+    accessorKey: 'risk_level',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).risk_level ?? '—'),
+  },
+  {
+    header: humanizeField('identified_by'),
+    accessorKey: 'identified_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).identified_by ?? '—'),
+  },
+  {
+    header: humanizeField('identified_at'),
+    accessorKey: 'identified_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).identified_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'risk_category', label: humanizeField('risk_category'), required: true },
+  { key: 'description', label: humanizeField('description') },
+  { key: 'risk_level', label: humanizeField('risk_level') },
+  { key: 'identified_by', label: humanizeField('identified_by'), type: 'number', required: true },
+  { key: 'identified_at', label: humanizeField('identified_at'), type: 'date', required: true },
+  { key: 'mitigation_plan', label: humanizeField('mitigation_plan') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  risk_category: '',
+  description: '',
+  risk_level: '',
+  identified_by: '',
+  identified_at: '',
+  mitigation_plan: '',
+}
 
 export function RiskFactorListPage() {
-  const { useList, remove } = useRiskFactorResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRiskFactorResource()
+  const title = humanizeModuleName('MedicalRecordRiskFactor')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RiskFactor</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-risk-factor/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-risk-factor/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<RiskFactor>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.risk_category ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

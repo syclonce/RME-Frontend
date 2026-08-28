@@ -52,7 +52,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
           onChange(null)
         }}
       >
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Provinsi" />
         </SelectTrigger>
         <SelectContent>
@@ -72,7 +72,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
         }}
         disabled={provinceCode === null}
       >
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Kota/Kabupaten" />
         </SelectTrigger>
         <SelectContent>
@@ -91,7 +91,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
         }}
         disabled={cityCode === null}
       >
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Kecamatan" />
         </SelectTrigger>
         <SelectContent>
@@ -107,7 +107,7 @@ export function RegionVillagePicker({ value, onChange }: RegionVillagePickerProp
         onValueChange={(v) => onChange(Number(v))}
         disabled={districtCode === null}
       >
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Desa/Kelurahan" />
         </SelectTrigger>
         <SelectContent>

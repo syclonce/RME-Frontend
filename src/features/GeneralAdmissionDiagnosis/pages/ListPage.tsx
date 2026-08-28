@@ -1,58 +1,65 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useAdmissionDiagnosisResource } from '../api'
+import type { AdmissionDiagnosis } from '../types'
 
-const COLUMNS = ["id","visit_id","diagnosis_code_id","diagnosis_text","is_primary","diagnosed_at","created_at"] as const
+const columns: ColumnDef<AdmissionDiagnosis, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('diagnosis_code_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/diagnosis-codes" id={(row.original as unknown as Record<string, unknown>).diagnosis_code_id as number | null} />,
+  },
+  {
+    header: humanizeField('diagnosis_text'),
+    accessorKey: 'diagnosis_text',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).diagnosis_text ?? '—'),
+  },
+  {
+    header: humanizeField('is_primary'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_primary ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('diagnosed_at'),
+    accessorKey: 'diagnosed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).diagnosed_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'diagnosis_code_id', label: humanizeField('diagnosis_code_id'), type: 'relation', relationEndpoint: '/diagnosis-codes', required: true },
+  { key: 'diagnosis_text', label: humanizeField('diagnosis_text') },
+  { key: 'is_primary', label: humanizeField('is_primary'), type: 'checkbox' },
+  { key: 'diagnosed_at', label: humanizeField('diagnosed_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  diagnosis_code_id: null,
+  diagnosis_text: '',
+  is_primary: false,
+  diagnosed_at: '',
+}
 
 export function AdmissionDiagnosisListPage() {
-  const { useList, remove } = useAdmissionDiagnosisResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useAdmissionDiagnosisResource()
+  const title = humanizeModuleName('GeneralAdmissionDiagnosis')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">AdmissionDiagnosis</h1>
-        <Button asChild>
-          <Link to="/modul/general-admission-diagnosis/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-admission-diagnosis/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<AdmissionDiagnosis>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.diagnosis_text ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

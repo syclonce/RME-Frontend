@@ -1,58 +1,52 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useBerkasKlaimClaimFileResource } from '../api'
+import type { BerkasKlaimClaimFile } from '../types'
 
-const COLUMNS = ["id","visit_id","invoice_id","status"] as const
+const columns: ColumnDef<BerkasKlaimClaimFile, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('invoice_id'),
+    accessorKey: 'invoice_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_id ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    accessorKey: 'status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).status ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number' },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  invoice_id: '',
+  status: '',
+}
 
 export function BerkasKlaimClaimFileListPage() {
-  const { useList, remove } = useBerkasKlaimClaimFileResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBerkasKlaimClaimFileResource()
+  const title = humanizeModuleName('BerkasKlaimClaimFile')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BerkasKlaimClaimFile</h1>
-        <Button asChild>
-          <Link to="/modul/berkas-klaim-claim-file/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/berkas-klaim-claim-file/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<BerkasKlaimClaimFile>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

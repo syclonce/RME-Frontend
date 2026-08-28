@@ -1,58 +1,84 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useIntradialyticHdMonitoringResource } from '../api'
+import type { IntradialyticHdMonitoring } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","dialysis_hour","blood_pressure_systolic","blood_pressure_diastolic","blood_flow_rate","dialysate_flow_rate","ultrafiltration_rate","venous_pressure","transmembrane_pressure","symptoms","monitored_at","created_at","updated_at"] as const
+const columns: ColumnDef<IntradialyticHdMonitoring, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('dialysis_hour'),
+    accessorKey: 'dialysis_hour',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).dialysis_hour ?? '—'),
+  },
+  {
+    header: humanizeField('blood_pressure_systolic'),
+    accessorKey: 'blood_pressure_systolic',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_pressure_systolic ?? '—'),
+  },
+  {
+    header: humanizeField('blood_pressure_diastolic'),
+    accessorKey: 'blood_pressure_diastolic',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_pressure_diastolic ?? '—'),
+  },
+  {
+    header: humanizeField('blood_flow_rate'),
+    accessorKey: 'blood_flow_rate',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_flow_rate ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true, section: 'Detail' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true, section: 'Detail' },
+  { key: 'dialysis_hour', label: humanizeField('dialysis_hour'), type: 'number', section: 'Detail' },
+  { key: 'blood_pressure_systolic', label: humanizeField('blood_pressure_systolic'), type: 'number', section: 'Detail' },
+  { key: 'blood_pressure_diastolic', label: humanizeField('blood_pressure_diastolic'), type: 'number', section: 'Detail' },
+  { key: 'blood_flow_rate', label: humanizeField('blood_flow_rate'), type: 'number', section: 'Detail' },
+  { key: 'dialysate_flow_rate', label: humanizeField('dialysate_flow_rate'), type: 'number', section: 'Detail Tambahan' },
+  { key: 'ultrafiltration_rate', label: humanizeField('ultrafiltration_rate'), type: 'number', section: 'Detail Tambahan' },
+  { key: 'venous_pressure', label: humanizeField('venous_pressure'), type: 'number', section: 'Detail Tambahan' },
+  { key: 'transmembrane_pressure', label: humanizeField('transmembrane_pressure'), type: 'number', section: 'Detail Tambahan' },
+  { key: 'symptoms', label: humanizeField('symptoms'), section: 'Detail Tambahan' },
+  { key: 'monitored_at', label: humanizeField('monitored_at'), type: 'date', section: 'Detail Tambahan' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  patient_id: null,
+  dialysis_hour: '',
+  blood_pressure_systolic: '',
+  blood_pressure_diastolic: '',
+  blood_flow_rate: '',
+  dialysate_flow_rate: '',
+  ultrafiltration_rate: '',
+  venous_pressure: '',
+  transmembrane_pressure: '',
+  symptoms: '',
+  monitored_at: '',
+}
 
 export function IntradialyticHdMonitoringListPage() {
-  const { useList, remove } = useIntradialyticHdMonitoringResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useIntradialyticHdMonitoringResource()
+  const title = humanizeModuleName('MedicalRecordIntradialyticHdMonitoring')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">IntradialyticHdMonitoring</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-intradialytic-hd-monitoring/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-intradialytic-hd-monitoring/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<IntradialyticHdMonitoring>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.symptoms ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

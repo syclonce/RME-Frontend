@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useUpperGiTractExaminationResource } from '../api'
+import type { UpperGiTractExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","procedure_type","esophagus_findings","stomach_findings","duodenum_findings","hpylori_result","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<UpperGiTractExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('procedure_type'),
+    accessorKey: 'procedure_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).procedure_type ?? '—'),
+  },
+  {
+    header: humanizeField('esophagus_findings'),
+    accessorKey: 'esophagus_findings',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).esophagus_findings ?? '—'),
+  },
+  {
+    header: humanizeField('stomach_findings'),
+    accessorKey: 'stomach_findings',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).stomach_findings ?? '—'),
+  },
+  {
+    header: humanizeField('duodenum_findings'),
+    accessorKey: 'duodenum_findings',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).duodenum_findings ?? '—'),
+  },
+  {
+    header: humanizeField('hpylori_result'),
+    accessorKey: 'hpylori_result',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).hpylori_result ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'procedure_type', label: humanizeField('procedure_type') },
+  { key: 'esophagus_findings', label: humanizeField('esophagus_findings') },
+  { key: 'stomach_findings', label: humanizeField('stomach_findings') },
+  { key: 'duodenum_findings', label: humanizeField('duodenum_findings') },
+  { key: 'hpylori_result', label: humanizeField('hpylori_result'), type: 'select', options: [{"value":"positive","label":"Positive"},{"value":"negative","label":"Negative"},{"value":"not_tested","label":"Not Tested"}] },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  procedure_type: '',
+  esophagus_findings: '',
+  stomach_findings: '',
+  duodenum_findings: '',
+  hpylori_result: '',
+  examined_at: '',
+}
 
 export function UpperGiTractExaminationListPage() {
-  const { useList, remove } = useUpperGiTractExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useUpperGiTractExaminationResource()
+  const title = humanizeModuleName('MedicalRecordUpperGiTractExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">UpperGiTractExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-upper-gi-tract-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-upper-gi-tract-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<UpperGiTractExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.procedure_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

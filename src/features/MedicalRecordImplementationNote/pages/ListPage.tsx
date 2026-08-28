@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useImplementationNoteResource } from '../api'
+import type { ImplementationNote } from '../types'
 
-const COLUMNS = ["id","visit_id","note_type","content","recorded_by","recorded_at","created_at","updated_at"] as const
+const columns: ColumnDef<ImplementationNote, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('note_type'),
+    accessorKey: 'note_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).note_type ?? '—'),
+  },
+  {
+    header: humanizeField('content'),
+    accessorKey: 'content',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).content ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_by'),
+    accessorKey: 'recorded_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_by ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_at'),
+    accessorKey: 'recorded_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'note_type', label: humanizeField('note_type') },
+  { key: 'content', label: humanizeField('content') },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  note_type: '',
+  content: '',
+  recorded_by: '',
+  recorded_at: '',
+}
 
 export function ImplementationNoteListPage() {
-  const { useList, remove } = useImplementationNoteResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useImplementationNoteResource()
+  const title = humanizeModuleName('MedicalRecordImplementationNote')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ImplementationNote</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-implementation-note/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-implementation-note/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ImplementationNote>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.note_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

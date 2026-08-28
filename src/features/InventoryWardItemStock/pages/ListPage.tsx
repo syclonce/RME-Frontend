@@ -1,58 +1,51 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useInventoryWardItemStockResource } from '../api'
+import type { InventoryWardItemStock } from '../types'
 
-const COLUMNS = ["id","item_id","ward_id","quantity","created_at","updated_at"] as const
+const columns: ColumnDef<InventoryWardItemStock, unknown>[] = [
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('quantity'),
+    accessorKey: 'quantity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).quantity ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items', required: true },
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'quantity', label: humanizeField('quantity'), type: 'number', required: true },
+]
+
+const emptyForm = {
+  item_id: null,
+  ward_id: null,
+  quantity: '',
+}
 
 export function InventoryWardItemStockListPage() {
-  const { useList, remove } = useInventoryWardItemStockResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInventoryWardItemStockResource()
+  const title = humanizeModuleName('InventoryWardItemStock')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InventoryWardItemStock</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-ward-item-stock/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-ward-item-stock/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<InventoryWardItemStock>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      resource={resource}
+    />
   )
 }

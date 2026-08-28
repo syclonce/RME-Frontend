@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useTreatmentProtocolStepDrugResource } from '../api'
+import type { TreatmentProtocolStepDrug } from '../types'
 
-const COLUMNS = ["id","treatment_protocol_step_id","drug_name","dosage","frequency","route","created_at","updated_at"] as const
+const columns: ColumnDef<TreatmentProtocolStepDrug, unknown>[] = [
+  {
+    header: humanizeField('treatment_protocol_step_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/treatment-protocol-steps" id={(row.original as unknown as Record<string, unknown>).treatment_protocol_step_id as number | null} />,
+  },
+  {
+    header: humanizeField('drug_name'),
+    accessorKey: 'drug_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).drug_name ?? '—'),
+  },
+  {
+    header: humanizeField('dosage'),
+    accessorKey: 'dosage',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).dosage ?? '—'),
+  },
+  {
+    header: humanizeField('frequency'),
+    accessorKey: 'frequency',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).frequency ?? '—'),
+  },
+  {
+    header: humanizeField('route'),
+    accessorKey: 'route',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).route ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'treatment_protocol_step_id', label: humanizeField('treatment_protocol_step_id'), type: 'relation', relationEndpoint: '/treatment-protocol-steps', required: true },
+  { key: 'drug_name', label: humanizeField('drug_name'), required: true },
+  { key: 'dosage', label: humanizeField('dosage'), required: true },
+  { key: 'frequency', label: humanizeField('frequency'), required: true },
+  { key: 'route', label: humanizeField('route') },
+]
+
+const emptyForm = {
+  treatment_protocol_step_id: null,
+  drug_name: '',
+  dosage: '',
+  frequency: '',
+  route: '',
+}
 
 export function TreatmentProtocolStepDrugListPage() {
-  const { useList, remove } = useTreatmentProtocolStepDrugResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useTreatmentProtocolStepDrugResource()
+  const title = humanizeModuleName('LayananTreatmentProtocolStepDrug')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">TreatmentProtocolStepDrug</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-treatment-protocol-step-drug/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-treatment-protocol-step-drug/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<TreatmentProtocolStepDrug>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.drug_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

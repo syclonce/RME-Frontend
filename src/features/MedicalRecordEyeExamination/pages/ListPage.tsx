@@ -1,58 +1,79 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useEyeExaminationResource } from '../api'
+import type { EyeExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","side","visual_acuity","pupil_size_mm","pupil_reflex","conjunctiva","sclera","findings","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<EyeExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('side'),
+    accessorKey: 'side',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).side ?? '—'),
+  },
+  {
+    header: humanizeField('visual_acuity'),
+    accessorKey: 'visual_acuity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visual_acuity ?? '—'),
+  },
+  {
+    header: humanizeField('pupil_size_mm'),
+    accessorKey: 'pupil_size_mm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).pupil_size_mm ?? '—'),
+  },
+  {
+    header: humanizeField('pupil_reflex'),
+    accessorKey: 'pupil_reflex',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).pupil_reflex ?? '—'),
+  },
+  {
+    header: humanizeField('conjunctiva'),
+    accessorKey: 'conjunctiva',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).conjunctiva ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'side', label: humanizeField('side'), type: 'select', options: [{"value":"left","label":"Left"},{"value":"right","label":"Right"},{"value":"bilateral","label":"Bilateral"}] },
+  { key: 'visual_acuity', label: humanizeField('visual_acuity') },
+  { key: 'pupil_size_mm', label: humanizeField('pupil_size_mm'), type: 'number' },
+  { key: 'pupil_reflex', label: humanizeField('pupil_reflex') },
+  { key: 'conjunctiva', label: humanizeField('conjunctiva') },
+  { key: 'sclera', label: humanizeField('sclera') },
+  { key: 'findings', label: humanizeField('findings') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  side: '',
+  visual_acuity: '',
+  pupil_size_mm: '',
+  pupil_reflex: '',
+  conjunctiva: '',
+  sclera: '',
+  findings: '',
+  examined_at: '',
+}
 
 export function EyeExaminationListPage() {
-  const { useList, remove } = useEyeExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useEyeExaminationResource()
+  const title = humanizeModuleName('MedicalRecordEyeExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">EyeExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-eye-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-eye-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<EyeExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.side ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

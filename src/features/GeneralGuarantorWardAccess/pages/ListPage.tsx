@@ -1,58 +1,57 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useGuarantorWardAccessResource } from '../api'
+import type { GuarantorWardAccess } from '../types'
 
-const COLUMNS = ["id","guarantor_id","ward_id","is_allowed","notes","created_at"] as const
+const columns: ColumnDef<GuarantorWardAccess, unknown>[] = [
+  {
+    header: humanizeField('guarantor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/guarantors" id={(row.original as unknown as Record<string, unknown>).guarantor_id as number | null} />,
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('is_allowed'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_allowed ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'guarantor_id', label: humanizeField('guarantor_id'), type: 'relation', relationEndpoint: '/guarantors', required: true },
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'is_allowed', label: humanizeField('is_allowed'), type: 'checkbox' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  guarantor_id: null,
+  ward_id: null,
+  is_allowed: false,
+  notes: '',
+}
 
 export function GuarantorWardAccessListPage() {
-  const { useList, remove } = useGuarantorWardAccessResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGuarantorWardAccessResource()
+  const title = humanizeModuleName('GeneralGuarantorWardAccess')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GuarantorWardAccess</h1>
-        <Button asChild>
-          <Link to="/modul/general-guarantor-ward-access/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-guarantor-ward-access/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<GuarantorWardAccess>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

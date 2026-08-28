@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useRehabilitationProcedureExaminationResource } from '../api'
+import type { RehabilitationProcedureExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","procedure_name","therapist_id","diagnosis_summary","functional_goal","notes","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<RehabilitationProcedureExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('procedure_name'),
+    accessorKey: 'procedure_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).procedure_name ?? '—'),
+  },
+  {
+    header: humanizeField('therapist_id'),
+    accessorKey: 'therapist_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).therapist_id ?? '—'),
+  },
+  {
+    header: humanizeField('diagnosis_summary'),
+    accessorKey: 'diagnosis_summary',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).diagnosis_summary ?? '—'),
+  },
+  {
+    header: humanizeField('functional_goal'),
+    accessorKey: 'functional_goal',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).functional_goal ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'procedure_name', label: humanizeField('procedure_name'), required: true },
+  { key: 'therapist_id', label: humanizeField('therapist_id'), type: 'number' },
+  { key: 'diagnosis_summary', label: humanizeField('diagnosis_summary') },
+  { key: 'functional_goal', label: humanizeField('functional_goal') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  procedure_name: '',
+  therapist_id: '',
+  diagnosis_summary: '',
+  functional_goal: '',
+  notes: '',
+  examined_at: '',
+}
 
 export function RehabilitationProcedureExaminationListPage() {
-  const { useList, remove } = useRehabilitationProcedureExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRehabilitationProcedureExaminationResource()
+  const title = humanizeModuleName('MedicalRecordRehabilitationProcedureExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RehabilitationProcedureExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-rehabilitation-procedure-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-rehabilitation-procedure-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<RehabilitationProcedureExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.procedure_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

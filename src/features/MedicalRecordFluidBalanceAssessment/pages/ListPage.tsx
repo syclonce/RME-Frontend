@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useFluidBalanceAssessmentResource } from '../api'
+import type { FluidBalanceAssessment } from '../types'
 
-const COLUMNS = ["id","visit_id","shift","assessed_at","total_intake_ml","total_output_ml","balance_ml","created_at","updated_at"] as const
+const columns: ColumnDef<FluidBalanceAssessment, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('shift'),
+    accessorKey: 'shift',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).shift ?? '—'),
+  },
+  {
+    header: humanizeField('assessed_at'),
+    accessorKey: 'assessed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessed_at ?? '—'),
+  },
+  {
+    header: humanizeField('total_intake_ml'),
+    accessorKey: 'total_intake_ml',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).total_intake_ml ?? '—'),
+  },
+  {
+    header: humanizeField('total_output_ml'),
+    accessorKey: 'total_output_ml',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).total_output_ml ?? '—'),
+  },
+  {
+    header: humanizeField('balance_ml'),
+    accessorKey: 'balance_ml',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).balance_ml ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'shift', label: humanizeField('shift'), type: 'select', options: [{"value":"pagi","label":"Pagi"},{"value":"siang","label":"Siang"},{"value":"malam","label":"Malam"}] },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date', required: true },
+  { key: 'total_intake_ml', label: humanizeField('total_intake_ml'), type: 'number' },
+  { key: 'total_output_ml', label: humanizeField('total_output_ml'), type: 'number' },
+  { key: 'balance_ml', label: humanizeField('balance_ml'), type: 'number' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  shift: '',
+  assessed_at: '',
+  total_intake_ml: '',
+  total_output_ml: '',
+  balance_ml: '',
+}
 
 export function FluidBalanceAssessmentListPage() {
-  const { useList, remove } = useFluidBalanceAssessmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useFluidBalanceAssessmentResource()
+  const title = humanizeModuleName('MedicalRecordFluidBalanceAssessment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">FluidBalanceAssessment</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-fluid-balance-assessment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-fluid-balance-assessment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<FluidBalanceAssessment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.shift ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

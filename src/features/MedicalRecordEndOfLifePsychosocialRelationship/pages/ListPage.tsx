@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useEndOfLifePsychosocialRelationshipResource } from '../api'
+import type { EndOfLifePsychosocialRelationship } from '../types'
 
-const COLUMNS = ["id","visit_id","relationship_type","support_system","spiritual_needs","emotional_state","assessed_by","assessed_at","created_at","updated_at"] as const
+const columns: ColumnDef<EndOfLifePsychosocialRelationship, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('relationship_type'),
+    accessorKey: 'relationship_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).relationship_type ?? '—'),
+  },
+  {
+    header: humanizeField('support_system'),
+    accessorKey: 'support_system',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).support_system ?? '—'),
+  },
+  {
+    header: humanizeField('spiritual_needs'),
+    accessorKey: 'spiritual_needs',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).spiritual_needs ?? '—'),
+  },
+  {
+    header: humanizeField('emotional_state'),
+    accessorKey: 'emotional_state',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).emotional_state ?? '—'),
+  },
+  {
+    header: humanizeField('assessed_by'),
+    accessorKey: 'assessed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessed_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'relationship_type', label: humanizeField('relationship_type') },
+  { key: 'support_system', label: humanizeField('support_system') },
+  { key: 'spiritual_needs', label: humanizeField('spiritual_needs') },
+  { key: 'emotional_state', label: humanizeField('emotional_state') },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  relationship_type: '',
+  support_system: '',
+  spiritual_needs: '',
+  emotional_state: '',
+  assessed_by: '',
+  assessed_at: '',
+}
 
 export function EndOfLifePsychosocialRelationshipListPage() {
-  const { useList, remove } = useEndOfLifePsychosocialRelationshipResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useEndOfLifePsychosocialRelationshipResource()
+  const title = humanizeModuleName('MedicalRecordEndOfLifePsychosocialRelationship')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">EndOfLifePsychosocialRelationship</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-end-of-life-psychosocial-relationship/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-end-of-life-psychosocial-relationship/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<EndOfLifePsychosocialRelationship>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.relationship_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

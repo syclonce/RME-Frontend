@@ -1,58 +1,81 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePediatricStatusResource } from '../api'
+import type { PediatricStatus } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","birth_weight_grams","birth_length_cm","head_circumference_cm","gestational_age_weeks","immunization_status","developmental_milestones","notes","recorded_at","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<PediatricStatus, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('birth_weight_grams'),
+    accessorKey: 'birth_weight_grams',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).birth_weight_grams ?? '—'),
+  },
+  {
+    header: humanizeField('birth_length_cm'),
+    accessorKey: 'birth_length_cm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).birth_length_cm ?? '—'),
+  },
+  {
+    header: humanizeField('head_circumference_cm'),
+    accessorKey: 'head_circumference_cm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).head_circumference_cm ?? '—'),
+  },
+  {
+    header: humanizeField('gestational_age_weeks'),
+    accessorKey: 'gestational_age_weeks',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gestational_age_weeks ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'birth_weight_grams', label: humanizeField('birth_weight_grams'), type: 'number' },
+  { key: 'birth_length_cm', label: humanizeField('birth_length_cm'), type: 'number' },
+  { key: 'head_circumference_cm', label: humanizeField('head_circumference_cm'), type: 'number' },
+  { key: 'gestational_age_weeks', label: humanizeField('gestational_age_weeks'), type: 'number' },
+  { key: 'immunization_status', label: humanizeField('immunization_status') },
+  { key: 'developmental_milestones', label: humanizeField('developmental_milestones') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date' },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  birth_weight_grams: '',
+  birth_length_cm: '',
+  head_circumference_cm: '',
+  gestational_age_weeks: '',
+  immunization_status: '',
+  developmental_milestones: '',
+  notes: '',
+  recorded_at: '',
+}
 
 export function PediatricStatusListPage() {
-  const { useList, remove } = usePediatricStatusResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePediatricStatusResource()
+  const title = humanizeModuleName('MedicalRecordPediatricStatus')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PediatricStatus</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-pediatric-status/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-pediatric-status/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PediatricStatus>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.immunization_status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

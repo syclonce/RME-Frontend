@@ -1,58 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useBankAccountResource } from '../api'
+import type { BankAccount } from '../types'
 
-const COLUMNS = ["id","bank_name","account_number","account_holder","account_type","is_active"] as const
+const columns: ColumnDef<BankAccount, unknown>[] = [
+  {
+    header: humanizeField('bank_name'),
+    accessorKey: 'bank_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).bank_name ?? '—'),
+  },
+  {
+    header: humanizeField('account_number'),
+    accessorKey: 'account_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).account_number ?? '—'),
+  },
+  {
+    header: humanizeField('account_holder'),
+    accessorKey: 'account_holder',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).account_holder ?? '—'),
+  },
+  {
+    header: humanizeField('account_type'),
+    accessorKey: 'account_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).account_type ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'bank_name', label: humanizeField('bank_name'), required: true },
+  { key: 'account_number', label: humanizeField('account_number'), required: true },
+  { key: 'account_holder', label: humanizeField('account_holder'), required: true },
+  { key: 'account_type', label: humanizeField('account_type') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  bank_name: '',
+  account_number: '',
+  account_holder: '',
+  account_type: '',
+  is_active: false,
+}
 
 export function BankAccountListPage() {
-  const { useList, remove } = useBankAccountResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBankAccountResource()
+  const title = humanizeModuleName('GeneralBankAccount')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BankAccount</h1>
-        <Button asChild>
-          <Link to="/modul/general-bank-account/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-bank-account/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<BankAccount>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.bank_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useControlScheduleResource } from '../api'
+import type { ControlSchedule } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","medical_department_id","scheduled_date","purpose","scheduled_by","status","notes","created_at","updated_at"] as const
+const columns: ColumnDef<ControlSchedule, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('medical_department_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/medical-departments" id={(row.original as unknown as Record<string, unknown>).medical_department_id as number | null} />,
+  },
+  {
+    header: humanizeField('scheduled_date'),
+    accessorKey: 'scheduled_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).scheduled_date ?? '—'),
+  },
+  {
+    header: humanizeField('purpose'),
+    accessorKey: 'purpose',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).purpose ?? '—'),
+  },
+  {
+    header: humanizeField('scheduled_by'),
+    accessorKey: 'scheduled_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).scheduled_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'medical_department_id', label: humanizeField('medical_department_id'), type: 'relation', relationEndpoint: '/medical-departments' },
+  { key: 'scheduled_date', label: humanizeField('scheduled_date'), type: 'date', required: true },
+  { key: 'purpose', label: humanizeField('purpose') },
+  { key: 'scheduled_by', label: humanizeField('scheduled_by'), type: 'number', required: true },
+  { key: 'status', label: humanizeField('status') },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  medical_department_id: null,
+  scheduled_date: '',
+  purpose: '',
+  scheduled_by: '',
+  status: '',
+  notes: '',
+}
 
 export function ControlScheduleListPage() {
-  const { useList, remove } = useControlScheduleResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useControlScheduleResource()
+  const title = humanizeModuleName('MedicalRecordControlSchedule')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ControlSchedule</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-control-schedule/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-control-schedule/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ControlSchedule>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.purpose ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

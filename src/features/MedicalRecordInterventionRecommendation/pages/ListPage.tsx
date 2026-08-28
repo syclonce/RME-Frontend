@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useInterventionRecommendationResource } from '../api'
+import type { InterventionRecommendation } from '../types'
 
-const COLUMNS = ["id","visit_id","source","recommendation","priority","recommended_by","recommended_at","status","created_at","updated_at"] as const
+const columns: ColumnDef<InterventionRecommendation, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('source'),
+    accessorKey: 'source',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).source ?? '—'),
+  },
+  {
+    header: humanizeField('recommendation'),
+    accessorKey: 'recommendation',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recommendation ?? '—'),
+  },
+  {
+    header: humanizeField('priority'),
+    accessorKey: 'priority',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).priority ?? '—'),
+  },
+  {
+    header: humanizeField('recommended_by'),
+    accessorKey: 'recommended_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recommended_by ?? '—'),
+  },
+  {
+    header: humanizeField('recommended_at'),
+    accessorKey: 'recommended_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recommended_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'source', label: humanizeField('source') },
+  { key: 'recommendation', label: humanizeField('recommendation') },
+  { key: 'priority', label: humanizeField('priority') },
+  { key: 'recommended_by', label: humanizeField('recommended_by'), type: 'number', required: true },
+  { key: 'recommended_at', label: humanizeField('recommended_at'), type: 'date', required: true },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  source: '',
+  recommendation: '',
+  priority: '',
+  recommended_by: '',
+  recommended_at: '',
+  status: '',
+}
 
 export function InterventionRecommendationListPage() {
-  const { useList, remove } = useInterventionRecommendationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInterventionRecommendationResource()
+  const title = humanizeModuleName('MedicalRecordInterventionRecommendation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InterventionRecommendation</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-intervention-recommendation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-intervention-recommendation/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<InterventionRecommendation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.source ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

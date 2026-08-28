@@ -1,58 +1,69 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePrescriptionOriginUnitRestrictionResource } from '../api'
+import type { PrescriptionOriginUnitRestriction } from '../types'
 
-const COLUMNS = ["id","ward_id","item_id","is_allowed","note","is_active","created_at"] as const
+const columns: ColumnDef<PrescriptionOriginUnitRestriction, unknown>[] = [
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('is_allowed'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_allowed ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('note'),
+    accessorKey: 'note',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).note ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items' },
+  { key: 'is_allowed', label: humanizeField('is_allowed'), type: 'checkbox' },
+  { key: 'note', label: humanizeField('note') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  ward_id: null,
+  item_id: null,
+  is_allowed: false,
+  note: '',
+  is_active: false,
+}
 
 export function PrescriptionOriginUnitRestrictionListPage() {
-  const { useList, remove } = usePrescriptionOriginUnitRestrictionResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePrescriptionOriginUnitRestrictionResource()
+  const title = humanizeModuleName('GeneralPrescriptionOriginUnitRestriction')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PrescriptionOriginUnitRestriction</h1>
-        <Button asChild>
-          <Link to="/modul/general-prescription-origin-unit-restriction/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-prescription-origin-unit-restriction/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PrescriptionOriginUnitRestriction>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.note ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useFingerExaminationResource } from '../api'
+import type { FingerExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","hand_side","clubbing","cyanosis","capillary_refill_seconds","range_of_motion","notes","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<FingerExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('hand_side'),
+    accessorKey: 'hand_side',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).hand_side ?? '—'),
+  },
+  {
+    header: humanizeField('clubbing'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).clubbing ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('cyanosis'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).cyanosis ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('capillary_refill_seconds'),
+    accessorKey: 'capillary_refill_seconds',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).capillary_refill_seconds ?? '—'),
+  },
+  {
+    header: humanizeField('range_of_motion'),
+    accessorKey: 'range_of_motion',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).range_of_motion ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'hand_side', label: humanizeField('hand_side') },
+  { key: 'clubbing', label: humanizeField('clubbing'), type: 'checkbox' },
+  { key: 'cyanosis', label: humanizeField('cyanosis'), type: 'checkbox' },
+  { key: 'capillary_refill_seconds', label: humanizeField('capillary_refill_seconds'), type: 'number' },
+  { key: 'range_of_motion', label: humanizeField('range_of_motion') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  hand_side: '',
+  clubbing: false,
+  cyanosis: false,
+  capillary_refill_seconds: '',
+  range_of_motion: '',
+  notes: '',
+  examined_at: '',
+}
 
 export function FingerExaminationListPage() {
-  const { useList, remove } = useFingerExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useFingerExaminationResource()
+  const title = humanizeModuleName('MedicalRecordFingerExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">FingerExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-finger-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-finger-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<FingerExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.hand_side ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

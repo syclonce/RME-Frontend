@@ -1,58 +1,58 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useGuarantorSubspecialtyResource } from '../api'
+import type { GuarantorSubspecialty } from '../types'
 
-const COLUMNS = ["id","guarantor_id","subspecialty_name","is_covered","coverage_note","created_at"] as const
+const columns: ColumnDef<GuarantorSubspecialty, unknown>[] = [
+  {
+    header: humanizeField('guarantor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/guarantors" id={(row.original as unknown as Record<string, unknown>).guarantor_id as number | null} />,
+  },
+  {
+    header: humanizeField('subspecialty_name'),
+    accessorKey: 'subspecialty_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).subspecialty_name ?? '—'),
+  },
+  {
+    header: humanizeField('is_covered'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_covered ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('coverage_note'),
+    accessorKey: 'coverage_note',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).coverage_note ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'guarantor_id', label: humanizeField('guarantor_id'), type: 'relation', relationEndpoint: '/guarantors', required: true },
+  { key: 'subspecialty_name', label: humanizeField('subspecialty_name'), required: true },
+  { key: 'is_covered', label: humanizeField('is_covered'), type: 'checkbox' },
+  { key: 'coverage_note', label: humanizeField('coverage_note') },
+]
+
+const emptyForm = {
+  guarantor_id: null,
+  subspecialty_name: '',
+  is_covered: false,
+  coverage_note: '',
+}
 
 export function GuarantorSubspecialtyListPage() {
-  const { useList, remove } = useGuarantorSubspecialtyResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGuarantorSubspecialtyResource()
+  const title = humanizeModuleName('GeneralGuarantorSubspecialty')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GuarantorSubspecialty</h1>
-        <Button asChild>
-          <Link to="/modul/general-guarantor-subspecialty/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-guarantor-subspecialty/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<GuarantorSubspecialty>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.subspecialty_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -21,11 +21,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext'
 import { generatedRoutes } from '@/routes/generated'
 import { manualRoutes } from '@/routes/manual'
-
-function domainOf(moduleName: string): string {
-  const match = moduleName.match(/^[A-Z][a-z0-9]*/)
-  return match ? match[0] : 'Lainnya'
-}
+import { domainPrefixOf, humanizeDomain, humanizeModuleName } from '@/shared/labels'
 
 function initials(name: string): string {
   return name
@@ -47,7 +43,7 @@ export function AppLayout() {
     )
     const byDomain = new Map<string, typeof listRoutes>()
     for (const r of listRoutes) {
-      const domain = domainOf(r.module)
+      const domain = domainPrefixOf(r.module)
       if (!byDomain.has(domain)) byDomain.set(domain, [])
       byDomain.get(domain)!.push(r)
     }
@@ -70,19 +66,24 @@ export function AppLayout() {
         </SidebarHeader>
         <SidebarContent>
           {grouped.map(([domain, routes]) => {
-            const visible = q ? routes.filter((r) => r.module.toLowerCase().includes(q)) : routes
+            const visible = q
+              ? routes.filter(
+                  (r) =>
+                    r.module.toLowerCase().includes(q) || humanizeModuleName(r.module).toLowerCase().includes(q),
+                )
+              : routes
             if (visible.length === 0) return null
             return (
               <SidebarGroup key={domain}>
                 <SidebarGroupLabel>
-                  {domain} ({visible.length})
+                  {humanizeDomain(domain)} ({visible.length})
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
                     {visible.map((r) => (
                       <SidebarMenuItem key={r.path}>
                         <SidebarMenuButton asChild tooltip={r.module}>
-                          <Link to={r.path}>{r.module}</Link>
+                          <Link to={r.path}>{humanizeModuleName(r.module)}</Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}

@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePembatalanDocumentCancellationResource } from '../api'
+import type { PembatalanDocumentCancellation } from '../types'
 
-const COLUMNS = ["id","document_id","document_type","reason","cancellation_date","requested_by","status"] as const
+const columns: ColumnDef<PembatalanDocumentCancellation, unknown>[] = [
+  {
+    header: humanizeField('document_id'),
+    accessorKey: 'document_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).document_id ?? '—'),
+  },
+  {
+    header: humanizeField('document_type'),
+    accessorKey: 'document_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).document_type ?? '—'),
+  },
+  {
+    header: humanizeField('reason'),
+    accessorKey: 'reason',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reason ?? '—'),
+  },
+  {
+    header: humanizeField('cancellation_date'),
+    accessorKey: 'cancellation_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cancellation_date ?? '—'),
+  },
+  {
+    header: humanizeField('requested_by'),
+    accessorKey: 'requested_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).requested_by ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    accessorKey: 'status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).status ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'document_id', label: humanizeField('document_id'), required: true },
+  { key: 'document_type', label: humanizeField('document_type'), required: true },
+  { key: 'reason', label: humanizeField('reason'), required: true },
+  { key: 'cancellation_date', label: humanizeField('cancellation_date'), type: 'date', required: true },
+  { key: 'requested_by', label: humanizeField('requested_by'), required: true },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  document_id: '',
+  document_type: '',
+  reason: '',
+  cancellation_date: '',
+  requested_by: '',
+  status: '',
+}
 
 export function PembatalanDocumentCancellationListPage() {
-  const { useList, remove } = usePembatalanDocumentCancellationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePembatalanDocumentCancellationResource()
+  const title = humanizeModuleName('PembatalanDocumentCancellation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PembatalanDocumentCancellation</h1>
-        <Button asChild>
-          <Link to="/modul/pembatalan-document-cancellation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembatalan-document-cancellation/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PembatalanDocumentCancellation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.document_id ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

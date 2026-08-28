@@ -1,58 +1,65 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePrescriptionFulfillmentItemResource } from '../api'
+import type { PrescriptionFulfillmentItem } from '../types'
 
-const COLUMNS = ["id","prescription_fulfillment_id","prescription_item_id","quantity_served","is_substituted","notes","created_at","updated_at"] as const
+const columns: ColumnDef<PrescriptionFulfillmentItem, unknown>[] = [
+  {
+    header: humanizeField('prescription_fulfillment_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/prescription-fulfillments" id={(row.original as unknown as Record<string, unknown>).prescription_fulfillment_id as number | null} />,
+  },
+  {
+    header: humanizeField('prescription_item_id'),
+    accessorKey: 'prescription_item_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).prescription_item_id ?? '—'),
+  },
+  {
+    header: humanizeField('quantity_served'),
+    accessorKey: 'quantity_served',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).quantity_served ?? '—'),
+  },
+  {
+    header: humanizeField('is_substituted'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_substituted ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'prescription_fulfillment_id', label: humanizeField('prescription_fulfillment_id'), type: 'relation', relationEndpoint: '/prescription-fulfillments', required: true },
+  { key: 'prescription_item_id', label: humanizeField('prescription_item_id'), type: 'number', required: true },
+  { key: 'quantity_served', label: humanizeField('quantity_served'), type: 'number', required: true },
+  { key: 'is_substituted', label: humanizeField('is_substituted'), type: 'checkbox' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  prescription_fulfillment_id: null,
+  prescription_item_id: '',
+  quantity_served: '',
+  is_substituted: false,
+  notes: '',
+}
 
 export function PrescriptionFulfillmentItemListPage() {
-  const { useList, remove } = usePrescriptionFulfillmentItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePrescriptionFulfillmentItemResource()
+  const title = humanizeModuleName('LayananPrescriptionFulfillmentItem')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PrescriptionFulfillmentItem</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-prescription-fulfillment-item/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-prescription-fulfillment-item/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PrescriptionFulfillmentItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

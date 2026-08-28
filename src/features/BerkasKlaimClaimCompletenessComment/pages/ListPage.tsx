@@ -1,58 +1,59 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useBerkasKlaimClaimCompletenessCommentResource } from '../api'
+import type { BerkasKlaimClaimCompletenessComment } from '../types'
 
-const COLUMNS = ["id","claim_completeness_id","comment","commented_by","commented_at"] as const
+const columns: ColumnDef<BerkasKlaimClaimCompletenessComment, unknown>[] = [
+  {
+    header: humanizeField('claim_completeness_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/claim-completeness" id={(row.original as unknown as Record<string, unknown>).claim_completeness_id as number | null} />,
+  },
+  {
+    header: humanizeField('comment'),
+    accessorKey: 'comment',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).comment ?? '—'),
+  },
+  {
+    header: humanizeField('commented_by'),
+    accessorKey: 'commented_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).commented_by ?? '—'),
+  },
+  {
+    header: humanizeField('commented_at'),
+    accessorKey: 'commented_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).commented_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'claim_completeness_id', label: humanizeField('claim_completeness_id'), type: 'relation', relationEndpoint: '/claim-completeness', required: true },
+  { key: 'comment', label: humanizeField('comment'), required: true },
+  { key: 'commented_by', label: humanizeField('commented_by') },
+  { key: 'commented_at', label: humanizeField('commented_at'), type: 'date' },
+]
+
+const emptyForm = {
+  claim_completeness_id: null,
+  comment: '',
+  commented_by: '',
+  commented_at: '',
+}
 
 export function BerkasKlaimClaimCompletenessCommentListPage() {
-  const { useList, remove } = useBerkasKlaimClaimCompletenessCommentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBerkasKlaimClaimCompletenessCommentResource()
+  const title = humanizeModuleName('BerkasKlaimClaimCompletenessComment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BerkasKlaimClaimCompletenessComment</h1>
-        <Button asChild>
-          <Link to="/modul/berkas-klaim-claim-completeness-comment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/berkas-klaim-claim-completeness-comment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<BerkasKlaimClaimCompletenessComment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.comment ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

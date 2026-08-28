@@ -1,58 +1,58 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePenjaminRSAttendingPhysicianResource } from '../api'
+import type { PenjaminRSAttendingPhysician } from '../types'
 
-const COLUMNS = ["id","visit_id","employee_id","assigned_at","is_primary"] as const
+const columns: ColumnDef<PenjaminRSAttendingPhysician, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('employee_id'),
+    accessorKey: 'employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('assigned_at'),
+    accessorKey: 'assigned_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assigned_at ?? '—'),
+  },
+  {
+    header: humanizeField('is_primary'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_primary ? 'Ya' : 'Tidak'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'assigned_at', label: humanizeField('assigned_at'), type: 'date' },
+  { key: 'is_primary', label: humanizeField('is_primary'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  employee_id: '',
+  assigned_at: '',
+  is_primary: false,
+}
 
 export function PenjaminRSAttendingPhysicianListPage() {
-  const { useList, remove } = usePenjaminRSAttendingPhysicianResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePenjaminRSAttendingPhysicianResource()
+  const title = humanizeModuleName('PenjaminRSAttendingPhysician')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PenjaminRSAttendingPhysician</h1>
-        <Button asChild>
-          <Link to="/modul/penjamin-rsattending-physician/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/penjamin-rsattending-physician/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PenjaminRSAttendingPhysician>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      resource={resource}
+    />
   )
 }

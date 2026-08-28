@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePatientEscortResource } from '../api'
+import type { PatientEscort } from '../types'
 
-const COLUMNS = ["id","registration_id","full_name","relationship_to_patient","phone_number","address","arrival_mode","notes","status","created_at","updated_at"] as const
+const columns: ColumnDef<PatientEscort, unknown>[] = [
+  {
+    header: humanizeField('registration_id'),
+    accessorKey: 'registration_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).registration_id ?? '—'),
+  },
+  {
+    header: humanizeField('full_name'),
+    accessorKey: 'full_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).full_name ?? '—'),
+  },
+  {
+    header: humanizeField('relationship_to_patient'),
+    accessorKey: 'relationship_to_patient',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).relationship_to_patient ?? '—'),
+  },
+  {
+    header: humanizeField('phone_number'),
+    accessorKey: 'phone_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).phone_number ?? '—'),
+  },
+  {
+    header: humanizeField('address'),
+    accessorKey: 'address',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).address ?? '—'),
+  },
+  {
+    header: humanizeField('arrival_mode'),
+    accessorKey: 'arrival_mode',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).arrival_mode ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'registration_id', label: humanizeField('registration_id'), type: 'number', required: true },
+  { key: 'full_name', label: humanizeField('full_name'), required: true },
+  { key: 'relationship_to_patient', label: humanizeField('relationship_to_patient'), required: true },
+  { key: 'phone_number', label: humanizeField('phone_number') },
+  { key: 'address', label: humanizeField('address') },
+  { key: 'arrival_mode', label: humanizeField('arrival_mode') },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  registration_id: '',
+  full_name: '',
+  relationship_to_patient: '',
+  phone_number: '',
+  address: '',
+  arrival_mode: '',
+  notes: '',
+}
 
 export function PatientEscortListPage() {
-  const { useList, remove } = usePatientEscortResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePatientEscortResource()
+  const title = humanizeModuleName('PendaftaranPatientEscort')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PatientEscort</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-patient-escort/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pendaftaran-patient-escort/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PatientEscort>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.full_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

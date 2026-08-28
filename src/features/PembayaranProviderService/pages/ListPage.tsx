@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useProviderServiceResource } from '../api'
+import type { ProviderService } from '../types'
 
-const COLUMNS = ["id","payment_provider_id","service_code","service_name","service_type","admin_fee_type","admin_fee_amount","is_active","created_at","updated_at"] as const
+const columns: ColumnDef<ProviderService, unknown>[] = [
+  {
+    header: humanizeField('payment_provider_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/payment-providers" id={(row.original as unknown as Record<string, unknown>).payment_provider_id as number | null} />,
+  },
+  {
+    header: humanizeField('service_code'),
+    accessorKey: 'service_code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).service_code ?? '—'),
+  },
+  {
+    header: humanizeField('service_name'),
+    accessorKey: 'service_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).service_name ?? '—'),
+  },
+  {
+    header: humanizeField('service_type'),
+    accessorKey: 'service_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).service_type ?? '—'),
+  },
+  {
+    header: humanizeField('admin_fee_type'),
+    accessorKey: 'admin_fee_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).admin_fee_type ?? '—'),
+  },
+  {
+    header: humanizeField('admin_fee_amount'),
+    accessorKey: 'admin_fee_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).admin_fee_amount ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'payment_provider_id', label: humanizeField('payment_provider_id'), type: 'relation', relationEndpoint: '/payment-providers', required: true },
+  { key: 'service_code', label: humanizeField('service_code') },
+  { key: 'service_name', label: humanizeField('service_name'), required: true },
+  { key: 'service_type', label: humanizeField('service_type') },
+  { key: 'admin_fee_type', label: humanizeField('admin_fee_type') },
+  { key: 'admin_fee_amount', label: humanizeField('admin_fee_amount'), type: 'number' },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  payment_provider_id: null,
+  service_code: '',
+  service_name: '',
+  service_type: '',
+  admin_fee_type: '',
+  admin_fee_amount: '',
+  is_active: false,
+}
 
 export function ProviderServiceListPage() {
-  const { useList, remove } = useProviderServiceResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useProviderServiceResource()
+  const title = humanizeModuleName('PembayaranProviderService')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ProviderService</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-provider-service/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-provider-service/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ProviderService>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.service_code ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

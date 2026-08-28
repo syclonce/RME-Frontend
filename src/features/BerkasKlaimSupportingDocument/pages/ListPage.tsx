@@ -1,58 +1,59 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useBerkasKlaimSupportingDocumentResource } from '../api'
+import type { BerkasKlaimSupportingDocument } from '../types'
 
-const COLUMNS = ["id","claim_file_id","document_type","file_path","uploaded_at"] as const
+const columns: ColumnDef<BerkasKlaimSupportingDocument, unknown>[] = [
+  {
+    header: humanizeField('claim_file_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/claim-files" id={(row.original as unknown as Record<string, unknown>).claim_file_id as number | null} />,
+  },
+  {
+    header: humanizeField('document_type'),
+    accessorKey: 'document_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).document_type ?? '—'),
+  },
+  {
+    header: humanizeField('file_path'),
+    accessorKey: 'file_path',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).file_path ?? '—'),
+  },
+  {
+    header: humanizeField('uploaded_at'),
+    accessorKey: 'uploaded_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).uploaded_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'claim_file_id', label: humanizeField('claim_file_id'), type: 'relation', relationEndpoint: '/claim-files', required: true },
+  { key: 'document_type', label: humanizeField('document_type'), required: true },
+  { key: 'file_path', label: humanizeField('file_path'), required: true },
+  { key: 'uploaded_at', label: humanizeField('uploaded_at'), type: 'date' },
+]
+
+const emptyForm = {
+  claim_file_id: null,
+  document_type: '',
+  file_path: '',
+  uploaded_at: '',
+}
 
 export function BerkasKlaimSupportingDocumentListPage() {
-  const { useList, remove } = useBerkasKlaimSupportingDocumentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBerkasKlaimSupportingDocumentResource()
+  const title = humanizeModuleName('BerkasKlaimSupportingDocument')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BerkasKlaimSupportingDocument</h1>
-        <Button asChild>
-          <Link to="/modul/berkas-klaim-supporting-document/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/berkas-klaim-supporting-document/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<BerkasKlaimSupportingDocument>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.document_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

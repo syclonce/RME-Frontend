@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePhysicalAssessmentResource } from '../api'
+import type { PhysicalAssessment } from '../types'
 
-const COLUMNS = ["id","visit_id","mobility_status","adl_status","cognitive_status","nutritional_risk","pain_level","notes","assessed_at","created_at","updated_at"] as const
+const columns: ColumnDef<PhysicalAssessment, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('mobility_status'),
+    accessorKey: 'mobility_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).mobility_status ?? '—'),
+  },
+  {
+    header: humanizeField('adl_status'),
+    accessorKey: 'adl_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).adl_status ?? '—'),
+  },
+  {
+    header: humanizeField('cognitive_status'),
+    accessorKey: 'cognitive_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cognitive_status ?? '—'),
+  },
+  {
+    header: humanizeField('nutritional_risk'),
+    accessorKey: 'nutritional_risk',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).nutritional_risk ?? '—'),
+  },
+  {
+    header: humanizeField('pain_level'),
+    accessorKey: 'pain_level',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).pain_level ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'mobility_status', label: humanizeField('mobility_status') },
+  { key: 'adl_status', label: humanizeField('adl_status') },
+  { key: 'cognitive_status', label: humanizeField('cognitive_status') },
+  { key: 'nutritional_risk', label: humanizeField('nutritional_risk'), type: 'select', options: [{"value":"low","label":"Low"},{"value":"medium","label":"Medium"},{"value":"high","label":"High"}] },
+  { key: 'pain_level', label: humanizeField('pain_level'), type: 'number' },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  mobility_status: '',
+  adl_status: '',
+  cognitive_status: '',
+  nutritional_risk: '',
+  pain_level: '',
+  notes: '',
+  assessed_at: '',
+}
 
 export function PhysicalAssessmentListPage() {
-  const { useList, remove } = usePhysicalAssessmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePhysicalAssessmentResource()
+  const title = humanizeModuleName('MedicalRecordPhysicalAssessment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PhysicalAssessment</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-physical-assessment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-physical-assessment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PhysicalAssessment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.mobility_status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

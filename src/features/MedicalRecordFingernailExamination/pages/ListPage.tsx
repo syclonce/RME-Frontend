@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useFingernailExaminationResource } from '../api'
+import type { FingernailExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","color","capillary_refill_seconds","clubbing","cyanosis","lesions","findings","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<FingernailExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('color'),
+    accessorKey: 'color',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).color ?? '—'),
+  },
+  {
+    header: humanizeField('capillary_refill_seconds'),
+    accessorKey: 'capillary_refill_seconds',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).capillary_refill_seconds ?? '—'),
+  },
+  {
+    header: humanizeField('clubbing'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).clubbing ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('cyanosis'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).cyanosis ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('lesions'),
+    accessorKey: 'lesions',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).lesions ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'color', label: humanizeField('color') },
+  { key: 'capillary_refill_seconds', label: humanizeField('capillary_refill_seconds'), type: 'number' },
+  { key: 'clubbing', label: humanizeField('clubbing'), type: 'checkbox' },
+  { key: 'cyanosis', label: humanizeField('cyanosis'), type: 'checkbox' },
+  { key: 'lesions', label: humanizeField('lesions') },
+  { key: 'findings', label: humanizeField('findings') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  color: '',
+  capillary_refill_seconds: '',
+  clubbing: false,
+  cyanosis: false,
+  lesions: '',
+  findings: '',
+  examined_at: '',
+}
 
 export function FingernailExaminationListPage() {
-  const { useList, remove } = useFingernailExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useFingernailExaminationResource()
+  const title = humanizeModuleName('MedicalRecordFingernailExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">FingernailExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-fingernail-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-fingernail-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<FingernailExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.color ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

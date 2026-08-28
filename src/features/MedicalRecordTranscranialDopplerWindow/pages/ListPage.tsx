@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useTranscranialDopplerWindowResource } from '../api'
+import type { TranscranialDopplerWindow } from '../types'
 
-const COLUMNS = ["id","transcranial_doppler_examination_id","window_site","signal_quality","depth_mm","velocity_cm_s","created_at","updated_at"] as const
+const columns: ColumnDef<TranscranialDopplerWindow, unknown>[] = [
+  {
+    header: humanizeField('transcranial_doppler_examination_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/tcd-examinations" id={(row.original as unknown as Record<string, unknown>).transcranial_doppler_examination_id as number | null} />,
+  },
+  {
+    header: humanizeField('window_site'),
+    accessorKey: 'window_site',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).window_site ?? '—'),
+  },
+  {
+    header: humanizeField('signal_quality'),
+    accessorKey: 'signal_quality',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).signal_quality ?? '—'),
+  },
+  {
+    header: humanizeField('depth_mm'),
+    accessorKey: 'depth_mm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).depth_mm ?? '—'),
+  },
+  {
+    header: humanizeField('velocity_cm_s'),
+    accessorKey: 'velocity_cm_s',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).velocity_cm_s ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'transcranial_doppler_examination_id', label: humanizeField('transcranial_doppler_examination_id'), type: 'relation', relationEndpoint: '/tcd-examinations', required: true },
+  { key: 'window_site', label: humanizeField('window_site'), type: 'select', required: true, options: [{"value":"temporal","label":"Temporal"},{"value":"orbital","label":"Orbital"},{"value":"suboccipital","label":"Suboccipital"},{"value":"submandibular","label":"Submandibular"}] },
+  { key: 'signal_quality', label: humanizeField('signal_quality'), type: 'select', options: [{"value":"good","label":"Good"},{"value":"fair","label":"Fair"},{"value":"poor","label":"Poor"},{"value":"absent","label":"Absent"}] },
+  { key: 'depth_mm', label: humanizeField('depth_mm'), type: 'number' },
+  { key: 'velocity_cm_s', label: humanizeField('velocity_cm_s'), type: 'number' },
+]
+
+const emptyForm = {
+  transcranial_doppler_examination_id: null,
+  window_site: '',
+  signal_quality: '',
+  depth_mm: '',
+  velocity_cm_s: '',
+}
 
 export function TranscranialDopplerWindowListPage() {
-  const { useList, remove } = useTranscranialDopplerWindowResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useTranscranialDopplerWindowResource()
+  const title = humanizeModuleName('MedicalRecordTranscranialDopplerWindow')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">TranscranialDopplerWindow</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-transcranial-doppler-window/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-transcranial-doppler-window/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<TranscranialDopplerWindow>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.window_site ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

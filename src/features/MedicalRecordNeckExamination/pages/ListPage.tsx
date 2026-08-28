@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useNeckExaminationResource } from '../api'
+import type { NeckExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","lymph_nodes","thyroid","jugular_venous_pressure","trachea_position","mass","findings","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<NeckExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('lymph_nodes'),
+    accessorKey: 'lymph_nodes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).lymph_nodes ?? '—'),
+  },
+  {
+    header: humanizeField('thyroid'),
+    accessorKey: 'thyroid',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).thyroid ?? '—'),
+  },
+  {
+    header: humanizeField('jugular_venous_pressure'),
+    accessorKey: 'jugular_venous_pressure',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).jugular_venous_pressure ?? '—'),
+  },
+  {
+    header: humanizeField('trachea_position'),
+    accessorKey: 'trachea_position',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).trachea_position ?? '—'),
+  },
+  {
+    header: humanizeField('mass'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).mass ? 'Ya' : 'Tidak'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'lymph_nodes', label: humanizeField('lymph_nodes') },
+  { key: 'thyroid', label: humanizeField('thyroid') },
+  { key: 'jugular_venous_pressure', label: humanizeField('jugular_venous_pressure') },
+  { key: 'trachea_position', label: humanizeField('trachea_position') },
+  { key: 'mass', label: humanizeField('mass'), type: 'checkbox' },
+  { key: 'findings', label: humanizeField('findings') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  lymph_nodes: '',
+  thyroid: '',
+  jugular_venous_pressure: '',
+  trachea_position: '',
+  mass: false,
+  findings: '',
+  examined_at: '',
+}
 
 export function NeckExaminationListPage() {
-  const { useList, remove } = useNeckExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useNeckExaminationResource()
+  const title = humanizeModuleName('MedicalRecordNeckExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">NeckExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-neck-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-neck-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<NeckExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.lymph_nodes ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

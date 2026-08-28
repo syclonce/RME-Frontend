@@ -1,58 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useGuarantorItemCategoryMappingResource } from '../api'
+import type { GuarantorItemCategoryMapping } from '../types'
 
-const COLUMNS = ["id","guarantor_id","item_category_id","is_covered","coverage_percentage","notes","created_at"] as const
+const columns: ColumnDef<GuarantorItemCategoryMapping, unknown>[] = [
+  {
+    header: humanizeField('guarantor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/guarantors" id={(row.original as unknown as Record<string, unknown>).guarantor_id as number | null} />,
+  },
+  {
+    header: humanizeField('item_category_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/inventoryitemcategories" id={(row.original as unknown as Record<string, unknown>).item_category_id as number | null} />,
+  },
+  {
+    header: humanizeField('is_covered'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_covered ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('coverage_percentage'),
+    accessorKey: 'coverage_percentage',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).coverage_percentage ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'guarantor_id', label: humanizeField('guarantor_id'), type: 'relation', relationEndpoint: '/guarantors', required: true },
+  { key: 'item_category_id', label: humanizeField('item_category_id'), type: 'relation', relationEndpoint: '/inventoryitemcategories', required: true },
+  { key: 'is_covered', label: humanizeField('is_covered'), type: 'checkbox' },
+  { key: 'coverage_percentage', label: humanizeField('coverage_percentage'), type: 'number' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  guarantor_id: null,
+  item_category_id: null,
+  is_covered: false,
+  coverage_percentage: '',
+  notes: '',
+}
 
 export function GuarantorItemCategoryMappingListPage() {
-  const { useList, remove } = useGuarantorItemCategoryMappingResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGuarantorItemCategoryMappingResource()
+  const title = humanizeModuleName('GeneralGuarantorItemCategoryMapping')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GuarantorItemCategoryMapping</h1>
-        <Button asChild>
-          <Link to="/modul/general-guarantor-item-category-mapping/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-guarantor-item-category-mapping/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<GuarantorItemCategoryMapping>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

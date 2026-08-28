@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useRegistrationInvoiceResource } from '../api'
+import type { RegistrationInvoice } from '../types'
 
-const COLUMNS = ["id","registration_id","invoice_id","invoice_category","amount","notes","created_at","updated_at"] as const
+const columns: ColumnDef<RegistrationInvoice, unknown>[] = [
+  {
+    header: humanizeField('registration_id'),
+    accessorKey: 'registration_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).registration_id ?? '—'),
+  },
+  {
+    header: humanizeField('invoice_id'),
+    accessorKey: 'invoice_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_id ?? '—'),
+  },
+  {
+    header: humanizeField('invoice_category'),
+    accessorKey: 'invoice_category',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_category ?? '—'),
+  },
+  {
+    header: humanizeField('amount'),
+    accessorKey: 'amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).amount ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'registration_id', label: humanizeField('registration_id'), type: 'number', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'invoice_category', label: humanizeField('invoice_category') },
+  { key: 'amount', label: humanizeField('amount'), type: 'number', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  registration_id: '',
+  invoice_id: '',
+  invoice_category: '',
+  amount: '',
+  notes: '',
+}
 
 export function RegistrationInvoiceListPage() {
-  const { useList, remove } = useRegistrationInvoiceResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRegistrationInvoiceResource()
+  const title = humanizeModuleName('PembayaranRegistrationInvoice')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RegistrationInvoice</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-registration-invoice/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-registration-invoice/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<RegistrationInvoice>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.invoice_category ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,74 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useProcedureSurgeryResource } from '../api'
+import type { ProcedureSurgery } from '../types'
 
-const COLUMNS = ["id","visit_id","procedure_id","surgery_name","surgery_type","anesthesia_type","performed_at","notes","created_at","updated_at"] as const
+const columns: ColumnDef<ProcedureSurgery, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('procedure_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/procedures" id={(row.original as unknown as Record<string, unknown>).procedure_id as number | null} />,
+  },
+  {
+    header: humanizeField('surgery_name'),
+    accessorKey: 'surgery_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).surgery_name ?? '—'),
+  },
+  {
+    header: humanizeField('surgery_type'),
+    accessorKey: 'surgery_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).surgery_type ?? '—'),
+  },
+  {
+    header: humanizeField('anesthesia_type'),
+    accessorKey: 'anesthesia_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).anesthesia_type ?? '—'),
+  },
+  {
+    header: humanizeField('performed_at'),
+    accessorKey: 'performed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'procedure_id', label: humanizeField('procedure_id'), type: 'relation', relationEndpoint: '/procedures' },
+  { key: 'surgery_name', label: humanizeField('surgery_name'), required: true },
+  { key: 'surgery_type', label: humanizeField('surgery_type') },
+  { key: 'anesthesia_type', label: humanizeField('anesthesia_type') },
+  { key: 'performed_at', label: humanizeField('performed_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: null,
+  procedure_id: null,
+  surgery_name: '',
+  surgery_type: '',
+  anesthesia_type: '',
+  performed_at: '',
+  notes: '',
+}
 
 export function ProcedureSurgeryListPage() {
-  const { useList, remove } = useProcedureSurgeryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useProcedureSurgeryResource()
+  const title = humanizeModuleName('MedicalRecordProcedureSurgery')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ProcedureSurgery</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-procedure-surgery/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-procedure-surgery/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ProcedureSurgery>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.surgery_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

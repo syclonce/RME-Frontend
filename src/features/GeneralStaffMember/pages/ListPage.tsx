@@ -1,58 +1,57 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useStaffMemberResource } from '../api'
+import type { StaffMember } from '../types'
 
-const COLUMNS = ["id","employee_id","staff_role","is_active","created_at","updated_at"] as const
+const columns: ColumnDef<StaffMember, unknown>[] = [
+  {
+    header: humanizeField('employee_id'),
+    accessorKey: 'employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('staff_role'),
+    accessorKey: 'staff_role',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).staff_role ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'staff_role', label: humanizeField('staff_role') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  employee_id: '',
+  staff_role: '',
+  is_active: false,
+}
 
 export function StaffMemberListPage() {
-  const { useList, remove } = useStaffMemberResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useStaffMemberResource()
+  const title = humanizeModuleName('GeneralStaffMember')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">StaffMember</h1>
-        <Button asChild>
-          <Link to="/modul/general-staff-member/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-staff-member/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<StaffMember>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.staff_role ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

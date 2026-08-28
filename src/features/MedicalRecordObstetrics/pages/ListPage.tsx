@@ -1,58 +1,84 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useObstetricsResource } from '../api'
+import type { Obstetrics } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","gravida","para","abortus","gestational_age_weeks","fundal_height_cm","fetal_heart_rate","fetal_presentation","estimated_fetal_weight","notes","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<Obstetrics, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('gravida'),
+    accessorKey: 'gravida',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gravida ?? '—'),
+  },
+  {
+    header: humanizeField('para'),
+    accessorKey: 'para',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).para ?? '—'),
+  },
+  {
+    header: humanizeField('abortus'),
+    accessorKey: 'abortus',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).abortus ?? '—'),
+  },
+  {
+    header: humanizeField('gestational_age_weeks'),
+    accessorKey: 'gestational_age_weeks',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gestational_age_weeks ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true, section: 'Detail' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true, section: 'Detail' },
+  { key: 'gravida', label: humanizeField('gravida'), type: 'number', section: 'Detail' },
+  { key: 'para', label: humanizeField('para'), type: 'number', section: 'Detail' },
+  { key: 'abortus', label: humanizeField('abortus'), type: 'number', section: 'Detail' },
+  { key: 'gestational_age_weeks', label: humanizeField('gestational_age_weeks'), type: 'number', section: 'Detail' },
+  { key: 'fundal_height_cm', label: humanizeField('fundal_height_cm'), type: 'number', section: 'Detail Tambahan' },
+  { key: 'fetal_heart_rate', label: humanizeField('fetal_heart_rate'), type: 'number', section: 'Detail Tambahan' },
+  { key: 'fetal_presentation', label: humanizeField('fetal_presentation'), section: 'Detail Tambahan' },
+  { key: 'estimated_fetal_weight', label: humanizeField('estimated_fetal_weight'), type: 'number', section: 'Detail Tambahan' },
+  { key: 'notes', label: humanizeField('notes'), section: 'Detail Tambahan' },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date', section: 'Detail Tambahan' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  patient_id: null,
+  gravida: '',
+  para: '',
+  abortus: '',
+  gestational_age_weeks: '',
+  fundal_height_cm: '',
+  fetal_heart_rate: '',
+  fetal_presentation: '',
+  estimated_fetal_weight: '',
+  notes: '',
+  examined_at: '',
+}
 
 export function ObstetricsListPage() {
-  const { useList, remove } = useObstetricsResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useObstetricsResource()
+  const title = humanizeModuleName('MedicalRecordObstetrics')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Obstetrics</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-obstetrics/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-obstetrics/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<Obstetrics>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.fetal_presentation ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

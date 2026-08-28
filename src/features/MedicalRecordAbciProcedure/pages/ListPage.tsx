@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useAbciProcedureResource } from '../api'
+import type { AbciProcedure } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","doctor_id","procedure_date","indication","procedure_details","outcome","notes","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<AbciProcedure, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('procedure_date'),
+    accessorKey: 'procedure_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).procedure_date ?? '—'),
+  },
+  {
+    header: humanizeField('indication'),
+    accessorKey: 'indication',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).indication ?? '—'),
+  },
+  {
+    header: humanizeField('procedure_details'),
+    accessorKey: 'procedure_details',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).procedure_details ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors' },
+  { key: 'procedure_date', label: humanizeField('procedure_date'), type: 'date', required: true },
+  { key: 'indication', label: humanizeField('indication') },
+  { key: 'procedure_details', label: humanizeField('procedure_details') },
+  { key: 'outcome', label: humanizeField('outcome') },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  doctor_id: null,
+  procedure_date: '',
+  indication: '',
+  procedure_details: '',
+  outcome: '',
+  notes: '',
+}
 
 export function AbciProcedureListPage() {
-  const { useList, remove } = useAbciProcedureResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useAbciProcedureResource()
+  const title = humanizeModuleName('MedicalRecordAbciProcedure')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">AbciProcedure</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-abci-procedure/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-abci-procedure/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<AbciProcedure>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.indication ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

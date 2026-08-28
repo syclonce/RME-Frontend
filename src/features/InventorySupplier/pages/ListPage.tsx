@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useSupplierResource } from '../api'
+import type { Supplier } from '../types'
 
-const COLUMNS = ["id","code","name","contact_person","phone","email","address","is_active","created_at"] as const
+const columns: ColumnDef<Supplier, unknown>[] = [
+  {
+    header: humanizeField('code'),
+    accessorKey: 'code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).code ?? '—'),
+  },
+  {
+    header: humanizeField('name'),
+    accessorKey: 'name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).name ?? '—'),
+  },
+  {
+    header: humanizeField('contact_person'),
+    accessorKey: 'contact_person',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).contact_person ?? '—'),
+  },
+  {
+    header: humanizeField('phone'),
+    accessorKey: 'phone',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).phone ?? '—'),
+  },
+  {
+    header: humanizeField('email'),
+    accessorKey: 'email',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).email ?? '—'),
+  },
+  {
+    header: humanizeField('address'),
+    accessorKey: 'address',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).address ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'code', label: humanizeField('code') },
+  { key: 'name', label: humanizeField('name'), required: true },
+  { key: 'contact_person', label: humanizeField('contact_person') },
+  { key: 'phone', label: humanizeField('phone') },
+  { key: 'email', label: humanizeField('email') },
+  { key: 'address', label: humanizeField('address') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  code: '',
+  name: '',
+  contact_person: '',
+  phone: '',
+  email: '',
+  address: '',
+  is_active: false,
+}
 
 export function SupplierListPage() {
-  const { useList, remove } = useSupplierResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSupplierResource()
+  const title = humanizeModuleName('InventorySupplier')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Supplier</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-supplier/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-supplier/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<Supplier>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

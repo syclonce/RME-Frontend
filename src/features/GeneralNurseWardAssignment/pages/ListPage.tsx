@@ -1,58 +1,58 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useNurseWardAssignmentResource } from '../api'
+import type { NurseWardAssignment } from '../types'
 
-const COLUMNS = ["id","nurse_id","ward_id","shift","assigned_at","created_at","updated_at"] as const
+const columns: ColumnDef<NurseWardAssignment, unknown>[] = [
+  {
+    header: humanizeField('nurse_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/nurses" id={(row.original as unknown as Record<string, unknown>).nurse_id as number | null} />,
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('shift'),
+    accessorKey: 'shift',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).shift ?? '—'),
+  },
+  {
+    header: humanizeField('assigned_at'),
+    accessorKey: 'assigned_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assigned_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'nurse_id', label: humanizeField('nurse_id'), type: 'relation', relationEndpoint: '/nurses', required: true },
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'shift', label: humanizeField('shift') },
+  { key: 'assigned_at', label: humanizeField('assigned_at'), type: 'date' },
+]
+
+const emptyForm = {
+  nurse_id: null,
+  ward_id: null,
+  shift: '',
+  assigned_at: '',
+}
 
 export function NurseWardAssignmentListPage() {
-  const { useList, remove } = useNurseWardAssignmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useNurseWardAssignmentResource()
+  const title = humanizeModuleName('GeneralNurseWardAssignment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">NurseWardAssignment</h1>
-        <Button asChild>
-          <Link to="/modul/general-nurse-ward-assignment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-nurse-ward-assignment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<NurseWardAssignment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.shift ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

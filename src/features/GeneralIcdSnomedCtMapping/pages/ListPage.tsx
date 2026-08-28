@@ -1,58 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useIcdSnomedCtMappingResource } from '../api'
+import type { IcdSnomedCtMapping } from '../types'
 
-const COLUMNS = ["id","icd_code","snomed_code","icd_description","snomed_description","is_active"] as const
+const columns: ColumnDef<IcdSnomedCtMapping, unknown>[] = [
+  {
+    header: humanizeField('icd_code'),
+    accessorKey: 'icd_code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).icd_code ?? '—'),
+  },
+  {
+    header: humanizeField('snomed_code'),
+    accessorKey: 'snomed_code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).snomed_code ?? '—'),
+  },
+  {
+    header: humanizeField('icd_description'),
+    accessorKey: 'icd_description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).icd_description ?? '—'),
+  },
+  {
+    header: humanizeField('snomed_description'),
+    accessorKey: 'snomed_description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).snomed_description ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'icd_code', label: humanizeField('icd_code'), required: true },
+  { key: 'snomed_code', label: humanizeField('snomed_code'), required: true },
+  { key: 'icd_description', label: humanizeField('icd_description') },
+  { key: 'snomed_description', label: humanizeField('snomed_description') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  icd_code: '',
+  snomed_code: '',
+  icd_description: '',
+  snomed_description: '',
+  is_active: false,
+}
 
 export function IcdSnomedCtMappingListPage() {
-  const { useList, remove } = useIcdSnomedCtMappingResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useIcdSnomedCtMappingResource()
+  const title = humanizeModuleName('GeneralIcdSnomedCtMapping')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">IcdSnomedCtMapping</h1>
-        <Button asChild>
-          <Link to="/modul/general-icd-snomed-ct-mapping/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-icd-snomed-ct-mapping/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<IcdSnomedCtMapping>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.icd_code ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useEegExaminationResource } from '../api'
+import type { EegExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","background_rhythm","epileptiform_discharges","abnormality_type","clinical_correlation","conclusion","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<EegExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('background_rhythm'),
+    accessorKey: 'background_rhythm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).background_rhythm ?? '—'),
+  },
+  {
+    header: humanizeField('epileptiform_discharges'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).epileptiform_discharges ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('abnormality_type'),
+    accessorKey: 'abnormality_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).abnormality_type ?? '—'),
+  },
+  {
+    header: humanizeField('clinical_correlation'),
+    accessorKey: 'clinical_correlation',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).clinical_correlation ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true },
+  { key: 'background_rhythm', label: humanizeField('background_rhythm') },
+  { key: 'epileptiform_discharges', label: humanizeField('epileptiform_discharges'), type: 'checkbox' },
+  { key: 'abnormality_type', label: humanizeField('abnormality_type') },
+  { key: 'clinical_correlation', label: humanizeField('clinical_correlation') },
+  { key: 'conclusion', label: humanizeField('conclusion') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  patient_id: null,
+  background_rhythm: '',
+  epileptiform_discharges: false,
+  abnormality_type: '',
+  clinical_correlation: '',
+  conclusion: '',
+  examined_at: '',
+}
 
 export function EegExaminationListPage() {
-  const { useList, remove } = useEegExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useEegExaminationResource()
+  const title = humanizeModuleName('MedicalRecordEegExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">EegExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-eeg-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-eeg-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<EegExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.background_rhythm ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

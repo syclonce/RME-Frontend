@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useNursingImplementationResource } from '../api'
+import type { NursingImplementation } from '../types'
 
-const COLUMNS = ["id","nursing_diagnosis_id","action_taken","performed_by","performed_at","patient_response","created_at","updated_at"] as const
+const columns: ColumnDef<NursingImplementation, unknown>[] = [
+  {
+    header: humanizeField('nursing_diagnosis_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/nursing-diagnoses" id={(row.original as unknown as Record<string, unknown>).nursing_diagnosis_id as number | null} />,
+  },
+  {
+    header: humanizeField('action_taken'),
+    accessorKey: 'action_taken',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).action_taken ?? '—'),
+  },
+  {
+    header: humanizeField('performed_by'),
+    accessorKey: 'performed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_by ?? '—'),
+  },
+  {
+    header: humanizeField('performed_at'),
+    accessorKey: 'performed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_at ?? '—'),
+  },
+  {
+    header: humanizeField('patient_response'),
+    accessorKey: 'patient_response',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_response ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'nursing_diagnosis_id', label: humanizeField('nursing_diagnosis_id'), type: 'relation', relationEndpoint: '/nursing-diagnoses', required: true },
+  { key: 'action_taken', label: humanizeField('action_taken') },
+  { key: 'performed_by', label: humanizeField('performed_by'), type: 'number', required: true },
+  { key: 'performed_at', label: humanizeField('performed_at'), type: 'date', required: true },
+  { key: 'patient_response', label: humanizeField('patient_response') },
+]
+
+const emptyForm = {
+  nursing_diagnosis_id: null,
+  action_taken: '',
+  performed_by: '',
+  performed_at: '',
+  patient_response: '',
+}
 
 export function NursingImplementationListPage() {
-  const { useList, remove } = useNursingImplementationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useNursingImplementationResource()
+  const title = humanizeModuleName('MedicalRecordNursingImplementation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">NursingImplementation</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-nursing-implementation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-nursing-implementation/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<NursingImplementation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.action_taken ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

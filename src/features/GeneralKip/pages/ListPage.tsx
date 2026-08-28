@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useKipResource } from '../api'
+import type { Kip } from '../types'
 
-const COLUMNS = ["id","patient_norm","card_type","card_number","address","rt","rw","postal_code","region_code"] as const
+const columns: ColumnDef<Kip, unknown>[] = [
+  {
+    header: humanizeField('patient_norm'),
+    accessorKey: 'patient_norm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_norm ?? '—'),
+  },
+  {
+    header: humanizeField('card_type'),
+    accessorKey: 'card_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).card_type ?? '—'),
+  },
+  {
+    header: humanizeField('card_number'),
+    accessorKey: 'card_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).card_number ?? '—'),
+  },
+  {
+    header: humanizeField('address'),
+    accessorKey: 'address',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).address ?? '—'),
+  },
+  {
+    header: humanizeField('rt'),
+    accessorKey: 'rt',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).rt ?? '—'),
+  },
+  {
+    header: humanizeField('rw'),
+    accessorKey: 'rw',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).rw ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_norm', label: humanizeField('patient_norm'), required: true },
+  { key: 'card_type', label: humanizeField('card_type'), required: true },
+  { key: 'card_number', label: humanizeField('card_number'), required: true },
+  { key: 'address', label: humanizeField('address') },
+  { key: 'rt', label: humanizeField('rt') },
+  { key: 'rw', label: humanizeField('rw') },
+  { key: 'postal_code', label: humanizeField('postal_code') },
+  { key: 'region_code', label: humanizeField('region_code') },
+]
+
+const emptyForm = {
+  patient_norm: '',
+  card_type: '',
+  card_number: '',
+  address: '',
+  rt: '',
+  rw: '',
+  postal_code: '',
+  region_code: '',
+}
 
 export function KipListPage() {
-  const { useList, remove } = useKipResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useKipResource()
+  const title = humanizeModuleName('GeneralKip')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Kip</h1>
-        <Button asChild>
-          <Link to="/modul/general-kip/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-kip/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<Kip>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.patient_norm ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

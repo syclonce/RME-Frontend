@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useChiefComplaintResource } from '../api'
+import type { ChiefComplaint } from '../types'
 
-const COLUMNS = ["id","visit_id","complaint","onset","duration","recorded_by","recorded_at","created_at","updated_at"] as const
+const columns: ColumnDef<ChiefComplaint, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('complaint'),
+    accessorKey: 'complaint',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).complaint ?? '—'),
+  },
+  {
+    header: humanizeField('onset'),
+    accessorKey: 'onset',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).onset ?? '—'),
+  },
+  {
+    header: humanizeField('duration'),
+    accessorKey: 'duration',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).duration ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_by'),
+    accessorKey: 'recorded_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_by ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_at'),
+    accessorKey: 'recorded_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'complaint', label: humanizeField('complaint') },
+  { key: 'onset', label: humanizeField('onset') },
+  { key: 'duration', label: humanizeField('duration') },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  complaint: '',
+  onset: '',
+  duration: '',
+  recorded_by: '',
+  recorded_at: '',
+}
 
 export function ChiefComplaintListPage() {
-  const { useList, remove } = useChiefComplaintResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useChiefComplaintResource()
+  const title = humanizeModuleName('MedicalRecordChiefComplaint')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ChiefComplaint</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-chief-complaint/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-chief-complaint/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ChiefComplaint>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.complaint ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

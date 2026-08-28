@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useGetUpAndGoTestAssessmentResource } from '../api'
+import type { GetUpAndGoTestAssessment } from '../types'
 
-const COLUMNS = ["id","visit_id","time_seconds","assistive_device","fall_risk","notes","assessed_at","created_at","updated_at"] as const
+const columns: ColumnDef<GetUpAndGoTestAssessment, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('time_seconds'),
+    accessorKey: 'time_seconds',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).time_seconds ?? '—'),
+  },
+  {
+    header: humanizeField('assistive_device'),
+    accessorKey: 'assistive_device',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assistive_device ?? '—'),
+  },
+  {
+    header: humanizeField('fall_risk'),
+    accessorKey: 'fall_risk',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).fall_risk ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+  {
+    header: humanizeField('assessed_at'),
+    accessorKey: 'assessed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessed_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'time_seconds', label: humanizeField('time_seconds'), type: 'number', required: true },
+  { key: 'assistive_device', label: humanizeField('assistive_device') },
+  { key: 'fall_risk', label: humanizeField('fall_risk'), type: 'select', options: [{"value":"low","label":"Low"},{"value":"medium","label":"Medium"},{"value":"high","label":"High"}] },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  time_seconds: '',
+  assistive_device: '',
+  fall_risk: '',
+  notes: '',
+  assessed_at: '',
+}
 
 export function GetUpAndGoTestAssessmentListPage() {
-  const { useList, remove } = useGetUpAndGoTestAssessmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGetUpAndGoTestAssessmentResource()
+  const title = humanizeModuleName('MedicalRecordGetUpAndGoTestAssessment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GetUpAndGoTestAssessment</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-get-up-and-go-test-assessment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-get-up-and-go-test-assessment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<GetUpAndGoTestAssessment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.assistive_device ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

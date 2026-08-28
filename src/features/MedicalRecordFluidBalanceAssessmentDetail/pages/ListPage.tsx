@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useFluidBalanceAssessmentDetailResource } from '../api'
+import type { FluidBalanceAssessmentDetail } from '../types'
 
-const COLUMNS = ["id","fluid_balance_assessment_id","type","category","amount_ml","recorded_at","created_at","updated_at"] as const
+const columns: ColumnDef<FluidBalanceAssessmentDetail, unknown>[] = [
+  {
+    header: humanizeField('fluid_balance_assessment_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/fluid-balance-assessments" id={(row.original as unknown as Record<string, unknown>).fluid_balance_assessment_id as number | null} />,
+  },
+  {
+    header: humanizeField('type'),
+    accessorKey: 'type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).type ?? '—'),
+  },
+  {
+    header: humanizeField('category'),
+    accessorKey: 'category',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).category ?? '—'),
+  },
+  {
+    header: humanizeField('amount_ml'),
+    accessorKey: 'amount_ml',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).amount_ml ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_at'),
+    accessorKey: 'recorded_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'fluid_balance_assessment_id', label: humanizeField('fluid_balance_assessment_id'), type: 'relation', relationEndpoint: '/fluid-balance-assessments', required: true },
+  { key: 'type', label: humanizeField('type'), type: 'select', required: true, options: [{"value":"intake","label":"Intake"},{"value":"output","label":"Output"}] },
+  { key: 'category', label: humanizeField('category'), required: true },
+  { key: 'amount_ml', label: humanizeField('amount_ml'), type: 'number', required: true },
+  { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date' },
+]
+
+const emptyForm = {
+  fluid_balance_assessment_id: null,
+  type: '',
+  category: '',
+  amount_ml: '',
+  recorded_at: '',
+}
 
 export function FluidBalanceAssessmentDetailListPage() {
-  const { useList, remove } = useFluidBalanceAssessmentDetailResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useFluidBalanceAssessmentDetailResource()
+  const title = humanizeModuleName('MedicalRecordFluidBalanceAssessmentDetail')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">FluidBalanceAssessmentDetail</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-fluid-balance-assessment-detail/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-fluid-balance-assessment-detail/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<FluidBalanceAssessmentDetail>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

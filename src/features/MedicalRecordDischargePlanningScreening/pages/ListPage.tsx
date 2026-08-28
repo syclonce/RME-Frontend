@@ -1,58 +1,72 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useDischargePlanningScreeningResource } from '../api'
+import type { DischargePlanningScreening } from '../types'
 
-const COLUMNS = ["id","visit_id","screening_criteria","total_score","requires_planning","screened_by","screened_at","created_at","updated_at"] as const
+const columns: ColumnDef<DischargePlanningScreening, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('screening_criteria'),
+    accessorKey: 'screening_criteria',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).screening_criteria ?? '—'),
+  },
+  {
+    header: humanizeField('total_score'),
+    accessorKey: 'total_score',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).total_score ?? '—'),
+  },
+  {
+    header: humanizeField('requires_planning'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).requires_planning ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('screened_by'),
+    accessorKey: 'screened_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).screened_by ?? '—'),
+  },
+  {
+    header: humanizeField('screened_at'),
+    accessorKey: 'screened_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).screened_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'screening_criteria', label: humanizeField('screening_criteria') },
+  { key: 'total_score', label: humanizeField('total_score'), type: 'number' },
+  { key: 'requires_planning', label: humanizeField('requires_planning'), type: 'checkbox' },
+  { key: 'screened_by', label: humanizeField('screened_by'), type: 'number', required: true },
+  { key: 'screened_at', label: humanizeField('screened_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  screening_criteria: '',
+  total_score: '',
+  requires_planning: false,
+  screened_by: '',
+  screened_at: '',
+}
 
 export function DischargePlanningScreeningListPage() {
-  const { useList, remove } = useDischargePlanningScreeningResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDischargePlanningScreeningResource()
+  const title = humanizeModuleName('MedicalRecordDischargePlanningScreening')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DischargePlanningScreening</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-discharge-planning-screening/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-discharge-planning-screening/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<DischargePlanningScreening>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.screening_criteria ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

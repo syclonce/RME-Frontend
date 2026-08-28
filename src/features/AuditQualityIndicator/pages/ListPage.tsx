@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useQualityIndicatorResource } from '../api'
+import type { QualityIndicator } from '../types'
 
-const COLUMNS = ["id","indicator_id","period_month","period_year","numerator","denominator","recorded_by"] as const
+const columns: ColumnDef<QualityIndicator, unknown>[] = [
+  {
+    header: humanizeField('indicator_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/quality-indicators" id={(row.original as unknown as Record<string, unknown>).indicator_id as number | null} />,
+  },
+  {
+    header: humanizeField('period_month'),
+    accessorKey: 'period_month',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).period_month ?? '—'),
+  },
+  {
+    header: humanizeField('period_year'),
+    accessorKey: 'period_year',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).period_year ?? '—'),
+  },
+  {
+    header: humanizeField('numerator'),
+    accessorKey: 'numerator',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).numerator ?? '—'),
+  },
+  {
+    header: humanizeField('denominator'),
+    accessorKey: 'denominator',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).denominator ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_by'),
+    accessorKey: 'recorded_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'indicator_id', label: humanizeField('indicator_id'), type: 'relation', relationEndpoint: '/quality-indicators', required: true },
+  { key: 'period_month', label: humanizeField('period_month'), type: 'number', required: true },
+  { key: 'period_year', label: humanizeField('period_year'), type: 'number', required: true },
+  { key: 'numerator', label: humanizeField('numerator'), type: 'number', required: true },
+  { key: 'denominator', label: humanizeField('denominator'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number' },
+]
+
+const emptyForm = {
+  indicator_id: null,
+  period_month: '',
+  period_year: '',
+  numerator: '',
+  denominator: '',
+  recorded_by: '',
+}
 
 export function QualityIndicatorListPage() {
-  const { useList, remove } = useQualityIndicatorResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useQualityIndicatorResource()
+  const title = humanizeModuleName('AuditQualityIndicator')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">QualityIndicator</h1>
-        <Button asChild>
-          <Link to="/modul/audit-quality-indicator/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/audit-quality-indicator/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<QualityIndicator>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      resource={resource}
+    />
   )
 }

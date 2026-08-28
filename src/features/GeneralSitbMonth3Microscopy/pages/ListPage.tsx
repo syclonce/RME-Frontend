@@ -1,58 +1,57 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useSitbMonth3MicroscopyResource } from '../api'
+import type { SitbMonth3Microscopy } from '../types'
 
-const COLUMNS = ["id","name","code","is_active"] as const
+const columns: ColumnDef<SitbMonth3Microscopy, unknown>[] = [
+  {
+    header: humanizeField('name'),
+    accessorKey: 'name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).name ?? '—'),
+  },
+  {
+    header: humanizeField('code'),
+    accessorKey: 'code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).code ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'name', label: humanizeField('name'), required: true },
+  { key: 'code', label: humanizeField('code') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  name: '',
+  code: '',
+  is_active: false,
+}
 
 export function SitbMonth3MicroscopyListPage() {
-  const { useList, remove } = useSitbMonth3MicroscopyResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSitbMonth3MicroscopyResource()
+  const title = humanizeModuleName('GeneralSitbMonth3Microscopy')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">SitbMonth3Microscopy</h1>
-        <Button asChild>
-          <Link to="/modul/general-sitb-month3-microscopy/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-sitb-month3-microscopy/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<SitbMonth3Microscopy>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

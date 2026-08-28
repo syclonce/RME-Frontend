@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useImplementationResource } from '../api'
+import type { Implementation } from '../types'
 
-const COLUMNS = ["id","visit_id","order_reference","description","performed_by","performed_at","status","created_at","updated_at"] as const
+const columns: ColumnDef<Implementation, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('order_reference'),
+    accessorKey: 'order_reference',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).order_reference ?? '—'),
+  },
+  {
+    header: humanizeField('description'),
+    accessorKey: 'description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).description ?? '—'),
+  },
+  {
+    header: humanizeField('performed_by'),
+    accessorKey: 'performed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_by ?? '—'),
+  },
+  {
+    header: humanizeField('performed_at'),
+    accessorKey: 'performed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    accessorKey: 'status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).status ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'order_reference', label: humanizeField('order_reference') },
+  { key: 'description', label: humanizeField('description') },
+  { key: 'performed_by', label: humanizeField('performed_by'), type: 'number', required: true },
+  { key: 'performed_at', label: humanizeField('performed_at'), type: 'date', required: true },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  order_reference: '',
+  description: '',
+  performed_by: '',
+  performed_at: '',
+  status: '',
+}
 
 export function ImplementationListPage() {
-  const { useList, remove } = useImplementationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useImplementationResource()
+  const title = humanizeModuleName('MedicalRecordImplementation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Implementation</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-implementation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-implementation/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<Implementation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.order_reference ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

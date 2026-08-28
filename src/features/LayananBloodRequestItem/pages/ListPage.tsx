@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useBloodRequestItemResource } from '../api'
+import type { BloodRequestItem } from '../types'
 
-const COLUMNS = ["id","blood_transfusion_id","blood_component","blood_type","bag_quantity","cross_match_result","status","notes","created_at","updated_at"] as const
+const columns: ColumnDef<BloodRequestItem, unknown>[] = [
+  {
+    header: humanizeField('blood_transfusion_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/blood-transfusions" id={(row.original as unknown as Record<string, unknown>).blood_transfusion_id as number | null} />,
+  },
+  {
+    header: humanizeField('blood_component'),
+    accessorKey: 'blood_component',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_component ?? '—'),
+  },
+  {
+    header: humanizeField('blood_type'),
+    accessorKey: 'blood_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_type ?? '—'),
+  },
+  {
+    header: humanizeField('bag_quantity'),
+    accessorKey: 'bag_quantity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).bag_quantity ?? '—'),
+  },
+  {
+    header: humanizeField('cross_match_result'),
+    accessorKey: 'cross_match_result',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cross_match_result ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    accessorKey: 'status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).status ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'blood_transfusion_id', label: humanizeField('blood_transfusion_id'), type: 'relation', relationEndpoint: '/blood-transfusions', required: true },
+  { key: 'blood_component', label: humanizeField('blood_component'), required: true },
+  { key: 'blood_type', label: humanizeField('blood_type') },
+  { key: 'bag_quantity', label: humanizeField('bag_quantity'), type: 'number', required: true },
+  { key: 'cross_match_result', label: humanizeField('cross_match_result') },
+  { key: 'status', label: humanizeField('status') },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  blood_transfusion_id: null,
+  blood_component: '',
+  blood_type: '',
+  bag_quantity: '',
+  cross_match_result: '',
+  status: '',
+  notes: '',
+}
 
 export function BloodRequestItemListPage() {
-  const { useList, remove } = useBloodRequestItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBloodRequestItemResource()
+  const title = humanizeModuleName('LayananBloodRequestItem')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BloodRequestItem</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-blood-request-item/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-blood-request-item/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<BloodRequestItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.blood_component ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

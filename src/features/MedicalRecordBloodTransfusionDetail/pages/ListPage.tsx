@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useBloodTransfusionDetailResource } from '../api'
+import type { BloodTransfusionDetail } from '../types'
 
-const COLUMNS = ["id","transfusion_id","blood_bag_number","blood_type","volume_ml","start_time","end_time","reaction_observed","status","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<BloodTransfusionDetail, unknown>[] = [
+  {
+    header: humanizeField('transfusion_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/blood-transfusions" id={(row.original as unknown as Record<string, unknown>).transfusion_id as number | null} />,
+  },
+  {
+    header: humanizeField('blood_bag_number'),
+    accessorKey: 'blood_bag_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_bag_number ?? '—'),
+  },
+  {
+    header: humanizeField('blood_type'),
+    accessorKey: 'blood_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_type ?? '—'),
+  },
+  {
+    header: humanizeField('volume_ml'),
+    accessorKey: 'volume_ml',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).volume_ml ?? '—'),
+  },
+  {
+    header: humanizeField('start_time'),
+    accessorKey: 'start_time',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).start_time ?? '—'),
+  },
+  {
+    header: humanizeField('end_time'),
+    accessorKey: 'end_time',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).end_time ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'transfusion_id', label: humanizeField('transfusion_id'), type: 'relation', relationEndpoint: '/blood-transfusions', required: true },
+  { key: 'blood_bag_number', label: humanizeField('blood_bag_number'), required: true },
+  { key: 'blood_type', label: humanizeField('blood_type') },
+  { key: 'volume_ml', label: humanizeField('volume_ml'), type: 'number', required: true },
+  { key: 'start_time', label: humanizeField('start_time'), type: 'date' },
+  { key: 'end_time', label: humanizeField('end_time'), type: 'date' },
+  { key: 'reaction_observed', label: humanizeField('reaction_observed') },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  transfusion_id: null,
+  blood_bag_number: '',
+  blood_type: '',
+  volume_ml: '',
+  start_time: '',
+  end_time: '',
+  reaction_observed: '',
+  status: '',
+}
 
 export function BloodTransfusionDetailListPage() {
-  const { useList, remove } = useBloodTransfusionDetailResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBloodTransfusionDetailResource()
+  const title = humanizeModuleName('MedicalRecordBloodTransfusionDetail')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BloodTransfusionDetail</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-blood-transfusion-detail/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-blood-transfusion-detail/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<BloodTransfusionDetail>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.blood_bag_number ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

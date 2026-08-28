@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useDentalExaminationResource } from '../api'
+import type { DentalExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","decayed_teeth_count","missing_teeth_count","filled_teeth_count","odontogram_json","occlusion_status","notes","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<DentalExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('decayed_teeth_count'),
+    accessorKey: 'decayed_teeth_count',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).decayed_teeth_count ?? '—'),
+  },
+  {
+    header: humanizeField('missing_teeth_count'),
+    accessorKey: 'missing_teeth_count',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).missing_teeth_count ?? '—'),
+  },
+  {
+    header: humanizeField('filled_teeth_count'),
+    accessorKey: 'filled_teeth_count',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).filled_teeth_count ?? '—'),
+  },
+  {
+    header: humanizeField('odontogram_json'),
+    accessorKey: 'odontogram_json',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).odontogram_json ?? '—'),
+  },
+  {
+    header: humanizeField('occlusion_status'),
+    accessorKey: 'occlusion_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).occlusion_status ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'decayed_teeth_count', label: humanizeField('decayed_teeth_count'), type: 'number' },
+  { key: 'missing_teeth_count', label: humanizeField('missing_teeth_count'), type: 'number' },
+  { key: 'filled_teeth_count', label: humanizeField('filled_teeth_count'), type: 'number' },
+  { key: 'odontogram_json', label: humanizeField('odontogram_json') },
+  { key: 'occlusion_status', label: humanizeField('occlusion_status') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  decayed_teeth_count: '',
+  missing_teeth_count: '',
+  filled_teeth_count: '',
+  odontogram_json: '',
+  occlusion_status: '',
+  notes: '',
+  examined_at: '',
+}
 
 export function DentalExaminationListPage() {
-  const { useList, remove } = useDentalExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDentalExaminationResource()
+  const title = humanizeModuleName('MedicalRecordDentalExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DentalExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-dental-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-dental-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<DentalExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.occlusion_status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

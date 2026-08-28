@@ -1,58 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useMedicationServiceLimitResource } from '../api'
+import type { MedicationServiceLimit } from '../types'
 
-const COLUMNS = ["id","item_id","guarantor_type","max_quantity_per_month","max_days_supply","is_active","created_at"] as const
+const columns: ColumnDef<MedicationServiceLimit, unknown>[] = [
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('guarantor_type'),
+    accessorKey: 'guarantor_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).guarantor_type ?? '—'),
+  },
+  {
+    header: humanizeField('max_quantity_per_month'),
+    accessorKey: 'max_quantity_per_month',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).max_quantity_per_month ?? '—'),
+  },
+  {
+    header: humanizeField('max_days_supply'),
+    accessorKey: 'max_days_supply',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).max_days_supply ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items', required: true },
+  { key: 'guarantor_type', label: humanizeField('guarantor_type') },
+  { key: 'max_quantity_per_month', label: humanizeField('max_quantity_per_month'), type: 'number', required: true },
+  { key: 'max_days_supply', label: humanizeField('max_days_supply'), type: 'number' },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  item_id: null,
+  guarantor_type: '',
+  max_quantity_per_month: '',
+  max_days_supply: '',
+  is_active: false,
+}
 
 export function MedicationServiceLimitListPage() {
-  const { useList, remove } = useMedicationServiceLimitResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useMedicationServiceLimitResource()
+  const title = humanizeModuleName('LayananMedicationServiceLimit')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">MedicationServiceLimit</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-medication-service-limit/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-medication-service-limit/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<MedicationServiceLimit>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.guarantor_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

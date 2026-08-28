@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePatientTransferSheetResource } from '../api'
+import type { PatientTransferSheet } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","from_ward_id","to_ward_id","transfer_reason","patient_condition","transferred_at","transferred_by","created_at","updated_at"] as const
+const columns: ColumnDef<PatientTransferSheet, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('from_ward_id'),
+    accessorKey: 'from_ward_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).from_ward_id ?? '—'),
+  },
+  {
+    header: humanizeField('to_ward_id'),
+    accessorKey: 'to_ward_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).to_ward_id ?? '—'),
+  },
+  {
+    header: humanizeField('transfer_reason'),
+    accessorKey: 'transfer_reason',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).transfer_reason ?? '—'),
+  },
+  {
+    header: humanizeField('patient_condition'),
+    accessorKey: 'patient_condition',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_condition ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true },
+  { key: 'from_ward_id', label: humanizeField('from_ward_id'), type: 'number' },
+  { key: 'to_ward_id', label: humanizeField('to_ward_id'), type: 'number' },
+  { key: 'transfer_reason', label: humanizeField('transfer_reason') },
+  { key: 'patient_condition', label: humanizeField('patient_condition') },
+  { key: 'transferred_at', label: humanizeField('transferred_at'), type: 'date' },
+  { key: 'transferred_by', label: humanizeField('transferred_by'), type: 'number' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  patient_id: null,
+  from_ward_id: '',
+  to_ward_id: '',
+  transfer_reason: '',
+  patient_condition: '',
+  transferred_at: '',
+  transferred_by: '',
+}
 
 export function PatientTransferSheetListPage() {
-  const { useList, remove } = usePatientTransferSheetResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePatientTransferSheetResource()
+  const title = humanizeModuleName('MedicalRecordPatientTransferSheet')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PatientTransferSheet</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-patient-transfer-sheet/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-patient-transfer-sheet/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PatientTransferSheet>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.transfer_reason ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

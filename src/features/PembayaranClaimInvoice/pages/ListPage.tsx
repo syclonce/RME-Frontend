@@ -1,58 +1,69 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useClaimInvoiceResource } from '../api'
+import type { ClaimInvoice } from '../types'
 
-const COLUMNS = ["id","claim_number","invoice_id","guarantor_id","claim_amount","verified_amount","submitted_at","status","rejection_reason","created_at","updated_at"] as const
+const columns: ColumnDef<ClaimInvoice, unknown>[] = [
+  {
+    header: humanizeField('claim_number'),
+    accessorKey: 'claim_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).claim_number ?? '—'),
+  },
+  {
+    header: humanizeField('invoice_id'),
+    accessorKey: 'invoice_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_id ?? '—'),
+  },
+  {
+    header: humanizeField('guarantor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/guarantors" id={(row.original as unknown as Record<string, unknown>).guarantor_id as number | null} />,
+  },
+  {
+    header: humanizeField('claim_amount'),
+    accessorKey: 'claim_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).claim_amount ?? '—'),
+  },
+  {
+    header: humanizeField('verified_amount'),
+    accessorKey: 'verified_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).verified_amount ?? '—'),
+  },
+  {
+    header: humanizeField('submitted_at'),
+    accessorKey: 'submitted_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).submitted_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'claim_number', label: humanizeField('claim_number') },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'guarantor_id', label: humanizeField('guarantor_id'), type: 'relation', relationEndpoint: '/guarantors' },
+  { key: 'claim_amount', label: humanizeField('claim_amount'), type: 'number', required: true },
+]
+
+const emptyForm = {
+  claim_number: '',
+  invoice_id: '',
+  guarantor_id: null,
+  claim_amount: '',
+}
 
 export function ClaimInvoiceListPage() {
-  const { useList, remove } = useClaimInvoiceResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useClaimInvoiceResource()
+  const title = humanizeModuleName('PembayaranClaimInvoice')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ClaimInvoice</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-claim-invoice/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-claim-invoice/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ClaimInvoice>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.claim_number ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useLinenItemResource } from '../api'
+import type { LinenItem } from '../types'
 
-const COLUMNS = ["id","linen_item_id","status","sent_at","received_at","quantity","created_at","updated_at"] as const
+const columns: ColumnDef<LinenItem, unknown>[] = [
+  {
+    header: humanizeField('linen_item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/linen-items" id={(row.original as unknown as Record<string, unknown>).linen_item_id as number | null} />,
+  },
+  {
+    header: humanizeField('status'),
+    accessorKey: 'status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).status ?? '—'),
+  },
+  {
+    header: humanizeField('sent_at'),
+    accessorKey: 'sent_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sent_at ?? '—'),
+  },
+  {
+    header: humanizeField('received_at'),
+    accessorKey: 'received_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).received_at ?? '—'),
+  },
+  {
+    header: humanizeField('quantity'),
+    accessorKey: 'quantity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).quantity ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'linen_item_id', label: humanizeField('linen_item_id'), type: 'relation', relationEndpoint: '/linen-items', required: true },
+  { key: 'status', label: humanizeField('status'), type: 'select', options: [{"value":"dikirim_londri","label":"Dikirim Londri"},{"value":"dicuci","label":"Dicuci"},{"value":"kembali_bersih","label":"Kembali Bersih"},{"value":"rusak_hilang","label":"Rusak Hilang"}] },
+  { key: 'sent_at', label: humanizeField('sent_at'), type: 'date' },
+  { key: 'quantity', label: humanizeField('quantity'), type: 'number' },
+]
+
+const emptyForm = {
+  linen_item_id: null,
+  status: '',
+  sent_at: '',
+  quantity: '',
+}
 
 export function LinenItemListPage() {
-  const { useList, remove } = useLinenItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLinenItemResource()
+  const title = humanizeModuleName('InventoryLinenTracking')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LinenItem</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-linen-tracking/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-linen-tracking/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<LinenItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

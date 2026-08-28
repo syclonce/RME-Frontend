@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useFamilyPlanningObstetricsResource } from '../api'
+import type { FamilyPlanningObstetrics } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","contraceptive_method","installation_date","removal_date","side_effects","action_taken","next_visit_date","created_at","updated_at"] as const
+const columns: ColumnDef<FamilyPlanningObstetrics, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('contraceptive_method'),
+    accessorKey: 'contraceptive_method',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).contraceptive_method ?? '—'),
+  },
+  {
+    header: humanizeField('installation_date'),
+    accessorKey: 'installation_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).installation_date ?? '—'),
+  },
+  {
+    header: humanizeField('removal_date'),
+    accessorKey: 'removal_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).removal_date ?? '—'),
+  },
+  {
+    header: humanizeField('side_effects'),
+    accessorKey: 'side_effects',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).side_effects ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true },
+  { key: 'contraceptive_method', label: humanizeField('contraceptive_method'), required: true },
+  { key: 'installation_date', label: humanizeField('installation_date'), type: 'date' },
+  { key: 'removal_date', label: humanizeField('removal_date'), type: 'date' },
+  { key: 'side_effects', label: humanizeField('side_effects') },
+  { key: 'action_taken', label: humanizeField('action_taken') },
+  { key: 'next_visit_date', label: humanizeField('next_visit_date'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  patient_id: null,
+  contraceptive_method: '',
+  installation_date: '',
+  removal_date: '',
+  side_effects: '',
+  action_taken: '',
+  next_visit_date: '',
+}
 
 export function FamilyPlanningObstetricsListPage() {
-  const { useList, remove } = useFamilyPlanningObstetricsResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useFamilyPlanningObstetricsResource()
+  const title = humanizeModuleName('MedicalRecordFamilyPlanningObstetrics')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">FamilyPlanningObstetrics</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-family-planning-obstetrics/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-family-planning-obstetrics/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<FamilyPlanningObstetrics>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.contraceptive_method ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

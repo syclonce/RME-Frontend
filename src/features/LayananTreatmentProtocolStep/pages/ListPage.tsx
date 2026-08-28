@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useTreatmentProtocolStepResource } from '../api'
+import type { TreatmentProtocolStep } from '../types'
 
-const COLUMNS = ["id","treatment_protocol_id","sequence","instruction","scheduled_at","status","created_at","updated_at"] as const
+const columns: ColumnDef<TreatmentProtocolStep, unknown>[] = [
+  {
+    header: humanizeField('treatment_protocol_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/treatment-protocols" id={(row.original as unknown as Record<string, unknown>).treatment_protocol_id as number | null} />,
+  },
+  {
+    header: humanizeField('sequence'),
+    accessorKey: 'sequence',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sequence ?? '—'),
+  },
+  {
+    header: humanizeField('instruction'),
+    accessorKey: 'instruction',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).instruction ?? '—'),
+  },
+  {
+    header: humanizeField('scheduled_at'),
+    accessorKey: 'scheduled_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).scheduled_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    accessorKey: 'status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).status ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'treatment_protocol_id', label: humanizeField('treatment_protocol_id'), type: 'relation', relationEndpoint: '/treatment-protocols', required: true },
+  { key: 'sequence', label: humanizeField('sequence'), type: 'number', required: true },
+  { key: 'instruction', label: humanizeField('instruction'), required: true },
+  { key: 'scheduled_at', label: humanizeField('scheduled_at'), type: 'date' },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  treatment_protocol_id: null,
+  sequence: '',
+  instruction: '',
+  scheduled_at: '',
+  status: '',
+}
 
 export function TreatmentProtocolStepListPage() {
-  const { useList, remove } = useTreatmentProtocolStepResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useTreatmentProtocolStepResource()
+  const title = humanizeModuleName('LayananTreatmentProtocolStep')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">TreatmentProtocolStep</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-treatment-protocol-step/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-treatment-protocol-step/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<TreatmentProtocolStep>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.instruction ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

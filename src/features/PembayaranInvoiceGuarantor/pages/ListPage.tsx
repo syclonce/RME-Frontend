@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useInvoiceGuarantorResource } from '../api'
+import type { InvoiceGuarantor } from '../types'
 
-const COLUMNS = ["id","invoice_id","guarantor_id","sequence","room_class_id","covered_amount","coverage_percentage","verification_status","verified_by","verified_at","notes","created_at","updated_at"] as const
+const columns: ColumnDef<InvoiceGuarantor, unknown>[] = [
+  {
+    header: humanizeField('invoice_id'),
+    accessorKey: 'invoice_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_id ?? '—'),
+  },
+  {
+    header: humanizeField('guarantor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/guarantors" id={(row.original as unknown as Record<string, unknown>).guarantor_id as number | null} />,
+  },
+  {
+    header: humanizeField('sequence'),
+    accessorKey: 'sequence',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sequence ?? '—'),
+  },
+  {
+    header: humanizeField('room_class_id'),
+    accessorKey: 'room_class_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).room_class_id ?? '—'),
+  },
+  {
+    header: humanizeField('covered_amount'),
+    accessorKey: 'covered_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).covered_amount ?? '—'),
+  },
+  {
+    header: humanizeField('coverage_percentage'),
+    accessorKey: 'coverage_percentage',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).coverage_percentage ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'guarantor_id', label: humanizeField('guarantor_id'), type: 'relation', relationEndpoint: '/guarantors', required: true },
+  { key: 'covered_amount', label: humanizeField('covered_amount'), type: 'number' },
+  { key: 'coverage_percentage', label: humanizeField('coverage_percentage'), type: 'number' },
+  { key: 'verification_status', label: humanizeField('verification_status') },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  invoice_id: '',
+  guarantor_id: null,
+  covered_amount: '',
+  coverage_percentage: '',
+  verification_status: '',
+  notes: '',
+}
 
 export function InvoiceGuarantorListPage() {
-  const { useList, remove } = useInvoiceGuarantorResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInvoiceGuarantorResource()
+  const title = humanizeModuleName('PembayaranInvoiceGuarantor')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InvoiceGuarantor</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-invoice-guarantor/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-invoice-guarantor/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<InvoiceGuarantor>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.verification_status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

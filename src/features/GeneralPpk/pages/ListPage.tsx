@@ -1,58 +1,97 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePpkResource } from '../api'
+import type { Ppk } from '../types'
 
-const COLUMNS = ["id","code","bpjs_code","type","ownership","jpk","name","class","address","rt","rw","postal_code","phone","fax","region_code","region_name","started_at","ended_at","is_active"] as const
+const columns: ColumnDef<Ppk, unknown>[] = [
+  {
+    header: humanizeField('code'),
+    accessorKey: 'code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).code ?? '—'),
+  },
+  {
+    header: humanizeField('bpjs_code'),
+    accessorKey: 'bpjs_code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).bpjs_code ?? '—'),
+  },
+  {
+    header: humanizeField('type'),
+    accessorKey: 'type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).type ?? '—'),
+  },
+  {
+    header: humanizeField('ownership'),
+    accessorKey: 'ownership',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ownership ?? '—'),
+  },
+  {
+    header: humanizeField('jpk'),
+    accessorKey: 'jpk',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).jpk ?? '—'),
+  },
+  {
+    header: humanizeField('name'),
+    accessorKey: 'name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).name ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'code', label: humanizeField('code'), section: 'Detail' },
+  { key: 'bpjs_code', label: humanizeField('bpjs_code'), section: 'Detail' },
+  { key: 'type', label: humanizeField('type'), type: 'number', section: 'Detail' },
+  { key: 'ownership', label: humanizeField('ownership'), type: 'number', section: 'Detail' },
+  { key: 'jpk', label: humanizeField('jpk'), type: 'number', section: 'Detail' },
+  { key: 'name', label: humanizeField('name'), required: true, section: 'Detail' },
+  { key: 'class', label: humanizeField('class'), required: true, section: 'Detail' },
+  { key: 'address', label: humanizeField('address'), required: true, section: 'Detail' },
+  { key: 'rt', label: humanizeField('rt'), section: 'Detail' },
+  { key: 'rw', label: humanizeField('rw'), section: 'Detail Tambahan' },
+  { key: 'postal_code', label: humanizeField('postal_code'), section: 'Detail Tambahan' },
+  { key: 'phone', label: humanizeField('phone'), section: 'Detail Tambahan' },
+  { key: 'fax', label: humanizeField('fax'), required: true, section: 'Detail Tambahan' },
+  { key: 'region_code', label: humanizeField('region_code'), section: 'Detail Tambahan' },
+  { key: 'region_name', label: humanizeField('region_name'), required: true, section: 'Detail Tambahan' },
+  { key: 'started_at', label: humanizeField('started_at'), type: 'date', section: 'Detail Tambahan' },
+  { key: 'ended_at', label: humanizeField('ended_at'), type: 'date', section: 'Detail Tambahan' },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox', section: 'Detail Tambahan' },
+]
+
+const emptyForm = {
+  code: '',
+  bpjs_code: '',
+  type: '',
+  ownership: '',
+  jpk: '',
+  name: '',
+  class: '',
+  address: '',
+  rt: '',
+  rw: '',
+  postal_code: '',
+  phone: '',
+  fax: '',
+  region_code: '',
+  region_name: '',
+  started_at: '',
+  ended_at: '',
+  is_active: false,
+}
 
 export function PpkListPage() {
-  const { useList, remove } = usePpkResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePpkResource()
+  const title = humanizeModuleName('GeneralPpk')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Ppk</h1>
-        <Button asChild>
-          <Link to="/modul/general-ppk/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-ppk/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<Ppk>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

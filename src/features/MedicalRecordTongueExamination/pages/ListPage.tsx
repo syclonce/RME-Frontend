@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useTongueExaminationResource } from '../api'
+import type { TongueExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","color","coating","moisture","lesions","movement","findings","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<TongueExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('color'),
+    accessorKey: 'color',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).color ?? '—'),
+  },
+  {
+    header: humanizeField('coating'),
+    accessorKey: 'coating',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).coating ?? '—'),
+  },
+  {
+    header: humanizeField('moisture'),
+    accessorKey: 'moisture',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).moisture ?? '—'),
+  },
+  {
+    header: humanizeField('lesions'),
+    accessorKey: 'lesions',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).lesions ?? '—'),
+  },
+  {
+    header: humanizeField('movement'),
+    accessorKey: 'movement',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).movement ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'color', label: humanizeField('color') },
+  { key: 'coating', label: humanizeField('coating') },
+  { key: 'moisture', label: humanizeField('moisture') },
+  { key: 'lesions', label: humanizeField('lesions') },
+  { key: 'movement', label: humanizeField('movement') },
+  { key: 'findings', label: humanizeField('findings') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  color: '',
+  coating: '',
+  moisture: '',
+  lesions: '',
+  movement: '',
+  findings: '',
+  examined_at: '',
+}
 
 export function TongueExaminationListPage() {
-  const { useList, remove } = useTongueExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useTongueExaminationResource()
+  const title = humanizeModuleName('MedicalRecordTongueExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">TongueExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-tongue-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-tongue-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<TongueExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.color ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

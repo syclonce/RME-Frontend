@@ -1,58 +1,52 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useInventoryItemSerialNumberResource } from '../api'
+import type { InventoryItemSerialNumber } from '../types'
 
-const COLUMNS = ["id","ward_item_stock_id","serial_number","expiry_date","created_at"] as const
+const columns: ColumnDef<InventoryItemSerialNumber, unknown>[] = [
+  {
+    header: humanizeField('ward_item_stock_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/inventorywarditemstocks" id={(row.original as unknown as Record<string, unknown>).ward_item_stock_id as number | null} />,
+  },
+  {
+    header: humanizeField('serial_number'),
+    accessorKey: 'serial_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).serial_number ?? '—'),
+  },
+  {
+    header: humanizeField('expiry_date'),
+    accessorKey: 'expiry_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).expiry_date ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'ward_item_stock_id', label: humanizeField('ward_item_stock_id'), type: 'relation', relationEndpoint: '/inventorywarditemstocks', required: true },
+  { key: 'serial_number', label: humanizeField('serial_number'), required: true },
+  { key: 'expiry_date', label: humanizeField('expiry_date'), type: 'date' },
+]
+
+const emptyForm = {
+  ward_item_stock_id: null,
+  serial_number: '',
+  expiry_date: '',
+}
 
 export function InventoryItemSerialNumberListPage() {
-  const { useList, remove } = useInventoryItemSerialNumberResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInventoryItemSerialNumberResource()
+  const title = humanizeModuleName('InventoryItemSerialNumber')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InventoryItemSerialNumber</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-item-serial-number/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-item-serial-number/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<InventoryItemSerialNumber>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.serial_number ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

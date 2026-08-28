@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useRavenTestExaminationResource } from '../api'
+import type { RavenTestExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","test_form","raw_score","percentile","iq_grade","examiner_notes","tested_at","created_at","updated_at"] as const
+const columns: ColumnDef<RavenTestExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('test_form'),
+    accessorKey: 'test_form',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).test_form ?? '—'),
+  },
+  {
+    header: humanizeField('raw_score'),
+    accessorKey: 'raw_score',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).raw_score ?? '—'),
+  },
+  {
+    header: humanizeField('percentile'),
+    accessorKey: 'percentile',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).percentile ?? '—'),
+  },
+  {
+    header: humanizeField('iq_grade'),
+    accessorKey: 'iq_grade',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).iq_grade ?? '—'),
+  },
+  {
+    header: humanizeField('examiner_notes'),
+    accessorKey: 'examiner_notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examiner_notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'test_form', label: humanizeField('test_form'), type: 'select', options: [{"value":"CPM","label":"CPM"},{"value":"SPM","label":"SPM"},{"value":"APM","label":"APM"}] },
+  { key: 'raw_score', label: humanizeField('raw_score'), type: 'number' },
+  { key: 'percentile', label: humanizeField('percentile'), type: 'number' },
+  { key: 'iq_grade', label: humanizeField('iq_grade') },
+  { key: 'examiner_notes', label: humanizeField('examiner_notes') },
+  { key: 'tested_at', label: humanizeField('tested_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  test_form: '',
+  raw_score: '',
+  percentile: '',
+  iq_grade: '',
+  examiner_notes: '',
+  tested_at: '',
+}
 
 export function RavenTestExaminationListPage() {
-  const { useList, remove } = useRavenTestExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRavenTestExaminationResource()
+  const title = humanizeModuleName('MedicalRecordRavenTestExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RavenTestExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-raven-test-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-raven-test-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<RavenTestExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.test_form ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

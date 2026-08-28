@@ -1,58 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePackageInvoiceItemResource } from '../api'
+import type { PackageInvoiceItem } from '../types'
 
-const COLUMNS = ["id","invoice_id","package_id","quantity","unit_price","subtotal","notes","created_at","updated_at"] as const
+const columns: ColumnDef<PackageInvoiceItem, unknown>[] = [
+  {
+    header: humanizeField('invoice_id'),
+    accessorKey: 'invoice_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_id ?? '—'),
+  },
+  {
+    header: humanizeField('package_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/packages" id={(row.original as unknown as Record<string, unknown>).package_id as number | null} />,
+  },
+  {
+    header: humanizeField('quantity'),
+    accessorKey: 'quantity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).quantity ?? '—'),
+  },
+  {
+    header: humanizeField('unit_price'),
+    accessorKey: 'unit_price',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).unit_price ?? '—'),
+  },
+  {
+    header: humanizeField('subtotal'),
+    accessorKey: 'subtotal',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).subtotal ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'package_id', label: humanizeField('package_id'), type: 'relation', relationEndpoint: '/packages', required: true },
+  { key: 'quantity', label: humanizeField('quantity'), type: 'number' },
+  { key: 'unit_price', label: humanizeField('unit_price'), type: 'number', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  invoice_id: '',
+  package_id: null,
+  quantity: '',
+  unit_price: '',
+  notes: '',
+}
 
 export function PackageInvoiceItemListPage() {
-  const { useList, remove } = usePackageInvoiceItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePackageInvoiceItemResource()
+  const title = humanizeModuleName('PembayaranPackageInvoiceItem')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PackageInvoiceItem</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-package-invoice-item/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-package-invoice-item/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PackageInvoiceItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

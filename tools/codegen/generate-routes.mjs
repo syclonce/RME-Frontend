@@ -22,10 +22,22 @@ const readonlyFiles = new Set(readonlyManifest.map((e) => `${e.module}/${e.fileN
 // otomatis dari metadata Laravel yang dibaca extract-metadata.mjs.
 const PARAM_OVERRIDES = { AplikasiSetting: 'key' }
 
+// Modul yang sudah punya rute tangan di src/routes/manual.tsx (mis. Grup -
+// alur referral lintas cabang, bukan CRUD sederhana) TIDAK boleh ikut
+// discan di sini juga, walau folder src/features/<Modul>/pages/ListPage.tsx
+// masih ada (peninggalan generator lama) - kalau tidak, dua rute dengan path
+// sama terdaftar sekaligus (satu dari sini, satu dari manual.tsx), yang
+// bikin React "duplicate key" warning di sidebar AppLayout.
+const manualTsxPath = path.resolve(here, '../../src/routes/manual.tsx')
+const manualModules = new Set(
+  [...readFileSync(manualTsxPath, 'utf8').matchAll(/module: '([^']+)'/g)].map((m) => m[1]),
+)
+
 // Bentuk #1 (CRUD): pages/ListPage.tsx sebagai file utama, punya FormPage.tsx pendamping.
 const crudEntries = modules
   .filter((m) => existsSync(path.join(FEATURES_ROOT, m, 'pages/ListPage.tsx')))
   .filter((m) => !readonlyFiles.has(`${m}/ListPage.tsx`))
+  .filter((m) => !manualModules.has(m))
   .map((m) => ({ module: m, slug: toKebab(m), hasForm: existsSync(path.join(FEATURES_ROOT, m, 'pages/FormPage.tsx')) }))
 
 // Bentuk #6 (read-only): satu atau lebih ListPage*.tsx per modul, dari manifest generate-readonly.mjs.

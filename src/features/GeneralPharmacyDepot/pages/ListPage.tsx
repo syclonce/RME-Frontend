@@ -1,58 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePharmacyDepotResource } from '../api'
+import type { PharmacyDepot } from '../types'
 
-const COLUMNS = ["id","code","name","ward_id","phone","is_active","created_at"] as const
+const columns: ColumnDef<PharmacyDepot, unknown>[] = [
+  {
+    header: humanizeField('code'),
+    accessorKey: 'code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).code ?? '—'),
+  },
+  {
+    header: humanizeField('name'),
+    accessorKey: 'name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).name ?? '—'),
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('phone'),
+    accessorKey: 'phone',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).phone ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'code', label: humanizeField('code'), required: true },
+  { key: 'name', label: humanizeField('name'), required: true },
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards' },
+  { key: 'phone', label: humanizeField('phone') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  code: '',
+  name: '',
+  ward_id: null,
+  phone: '',
+  is_active: false,
+}
 
 export function PharmacyDepotListPage() {
-  const { useList, remove } = usePharmacyDepotResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePharmacyDepotResource()
+  const title = humanizeModuleName('GeneralPharmacyDepot')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PharmacyDepot</h1>
-        <Button asChild>
-          <Link to="/modul/general-pharmacy-depot/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-pharmacy-depot/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PharmacyDepot>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

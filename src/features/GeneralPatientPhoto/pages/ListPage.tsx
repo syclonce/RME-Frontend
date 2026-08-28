@@ -1,58 +1,52 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useGeneralPatientPhotoResource } from '../api'
+import type { GeneralPatientPhoto } from '../types'
 
-const COLUMNS = ["id","patient_id","file_path","taken_at"] as const
+const columns: ColumnDef<GeneralPatientPhoto, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('file_path'),
+    accessorKey: 'file_path',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).file_path ?? '—'),
+  },
+  {
+    header: humanizeField('taken_at'),
+    accessorKey: 'taken_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).taken_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'file_path', label: humanizeField('file_path'), required: true },
+  { key: 'taken_at', label: humanizeField('taken_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  patient_id: '',
+  file_path: '',
+  taken_at: '',
+}
 
 export function GeneralPatientPhotoListPage() {
-  const { useList, remove } = useGeneralPatientPhotoResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGeneralPatientPhotoResource()
+  const title = humanizeModuleName('GeneralPatientPhoto')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GeneralPatientPhoto</h1>
-        <Button asChild>
-          <Link to="/modul/general-patient-photo/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-patient-photo/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<GeneralPatientPhoto>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.file_path ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -5,14 +5,15 @@ interface RelationSelectProps {
   endpoint: string
   value: number | null
   onChange: (value: number | null) => void
+  disabled?: boolean
 }
 
-export function RelationSelect({ endpoint, value, onChange }: RelationSelectProps) {
+export function RelationSelect({ endpoint, value, onChange, disabled }: RelationSelectProps) {
   const { data: options, isLoading } = useOptions(endpoint)
 
   return (
-    <Select value={value !== null ? String(value) : ''} onValueChange={(v) => onChange(v ? Number(v) : null)}>
-      <SelectTrigger>
+    <Select value={value !== null ? String(value) : ''} onValueChange={(v) => onChange(v ? Number(v) : null)} disabled={disabled}>
+      <SelectTrigger className="w-full">
         <SelectValue placeholder={isLoading ? 'Memuat...' : 'Pilih...'} />
       </SelectTrigger>
       <SelectContent>

@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePatientComplaintResource } from '../api'
+import type { PatientComplaint } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","category","description","submitted_at"] as const
+const columns: ColumnDef<PatientComplaint, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('category'),
+    accessorKey: 'category',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).category ?? '—'),
+  },
+  {
+    header: humanizeField('description'),
+    accessorKey: 'description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).description ?? '—'),
+  },
+  {
+    header: humanizeField('submitted_at'),
+    accessorKey: 'submitted_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).submitted_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'category', label: humanizeField('category'), required: true },
+  { key: 'description', label: humanizeField('description'), required: true },
+  { key: 'submitted_at', label: humanizeField('submitted_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  category: '',
+  description: '',
+  submitted_at: '',
+}
 
 export function PatientComplaintListPage() {
-  const { useList, remove } = usePatientComplaintResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePatientComplaintResource()
+  const title = humanizeModuleName('LayananPatientComplaint')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PatientComplaint</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-patient-complaint/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-patient-complaint/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PatientComplaint>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.category ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

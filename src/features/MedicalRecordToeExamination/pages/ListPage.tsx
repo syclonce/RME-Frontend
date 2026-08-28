@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useToeExaminationResource } from '../api'
+import type { ToeExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","foot_side","deformity","ulceration","capillary_refill_seconds","sensation_monofilament","notes","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<ToeExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('foot_side'),
+    accessorKey: 'foot_side',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).foot_side ?? '—'),
+  },
+  {
+    header: humanizeField('deformity'),
+    accessorKey: 'deformity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).deformity ?? '—'),
+  },
+  {
+    header: humanizeField('ulceration'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).ulceration ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('capillary_refill_seconds'),
+    accessorKey: 'capillary_refill_seconds',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).capillary_refill_seconds ?? '—'),
+  },
+  {
+    header: humanizeField('sensation_monofilament'),
+    accessorKey: 'sensation_monofilament',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sensation_monofilament ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'foot_side', label: humanizeField('foot_side') },
+  { key: 'deformity', label: humanizeField('deformity') },
+  { key: 'ulceration', label: humanizeField('ulceration'), type: 'checkbox' },
+  { key: 'capillary_refill_seconds', label: humanizeField('capillary_refill_seconds'), type: 'number' },
+  { key: 'sensation_monofilament', label: humanizeField('sensation_monofilament') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  foot_side: '',
+  deformity: '',
+  ulceration: false,
+  capillary_refill_seconds: '',
+  sensation_monofilament: '',
+  notes: '',
+  examined_at: '',
+}
 
 export function ToeExaminationListPage() {
-  const { useList, remove } = useToeExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useToeExaminationResource()
+  const title = humanizeModuleName('MedicalRecordToeExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ToeExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-toe-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-toe-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ToeExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.foot_side ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

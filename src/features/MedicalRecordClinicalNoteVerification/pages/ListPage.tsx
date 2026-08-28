@@ -1,58 +1,70 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useClinicalNoteVerificationResource } from '../api'
+import type { ClinicalNoteVerification } from '../types'
 
-const COLUMNS = ["id","clinical_note_id","verifier_doctor_id","verification_status","verified_at","notes","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<ClinicalNoteVerification, unknown>[] = [
+  {
+    header: humanizeField('clinical_note_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/clinical-notes" id={(row.original as unknown as Record<string, unknown>).clinical_note_id as number | null} />,
+  },
+  {
+    header: humanizeField('verifier_doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).verifier_doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('verification_status'),
+    accessorKey: 'verification_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).verification_status ?? '—'),
+  },
+  {
+    header: humanizeField('verified_at'),
+    accessorKey: 'verified_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).verified_at ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'clinical_note_id', label: humanizeField('clinical_note_id'), type: 'relation', relationEndpoint: '/clinical-notes', required: true },
+  { key: 'verifier_doctor_id', label: humanizeField('verifier_doctor_id'), type: 'relation', relationEndpoint: '/doctors', required: true },
+  { key: 'verification_status', label: humanizeField('verification_status') },
+  { key: 'verified_at', label: humanizeField('verified_at'), type: 'date', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  clinical_note_id: null,
+  verifier_doctor_id: null,
+  verification_status: '',
+  verified_at: '',
+  notes: '',
+}
 
 export function ClinicalNoteVerificationListPage() {
-  const { useList, remove } = useClinicalNoteVerificationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useClinicalNoteVerificationResource()
+  const title = humanizeModuleName('MedicalRecordClinicalNoteVerification')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ClinicalNoteVerification</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-clinical-note-verification/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-clinical-note-verification/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ClinicalNoteVerification>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.verification_status ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

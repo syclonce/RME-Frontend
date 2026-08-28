@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useLegJointExaminationResource } from '../api'
+import type { LegJointExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","joint","range_of_motion","swelling","tenderness","deformity","findings","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<LegJointExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('joint'),
+    accessorKey: 'joint',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).joint ?? '—'),
+  },
+  {
+    header: humanizeField('range_of_motion'),
+    accessorKey: 'range_of_motion',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).range_of_motion ?? '—'),
+  },
+  {
+    header: humanizeField('swelling'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).swelling ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('tenderness'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).tenderness ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('deformity'),
+    accessorKey: 'deformity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).deformity ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'joint', label: humanizeField('joint'), type: 'select', options: [{"value":"hip","label":"Hip"},{"value":"knee","label":"Knee"},{"value":"ankle","label":"Ankle"},{"value":"toe","label":"Toe"}] },
+  { key: 'range_of_motion', label: humanizeField('range_of_motion') },
+  { key: 'swelling', label: humanizeField('swelling'), type: 'checkbox' },
+  { key: 'tenderness', label: humanizeField('tenderness'), type: 'checkbox' },
+  { key: 'deformity', label: humanizeField('deformity') },
+  { key: 'findings', label: humanizeField('findings') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  joint: '',
+  range_of_motion: '',
+  swelling: false,
+  tenderness: false,
+  deformity: '',
+  findings: '',
+  examined_at: '',
+}
 
 export function LegJointExaminationListPage() {
-  const { useList, remove } = useLegJointExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLegJointExaminationResource()
+  const title = humanizeModuleName('MedicalRecordLegJointExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LegJointExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-leg-joint-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-leg-joint-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<LegJointExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.joint ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

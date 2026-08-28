@@ -1,58 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useCashierResource } from '../api'
+import type { Cashier } from '../types'
 
-const COLUMNS = ["id","employee_id","cashier_code","shift","is_active"] as const
+const columns: ColumnDef<Cashier, unknown>[] = [
+  {
+    header: humanizeField('employee_id'),
+    accessorKey: 'employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('cashier_code'),
+    accessorKey: 'cashier_code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cashier_code ?? '—'),
+  },
+  {
+    header: humanizeField('shift'),
+    accessorKey: 'shift',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).shift ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'cashier_code', label: humanizeField('cashier_code'), required: true },
+  { key: 'shift', label: humanizeField('shift'), required: true },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  employee_id: '',
+  cashier_code: '',
+  shift: '',
+  is_active: false,
+}
 
 export function CashierListPage() {
-  const { useList, remove } = useCashierResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useCashierResource()
+  const title = humanizeModuleName('PembayaranCashier')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Cashier</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-cashier/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-cashier/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<Cashier>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.cashier_code ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

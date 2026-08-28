@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useEarExaminationResource } from '../api'
+import type { EarExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","side","otoscopy","tympanic_membrane","hearing_test_result","discharge","findings","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<EarExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('side'),
+    accessorKey: 'side',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).side ?? '—'),
+  },
+  {
+    header: humanizeField('otoscopy'),
+    accessorKey: 'otoscopy',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).otoscopy ?? '—'),
+  },
+  {
+    header: humanizeField('tympanic_membrane'),
+    accessorKey: 'tympanic_membrane',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).tympanic_membrane ?? '—'),
+  },
+  {
+    header: humanizeField('hearing_test_result'),
+    accessorKey: 'hearing_test_result',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).hearing_test_result ?? '—'),
+  },
+  {
+    header: humanizeField('discharge'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).discharge ? 'Ya' : 'Tidak'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'side', label: humanizeField('side'), type: 'select', options: [{"value":"left","label":"Left"},{"value":"right","label":"Right"},{"value":"bilateral","label":"Bilateral"}] },
+  { key: 'otoscopy', label: humanizeField('otoscopy') },
+  { key: 'tympanic_membrane', label: humanizeField('tympanic_membrane') },
+  { key: 'hearing_test_result', label: humanizeField('hearing_test_result') },
+  { key: 'discharge', label: humanizeField('discharge'), type: 'checkbox' },
+  { key: 'findings', label: humanizeField('findings') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  side: '',
+  otoscopy: '',
+  tympanic_membrane: '',
+  hearing_test_result: '',
+  discharge: false,
+  findings: '',
+  examined_at: '',
+}
 
 export function EarExaminationListPage() {
-  const { useList, remove } = useEarExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useEarExaminationResource()
+  const title = humanizeModuleName('MedicalRecordEarExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">EarExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-ear-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-ear-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<EarExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.side ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

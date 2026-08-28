@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useCoughAssessmentResource } from '../api'
+import type { CoughAssessment } from '../types'
 
-const COLUMNS = ["id","visit_id","has_cough","duration_weeks","cough_type","other_symptoms","is_referred_tb_screening","assessed_by","assessed_at","created_at","updated_at"] as const
+const columns: ColumnDef<CoughAssessment, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('has_cough'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).has_cough ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('duration_weeks'),
+    accessorKey: 'duration_weeks',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).duration_weeks ?? '—'),
+  },
+  {
+    header: humanizeField('cough_type'),
+    accessorKey: 'cough_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cough_type ?? '—'),
+  },
+  {
+    header: humanizeField('other_symptoms'),
+    accessorKey: 'other_symptoms',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).other_symptoms ?? '—'),
+  },
+  {
+    header: humanizeField('is_referred_tb_screening'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_referred_tb_screening ? 'Ya' : 'Tidak'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'has_cough', label: humanizeField('has_cough'), type: 'checkbox' },
+  { key: 'duration_weeks', label: humanizeField('duration_weeks'), type: 'number' },
+  { key: 'cough_type', label: humanizeField('cough_type') },
+  { key: 'other_symptoms', label: humanizeField('other_symptoms') },
+  { key: 'is_referred_tb_screening', label: humanizeField('is_referred_tb_screening'), type: 'checkbox' },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  has_cough: false,
+  duration_weeks: '',
+  cough_type: '',
+  other_symptoms: '',
+  is_referred_tb_screening: false,
+  assessed_by: '',
+  assessed_at: '',
+}
 
 export function CoughAssessmentListPage() {
-  const { useList, remove } = useCoughAssessmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useCoughAssessmentResource()
+  const title = humanizeModuleName('MedicalRecordCoughAssessment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">CoughAssessment</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-cough-assessment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-cough-assessment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<CoughAssessment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.cough_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useInventoryPharmacyPackageResource } from '../api'
+import type { InventoryPharmacyPackage } from '../types'
 
-const COLUMNS = ["id","package_code","name","pharmacy_service_room_id","category","price","description","is_active","created_at","updated_at"] as const
+const columns: ColumnDef<InventoryPharmacyPackage, unknown>[] = [
+  {
+    header: humanizeField('package_code'),
+    accessorKey: 'package_code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).package_code ?? '—'),
+  },
+  {
+    header: humanizeField('name'),
+    accessorKey: 'name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).name ?? '—'),
+  },
+  {
+    header: humanizeField('pharmacy_service_room_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/pharmacy-service-rooms" id={(row.original as unknown as Record<string, unknown>).pharmacy_service_room_id as number | null} />,
+  },
+  {
+    header: humanizeField('category'),
+    accessorKey: 'category',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).category ?? '—'),
+  },
+  {
+    header: humanizeField('price'),
+    accessorKey: 'price',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).price ?? '—'),
+  },
+  {
+    header: humanizeField('description'),
+    accessorKey: 'description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).description ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'package_code', label: humanizeField('package_code'), required: true },
+  { key: 'name', label: humanizeField('name'), required: true },
+  { key: 'pharmacy_service_room_id', label: humanizeField('pharmacy_service_room_id'), type: 'relation', relationEndpoint: '/pharmacy-service-rooms' },
+  { key: 'category', label: humanizeField('category'), type: 'select', required: true, options: [{"value":"obat","label":"Obat"},{"value":"alkes","label":"Alkes"},{"value":"campuran","label":"Campuran"}] },
+  { key: 'price', label: humanizeField('price'), type: 'number', required: true },
+  { key: 'description', label: humanizeField('description') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  package_code: '',
+  name: '',
+  pharmacy_service_room_id: null,
+  category: '',
+  price: '',
+  description: '',
+  is_active: false,
+}
 
 export function InventoryPharmacyPackageListPage() {
-  const { useList, remove } = useInventoryPharmacyPackageResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInventoryPharmacyPackageResource()
+  const title = humanizeModuleName('InventoryPharmacyPackage')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InventoryPharmacyPackage</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-pharmacy-package/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-pharmacy-package/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<InventoryPharmacyPackage>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

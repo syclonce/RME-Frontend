@@ -1,58 +1,79 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useLabReferenceValueResource } from '../api'
+import type { LabReferenceValue } from '../types'
 
-const COLUMNS = ["id","lab_service_parameter_id","gender","min_age","max_age","min_value","max_value","unit","note","is_active"] as const
+const columns: ColumnDef<LabReferenceValue, unknown>[] = [
+  {
+    header: humanizeField('lab_service_parameter_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/lab-service-parameters" id={(row.original as unknown as Record<string, unknown>).lab_service_parameter_id as number | null} />,
+  },
+  {
+    header: humanizeField('gender'),
+    accessorKey: 'gender',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gender ?? '—'),
+  },
+  {
+    header: humanizeField('min_age'),
+    accessorKey: 'min_age',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).min_age ?? '—'),
+  },
+  {
+    header: humanizeField('max_age'),
+    accessorKey: 'max_age',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).max_age ?? '—'),
+  },
+  {
+    header: humanizeField('min_value'),
+    accessorKey: 'min_value',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).min_value ?? '—'),
+  },
+  {
+    header: humanizeField('max_value'),
+    accessorKey: 'max_value',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).max_value ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'lab_service_parameter_id', label: humanizeField('lab_service_parameter_id'), type: 'relation', relationEndpoint: '/lab-service-parameters', required: true },
+  { key: 'gender', label: humanizeField('gender'), type: 'select', options: [{"value":"male","label":"Male"},{"value":"female","label":"Female"},{"value":"all","label":"All"}] },
+  { key: 'min_age', label: humanizeField('min_age'), type: 'number' },
+  { key: 'max_age', label: humanizeField('max_age'), type: 'number' },
+  { key: 'min_value', label: humanizeField('min_value'), type: 'number' },
+  { key: 'max_value', label: humanizeField('max_value'), type: 'number' },
+  { key: 'unit', label: humanizeField('unit') },
+  { key: 'note', label: humanizeField('note') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  lab_service_parameter_id: null,
+  gender: '',
+  min_age: '',
+  max_age: '',
+  min_value: '',
+  max_value: '',
+  unit: '',
+  note: '',
+  is_active: false,
+}
 
 export function LabReferenceValueListPage() {
-  const { useList, remove } = useLabReferenceValueResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLabReferenceValueResource()
+  const title = humanizeModuleName('GeneralLabReferenceValue')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LabReferenceValue</h1>
-        <Button asChild>
-          <Link to="/modul/general-lab-reference-value/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-lab-reference-value/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<LabReferenceValue>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.gender ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

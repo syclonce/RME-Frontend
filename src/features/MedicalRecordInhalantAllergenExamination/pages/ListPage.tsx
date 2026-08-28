@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useInhalantAllergenExaminationResource } from '../api'
+import type { InhalantAllergenExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","allergen_name","reaction_grade","wheal_diameter_mm","erythema_diameter_mm","interpretation","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<InhalantAllergenExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('allergen_name'),
+    accessorKey: 'allergen_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).allergen_name ?? '—'),
+  },
+  {
+    header: humanizeField('reaction_grade'),
+    accessorKey: 'reaction_grade',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reaction_grade ?? '—'),
+  },
+  {
+    header: humanizeField('wheal_diameter_mm'),
+    accessorKey: 'wheal_diameter_mm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).wheal_diameter_mm ?? '—'),
+  },
+  {
+    header: humanizeField('erythema_diameter_mm'),
+    accessorKey: 'erythema_diameter_mm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).erythema_diameter_mm ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true },
+  { key: 'allergen_name', label: humanizeField('allergen_name'), required: true },
+  { key: 'reaction_grade', label: humanizeField('reaction_grade') },
+  { key: 'wheal_diameter_mm', label: humanizeField('wheal_diameter_mm'), type: 'number' },
+  { key: 'erythema_diameter_mm', label: humanizeField('erythema_diameter_mm'), type: 'number' },
+  { key: 'interpretation', label: humanizeField('interpretation') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  patient_id: null,
+  allergen_name: '',
+  reaction_grade: '',
+  wheal_diameter_mm: '',
+  erythema_diameter_mm: '',
+  interpretation: '',
+  examined_at: '',
+}
 
 export function InhalantAllergenExaminationListPage() {
-  const { useList, remove } = useInhalantAllergenExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInhalantAllergenExaminationResource()
+  const title = humanizeModuleName('MedicalRecordInhalantAllergenExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InhalantAllergenExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-inhalant-allergen-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-inhalant-allergen-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<InhalantAllergenExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.allergen_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

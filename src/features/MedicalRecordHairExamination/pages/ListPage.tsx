@@ -1,58 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useHairExaminationResource } from '../api'
+import type { HairExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","distribution","texture","color","hair_loss","scalp_condition","findings","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<HairExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('distribution'),
+    accessorKey: 'distribution',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).distribution ?? '—'),
+  },
+  {
+    header: humanizeField('texture'),
+    accessorKey: 'texture',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).texture ?? '—'),
+  },
+  {
+    header: humanizeField('color'),
+    accessorKey: 'color',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).color ?? '—'),
+  },
+  {
+    header: humanizeField('hair_loss'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).hair_loss ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('scalp_condition'),
+    accessorKey: 'scalp_condition',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).scalp_condition ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'distribution', label: humanizeField('distribution') },
+  { key: 'texture', label: humanizeField('texture') },
+  { key: 'color', label: humanizeField('color') },
+  { key: 'hair_loss', label: humanizeField('hair_loss'), type: 'checkbox' },
+  { key: 'scalp_condition', label: humanizeField('scalp_condition') },
+  { key: 'findings', label: humanizeField('findings') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  distribution: '',
+  texture: '',
+  color: '',
+  hair_loss: false,
+  scalp_condition: '',
+  findings: '',
+  examined_at: '',
+}
 
 export function HairExaminationListPage() {
-  const { useList, remove } = useHairExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useHairExaminationResource()
+  const title = humanizeModuleName('MedicalRecordHairExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">HairExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-hair-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-hair-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<HairExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.distribution ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

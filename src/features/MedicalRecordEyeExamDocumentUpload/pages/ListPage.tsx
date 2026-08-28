@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useEyeExamDocumentUploadResource } from '../api'
+import type { EyeExamDocumentUpload } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","doctor_id","exam_date","file_path","eye_side","findings","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<EyeExamDocumentUpload, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('doctor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+  },
+  {
+    header: humanizeField('exam_date'),
+    accessorKey: 'exam_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).exam_date ?? '—'),
+  },
+  {
+    header: humanizeField('file_path'),
+    accessorKey: 'file_path',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).file_path ?? '—'),
+  },
+  {
+    header: humanizeField('eye_side'),
+    accessorKey: 'eye_side',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).eye_side ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors' },
+  { key: 'exam_date', label: humanizeField('exam_date'), type: 'date', required: true },
+  { key: 'file_path', label: humanizeField('file_path'), required: true },
+  { key: 'eye_side', label: humanizeField('eye_side') },
+  { key: 'findings', label: humanizeField('findings') },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  doctor_id: null,
+  exam_date: '',
+  file_path: '',
+  eye_side: '',
+  findings: '',
+}
 
 export function EyeExamDocumentUploadListPage() {
-  const { useList, remove } = useEyeExamDocumentUploadResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useEyeExamDocumentUploadResource()
+  const title = humanizeModuleName('MedicalRecordEyeExamDocumentUpload')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">EyeExamDocumentUpload</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-eye-exam-document-upload/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-eye-exam-document-upload/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<EyeExamDocumentUpload>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.file_path ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

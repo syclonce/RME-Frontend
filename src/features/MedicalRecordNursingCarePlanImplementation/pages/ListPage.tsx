@@ -1,58 +1,66 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useNursingCarePlanImplementationResource } from '../api'
+import type { NursingCarePlanImplementation } from '../types'
 
-const COLUMNS = ["id","nursing_care_plan_id","action_taken","performed_by","performed_at","evaluation","created_at","updated_at"] as const
+const columns: ColumnDef<NursingCarePlanImplementation, unknown>[] = [
+  {
+    header: humanizeField('nursing_care_plan_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/nursing-care-plans" id={(row.original as unknown as Record<string, unknown>).nursing_care_plan_id as number | null} />,
+  },
+  {
+    header: humanizeField('action_taken'),
+    accessorKey: 'action_taken',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).action_taken ?? '—'),
+  },
+  {
+    header: humanizeField('performed_by'),
+    accessorKey: 'performed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_by ?? '—'),
+  },
+  {
+    header: humanizeField('performed_at'),
+    accessorKey: 'performed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_at ?? '—'),
+  },
+  {
+    header: humanizeField('evaluation'),
+    accessorKey: 'evaluation',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).evaluation ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'nursing_care_plan_id', label: humanizeField('nursing_care_plan_id'), type: 'relation', relationEndpoint: '/nursing-care-plans', required: true },
+  { key: 'action_taken', label: humanizeField('action_taken') },
+  { key: 'performed_by', label: humanizeField('performed_by'), type: 'number', required: true },
+  { key: 'performed_at', label: humanizeField('performed_at'), type: 'date', required: true },
+  { key: 'evaluation', label: humanizeField('evaluation') },
+]
+
+const emptyForm = {
+  nursing_care_plan_id: null,
+  action_taken: '',
+  performed_by: '',
+  performed_at: '',
+  evaluation: '',
+}
 
 export function NursingCarePlanImplementationListPage() {
-  const { useList, remove } = useNursingCarePlanImplementationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useNursingCarePlanImplementationResource()
+  const title = humanizeModuleName('MedicalRecordNursingCarePlanImplementation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">NursingCarePlanImplementation</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-nursing-care-plan-implementation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-nursing-care-plan-implementation/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<NursingCarePlanImplementation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.action_taken ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

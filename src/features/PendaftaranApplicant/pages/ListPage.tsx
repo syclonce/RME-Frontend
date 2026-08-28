@@ -1,58 +1,79 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useApplicantResource } from '../api'
+import type { Applicant } from '../types'
 
-const COLUMNS = ["id","registration_id","full_name","relationship_to_patient","identity_number","phone_number","address","application_type","application_date","notes","status","created_at","updated_at"] as const
+const columns: ColumnDef<Applicant, unknown>[] = [
+  {
+    header: humanizeField('registration_id'),
+    accessorKey: 'registration_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).registration_id ?? '—'),
+  },
+  {
+    header: humanizeField('full_name'),
+    accessorKey: 'full_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).full_name ?? '—'),
+  },
+  {
+    header: humanizeField('relationship_to_patient'),
+    accessorKey: 'relationship_to_patient',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).relationship_to_patient ?? '—'),
+  },
+  {
+    header: humanizeField('identity_number'),
+    accessorKey: 'identity_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).identity_number ?? '—'),
+  },
+  {
+    header: humanizeField('phone_number'),
+    accessorKey: 'phone_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).phone_number ?? '—'),
+  },
+  {
+    header: humanizeField('address'),
+    accessorKey: 'address',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).address ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'registration_id', label: humanizeField('registration_id'), type: 'number', required: true },
+  { key: 'full_name', label: humanizeField('full_name'), required: true },
+  { key: 'relationship_to_patient', label: humanizeField('relationship_to_patient'), required: true },
+  { key: 'identity_number', label: humanizeField('identity_number') },
+  { key: 'phone_number', label: humanizeField('phone_number') },
+  { key: 'address', label: humanizeField('address') },
+  { key: 'application_type', label: humanizeField('application_type'), required: true },
+  { key: 'application_date', label: humanizeField('application_date'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  registration_id: '',
+  full_name: '',
+  relationship_to_patient: '',
+  identity_number: '',
+  phone_number: '',
+  address: '',
+  application_type: '',
+  application_date: '',
+  notes: '',
+}
 
 export function ApplicantListPage() {
-  const { useList, remove } = useApplicantResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useApplicantResource()
+  const title = humanizeModuleName('PendaftaranApplicant')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Applicant</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-applicant/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pendaftaran-applicant/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<Applicant>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.full_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

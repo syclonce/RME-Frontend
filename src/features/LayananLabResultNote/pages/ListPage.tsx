@@ -1,58 +1,52 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useLabResultNoteResource } from '../api'
+import type { LabResultNote } from '../types'
 
-const COLUMNS = ["id","lab_result_id","note","created_by","created_at"] as const
+const columns: ColumnDef<LabResultNote, unknown>[] = [
+  {
+    header: humanizeField('lab_result_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/lab-results" id={(row.original as unknown as Record<string, unknown>).lab_result_id as number | null} />,
+  },
+  {
+    header: humanizeField('note'),
+    accessorKey: 'note',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).note ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'lab_result_id', label: humanizeField('lab_result_id'), type: 'relation', relationEndpoint: '/lab-results', required: true },
+  { key: 'note', label: humanizeField('note'), required: true },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+]
+
+const emptyForm = {
+  lab_result_id: null,
+  note: '',
+  created_by: '',
+}
 
 export function LabResultNoteListPage() {
-  const { useList, remove } = useLabResultNoteResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLabResultNoteResource()
+  const title = humanizeModuleName('LayananLabResultNote')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LabResultNote</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-lab-result-note/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-lab-result-note/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<LabResultNote>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.note ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,70 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePharmacyTariffByRoomClassResource } from '../api'
+import type { PharmacyTariffByRoomClass } from '../types'
 
-const COLUMNS = ["id","item_id","room_class_id","price","effective_date","is_active"] as const
+const columns: ColumnDef<PharmacyTariffByRoomClass, unknown>[] = [
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('room_class_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/room-classes" id={(row.original as unknown as Record<string, unknown>).room_class_id as number | null} />,
+  },
+  {
+    header: humanizeField('price'),
+    accessorKey: 'price',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).price ?? '—'),
+  },
+  {
+    header: humanizeField('effective_date'),
+    accessorKey: 'effective_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).effective_date ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items' },
+  { key: 'room_class_id', label: humanizeField('room_class_id'), type: 'relation', relationEndpoint: '/room-classes' },
+  { key: 'price', label: humanizeField('price'), type: 'number', required: true },
+  { key: 'effective_date', label: humanizeField('effective_date'), type: 'date' },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  item_id: null,
+  room_class_id: null,
+  price: '',
+  effective_date: '',
+  is_active: false,
+}
 
 export function PharmacyTariffByRoomClassListPage() {
-  const { useList, remove } = usePharmacyTariffByRoomClassResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePharmacyTariffByRoomClassResource()
+  const title = humanizeModuleName('GeneralPharmacyTariffByRoomClass')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PharmacyTariffByRoomClass</h1>
-        <Button asChild>
-          <Link to="/modul/general-pharmacy-tariff-by-room-class/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-pharmacy-tariff-by-room-class/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PharmacyTariffByRoomClass>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      resource={resource}
+    />
   )
 }

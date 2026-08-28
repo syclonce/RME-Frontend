@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useSterilizationCycleResource } from '../api'
+import type { SterilizationCycle } from '../types'
 
-const COLUMNS = ["id","machine_name","temperature_celsius","pressure_bar","duration_minutes","started_at","completed_at","biological_indicator_result","status"] as const
+const columns: ColumnDef<SterilizationCycle, unknown>[] = [
+  {
+    header: humanizeField('machine_name'),
+    accessorKey: 'machine_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).machine_name ?? '—'),
+  },
+  {
+    header: humanizeField('temperature_celsius'),
+    accessorKey: 'temperature_celsius',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).temperature_celsius ?? '—'),
+  },
+  {
+    header: humanizeField('pressure_bar'),
+    accessorKey: 'pressure_bar',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).pressure_bar ?? '—'),
+  },
+  {
+    header: humanizeField('duration_minutes'),
+    accessorKey: 'duration_minutes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).duration_minutes ?? '—'),
+  },
+  {
+    header: humanizeField('started_at'),
+    accessorKey: 'started_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).started_at ?? '—'),
+  },
+  {
+    header: humanizeField('completed_at'),
+    accessorKey: 'completed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).completed_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'machine_name', label: humanizeField('machine_name'), required: true },
+  { key: 'temperature_celsius', label: humanizeField('temperature_celsius'), type: 'number', required: true },
+  { key: 'pressure_bar', label: humanizeField('pressure_bar'), type: 'number', required: true },
+  { key: 'duration_minutes', label: humanizeField('duration_minutes'), type: 'number', required: true },
+  { key: 'started_at', label: humanizeField('started_at'), type: 'date', required: true },
+  { key: 'completed_at', label: humanizeField('completed_at'), type: 'date' },
+  { key: 'biological_indicator_result', label: humanizeField('biological_indicator_result'), type: 'select', options: [{"value":"pending","label":"Pending"},{"value":"negative","label":"Negative"},{"value":"positive","label":"Positive"}] },
+  { key: 'status', label: humanizeField('status'), type: 'select', options: [{"value":"in_process","label":"In Process"},{"value":"passed","label":"Passed"},{"value":"failed","label":"Failed"}] },
+]
+
+const emptyForm = {
+  machine_name: '',
+  temperature_celsius: '',
+  pressure_bar: '',
+  duration_minutes: '',
+  started_at: '',
+  completed_at: '',
+  biological_indicator_result: '',
+  status: '',
+}
 
 export function SterilizationCycleListPage() {
-  const { useList, remove } = useSterilizationCycleResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSterilizationCycleResource()
+  const title = humanizeModuleName('InventorySterilizationCycle')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">SterilizationCycle</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-sterilization-cycle/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-sterilization-cycle/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<SterilizationCycle>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.machine_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

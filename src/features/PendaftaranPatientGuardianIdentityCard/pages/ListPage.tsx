@@ -1,58 +1,79 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePatientGuardianIdentityCardResource } from '../api'
+import type { PatientGuardianIdentityCard } from '../types'
 
-const COLUMNS = ["id","patient_guardian_id","card_type","card_number","issued_date","address","rt","rw","postal_code","region_code","created_at","updated_at"] as const
+const columns: ColumnDef<PatientGuardianIdentityCard, unknown>[] = [
+  {
+    header: humanizeField('patient_guardian_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patient-guardians" id={(row.original as unknown as Record<string, unknown>).patient_guardian_id as number | null} />,
+  },
+  {
+    header: humanizeField('card_type'),
+    accessorKey: 'card_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).card_type ?? '—'),
+  },
+  {
+    header: humanizeField('card_number'),
+    accessorKey: 'card_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).card_number ?? '—'),
+  },
+  {
+    header: humanizeField('issued_date'),
+    accessorKey: 'issued_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).issued_date ?? '—'),
+  },
+  {
+    header: humanizeField('address'),
+    accessorKey: 'address',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).address ?? '—'),
+  },
+  {
+    header: humanizeField('rt'),
+    accessorKey: 'rt',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).rt ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_guardian_id', label: humanizeField('patient_guardian_id'), type: 'relation', relationEndpoint: '/patient-guardians', required: true },
+  { key: 'card_type', label: humanizeField('card_type'), required: true },
+  { key: 'card_number', label: humanizeField('card_number'), required: true },
+  { key: 'issued_date', label: humanizeField('issued_date'), type: 'date' },
+  { key: 'address', label: humanizeField('address') },
+  { key: 'rt', label: humanizeField('rt') },
+  { key: 'rw', label: humanizeField('rw') },
+  { key: 'postal_code', label: humanizeField('postal_code') },
+  { key: 'region_code', label: humanizeField('region_code') },
+]
+
+const emptyForm = {
+  patient_guardian_id: null,
+  card_type: '',
+  card_number: '',
+  issued_date: '',
+  address: '',
+  rt: '',
+  rw: '',
+  postal_code: '',
+  region_code: '',
+}
 
 export function PatientGuardianIdentityCardListPage() {
-  const { useList, remove } = usePatientGuardianIdentityCardResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePatientGuardianIdentityCardResource()
+  const title = humanizeModuleName('PendaftaranPatientGuardianIdentityCard')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PatientGuardianIdentityCard</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-patient-guardian-identity-card/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pendaftaran-patient-guardian-identity-card/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<PatientGuardianIdentityCard>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.card_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

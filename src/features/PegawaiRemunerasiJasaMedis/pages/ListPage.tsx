@@ -1,58 +1,79 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useRemunerationEntryResource } from '../api'
+import type { RemunerationEntry } from '../types'
 
-const COLUMNS = ["id","employee_id","source_type","source_id","role","gross_amount","deduction_percentage","fixed_deduction","service_date","notes"] as const
+const columns: ColumnDef<RemunerationEntry, unknown>[] = [
+  {
+    header: humanizeField('employee_id'),
+    accessorKey: 'employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('source_type'),
+    accessorKey: 'source_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).source_type ?? '—'),
+  },
+  {
+    header: humanizeField('source_id'),
+    accessorKey: 'source_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).source_id ?? '—'),
+  },
+  {
+    header: humanizeField('role'),
+    accessorKey: 'role',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).role ?? '—'),
+  },
+  {
+    header: humanizeField('gross_amount'),
+    accessorKey: 'gross_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gross_amount ?? '—'),
+  },
+  {
+    header: humanizeField('deduction_percentage'),
+    accessorKey: 'deduction_percentage',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).deduction_percentage ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'source_type', label: humanizeField('source_type'), required: true },
+  { key: 'source_id', label: humanizeField('source_id'), type: 'number', required: true },
+  { key: 'role', label: humanizeField('role'), required: true },
+  { key: 'gross_amount', label: humanizeField('gross_amount'), type: 'number', required: true },
+  { key: 'deduction_percentage', label: humanizeField('deduction_percentage'), type: 'number' },
+  { key: 'fixed_deduction', label: humanizeField('fixed_deduction'), type: 'number' },
+  { key: 'service_date', label: humanizeField('service_date'), type: 'date', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  employee_id: '',
+  source_type: '',
+  source_id: '',
+  role: '',
+  gross_amount: '',
+  deduction_percentage: '',
+  fixed_deduction: '',
+  service_date: '',
+  notes: '',
+}
 
 export function RemunerationEntryListPage() {
-  const { useList, remove } = useRemunerationEntryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRemunerationEntryResource()
+  const title = humanizeModuleName('PegawaiRemunerasiJasaMedis')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RemunerationEntry</h1>
-        <Button asChild>
-          <Link to="/modul/pegawai-remunerasi-jasa-medis/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pegawai-remunerasi-jasa-medis/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<RemunerationEntry>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.source_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

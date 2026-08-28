@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useBloodTransfusionObservationResource } from '../api'
+import type { BloodTransfusionObservation } from '../types'
 
-const COLUMNS = ["id","blood_transfusion_id","observed_at","temperature_c","pulse_rate","blood_pressure","reaction_signs","volume_transfused_ml","notes","created_at","updated_at"] as const
+const columns: ColumnDef<BloodTransfusionObservation, unknown>[] = [
+  {
+    header: humanizeField('blood_transfusion_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/blood-transfusions" id={(row.original as unknown as Record<string, unknown>).blood_transfusion_id as number | null} />,
+  },
+  {
+    header: humanizeField('observed_at'),
+    accessorKey: 'observed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).observed_at ?? '—'),
+  },
+  {
+    header: humanizeField('temperature_c'),
+    accessorKey: 'temperature_c',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).temperature_c ?? '—'),
+  },
+  {
+    header: humanizeField('pulse_rate'),
+    accessorKey: 'pulse_rate',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).pulse_rate ?? '—'),
+  },
+  {
+    header: humanizeField('blood_pressure'),
+    accessorKey: 'blood_pressure',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).blood_pressure ?? '—'),
+  },
+  {
+    header: humanizeField('reaction_signs'),
+    accessorKey: 'reaction_signs',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reaction_signs ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'blood_transfusion_id', label: humanizeField('blood_transfusion_id'), type: 'relation', relationEndpoint: '/blood-transfusions', required: true },
+  { key: 'observed_at', label: humanizeField('observed_at'), type: 'date', required: true },
+  { key: 'temperature_c', label: humanizeField('temperature_c'), type: 'number' },
+  { key: 'pulse_rate', label: humanizeField('pulse_rate'), type: 'number' },
+  { key: 'blood_pressure', label: humanizeField('blood_pressure') },
+  { key: 'reaction_signs', label: humanizeField('reaction_signs') },
+  { key: 'volume_transfused_ml', label: humanizeField('volume_transfused_ml'), type: 'number' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  blood_transfusion_id: null,
+  observed_at: '',
+  temperature_c: '',
+  pulse_rate: '',
+  blood_pressure: '',
+  reaction_signs: '',
+  volume_transfused_ml: '',
+  notes: '',
+}
 
 export function BloodTransfusionObservationListPage() {
-  const { useList, remove } = useBloodTransfusionObservationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBloodTransfusionObservationResource()
+  const title = humanizeModuleName('MedicalRecordBloodTransfusionObservation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BloodTransfusionObservation</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-blood-transfusion-observation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-blood-transfusion-observation/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<BloodTransfusionObservation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.blood_pressure ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

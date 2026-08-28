@@ -1,58 +1,65 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useClinicalNoteCoManagementResource } from '../api'
+import type { ClinicalNoteCoManagement } from '../types'
 
-const COLUMNS = ["id","clinical_note_id","medical_department_id","notes","author_id","recorded_at","created_at","updated_at"] as const
+const columns: ColumnDef<ClinicalNoteCoManagement, unknown>[] = [
+  {
+    header: humanizeField('clinical_note_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/clinical-notes" id={(row.original as unknown as Record<string, unknown>).clinical_note_id as number | null} />,
+  },
+  {
+    header: humanizeField('medical_department_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/medical-departments" id={(row.original as unknown as Record<string, unknown>).medical_department_id as number | null} />,
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+  {
+    header: humanizeField('author_id'),
+    accessorKey: 'author_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).author_id ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_at'),
+    accessorKey: 'recorded_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'clinical_note_id', label: humanizeField('clinical_note_id'), type: 'relation', relationEndpoint: '/clinical-notes', required: true },
+  { key: 'medical_department_id', label: humanizeField('medical_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'author_id', label: humanizeField('author_id'), type: 'number', required: true },
+  { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  clinical_note_id: null,
+  medical_department_id: null,
+  notes: '',
+  author_id: '',
+  recorded_at: '',
+}
 
 export function ClinicalNoteCoManagementListPage() {
-  const { useList, remove } = useClinicalNoteCoManagementResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useClinicalNoteCoManagementResource()
+  const title = humanizeModuleName('MedicalRecordClinicalNoteCoManagement')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ClinicalNoteCoManagement</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-clinical-note-co-management/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-clinical-note-co-management/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ClinicalNoteCoManagement>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

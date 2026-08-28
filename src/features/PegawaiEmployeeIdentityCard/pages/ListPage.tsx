@@ -1,58 +1,59 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useEmployeeIdentityCardResource } from '../api'
+import type { EmployeeIdentityCard } from '../types'
 
-const COLUMNS = ["id","employee_id","id_type","id_number","issued_at","created_at"] as const
+const columns: ColumnDef<EmployeeIdentityCard, unknown>[] = [
+  {
+    header: humanizeField('employee_id'),
+    accessorKey: 'employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('id_type'),
+    accessorKey: 'id_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).id_type ?? '—'),
+  },
+  {
+    header: humanizeField('id_number'),
+    accessorKey: 'id_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).id_number ?? '—'),
+  },
+  {
+    header: humanizeField('issued_at'),
+    accessorKey: 'issued_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).issued_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'id_type', label: humanizeField('id_type'), type: 'select', required: true, options: [{"value":"KTP","label":"KTP"},{"value":"SIM","label":"SIM"},{"value":"Paspor","label":"Paspor"}] },
+  { key: 'id_number', label: humanizeField('id_number'), required: true },
+  { key: 'issued_at', label: humanizeField('issued_at'), type: 'date' },
+]
+
+const emptyForm = {
+  employee_id: '',
+  id_type: '',
+  id_number: '',
+  issued_at: '',
+}
 
 export function EmployeeIdentityCardListPage() {
-  const { useList, remove } = useEmployeeIdentityCardResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useEmployeeIdentityCardResource()
+  const title = humanizeModuleName('PegawaiEmployeeIdentityCard')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">EmployeeIdentityCard</h1>
-        <Button asChild>
-          <Link to="/modul/pegawai-employee-identity-card/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pegawai-employee-identity-card/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<EmployeeIdentityCard>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.id_type ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

@@ -1,58 +1,83 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useImmunizationVaccinationResource } from '../api'
+import type { ImmunizationVaccination } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","vaccine_name","dose_number","batch_number","administered_at","administered_by","site","route","adverse_reaction","status","created_at","updated_at"] as const
+const columns: ColumnDef<ImmunizationVaccination, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('vaccine_name'),
+    accessorKey: 'vaccine_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).vaccine_name ?? '—'),
+  },
+  {
+    header: humanizeField('dose_number'),
+    accessorKey: 'dose_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).dose_number ?? '—'),
+  },
+  {
+    header: humanizeField('batch_number'),
+    accessorKey: 'batch_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).batch_number ?? '—'),
+  },
+  {
+    header: humanizeField('administered_at'),
+    accessorKey: 'administered_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).administered_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true, section: 'Detail' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', section: 'Detail' },
+  { key: 'vaccine_name', label: humanizeField('vaccine_name'), required: true, section: 'Detail' },
+  { key: 'dose_number', label: humanizeField('dose_number'), type: 'number', section: 'Detail' },
+  { key: 'batch_number', label: humanizeField('batch_number'), section: 'Detail' },
+  { key: 'administered_at', label: humanizeField('administered_at'), type: 'date', required: true, section: 'Detail' },
+  { key: 'administered_by', label: humanizeField('administered_by'), type: 'number', required: true, section: 'Detail Tambahan' },
+  { key: 'site', label: humanizeField('site'), section: 'Detail Tambahan' },
+  { key: 'route', label: humanizeField('route'), section: 'Detail Tambahan' },
+  { key: 'adverse_reaction', label: humanizeField('adverse_reaction'), section: 'Detail Tambahan' },
+  { key: 'status', label: humanizeField('status'), section: 'Detail Tambahan' },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  vaccine_name: '',
+  dose_number: '',
+  batch_number: '',
+  administered_at: '',
+  administered_by: '',
+  site: '',
+  route: '',
+  adverse_reaction: '',
+  status: '',
+}
 
 export function ImmunizationVaccinationListPage() {
-  const { useList, remove } = useImmunizationVaccinationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useImmunizationVaccinationResource()
+  const title = humanizeModuleName('MedicalRecordImmunizationVaccination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ImmunizationVaccination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-immunization-vaccination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-immunization-vaccination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<ImmunizationVaccination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.vaccine_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

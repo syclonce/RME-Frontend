@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useRecordFileLoanResource } from '../api'
+import type { RecordFileLoan } from '../types'
 
-const COLUMNS = ["id","patient_id","borrower_name","borrower_unit","purpose","loaned_at","due_at","returned_at","status","created_at","updated_at"] as const
+const columns: ColumnDef<RecordFileLoan, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/patients" id={(row.original as unknown as Record<string, unknown>).patient_id as number | null} />,
+  },
+  {
+    header: humanizeField('borrower_name'),
+    accessorKey: 'borrower_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).borrower_name ?? '—'),
+  },
+  {
+    header: humanizeField('borrower_unit'),
+    accessorKey: 'borrower_unit',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).borrower_unit ?? '—'),
+  },
+  {
+    header: humanizeField('purpose'),
+    accessorKey: 'purpose',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).purpose ?? '—'),
+  },
+  {
+    header: humanizeField('loaned_at'),
+    accessorKey: 'loaned_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).loaned_at ?? '—'),
+  },
+  {
+    header: humanizeField('due_at'),
+    accessorKey: 'due_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).due_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'relation', relationEndpoint: '/patients', required: true },
+  { key: 'borrower_name', label: humanizeField('borrower_name'), required: true },
+  { key: 'borrower_unit', label: humanizeField('borrower_unit') },
+  { key: 'purpose', label: humanizeField('purpose') },
+  { key: 'loaned_at', label: humanizeField('loaned_at'), type: 'date', required: true },
+  { key: 'due_at', label: humanizeField('due_at'), type: 'date' },
+  { key: 'returned_at', label: humanizeField('returned_at'), type: 'date' },
+  { key: 'status', label: humanizeField('status'), type: 'select', options: [{"value":"borrowed","label":"Borrowed"},{"value":"returned","label":"Returned"},{"value":"overdue","label":"Overdue"}] },
+]
+
+const emptyForm = {
+  patient_id: null,
+  borrower_name: '',
+  borrower_unit: '',
+  purpose: '',
+  loaned_at: '',
+  due_at: '',
+  returned_at: '',
+  status: '',
+}
 
 export function RecordFileLoanListPage() {
-  const { useList, remove } = useRecordFileLoanResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRecordFileLoanResource()
+  const title = humanizeModuleName('MedicalRecordRecordFileLoan')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RecordFileLoan</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-record-file-loan/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-record-file-loan/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<RecordFileLoan>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.borrower_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

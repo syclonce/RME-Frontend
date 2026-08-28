@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useInvoiceMergeResource } from '../api'
+import type { InvoiceMerge } from '../types'
 
-const COLUMNS = ["id","merge_number","payment_id","invoice_id","allocated_amount","merged_by","merged_at","notes","created_at","updated_at"] as const
+const columns: ColumnDef<InvoiceMerge, unknown>[] = [
+  {
+    header: humanizeField('merge_number'),
+    accessorKey: 'merge_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).merge_number ?? '—'),
+  },
+  {
+    header: humanizeField('payment_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/payments" id={(row.original as unknown as Record<string, unknown>).payment_id as number | null} />,
+  },
+  {
+    header: humanizeField('invoice_id'),
+    accessorKey: 'invoice_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_id ?? '—'),
+  },
+  {
+    header: humanizeField('allocated_amount'),
+    accessorKey: 'allocated_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).allocated_amount ?? '—'),
+  },
+  {
+    header: humanizeField('merged_by'),
+    accessorKey: 'merged_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).merged_by ?? '—'),
+  },
+  {
+    header: humanizeField('merged_at'),
+    accessorKey: 'merged_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).merged_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'merge_number', label: humanizeField('merge_number') },
+  { key: 'payment_id', label: humanizeField('payment_id'), type: 'relation', relationEndpoint: '/payments', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'allocated_amount', label: humanizeField('allocated_amount'), type: 'number', required: true },
+  { key: 'merged_at', label: humanizeField('merged_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  merge_number: '',
+  payment_id: null,
+  invoice_id: '',
+  allocated_amount: '',
+  merged_at: '',
+  notes: '',
+}
 
 export function InvoiceMergeListPage() {
-  const { useList, remove } = useInvoiceMergeResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInvoiceMergeResource()
+  const title = humanizeModuleName('PembayaranInvoiceMerge')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InvoiceMerge</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-invoice-merge/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-invoice-merge/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<InvoiceMerge>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.merge_number ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

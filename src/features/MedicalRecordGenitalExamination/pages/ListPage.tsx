@@ -1,58 +1,73 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useGenitalExaminationResource } from '../api'
+import type { GenitalExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","external_genitalia","discharge_characteristics","lesions_or_masses","notes","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<GenitalExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('external_genitalia'),
+    accessorKey: 'external_genitalia',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).external_genitalia ?? '—'),
+  },
+  {
+    header: humanizeField('discharge_characteristics'),
+    accessorKey: 'discharge_characteristics',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).discharge_characteristics ?? '—'),
+  },
+  {
+    header: humanizeField('lesions_or_masses'),
+    accessorKey: 'lesions_or_masses',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).lesions_or_masses ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+  {
+    header: humanizeField('examined_at'),
+    accessorKey: 'examined_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examined_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'external_genitalia', label: humanizeField('external_genitalia') },
+  { key: 'discharge_characteristics', label: humanizeField('discharge_characteristics') },
+  { key: 'lesions_or_masses', label: humanizeField('lesions_or_masses') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  external_genitalia: '',
+  discharge_characteristics: '',
+  lesions_or_masses: '',
+  notes: '',
+  examined_at: '',
+}
 
 export function GenitalExaminationListPage() {
-  const { useList, remove } = useGenitalExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGenitalExaminationResource()
+  const title = humanizeModuleName('MedicalRecordGenitalExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GenitalExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-genital-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-genital-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<GenitalExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.external_genitalia ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

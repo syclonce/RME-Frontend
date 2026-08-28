@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useDocumentUploadResource } from '../api'
+import type { DocumentUpload } from '../types'
 
-const COLUMNS = ["id","patient_id","visit_id","document_name","document_type","file_path","file_size_bytes","uploaded_at","notes","created_by","created_at","updated_at"] as const
+const columns: ColumnDef<DocumentUpload, unknown>[] = [
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('document_name'),
+    accessorKey: 'document_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).document_name ?? '—'),
+  },
+  {
+    header: humanizeField('document_type'),
+    accessorKey: 'document_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).document_type ?? '—'),
+  },
+  {
+    header: humanizeField('file_path'),
+    accessorKey: 'file_path',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).file_path ?? '—'),
+  },
+  {
+    header: humanizeField('file_size_bytes'),
+    accessorKey: 'file_size_bytes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).file_size_bytes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'document_name', label: humanizeField('document_name'), required: true },
+  { key: 'document_type', label: humanizeField('document_type') },
+  { key: 'file_path', label: humanizeField('file_path'), required: true },
+  { key: 'file_size_bytes', label: humanizeField('file_size_bytes'), type: 'number' },
+  { key: 'uploaded_at', label: humanizeField('uploaded_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  patient_id: '',
+  visit_id: '',
+  document_name: '',
+  document_type: '',
+  file_path: '',
+  file_size_bytes: '',
+  uploaded_at: '',
+  notes: '',
+}
 
 export function DocumentUploadListPage() {
-  const { useList, remove } = useDocumentUploadResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDocumentUploadResource()
+  const title = humanizeModuleName('MedicalRecordDocumentUpload')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DocumentUpload</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-document-upload/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-document-upload/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<DocumentUpload>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.document_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

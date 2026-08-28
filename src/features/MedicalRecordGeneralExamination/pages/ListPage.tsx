@@ -1,58 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useGeneralExaminationResource } from '../api'
+import type { GeneralExamination } from '../types'
 
-const COLUMNS = ["id","visit_id","general_appearance","consciousness_level","nutritional_status","posture","gait","examined_at","created_at","updated_at"] as const
+const columns: ColumnDef<GeneralExamination, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/visits" id={(row.original as unknown as Record<string, unknown>).visit_id as number | null} />,
+  },
+  {
+    header: humanizeField('general_appearance'),
+    accessorKey: 'general_appearance',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).general_appearance ?? '—'),
+  },
+  {
+    header: humanizeField('consciousness_level'),
+    accessorKey: 'consciousness_level',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).consciousness_level ?? '—'),
+  },
+  {
+    header: humanizeField('nutritional_status'),
+    accessorKey: 'nutritional_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).nutritional_status ?? '—'),
+  },
+  {
+    header: humanizeField('posture'),
+    accessorKey: 'posture',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).posture ?? '—'),
+  },
+  {
+    header: humanizeField('gait'),
+    accessorKey: 'gait',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gait ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'relation', relationEndpoint: '/visits', required: true },
+  { key: 'general_appearance', label: humanizeField('general_appearance') },
+  { key: 'consciousness_level', label: humanizeField('consciousness_level') },
+  { key: 'nutritional_status', label: humanizeField('nutritional_status') },
+  { key: 'posture', label: humanizeField('posture') },
+  { key: 'gait', label: humanizeField('gait') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: null,
+  general_appearance: '',
+  consciousness_level: '',
+  nutritional_status: '',
+  posture: '',
+  gait: '',
+  examined_at: '',
+}
 
 export function GeneralExaminationListPage() {
-  const { useList, remove } = useGeneralExaminationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGeneralExaminationResource()
+  const title = humanizeModuleName('MedicalRecordGeneralExamination')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GeneralExamination</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-general-examination/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-general-examination/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<GeneralExamination>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.general_appearance ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }

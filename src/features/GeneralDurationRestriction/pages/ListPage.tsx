@@ -1,58 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useDurationRestrictionResource } from '../api'
+import type { DurationRestriction } from '../types'
 
-const COLUMNS = ["id","antibiotic_name","max_days","min_days","requires_reevaluation","notes","is_active","created_at"] as const
+const columns: ColumnDef<DurationRestriction, unknown>[] = [
+  {
+    header: humanizeField('antibiotic_name'),
+    accessorKey: 'antibiotic_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).antibiotic_name ?? '—'),
+  },
+  {
+    header: humanizeField('max_days'),
+    accessorKey: 'max_days',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).max_days ?? '—'),
+  },
+  {
+    header: humanizeField('min_days'),
+    accessorKey: 'min_days',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).min_days ?? '—'),
+  },
+  {
+    header: humanizeField('requires_reevaluation'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).requires_reevaluation ? 'Ya' : 'Tidak'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) =>
+      (row.original as unknown as Record<string, unknown>).is_active ? (
+        <Badge className="bg-primary/10 text-primary border-primary/20">Aktif</Badge>
+      ) : (
+        <Badge variant="outline" className="text-muted-foreground">Nonaktif</Badge>
+      ),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'antibiotic_name', label: humanizeField('antibiotic_name'), required: true },
+  { key: 'max_days', label: humanizeField('max_days'), type: 'number', required: true },
+  { key: 'min_days', label: humanizeField('min_days'), type: 'number' },
+  { key: 'requires_reevaluation', label: humanizeField('requires_reevaluation'), type: 'checkbox' },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  antibiotic_name: '',
+  max_days: '',
+  min_days: '',
+  requires_reevaluation: false,
+  notes: '',
+  is_active: false,
+}
 
 export function DurationRestrictionListPage() {
-  const { useList, remove } = useDurationRestrictionResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDurationRestrictionResource()
+  const title = humanizeModuleName('GeneralDurationRestriction')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DurationRestriction</h1>
-        <Button asChild>
-          <Link to="/modul/general-duration-restriction/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-duration-restriction/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <CrudDialogPage<DurationRestriction>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      columns={columns}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.antibiotic_name ?? `#${item.id}`}
+      resource={resource}
+    />
   )
 }
