@@ -1,41 +1,47 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useReferralLetterResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranReferralLetterEndpoint, useReferralLetterResource } from '../api'
+import type { ReferralLetter } from '../types'
 
-const COLUMNS = [] as const
+const columns: ColumnDef<ReferralLetter, unknown>[] = [
+
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'from_department_id', label: humanizeField('from_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
+  { key: 'to_department_id', label: humanizeField('to_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
+  { key: 'issued_at', label: humanizeField('issued_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  from_department_id: null,
+  to_department_id: null,
+  issued_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<ReferralLetter>[] = []
 
 export function ReferralLetterListPage() {
-  const { useList } = useReferralLetterResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useReferralLetterResource()
+  const title = humanizeModuleName('PendaftaranReferralLetter')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ReferralLetter</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-referral-letter/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<ReferralLetter>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranReferralLetterEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

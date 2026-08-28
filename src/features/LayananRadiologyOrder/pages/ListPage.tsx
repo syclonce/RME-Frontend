@@ -1,49 +1,81 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useRadiologyOrderResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananRadiologyOrderEndpoint, useRadiologyOrderResource } from '../api'
+import type { RadiologyOrder } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","ordering_doctor_id","ordered_at","clinical_notes","status","created_at"] as const
+const columns: ColumnDef<RadiologyOrder, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('ordering_doctor_id'),
+    accessorKey: 'ordering_doctor_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ordering_doctor_id ?? '—'),
+  },
+  {
+    header: humanizeField('ordered_at'),
+    accessorKey: 'ordered_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ordered_at ?? '—'),
+  },
+  {
+    header: humanizeField('clinical_notes'),
+    accessorKey: 'clinical_notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).clinical_notes ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'ordering_doctor_id', label: humanizeField('ordering_doctor_id'), type: 'number' },
+  { key: 'ordered_at', label: humanizeField('ordered_at'), type: 'date', required: true },
+  { key: 'clinical_notes', label: humanizeField('clinical_notes') },
+  { key: 'status', label: humanizeField('status'), required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  patient_id: '',
+  ordering_doctor_id: '',
+  ordered_at: '',
+  clinical_notes: '',
+  status: '',
+}
+
+const actions: WorkflowAction<RadiologyOrder>[] = []
 
 export function RadiologyOrderListPage() {
-  const { useList } = useRadiologyOrderResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRadiologyOrderResource()
+  const title = humanizeModuleName('LayananRadiologyOrder')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RadiologyOrder</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-radiology-order/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-radiology-order/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<RadiologyOrder>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananRadiologyOrderEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.clinical_notes ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

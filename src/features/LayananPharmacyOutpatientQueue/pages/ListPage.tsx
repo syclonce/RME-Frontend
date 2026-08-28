@@ -1,49 +1,74 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { usePharmacyOutpatientQueueResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananPharmacyOutpatientQueueEndpoint, usePharmacyOutpatientQueueResource } from '../api'
+import type { PharmacyOutpatientQueue } from '../types'
 
-const COLUMNS = ["id","prescription_id","queue_number","status","called_at","completed_at","created_at"] as const
+const columns: ColumnDef<PharmacyOutpatientQueue, unknown>[] = [
+  {
+    header: humanizeField('prescription_id'),
+    accessorKey: 'prescription_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).prescription_id ?? '—'),
+  },
+  {
+    header: humanizeField('queue_number'),
+    accessorKey: 'queue_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).queue_number ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+  {
+    header: humanizeField('called_at'),
+    accessorKey: 'called_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).called_at ?? '—'),
+  },
+  {
+    header: humanizeField('completed_at'),
+    accessorKey: 'completed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).completed_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'number', required: true },
+  { key: 'queue_number', label: humanizeField('queue_number'), required: true },
+  { key: 'status', label: humanizeField('status'), required: true },
+  { key: 'called_at', label: humanizeField('called_at'), type: 'date' },
+  { key: 'completed_at', label: humanizeField('completed_at'), type: 'date' },
+]
+
+const emptyForm = {
+  prescription_id: '',
+  queue_number: '',
+  status: '',
+  called_at: '',
+  completed_at: '',
+}
+
+const actions: WorkflowAction<PharmacyOutpatientQueue>[] = []
 
 export function PharmacyOutpatientQueueListPage() {
-  const { useList } = usePharmacyOutpatientQueueResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePharmacyOutpatientQueueResource()
+  const title = humanizeModuleName('LayananPharmacyOutpatientQueue')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PharmacyOutpatientQueue</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-pharmacy-outpatient-queue/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-pharmacy-outpatient-queue/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<PharmacyOutpatientQueue>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananPharmacyOutpatientQueueEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.queue_number ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

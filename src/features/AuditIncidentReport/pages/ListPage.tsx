@@ -1,93 +1,102 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useIncidentReportResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { AuditIncidentReportEndpoint, useIncidentReportResource } from '../api'
+import type { IncidentReport } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","incident_category","description","occurred_at","reported_by","impact_score","probability_score","risk_grade","status","sla_due_at","created_at","updated_at","visit_number","patient_name","reported_by_name"] as const
+const columns: ColumnDef<IncidentReport, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('incident_category'),
+    accessorKey: 'incident_category',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).incident_category ?? '—'),
+  },
+  {
+    header: humanizeField('description'),
+    accessorKey: 'description',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).description ?? '—'),
+  },
+  {
+    header: humanizeField('occurred_at'),
+    accessorKey: 'occurred_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).occurred_at ?? '—'),
+  },
+  {
+    header: humanizeField('reported_by'),
+    accessorKey: 'reported_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reported_by ?? '—'),
+  },
+]
 
-const WF_ACTIONS = [{"label":"Investigate","verb":"post","prefix":"incident-reports","action":"investigate"},{"label":"Rca","verb":"post","prefix":"incident-reports","action":"rca"},{"label":"Close","verb":"post","prefix":"incident-reports","action":"close"}] as const
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number' },
+  { key: 'incident_category', label: humanizeField('incident_category'), required: true },
+  { key: 'description', label: humanizeField('description'), required: true },
+  { key: 'occurred_at', label: humanizeField('occurred_at'), type: 'date', required: true },
+  { key: 'reported_by', label: humanizeField('reported_by'), type: 'number', required: true },
+  { key: 'impact_score', label: humanizeField('impact_score'), type: 'number', required: true },
+  { key: 'probability_score', label: humanizeField('probability_score'), type: 'number', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  patient_id: '',
+  incident_category: '',
+  description: '',
+  occurred_at: '',
+  reported_by: '',
+  impact_score: '',
+  probability_score: '',
+}
+
+const actions: WorkflowAction<IncidentReport>[] = [
+  {
+    key: 'investigate',
+    label: 'Investigasi',
+    method: 'post',
+    path: (item) => `/incident-reports/${item.id}/investigate`,
+  },
+  {
+    key: 'rca',
+    label: 'RCA',
+    method: 'post',
+    path: (item) => `/incident-reports/${item.id}/rca`,
+  },
+  {
+    key: 'close',
+    label: 'Tutup',
+    method: 'post',
+    path: (item) => `/incident-reports/${item.id}/close`,
+    variant: 'destructive',
+  },
+]
 
 export function IncidentReportListPage() {
-  const { useList } = useIncidentReportResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/incident-reports'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useIncidentReportResource()
+  const title = humanizeModuleName('AuditIncidentReport')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">IncidentReport</h1>
-        <Button asChild>
-          <Link to="/modul/audit-incident-report/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/audit-incident-report/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Investigate'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Investigate
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Rca'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
-                  >
-                    Rca
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Close'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[2], row.id)}
-                  >
-                    Close
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<IncidentReport>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={AuditIncidentReportEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.incident_category ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

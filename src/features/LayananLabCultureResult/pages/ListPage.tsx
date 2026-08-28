@@ -1,49 +1,78 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useLabCultureResultResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananLabCultureResultEndpoint, useLabCultureResultResource } from '../api'
+import type { LabCultureResult } from '../types'
 
-const COLUMNS = ["id","lab_order_id","specimen_type","organism_found","colony_count","examined_at","result_status","created_at"] as const
+const columns: ColumnDef<LabCultureResult, unknown>[] = [
+  {
+    header: humanizeField('lab_order_id'),
+    accessorKey: 'lab_order_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).lab_order_id ?? '—'),
+  },
+  {
+    header: humanizeField('specimen_type'),
+    accessorKey: 'specimen_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).specimen_type ?? '—'),
+  },
+  {
+    header: humanizeField('organism_found'),
+    accessorKey: 'organism_found',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).organism_found ?? '—'),
+  },
+  {
+    header: humanizeField('colony_count'),
+    accessorKey: 'colony_count',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).colony_count ?? '—'),
+  },
+  {
+    header: humanizeField('examined_at'),
+    accessorKey: 'examined_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examined_at ?? '—'),
+  },
+  {
+    header: humanizeField('result_status'),
+    accessorKey: 'result_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).result_status ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'lab_order_id', label: humanizeField('lab_order_id'), type: 'number', required: true },
+  { key: 'specimen_type', label: humanizeField('specimen_type'), required: true },
+  { key: 'organism_found', label: humanizeField('organism_found') },
+  { key: 'colony_count', label: humanizeField('colony_count') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date', required: true },
+  { key: 'result_status', label: humanizeField('result_status'), required: true },
+]
+
+const emptyForm = {
+  lab_order_id: '',
+  specimen_type: '',
+  organism_found: '',
+  colony_count: '',
+  examined_at: '',
+  result_status: '',
+}
+
+const actions: WorkflowAction<LabCultureResult>[] = []
 
 export function LabCultureResultListPage() {
-  const { useList } = useLabCultureResultResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLabCultureResultResource()
+  const title = humanizeModuleName('LayananLabCultureResult')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LabCultureResult</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-lab-culture-result/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-lab-culture-result/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<LabCultureResult>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananLabCultureResultEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.specimen_type ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

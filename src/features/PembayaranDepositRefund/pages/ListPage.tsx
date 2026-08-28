@@ -1,41 +1,60 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useDepositRefundResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PembayaranDepositRefundEndpoint, useDepositRefundResource } from '../api'
+import type { DepositRefund } from '../types'
 
-const COLUMNS = ["id","deposit_id","refunded_amount","refunded_at","refunded_by","created_at"] as const
+const columns: ColumnDef<DepositRefund, unknown>[] = [
+  {
+    header: humanizeField('deposit_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/deposits" id={(row.original as unknown as Record<string, unknown>).deposit_id as number | null} />,
+  },
+  {
+    header: humanizeField('refunded_amount'),
+    accessorKey: 'refunded_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).refunded_amount ?? '—'),
+  },
+  {
+    header: humanizeField('refunded_at'),
+    accessorKey: 'refunded_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).refunded_at ?? '—'),
+  },
+  {
+    header: humanizeField('refunded_by'),
+    accessorKey: 'refunded_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).refunded_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'deposit_id', label: humanizeField('deposit_id'), type: 'relation', relationEndpoint: '/deposits', required: true },
+  { key: 'refunded_amount', label: humanizeField('refunded_amount'), type: 'number', required: true },
+]
+
+const emptyForm = {
+  deposit_id: null,
+  refunded_amount: '',
+}
+
+const actions: WorkflowAction<DepositRefund>[] = []
 
 export function DepositRefundListPage() {
-  const { useList } = useDepositRefundResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDepositRefundResource()
+  const title = humanizeModuleName('PembayaranDepositRefund')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DepositRefund</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-deposit-refund/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<DepositRefund>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PembayaranDepositRefundEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

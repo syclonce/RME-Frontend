@@ -1,49 +1,81 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useMedicalProcedureResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananMedicalProcedureEndpoint, useMedicalProcedureResource } from '../api'
+import type { MedicalProcedure } from '../types'
 
-const COLUMNS = ["id","visit_id","service_id","performed_at","performed_by","notes","status","created_by","created_at"] as const
+const columns: ColumnDef<MedicalProcedure, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('service_id'),
+    accessorKey: 'service_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).service_id ?? '—'),
+  },
+  {
+    header: humanizeField('performed_at'),
+    accessorKey: 'performed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_at ?? '—'),
+  },
+  {
+    header: humanizeField('performed_by'),
+    accessorKey: 'performed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_by ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'service_id', label: humanizeField('service_id'), type: 'number', required: true },
+  { key: 'performed_at', label: humanizeField('performed_at'), type: 'date' },
+  { key: 'performed_by', label: humanizeField('performed_by'), type: 'number', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'status', label: humanizeField('status'), type: 'select', options: [{"value":"completed","label":"Completed"},{"value":"cancelled","label":"Cancelled"}] },
+]
+
+const emptyForm = {
+  visit_id: '',
+  service_id: '',
+  performed_at: '',
+  performed_by: '',
+  notes: '',
+  status: '',
+}
+
+const actions: WorkflowAction<MedicalProcedure>[] = []
 
 export function MedicalProcedureListPage() {
-  const { useList } = useMedicalProcedureResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useMedicalProcedureResource()
+  const title = humanizeModuleName('LayananMedicalProcedure')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">MedicalProcedure</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-medical-procedure/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-medical-procedure/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<MedicalProcedure>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananMedicalProcedureEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

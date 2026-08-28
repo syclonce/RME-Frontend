@@ -1,49 +1,65 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useRadiologyClaimResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { BerkasKlaimRadiologyClaimEndpoint, useRadiologyClaimResource } from '../api'
+import type { RadiologyClaim } from '../types'
 
-const COLUMNS = ["id","claim_file_id","order_id","submitted_at","status","created_at"] as const
+const columns: ColumnDef<RadiologyClaim, unknown>[] = [
+  {
+    header: humanizeField('claim_file_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/claim-files" id={(row.original as unknown as Record<string, unknown>).claim_file_id as number | null} />,
+  },
+  {
+    header: humanizeField('order_id'),
+    accessorKey: 'order_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).order_id ?? '—'),
+  },
+  {
+    header: humanizeField('submitted_at'),
+    accessorKey: 'submitted_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).submitted_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'claim_file_id', label: humanizeField('claim_file_id'), type: 'relation', relationEndpoint: '/claim-files', required: true },
+  { key: 'order_id', label: humanizeField('order_id'), type: 'number' },
+  { key: 'submitted_at', label: humanizeField('submitted_at'), type: 'date' },
+]
+
+const emptyForm = {
+  claim_file_id: null,
+  order_id: '',
+  submitted_at: '',
+}
+
+const actions: WorkflowAction<RadiologyClaim>[] = []
 
 export function RadiologyClaimListPage() {
-  const { useList } = useRadiologyClaimResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRadiologyClaimResource()
+  const title = humanizeModuleName('BerkasKlaimRadiologyClaim')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RadiologyClaim</h1>
-        <Button asChild>
-          <Link to="/modul/berkas-klaim-radiology-claim/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/berkas-klaim-radiology-claim/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<RadiologyClaim>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={BerkasKlaimRadiologyClaimEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

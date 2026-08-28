@@ -1,41 +1,84 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useVitalSignObservationResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananEarlyWarningScoreEndpoint, useVitalSignObservationResource } from '../api'
+import type { VitalSignObservation } from '../types'
 
-const COLUMNS = ["id","visit_id","respiratory_rate","spo2","systolic_bp","pulse_rate","consciousness_level","temperature_celsius","recorded_by","recorded_at"] as const
+const columns: ColumnDef<VitalSignObservation, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('respiratory_rate'),
+    accessorKey: 'respiratory_rate',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).respiratory_rate ?? '—'),
+  },
+  {
+    header: humanizeField('spo2'),
+    accessorKey: 'spo2',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).spo2 ?? '—'),
+  },
+  {
+    header: humanizeField('systolic_bp'),
+    accessorKey: 'systolic_bp',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).systolic_bp ?? '—'),
+  },
+  {
+    header: humanizeField('pulse_rate'),
+    accessorKey: 'pulse_rate',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).pulse_rate ?? '—'),
+  },
+  {
+    header: humanizeField('consciousness_level'),
+    accessorKey: 'consciousness_level',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).consciousness_level ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'respiratory_rate', label: humanizeField('respiratory_rate'), type: 'number', required: true },
+  { key: 'spo2', label: humanizeField('spo2'), type: 'number', required: true },
+  { key: 'systolic_bp', label: humanizeField('systolic_bp'), type: 'number', required: true },
+  { key: 'pulse_rate', label: humanizeField('pulse_rate'), type: 'number', required: true },
+  { key: 'consciousness_level', label: humanizeField('consciousness_level'), required: true },
+  { key: 'temperature_celsius', label: humanizeField('temperature_celsius'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  respiratory_rate: '',
+  spo2: '',
+  systolic_bp: '',
+  pulse_rate: '',
+  consciousness_level: '',
+  temperature_celsius: '',
+  recorded_by: '',
+  recorded_at: '',
+}
+
+const actions: WorkflowAction<VitalSignObservation>[] = []
 
 export function VitalSignObservationListPage() {
-  const { useList } = useVitalSignObservationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useVitalSignObservationResource()
+  const title = humanizeModuleName('LayananEarlyWarningScore')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">VitalSignObservation</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-early-warning-score/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<VitalSignObservation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananEarlyWarningScoreEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.consciousness_level ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

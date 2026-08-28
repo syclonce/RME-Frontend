@@ -1,41 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useAntimicrobialStewardshipRadiologyResultResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananAntimicrobialStewardshipRadiologyResultEndpoint, useAntimicrobialStewardshipRadiologyResultResource } from '../api'
+import type { AntimicrobialStewardshipRadiologyResult } from '../types'
 
-const COLUMNS = ["id","antimicrobial_stewardship_form_id","examination_name","findings","examined_at","created_at"] as const
+const columns: ColumnDef<AntimicrobialStewardshipRadiologyResult, unknown>[] = [
+  {
+    header: humanizeField('antimicrobial_stewardship_form_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/antimicrobial-stewardship-forms" id={(row.original as unknown as Record<string, unknown>).antimicrobial_stewardship_form_id as number | null} />,
+  },
+  {
+    header: humanizeField('examination_name'),
+    accessorKey: 'examination_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examination_name ?? '—'),
+  },
+  {
+    header: humanizeField('findings'),
+    accessorKey: 'findings',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).findings ?? '—'),
+  },
+  {
+    header: humanizeField('examined_at'),
+    accessorKey: 'examined_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examined_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'antimicrobial_stewardship_form_id', label: humanizeField('antimicrobial_stewardship_form_id'), type: 'relation', relationEndpoint: '/antimicrobial-stewardship-forms', required: true },
+  { key: 'examination_name', label: humanizeField('examination_name'), required: true },
+  { key: 'findings', label: humanizeField('findings'), required: true },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  antimicrobial_stewardship_form_id: null,
+  examination_name: '',
+  findings: '',
+  examined_at: '',
+}
+
+const actions: WorkflowAction<AntimicrobialStewardshipRadiologyResult>[] = []
 
 export function AntimicrobialStewardshipRadiologyResultListPage() {
-  const { useList } = useAntimicrobialStewardshipRadiologyResultResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useAntimicrobialStewardshipRadiologyResultResource()
+  const title = humanizeModuleName('LayananAntimicrobialStewardshipRadiologyResult')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">AntimicrobialStewardshipRadiologyResult</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-antimicrobial-stewardship-radiology-result/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<AntimicrobialStewardshipRadiologyResult>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananAntimicrobialStewardshipRadiologyResultEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.examination_name ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

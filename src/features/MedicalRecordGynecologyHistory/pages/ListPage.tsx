@@ -1,41 +1,80 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGynecologyHistoryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordGynecologyHistoryEndpoint, useGynecologyHistoryResource } from '../api'
+import type { GynecologyHistory } from '../types'
 
-const COLUMNS = ["id","visit_id","created_by","menarche_age","menstrual_cycle_pattern","contraception_history","gynecological_surgery_history","notes","created_at"] as const
+const columns: ColumnDef<GynecologyHistory, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+  {
+    header: humanizeField('menarche_age'),
+    accessorKey: 'menarche_age',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).menarche_age ?? '—'),
+  },
+  {
+    header: humanizeField('menstrual_cycle_pattern'),
+    accessorKey: 'menstrual_cycle_pattern',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).menstrual_cycle_pattern ?? '—'),
+  },
+  {
+    header: humanizeField('contraception_history'),
+    accessorKey: 'contraception_history',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).contraception_history ?? '—'),
+  },
+  {
+    header: humanizeField('gynecological_surgery_history'),
+    accessorKey: 'gynecological_surgery_history',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gynecological_surgery_history ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'menarche_age', label: humanizeField('menarche_age'), type: 'number' },
+  { key: 'menstrual_cycle_pattern', label: humanizeField('menstrual_cycle_pattern') },
+  { key: 'contraception_history', label: humanizeField('contraception_history') },
+  { key: 'gynecological_surgery_history', label: humanizeField('gynecological_surgery_history') },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  created_by: '',
+  menarche_age: '',
+  menstrual_cycle_pattern: '',
+  contraception_history: '',
+  gynecological_surgery_history: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<GynecologyHistory>[] = []
 
 export function GynecologyHistoryListPage() {
-  const { useList } = useGynecologyHistoryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useGynecologyHistoryResource()
+  const title = humanizeModuleName('MedicalRecordGynecologyHistory')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">GynecologyHistory</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-gynecology-history/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<GynecologyHistory>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordGynecologyHistoryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.menstrual_cycle_pattern ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

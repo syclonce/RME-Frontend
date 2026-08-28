@@ -1,41 +1,78 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useFamilyMedicalHistoryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordFamilyMedicalHistoryEndpoint, useFamilyMedicalHistoryResource } from '../api'
+import type { FamilyMedicalHistory } from '../types'
 
-const COLUMNS = ["id","visit_id","created_by","relation","condition","diagnosed_age","notes","created_at"] as const
+const columns: ColumnDef<FamilyMedicalHistory, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+  {
+    header: humanizeField('relation'),
+    accessorKey: 'relation',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).relation ?? '—'),
+  },
+  {
+    header: humanizeField('condition'),
+    accessorKey: 'condition',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).condition ?? '—'),
+  },
+  {
+    header: humanizeField('diagnosed_age'),
+    accessorKey: 'diagnosed_age',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).diagnosed_age ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'relation', label: humanizeField('relation'), required: true },
+  { key: 'condition', label: humanizeField('condition'), required: true },
+  { key: 'diagnosed_age', label: humanizeField('diagnosed_age'), type: 'number' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  created_by: '',
+  relation: '',
+  condition: '',
+  diagnosed_age: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<FamilyMedicalHistory>[] = []
 
 export function FamilyMedicalHistoryListPage() {
-  const { useList } = useFamilyMedicalHistoryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useFamilyMedicalHistoryResource()
+  const title = humanizeModuleName('MedicalRecordFamilyMedicalHistory')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">FamilyMedicalHistory</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-family-medical-history/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<FamilyMedicalHistory>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordFamilyMedicalHistoryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.relation ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

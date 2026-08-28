@@ -1,49 +1,67 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useMedicalSupplyUsageResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananMedicalSupplyUsageEndpoint, useMedicalSupplyUsageResource } from '../api'
+import type { MedicalSupplyUsage } from '../types'
 
-const COLUMNS = ["id","visit_id","recorded_by","used_at","status","created_at"] as const
+const columns: ColumnDef<MedicalSupplyUsage, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_by'),
+    accessorKey: 'recorded_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_by ?? '—'),
+  },
+  {
+    header: humanizeField('used_at'),
+    accessorKey: 'used_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).used_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number' },
+  { key: 'used_at', label: humanizeField('used_at'), type: 'date', required: true },
+  { key: 'status', label: humanizeField('status'), required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  recorded_by: '',
+  used_at: '',
+  status: '',
+}
+
+const actions: WorkflowAction<MedicalSupplyUsage>[] = []
 
 export function MedicalSupplyUsageListPage() {
-  const { useList } = useMedicalSupplyUsageResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useMedicalSupplyUsageResource()
+  const title = humanizeModuleName('LayananMedicalSupplyUsage')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">MedicalSupplyUsage</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-medical-supply-usage/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-medical-supply-usage/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<MedicalSupplyUsage>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananMedicalSupplyUsageEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.status ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

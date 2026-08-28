@@ -1,49 +1,81 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useRadiologyResultResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananRadiologyResultEndpoint, useRadiologyResultResource } from '../api'
+import type { RadiologyResult } from '../types'
 
-const COLUMNS = ["id","radiology_order_id","findings","impression","radiologist_id","examined_at","status","created_at"] as const
+const columns: ColumnDef<RadiologyResult, unknown>[] = [
+  {
+    header: humanizeField('radiology_order_id'),
+    accessorKey: 'radiology_order_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).radiology_order_id ?? '—'),
+  },
+  {
+    header: humanizeField('findings'),
+    accessorKey: 'findings',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).findings ?? '—'),
+  },
+  {
+    header: humanizeField('impression'),
+    accessorKey: 'impression',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).impression ?? '—'),
+  },
+  {
+    header: humanizeField('radiologist_id'),
+    accessorKey: 'radiologist_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).radiologist_id ?? '—'),
+  },
+  {
+    header: humanizeField('examined_at'),
+    accessorKey: 'examined_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examined_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'radiology_order_id', label: humanizeField('radiology_order_id'), type: 'number', required: true },
+  { key: 'findings', label: humanizeField('findings'), required: true },
+  { key: 'impression', label: humanizeField('impression') },
+  { key: 'radiologist_id', label: humanizeField('radiologist_id'), type: 'number' },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date', required: true },
+  { key: 'status', label: humanizeField('status'), required: true },
+]
+
+const emptyForm = {
+  radiology_order_id: '',
+  findings: '',
+  impression: '',
+  radiologist_id: '',
+  examined_at: '',
+  status: '',
+}
+
+const actions: WorkflowAction<RadiologyResult>[] = []
 
 export function RadiologyResultListPage() {
-  const { useList } = useRadiologyResultResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRadiologyResultResource()
+  const title = humanizeModuleName('LayananRadiologyResult')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RadiologyResult</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-radiology-result/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-radiology-result/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<RadiologyResult>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananRadiologyResultEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.findings ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

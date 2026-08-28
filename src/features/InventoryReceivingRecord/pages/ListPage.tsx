@@ -1,41 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useReceivingRecordResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { InventoryReceivingRecordEndpoint, useReceivingRecordResource } from '../api'
+import type { ReceivingRecord } from '../types'
 
-const COLUMNS = ["id","ward_id","received_by","received_at","notes","created_at"] as const
+const columns: ColumnDef<ReceivingRecord, unknown>[] = [
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('received_by'),
+    accessorKey: 'received_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).received_by ?? '—'),
+  },
+  {
+    header: humanizeField('received_at'),
+    accessorKey: 'received_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).received_at ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'received_by', label: humanizeField('received_by'), type: 'number', required: true },
+  { key: 'received_at', label: humanizeField('received_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  ward_id: null,
+  received_by: '',
+  received_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<ReceivingRecord>[] = []
 
 export function ReceivingRecordListPage() {
-  const { useList } = useReceivingRecordResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useReceivingRecordResource()
+  const title = humanizeModuleName('InventoryReceivingRecord')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ReceivingRecord</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-receiving-record/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<ReceivingRecord>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={InventoryReceivingRecordEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

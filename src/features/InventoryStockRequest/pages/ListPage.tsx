@@ -1,49 +1,75 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useStockRequestResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { InventoryStockRequestEndpoint, useStockRequestResource } from '../api'
+import type { StockRequest } from '../types'
 
-const COLUMNS = ["id","request_number","ward_id","item_id","quantity","requested_by","requested_at","fulfilled_at","notes","status","created_at"] as const
+const columns: ColumnDef<StockRequest, unknown>[] = [
+  {
+    header: humanizeField('request_number'),
+    accessorKey: 'request_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).request_number ?? '—'),
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('quantity'),
+    accessorKey: 'quantity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).quantity ?? '—'),
+  },
+  {
+    header: humanizeField('requested_by'),
+    accessorKey: 'requested_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).requested_by ?? '—'),
+  },
+  {
+    header: humanizeField('requested_at'),
+    accessorKey: 'requested_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).requested_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items', required: true },
+  { key: 'quantity', label: humanizeField('quantity'), type: 'number', required: true },
+  { key: 'requested_at', label: humanizeField('requested_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  ward_id: null,
+  item_id: null,
+  quantity: '',
+  requested_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<StockRequest>[] = []
 
 export function StockRequestListPage() {
-  const { useList } = useStockRequestResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useStockRequestResource()
+  const title = humanizeModuleName('InventoryStockRequest')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">StockRequest</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-stock-request/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-stock-request/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<StockRequest>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={InventoryStockRequestEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

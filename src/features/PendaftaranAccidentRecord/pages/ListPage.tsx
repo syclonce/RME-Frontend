@@ -1,41 +1,47 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useAccidentRecordResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranAccidentRecordEndpoint, useAccidentRecordResource } from '../api'
+import type { AccidentRecord } from '../types'
 
-const COLUMNS = [] as const
+const columns: ColumnDef<AccidentRecord, unknown>[] = [
+
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'accident_type', label: humanizeField('accident_type'), required: true },
+  { key: 'accident_at', label: humanizeField('accident_at'), type: 'date', required: true },
+  { key: 'location', label: humanizeField('location'), required: true },
+  { key: 'police_report_number', label: humanizeField('police_report_number') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  accident_type: '',
+  accident_at: '',
+  location: '',
+  police_report_number: '',
+}
+
+const actions: WorkflowAction<AccidentRecord>[] = []
 
 export function AccidentRecordListPage() {
-  const { useList } = useAccidentRecordResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useAccidentRecordResource()
+  const title = humanizeModuleName('PendaftaranAccidentRecord')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">AccidentRecord</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-accident-record/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<AccidentRecord>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranAccidentRecordEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.accident_type ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

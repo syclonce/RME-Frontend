@@ -1,93 +1,70 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useBedResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { GeneralBedEndpoint, useBedResource } from '../api'
+import type { Bed } from '../types'
 
-const COLUMNS = ["id","room_id","bed_number","is_active"] as const
+const columns: ColumnDef<Bed, unknown>[] = [
+  {
+    header: humanizeField('room_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/rooms" id={(row.original as unknown as Record<string, unknown>).room_id as number | null} />,
+  },
+  {
+    header: humanizeField('bed_number'),
+    accessorKey: 'bed_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).bed_number ?? '—'),
+  },
+  {
+    header: humanizeField('is_active'),
+    cell: ({ row }) => ((row.original as unknown as Record<string, unknown>).is_active ? 'Ya' : 'Tidak'),
+  },
+]
 
-const WF_ACTIONS = [{"label":"Reserve","verb":"post","prefix":"beds","action":"reserve"},{"label":"Release Reservation","verb":"post","prefix":"beds","action":"release-reservation"}] as const
+const fields: CrudField[] = [
+  { key: 'room_id', label: humanizeField('room_id'), type: 'relation', relationEndpoint: '/rooms', required: true },
+  { key: 'bed_number', label: humanizeField('bed_number'), required: true },
+  { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
+]
+
+const emptyForm = {
+  room_id: null,
+  bed_number: '',
+  is_active: false,
+}
+
+const actions: WorkflowAction<Bed>[] = [
+  {
+    key: 'reserve',
+    label: 'Pesan',
+    method: 'post',
+    path: (item) => `/beds/${item.id}/reserve`,
+  },
+  {
+    key: 'release-reservation',
+    label: 'Lepas Reservasi',
+    method: 'post',
+    path: (item) => `/beds/${item.id}/release-reservation`,
+    variant: 'destructive',
+  },
+]
 
 export function BedListPage() {
-  const { useList, remove } = useBedResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/beds'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useBedResource()
+  const title = humanizeModuleName('GeneralBed')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Bed</h1>
-        <Button asChild>
-          <Link to="/modul/general-bed/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/general-bed/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Reserve'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Reserve
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Release Reservation'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
-                  >
-                    Release Reservation
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Bed>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={GeneralBedEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.bed_number ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

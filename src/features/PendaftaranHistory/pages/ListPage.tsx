@@ -1,41 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { usePendaftaranHistoryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranHistoryEndpoint, usePendaftaranHistoryResource } from '../api'
+import type { PendaftaranHistory } from '../types'
 
-const COLUMNS = ["id","registration_id","old_status","new_status","changed_by","changed_at","notes","created_at"] as const
+const columns: ColumnDef<PendaftaranHistory, unknown>[] = [
+  {
+    header: humanizeField('registration_id'),
+    accessorKey: 'registration_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).registration_id ?? '—'),
+  },
+  {
+    header: humanizeField('old_status'),
+    accessorKey: 'old_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).old_status ?? '—'),
+  },
+  {
+    header: humanizeField('new_status'),
+    accessorKey: 'new_status',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).new_status ?? '—'),
+  },
+  {
+    header: humanizeField('changed_by'),
+    accessorKey: 'changed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).changed_by ?? '—'),
+  },
+  {
+    header: humanizeField('changed_at'),
+    accessorKey: 'changed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).changed_at ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'registration_id', label: humanizeField('registration_id'), type: 'number', required: true },
+  { key: 'old_status', label: humanizeField('old_status') },
+  { key: 'new_status', label: humanizeField('new_status'), required: true },
+  { key: 'changed_at', label: humanizeField('changed_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  registration_id: '',
+  old_status: '',
+  new_status: '',
+  changed_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<PendaftaranHistory>[] = []
 
 export function PendaftaranHistoryListPage() {
-  const { useList } = usePendaftaranHistoryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePendaftaranHistoryResource()
+  const title = humanizeModuleName('PendaftaranHistory')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PendaftaranHistory</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-history/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<PendaftaranHistory>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranHistoryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.old_status ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

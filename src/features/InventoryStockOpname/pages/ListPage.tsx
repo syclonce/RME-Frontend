@@ -1,49 +1,72 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useInventoryStockOpnameResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { InventoryStockOpnameEndpoint, useInventoryStockOpnameResource } from '../api'
+import type { InventoryStockOpname } from '../types'
 
-const COLUMNS = ["id","ward_id","opname_date","conducted_by","status","notes","created_at"] as const
+const columns: ColumnDef<InventoryStockOpname, unknown>[] = [
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('opname_date'),
+    accessorKey: 'opname_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).opname_date ?? '—'),
+  },
+  {
+    header: humanizeField('conducted_by'),
+    accessorKey: 'conducted_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).conducted_by ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'opname_date', label: humanizeField('opname_date'), type: 'date', required: true },
+  { key: 'conducted_by', label: humanizeField('conducted_by'), type: 'number', required: true },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  ward_id: null,
+  opname_date: '',
+  conducted_by: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<InventoryStockOpname>[] = []
 
 export function InventoryStockOpnameListPage() {
-  const { useList } = useInventoryStockOpnameResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInventoryStockOpnameResource()
+  const title = humanizeModuleName('InventoryStockOpname')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InventoryStockOpname</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-stock-opname/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-stock-opname/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<InventoryStockOpname>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={InventoryStockOpnameEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

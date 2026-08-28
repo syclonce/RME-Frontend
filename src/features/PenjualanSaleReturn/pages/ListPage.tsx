@@ -1,41 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useSaleReturnResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PenjualanSaleReturnEndpoint, useSaleReturnResource } from '../api'
+import type { SaleReturn } from '../types'
 
-const COLUMNS = ["id","sale_id","returned_at","reason","refund_amount","created_at"] as const
+const columns: ColumnDef<SaleReturn, unknown>[] = [
+  {
+    header: humanizeField('sale_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/sales" id={(row.original as unknown as Record<string, unknown>).sale_id as number | null} />,
+  },
+  {
+    header: humanizeField('returned_at'),
+    accessorKey: 'returned_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).returned_at ?? '—'),
+  },
+  {
+    header: humanizeField('reason'),
+    accessorKey: 'reason',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reason ?? '—'),
+  },
+  {
+    header: humanizeField('refund_amount'),
+    accessorKey: 'refund_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).refund_amount ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'sale_id', label: humanizeField('sale_id'), type: 'relation', relationEndpoint: '/sales', required: true },
+  { key: 'returned_at', label: humanizeField('returned_at'), type: 'date' },
+  { key: 'reason', label: humanizeField('reason') },
+  { key: 'items', label: humanizeField('items'), required: true },
+]
+
+const emptyForm = {
+  sale_id: null,
+  returned_at: '',
+  reason: '',
+  items: '',
+}
+
+const actions: WorkflowAction<SaleReturn>[] = []
 
 export function SaleReturnListPage() {
-  const { useList } = useSaleReturnResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSaleReturnResource()
+  const title = humanizeModuleName('PenjualanSaleReturn')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">SaleReturn</h1>
-        <Button asChild>
-          <Link to="/modul/penjualan-sale-return/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<SaleReturn>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PenjualanSaleReturnEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.reason ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

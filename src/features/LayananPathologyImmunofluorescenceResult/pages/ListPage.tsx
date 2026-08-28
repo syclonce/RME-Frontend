@@ -1,41 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { usePathologyImmunofluorescenceResultResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananPathologyImmunofluorescenceResultEndpoint, usePathologyImmunofluorescenceResultResource } from '../api'
+import type { PathologyImmunofluorescenceResult } from '../types'
 
-const COLUMNS = ["id","pathology_anatomy_result_id","marker","result","intensity","examined_at","created_at"] as const
+const columns: ColumnDef<PathologyImmunofluorescenceResult, unknown>[] = [
+  {
+    header: humanizeField('pathology_anatomy_result_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/pathology-anatomy-results" id={(row.original as unknown as Record<string, unknown>).pathology_anatomy_result_id as number | null} />,
+  },
+  {
+    header: humanizeField('marker'),
+    accessorKey: 'marker',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).marker ?? '—'),
+  },
+  {
+    header: humanizeField('result'),
+    accessorKey: 'result',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).result ?? '—'),
+  },
+  {
+    header: humanizeField('intensity'),
+    accessorKey: 'intensity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).intensity ?? '—'),
+  },
+  {
+    header: humanizeField('examined_at'),
+    accessorKey: 'examined_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examined_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'pathology_anatomy_result_id', label: humanizeField('pathology_anatomy_result_id'), type: 'relation', relationEndpoint: '/pathology-anatomy-results', required: true },
+  { key: 'marker', label: humanizeField('marker'), required: true },
+  { key: 'result', label: humanizeField('result'), required: true },
+  { key: 'intensity', label: humanizeField('intensity') },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  pathology_anatomy_result_id: null,
+  marker: '',
+  result: '',
+  intensity: '',
+  examined_at: '',
+}
+
+const actions: WorkflowAction<PathologyImmunofluorescenceResult>[] = []
 
 export function PathologyImmunofluorescenceResultListPage() {
-  const { useList } = usePathologyImmunofluorescenceResultResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePathologyImmunofluorescenceResultResource()
+  const title = humanizeModuleName('LayananPathologyImmunofluorescenceResult')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PathologyImmunofluorescenceResult</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-pathology-immunofluorescence-result/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<PathologyImmunofluorescenceResult>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananPathologyImmunofluorescenceResultEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.marker ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

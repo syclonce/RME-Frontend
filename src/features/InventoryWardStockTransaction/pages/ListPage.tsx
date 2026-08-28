@@ -1,41 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useInventoryWardStockTransactionResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { InventoryWardStockTransactionEndpoint, useInventoryWardStockTransactionResource } from '../api'
+import type { InventoryWardStockTransaction } from '../types'
 
-const COLUMNS = ["id","ward_id","item_id","type","quantity","performed_by","performed_at","notes","created_at"] as const
+const columns: ColumnDef<InventoryWardStockTransaction, unknown>[] = [
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('type'),
+    accessorKey: 'type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).type ?? '—'),
+  },
+  {
+    header: humanizeField('quantity'),
+    accessorKey: 'quantity',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).quantity ?? '—'),
+  },
+  {
+    header: humanizeField('performed_by'),
+    accessorKey: 'performed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_by ?? '—'),
+  },
+  {
+    header: humanizeField('performed_at'),
+    accessorKey: 'performed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).performed_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items', required: true },
+  { key: 'type', label: humanizeField('type'), required: true },
+  { key: 'quantity', label: humanizeField('quantity'), type: 'number', required: true },
+  { key: 'performed_at', label: humanizeField('performed_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  ward_id: null,
+  item_id: null,
+  type: '',
+  quantity: '',
+  performed_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<InventoryWardStockTransaction>[] = []
 
 export function InventoryWardStockTransactionListPage() {
-  const { useList } = useInventoryWardStockTransactionResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInventoryWardStockTransactionResource()
+  const title = humanizeModuleName('InventoryWardStockTransaction')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InventoryWardStockTransaction</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-ward-stock-transaction/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<InventoryWardStockTransaction>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={InventoryWardStockTransactionEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.type ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

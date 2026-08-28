@@ -1,41 +1,78 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useTriageResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordTriageEndpoint, useTriageResource } from '../api'
+import type { Triage } from '../types'
 
-const COLUMNS = ["id","visit_id","level","chief_complaint","assessed_by","assessed_at","notes","created_by","created_at"] as const
+const columns: ColumnDef<Triage, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('level'),
+    accessorKey: 'level',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).level ?? '—'),
+  },
+  {
+    header: humanizeField('chief_complaint'),
+    accessorKey: 'chief_complaint',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).chief_complaint ?? '—'),
+  },
+  {
+    header: humanizeField('assessed_by'),
+    accessorKey: 'assessed_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessed_by ?? '—'),
+  },
+  {
+    header: humanizeField('assessed_at'),
+    accessorKey: 'assessed_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).assessed_at ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'level', label: humanizeField('level'), type: 'number', required: true },
+  { key: 'chief_complaint', label: humanizeField('chief_complaint') },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  level: '',
+  chief_complaint: '',
+  assessed_by: '',
+  assessed_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<Triage>[] = []
 
 export function TriageListPage() {
-  const { useList } = useTriageResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useTriageResource()
+  const title = humanizeModuleName('MedicalRecordTriage')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Triage</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-triage/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Triage>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordTriageEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.chief_complaint ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

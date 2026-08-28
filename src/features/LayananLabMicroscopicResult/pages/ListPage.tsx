@@ -1,41 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useLabMicroscopicResultResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananLabMicroscopicResultEndpoint, useLabMicroscopicResultResource } from '../api'
+import type { LabMicroscopicResult } from '../types'
 
-const COLUMNS = ["id","lab_order_id","specimen_type","findings","examined_by","examined_at","created_at"] as const
+const columns: ColumnDef<LabMicroscopicResult, unknown>[] = [
+  {
+    header: humanizeField('lab_order_id'),
+    accessorKey: 'lab_order_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).lab_order_id ?? '—'),
+  },
+  {
+    header: humanizeField('specimen_type'),
+    accessorKey: 'specimen_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).specimen_type ?? '—'),
+  },
+  {
+    header: humanizeField('findings'),
+    accessorKey: 'findings',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).findings ?? '—'),
+  },
+  {
+    header: humanizeField('examined_by'),
+    accessorKey: 'examined_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examined_by ?? '—'),
+  },
+  {
+    header: humanizeField('examined_at'),
+    accessorKey: 'examined_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examined_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'lab_order_id', label: humanizeField('lab_order_id'), type: 'number', required: true },
+  { key: 'specimen_type', label: humanizeField('specimen_type'), required: true },
+  { key: 'findings', label: humanizeField('findings'), required: true },
+  { key: 'examined_by', label: humanizeField('examined_by'), type: 'number' },
+  { key: 'examined_at', label: humanizeField('examined_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  lab_order_id: '',
+  specimen_type: '',
+  findings: '',
+  examined_by: '',
+  examined_at: '',
+}
+
+const actions: WorkflowAction<LabMicroscopicResult>[] = []
 
 export function LabMicroscopicResultListPage() {
-  const { useList } = useLabMicroscopicResultResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLabMicroscopicResultResource()
+  const title = humanizeModuleName('LayananLabMicroscopicResult')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LabMicroscopicResult</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-lab-microscopic-result/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<LabMicroscopicResult>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananLabMicroscopicResultEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.specimen_type ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

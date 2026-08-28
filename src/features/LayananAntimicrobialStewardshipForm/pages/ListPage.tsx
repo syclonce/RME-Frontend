@@ -1,49 +1,83 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useAntimicrobialStewardshipFormResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananAntimicrobialStewardshipFormEndpoint, useAntimicrobialStewardshipFormResource } from '../api'
+import type { AntimicrobialStewardshipForm } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","requesting_doctor_id","antibiotic_restriction_id","indication","status","submitted_at","created_at"] as const
+const columns: ColumnDef<AntimicrobialStewardshipForm, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('requesting_doctor_id'),
+    accessorKey: 'requesting_doctor_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).requesting_doctor_id ?? '—'),
+  },
+  {
+    header: humanizeField('antibiotic_restriction_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/antibiotic-restrictions" id={(row.original as unknown as Record<string, unknown>).antibiotic_restriction_id as number | null} />,
+  },
+  {
+    header: humanizeField('indication'),
+    accessorKey: 'indication',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).indication ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'requesting_doctor_id', label: humanizeField('requesting_doctor_id'), type: 'number' },
+  { key: 'antibiotic_restriction_id', label: humanizeField('antibiotic_restriction_id'), type: 'relation', relationEndpoint: '/antibiotic-restrictions' },
+  { key: 'indication', label: humanizeField('indication'), required: true },
+  { key: 'status', label: humanizeField('status'), required: true },
+  { key: 'submitted_at', label: humanizeField('submitted_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  patient_id: '',
+  requesting_doctor_id: '',
+  antibiotic_restriction_id: null,
+  indication: '',
+  status: '',
+  submitted_at: '',
+}
+
+const actions: WorkflowAction<AntimicrobialStewardshipForm>[] = []
 
 export function AntimicrobialStewardshipFormListPage() {
-  const { useList } = useAntimicrobialStewardshipFormResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useAntimicrobialStewardshipFormResource()
+  const title = humanizeModuleName('LayananAntimicrobialStewardshipForm')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">AntimicrobialStewardshipForm</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-antimicrobial-stewardship-form/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-antimicrobial-stewardship-form/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<AntimicrobialStewardshipForm>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananAntimicrobialStewardshipFormEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.indication ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

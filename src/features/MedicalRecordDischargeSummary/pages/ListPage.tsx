@@ -1,41 +1,83 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useDischargeSummaryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordDischargeSummaryEndpoint, useDischargeSummaryResource } from '../api'
+import type { DischargeSummary } from '../types'
 
-const COLUMNS = ["id","visit_id","admission_diagnosis_id","discharge_diagnosis_id","treatment_summary","condition_at_discharge","follow_up_plan","discharge_medication","authored_by","authored_at","created_by","created_at"] as const
+const columns: ColumnDef<DischargeSummary, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('admission_diagnosis_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/diagnoses" id={(row.original as unknown as Record<string, unknown>).admission_diagnosis_id as number | null} />,
+  },
+  {
+    header: humanizeField('discharge_diagnosis_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/diagnoses" id={(row.original as unknown as Record<string, unknown>).discharge_diagnosis_id as number | null} />,
+  },
+  {
+    header: humanizeField('treatment_summary'),
+    accessorKey: 'treatment_summary',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).treatment_summary ?? '—'),
+  },
+  {
+    header: humanizeField('condition_at_discharge'),
+    accessorKey: 'condition_at_discharge',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).condition_at_discharge ?? '—'),
+  },
+  {
+    header: humanizeField('follow_up_plan'),
+    accessorKey: 'follow_up_plan',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).follow_up_plan ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'admission_diagnosis_id', label: humanizeField('admission_diagnosis_id'), type: 'relation', relationEndpoint: '/diagnoses' },
+  { key: 'discharge_diagnosis_id', label: humanizeField('discharge_diagnosis_id'), type: 'relation', relationEndpoint: '/diagnoses' },
+  { key: 'treatment_summary', label: humanizeField('treatment_summary') },
+  { key: 'condition_at_discharge', label: humanizeField('condition_at_discharge') },
+  { key: 'follow_up_plan', label: humanizeField('follow_up_plan') },
+  { key: 'discharge_medication', label: humanizeField('discharge_medication') },
+  { key: 'authored_by', label: humanizeField('authored_by'), type: 'number', required: true },
+  { key: 'authored_at', label: humanizeField('authored_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  admission_diagnosis_id: null,
+  discharge_diagnosis_id: null,
+  treatment_summary: '',
+  condition_at_discharge: '',
+  follow_up_plan: '',
+  discharge_medication: '',
+  authored_by: '',
+  authored_at: '',
+}
+
+const actions: WorkflowAction<DischargeSummary>[] = []
 
 export function DischargeSummaryListPage() {
-  const { useList } = useDischargeSummaryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useDischargeSummaryResource()
+  const title = humanizeModuleName('MedicalRecordDischargeSummary')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DischargeSummary</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-discharge-summary/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<DischargeSummary>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordDischargeSummaryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.treatment_summary ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

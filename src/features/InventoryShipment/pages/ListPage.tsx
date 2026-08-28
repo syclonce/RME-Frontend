@@ -1,49 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useShipmentResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { InventoryShipmentEndpoint, useShipmentResource } from '../api'
+import type { Shipment } from '../types'
 
-const COLUMNS = ["id","from_ward_id","to_ward_id","shipped_by","shipped_at","status","created_at"] as const
+const columns: ColumnDef<Shipment, unknown>[] = [
+  {
+    header: humanizeField('from_ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).from_ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('to_ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).to_ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('shipped_by'),
+    accessorKey: 'shipped_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).shipped_by ?? '—'),
+  },
+  {
+    header: humanizeField('shipped_at'),
+    accessorKey: 'shipped_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).shipped_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'from_ward_id', label: humanizeField('from_ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'to_ward_id', label: humanizeField('to_ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'shipped_by', label: humanizeField('shipped_by'), type: 'number', required: true },
+  { key: 'shipped_at', label: humanizeField('shipped_at'), type: 'date' },
+]
+
+const emptyForm = {
+  from_ward_id: null,
+  to_ward_id: null,
+  shipped_by: '',
+  shipped_at: '',
+}
+
+const actions: WorkflowAction<Shipment>[] = []
 
 export function ShipmentListPage() {
-  const { useList } = useShipmentResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useShipmentResource()
+  const title = humanizeModuleName('InventoryShipment')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Shipment</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-shipment/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-shipment/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Shipment>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={InventoryShipmentEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

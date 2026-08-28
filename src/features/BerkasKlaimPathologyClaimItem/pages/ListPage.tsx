@@ -1,41 +1,57 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { usePathologyClaimItemResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { BerkasKlaimPathologyClaimItemEndpoint, usePathologyClaimItemResource } from '../api'
+import type { PathologyClaimItem } from '../types'
 
-const COLUMNS = ["id","pathology_claim_id","exam_name","amount","created_at"] as const
+const columns: ColumnDef<PathologyClaimItem, unknown>[] = [
+  {
+    header: humanizeField('pathology_claim_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/pathology-claims" id={(row.original as unknown as Record<string, unknown>).pathology_claim_id as number | null} />,
+  },
+  {
+    header: humanizeField('exam_name'),
+    accessorKey: 'exam_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).exam_name ?? '—'),
+  },
+  {
+    header: humanizeField('amount'),
+    accessorKey: 'amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).amount ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'pathology_claim_id', label: humanizeField('pathology_claim_id'), type: 'relation', relationEndpoint: '/pathology-claims', required: true },
+  { key: 'exam_name', label: humanizeField('exam_name'), required: true },
+  { key: 'amount', label: humanizeField('amount'), type: 'number', required: true },
+]
+
+const emptyForm = {
+  pathology_claim_id: null,
+  exam_name: '',
+  amount: '',
+}
+
+const actions: WorkflowAction<PathologyClaimItem>[] = []
 
 export function PathologyClaimItemListPage() {
-  const { useList } = usePathologyClaimItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePathologyClaimItemResource()
+  const title = humanizeModuleName('BerkasKlaimPathologyClaimItem')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PathologyClaimItem</h1>
-        <Button asChild>
-          <Link to="/modul/berkas-klaim-pathology-claim-item/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<PathologyClaimItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={BerkasKlaimPathologyClaimItemEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.exam_name ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

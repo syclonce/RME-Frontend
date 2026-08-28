@@ -1,41 +1,45 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useConsultationAnswerResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranConsultationAnswerEndpoint, useConsultationAnswerResource } from '../api'
+import type { ConsultationAnswer } from '../types'
 
-const COLUMNS = [] as const
+const columns: ColumnDef<ConsultationAnswer, unknown>[] = [
+
+]
+
+const fields: CrudField[] = [
+  { key: 'consultation_id', label: humanizeField('consultation_id'), type: 'relation', relationEndpoint: '/consultations', required: true },
+  { key: 'answered_by', label: humanizeField('answered_by'), type: 'number', required: true },
+  { key: 'answered_at', label: humanizeField('answered_at'), type: 'date' },
+  { key: 'answer', label: humanizeField('answer') },
+]
+
+const emptyForm = {
+  consultation_id: null,
+  answered_by: '',
+  answered_at: '',
+  answer: '',
+}
+
+const actions: WorkflowAction<ConsultationAnswer>[] = []
 
 export function ConsultationAnswerListPage() {
-  const { useList } = useConsultationAnswerResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useConsultationAnswerResource()
+  const title = humanizeModuleName('PendaftaranConsultationAnswer')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ConsultationAnswer</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-consultation-answer/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<ConsultationAnswer>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranConsultationAnswerEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.answer ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

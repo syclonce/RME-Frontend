@@ -1,49 +1,78 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { usePatientDeathRecordResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananPatientDeathRecordEndpoint, usePatientDeathRecordResource } from '../api'
+import type { PatientDeathRecord } from '../types'
 
-const COLUMNS = ["id","visit_id","patient_id","died_at","cause_of_death","declared_by","notes","created_at"] as const
+const columns: ColumnDef<PatientDeathRecord, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('died_at'),
+    accessorKey: 'died_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).died_at ?? '—'),
+  },
+  {
+    header: humanizeField('cause_of_death'),
+    accessorKey: 'cause_of_death',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cause_of_death ?? '—'),
+  },
+  {
+    header: humanizeField('declared_by'),
+    accessorKey: 'declared_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).declared_by ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'died_at', label: humanizeField('died_at'), type: 'date', required: true },
+  { key: 'cause_of_death', label: humanizeField('cause_of_death') },
+  { key: 'declared_by', label: humanizeField('declared_by'), type: 'number' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  patient_id: '',
+  died_at: '',
+  cause_of_death: '',
+  declared_by: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<PatientDeathRecord>[] = []
 
 export function PatientDeathRecordListPage() {
-  const { useList } = usePatientDeathRecordResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePatientDeathRecordResource()
+  const title = humanizeModuleName('LayananPatientDeathRecord')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PatientDeathRecord</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-patient-death-record/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-patient-death-record/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<PatientDeathRecord>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananPatientDeathRecordEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.cause_of_death ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

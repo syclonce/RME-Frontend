@@ -1,41 +1,60 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useInvoiceCancellationResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PembayaranInvoiceCancellationEndpoint, useInvoiceCancellationResource } from '../api'
+import type { InvoiceCancellation } from '../types'
 
-const COLUMNS = ["id","invoice_id","cancelled_at","cancelled_by","reason","created_at"] as const
+const columns: ColumnDef<InvoiceCancellation, unknown>[] = [
+  {
+    header: humanizeField('invoice_id'),
+    accessorKey: 'invoice_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_id ?? '—'),
+  },
+  {
+    header: humanizeField('cancelled_at'),
+    accessorKey: 'cancelled_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cancelled_at ?? '—'),
+  },
+  {
+    header: humanizeField('cancelled_by'),
+    accessorKey: 'cancelled_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cancelled_by ?? '—'),
+  },
+  {
+    header: humanizeField('reason'),
+    accessorKey: 'reason',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reason ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'reason', label: humanizeField('reason'), required: true },
+]
+
+const emptyForm = {
+  invoice_id: '',
+  reason: '',
+}
+
+const actions: WorkflowAction<InvoiceCancellation>[] = []
 
 export function InvoiceCancellationListPage() {
-  const { useList } = useInvoiceCancellationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInvoiceCancellationResource()
+  const title = humanizeModuleName('PembayaranInvoiceCancellation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">InvoiceCancellation</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-invoice-cancellation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<InvoiceCancellation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PembayaranInvoiceCancellationEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.reason ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

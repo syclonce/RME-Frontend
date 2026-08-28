@@ -1,93 +1,94 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useMedicineDeliveryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananMedicineDeliveryEndpoint, useMedicineDeliveryResource } from '../api'
+import type { MedicineDelivery } from '../types'
 
-const COLUMNS = ["id","pharmacy_dispense_id","patient_address","courier_employee_id","status","requested_at","delivered_at","created_at"] as const
+const columns: ColumnDef<MedicineDelivery, unknown>[] = [
+  {
+    header: humanizeField('pharmacy_dispense_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/pharmacy-dispenses" id={(row.original as unknown as Record<string, unknown>).pharmacy_dispense_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_address'),
+    accessorKey: 'patient_address',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_address ?? '—'),
+  },
+  {
+    header: humanizeField('courier_employee_id'),
+    accessorKey: 'courier_employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).courier_employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+  {
+    header: humanizeField('requested_at'),
+    accessorKey: 'requested_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).requested_at ?? '—'),
+  },
+  {
+    header: humanizeField('delivered_at'),
+    accessorKey: 'delivered_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).delivered_at ?? '—'),
+  },
+]
 
-const WF_ACTIONS = [{"label":"Assign Courier","verb":"post","prefix":"medicine-deliveries","action":"assign-courier"},{"label":"Mark Delivered","verb":"post","prefix":"medicine-deliveries","action":"mark-delivered"}] as const
+const fields: CrudField[] = [
+  { key: 'pharmacy_dispense_id', label: humanizeField('pharmacy_dispense_id'), type: 'relation', relationEndpoint: '/pharmacy-dispenses', required: true },
+  { key: 'patient_address', label: humanizeField('patient_address'), required: true },
+  { key: 'requested_at', label: humanizeField('requested_at'), type: 'date' },
+]
+
+const emptyForm = {
+  pharmacy_dispense_id: null,
+  patient_address: '',
+  requested_at: '',
+}
+
+const actions: WorkflowAction<MedicineDelivery>[] = [
+  {
+    key: 'assign-courier',
+    label: 'Tugaskan Kurir',
+    method: 'post',
+    path: (item) => `/medicine-deliveries/${item.id}/assign-courier`,
+    fields: [
+        { key: 'courier_employee_id', label: humanizeField('courier_employee_id'), type: 'number', required: true },
+    ],
+    emptyForm: {
+        courier_employee_id: '',
+    },
+  },
+  {
+    key: 'mark-delivered',
+    label: 'Tandai Terkirim',
+    method: 'post',
+    path: (item) => `/medicine-deliveries/${item.id}/mark-delivered`,
+  },
+]
 
 export function MedicineDeliveryListPage() {
-  const { useList, remove } = useMedicineDeliveryResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/medicine-deliveries'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useMedicineDeliveryResource()
+  const title = humanizeModuleName('LayananMedicineDelivery')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">MedicineDelivery</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-medicine-delivery/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-medicine-delivery/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Assign Courier'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Assign Courier
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Mark Delivered'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
-                  >
-                    Mark Delivered
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<MedicineDelivery>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananMedicineDeliveryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.patient_address ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

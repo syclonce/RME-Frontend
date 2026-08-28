@@ -1,49 +1,78 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useOxygenUsageResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananOxygenUsageEndpoint, useOxygenUsageResource } from '../api'
+import type { OxygenUsage } from '../types'
 
-const COLUMNS = ["id","visit_id","flow_rate_lpm","method","started_at","ended_at","recorded_by","created_at"] as const
+const columns: ColumnDef<OxygenUsage, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('flow_rate_lpm'),
+    accessorKey: 'flow_rate_lpm',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).flow_rate_lpm ?? '—'),
+  },
+  {
+    header: humanizeField('method'),
+    accessorKey: 'method',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).method ?? '—'),
+  },
+  {
+    header: humanizeField('started_at'),
+    accessorKey: 'started_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).started_at ?? '—'),
+  },
+  {
+    header: humanizeField('ended_at'),
+    accessorKey: 'ended_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ended_at ?? '—'),
+  },
+  {
+    header: humanizeField('recorded_by'),
+    accessorKey: 'recorded_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_by ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'flow_rate_lpm', label: humanizeField('flow_rate_lpm'), type: 'number', required: true },
+  { key: 'method', label: humanizeField('method'), required: true },
+  { key: 'started_at', label: humanizeField('started_at'), type: 'date', required: true },
+  { key: 'ended_at', label: humanizeField('ended_at'), type: 'date' },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  flow_rate_lpm: '',
+  method: '',
+  started_at: '',
+  ended_at: '',
+  recorded_by: '',
+}
+
+const actions: WorkflowAction<OxygenUsage>[] = []
 
 export function OxygenUsageListPage() {
-  const { useList } = useOxygenUsageResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useOxygenUsageResource()
+  const title = humanizeModuleName('LayananOxygenUsage')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">OxygenUsage</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-oxygen-usage/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-oxygen-usage/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<OxygenUsage>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananOxygenUsageEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.method ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

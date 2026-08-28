@@ -1,49 +1,77 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useSaleResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PenjualanSaleEndpoint, useSaleResource } from '../api'
+import type { Sale } from '../types'
 
-const COLUMNS = ["id","sale_number","patient_id","sold_by","sold_at","total_amount","status","created_at"] as const
+const columns: ColumnDef<Sale, unknown>[] = [
+  {
+    header: humanizeField('sale_number'),
+    accessorKey: 'sale_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sale_number ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('sold_by'),
+    accessorKey: 'sold_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sold_by ?? '—'),
+  },
+  {
+    header: humanizeField('sold_at'),
+    accessorKey: 'sold_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).sold_at ?? '—'),
+  },
+  {
+    header: humanizeField('total_amount'),
+    accessorKey: 'total_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).total_amount ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number' },
+  { key: 'sold_by', label: humanizeField('sold_by'), type: 'number', required: true },
+  { key: 'sold_at', label: humanizeField('sold_at'), type: 'date' },
+  { key: 'total_amount', label: humanizeField('total_amount'), type: 'number', required: true },
+]
+
+const emptyForm = {
+  patient_id: '',
+  sold_by: '',
+  sold_at: '',
+  total_amount: '',
+}
+
+const actions: WorkflowAction<Sale>[] = []
 
 export function SaleListPage() {
-  const { useList } = useSaleResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSaleResource()
+  const title = humanizeModuleName('PenjualanSale')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Sale</h1>
-        <Button asChild>
-          <Link to="/modul/penjualan-sale/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/penjualan-sale/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Sale>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PenjualanSaleEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

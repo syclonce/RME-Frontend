@@ -28,3 +28,4 @@ tools/codegen/.env
 *.njsproj
 *.sln
 *.sw?
+.claude/

@@ -1,41 +1,84 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { usePrescriptionItemResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananPrescriptionItemEndpoint, usePrescriptionItemResource } from '../api'
+import type { PrescriptionItem } from '../types'
 
-const COLUMNS = ["id","prescription_id","item_id","drug_name","dosage","frequency","route","duration","quantity","notes","created_at"] as const
+const columns: ColumnDef<PrescriptionItem, unknown>[] = [
+  {
+    header: humanizeField('prescription_id'),
+    accessorKey: 'prescription_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).prescription_id ?? '—'),
+  },
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('drug_name'),
+    accessorKey: 'drug_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).drug_name ?? '—'),
+  },
+  {
+    header: humanizeField('dosage'),
+    accessorKey: 'dosage',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).dosage ?? '—'),
+  },
+  {
+    header: humanizeField('frequency'),
+    accessorKey: 'frequency',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).frequency ?? '—'),
+  },
+  {
+    header: humanizeField('route'),
+    accessorKey: 'route',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).route ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'number', required: true },
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items' },
+  { key: 'drug_name', label: humanizeField('drug_name'), required: true },
+  { key: 'dosage', label: humanizeField('dosage'), required: true },
+  { key: 'frequency', label: humanizeField('frequency'), required: true },
+  { key: 'route', label: humanizeField('route') },
+  { key: 'duration', label: humanizeField('duration') },
+  { key: 'quantity', label: humanizeField('quantity'), type: 'number' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  prescription_id: '',
+  item_id: null,
+  drug_name: '',
+  dosage: '',
+  frequency: '',
+  route: '',
+  duration: '',
+  quantity: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<PrescriptionItem>[] = []
 
 export function PrescriptionItemListPage() {
-  const { useList } = usePrescriptionItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = usePrescriptionItemResource()
+  const title = humanizeModuleName('LayananPrescriptionItem')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">PrescriptionItem</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-prescription-item/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<PrescriptionItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananPrescriptionItemEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.drug_name ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

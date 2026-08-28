@@ -1,49 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useReferralResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranReferralEndpoint, useReferralResource } from '../api'
+import type { Referral } from '../types'
 
-const COLUMNS = ["id","referral_number","patient_id","direction","facility_name","reason","referred_at","status","created_at"] as const
+const columns: ColumnDef<Referral, unknown>[] = [
+  {
+    header: humanizeField('referral_number'),
+    accessorKey: 'referral_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).referral_number ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('direction'),
+    accessorKey: 'direction',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).direction ?? '—'),
+  },
+  {
+    header: humanizeField('facility_name'),
+    accessorKey: 'facility_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).facility_name ?? '—'),
+  },
+  {
+    header: humanizeField('reason'),
+    accessorKey: 'reason',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reason ?? '—'),
+  },
+  {
+    header: humanizeField('referred_at'),
+    accessorKey: 'referred_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).referred_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'direction', label: humanizeField('direction'), type: 'select', required: true, options: [{"value":"incoming","label":"Incoming"},{"value":"outgoing","label":"Outgoing"}] },
+  { key: 'facility_name', label: humanizeField('facility_name'), required: true },
+  { key: 'reason', label: humanizeField('reason') },
+  { key: 'referred_at', label: humanizeField('referred_at'), type: 'date' },
+]
+
+const emptyForm = {
+  patient_id: '',
+  direction: '',
+  facility_name: '',
+  reason: '',
+  referred_at: '',
+}
+
+const actions: WorkflowAction<Referral>[] = []
 
 export function ReferralListPage() {
-  const { useList } = useReferralResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useReferralResource()
+  const title = humanizeModuleName('PendaftaranReferral')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Referral</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-referral/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pendaftaran-referral/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Referral>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranReferralEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.direction ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

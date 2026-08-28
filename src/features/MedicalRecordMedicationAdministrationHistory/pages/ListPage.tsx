@@ -1,41 +1,82 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useMedicationAdministrationHistoryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordMedicationAdministrationHistoryEndpoint, useMedicationAdministrationHistoryResource } from '../api'
+import type { MedicationAdministrationHistory } from '../types'
 
-const COLUMNS = ["id","visit_id","administered_by","created_by","drug_name","dose","route","administered_at","notes","created_at"] as const
+const columns: ColumnDef<MedicationAdministrationHistory, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('administered_by'),
+    accessorKey: 'administered_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).administered_by ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+  {
+    header: humanizeField('drug_name'),
+    accessorKey: 'drug_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).drug_name ?? '—'),
+  },
+  {
+    header: humanizeField('dose'),
+    accessorKey: 'dose',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).dose ?? '—'),
+  },
+  {
+    header: humanizeField('route'),
+    accessorKey: 'route',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).route ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'administered_by', label: humanizeField('administered_by'), type: 'number', required: true },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'drug_name', label: humanizeField('drug_name'), required: true },
+  { key: 'dose', label: humanizeField('dose') },
+  { key: 'route', label: humanizeField('route') },
+  { key: 'administered_at', label: humanizeField('administered_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  administered_by: '',
+  created_by: '',
+  drug_name: '',
+  dose: '',
+  route: '',
+  administered_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<MedicationAdministrationHistory>[] = []
 
 export function MedicationAdministrationHistoryListPage() {
-  const { useList } = useMedicationAdministrationHistoryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useMedicationAdministrationHistoryResource()
+  const title = humanizeModuleName('MedicalRecordMedicationAdministrationHistory')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">MedicationAdministrationHistory</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-medication-administration-history/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<MedicationAdministrationHistory>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordMedicationAdministrationHistoryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.drug_name ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

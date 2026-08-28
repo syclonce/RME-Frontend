@@ -1,84 +1,96 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useImagingOrderResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananImagingOrderEndpoint, useImagingOrderResource } from '../api'
+import type { ImagingOrder } from '../types'
 
-const COLUMNS = ["id","visit_id","modality","body_part","ordered_by","ordered_at","scheduled_at","status","created_at"] as const
+const columns: ColumnDef<ImagingOrder, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('modality'),
+    accessorKey: 'modality',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).modality ?? '—'),
+  },
+  {
+    header: humanizeField('body_part'),
+    accessorKey: 'body_part',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).body_part ?? '—'),
+  },
+  {
+    header: humanizeField('ordered_by'),
+    accessorKey: 'ordered_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ordered_by ?? '—'),
+  },
+  {
+    header: humanizeField('ordered_at'),
+    accessorKey: 'ordered_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ordered_at ?? '—'),
+  },
+  {
+    header: humanizeField('scheduled_at'),
+    accessorKey: 'scheduled_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).scheduled_at ?? '—'),
+  },
+]
 
-const WF_ACTIONS = [{"label":"Schedule","verb":"post","prefix":"imaging-orders","action":"schedule"},{"label":"Cancel","verb":"post","prefix":"imaging-orders","action":"cancel"}] as const
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'modality', label: humanizeField('modality'), required: true },
+  { key: 'body_part', label: humanizeField('body_part'), required: true },
+  { key: 'ordered_by', label: humanizeField('ordered_by'), type: 'number', required: true },
+  { key: 'ordered_at', label: humanizeField('ordered_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  modality: '',
+  body_part: '',
+  ordered_by: '',
+  ordered_at: '',
+}
+
+const actions: WorkflowAction<ImagingOrder>[] = [
+  {
+    key: 'schedule',
+    label: 'Jadwalkan',
+    method: 'post',
+    path: (item) => `/imaging-orders/${item.id}/schedule`,
+    fields: [
+        { key: 'scheduled_at', label: humanizeField('scheduled_at'), type: 'date', required: true },
+    ],
+    emptyForm: {
+        scheduled_at: '',
+    },
+  },
+  {
+    key: 'cancel',
+    label: 'Batalkan',
+    method: 'post',
+    path: (item) => `/imaging-orders/${item.id}/cancel`,
+    variant: 'destructive',
+  },
+]
 
 export function ImagingOrderListPage() {
-  const { useList } = useImagingOrderResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/imaging-orders'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useImagingOrderResource()
+  const title = humanizeModuleName('LayananImagingOrder')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ImagingOrder</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-imaging-order/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-imaging-order/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Schedule'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Schedule
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Cancel'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<ImagingOrder>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananImagingOrderEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.modality ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

@@ -1,49 +1,82 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useSurgeryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordSurgeryEndpoint, useSurgeryResource } from '../api'
+import type { Surgery } from '../types'
 
-const COLUMNS = ["id","visit_id","diagnosis_id","procedure_name","surgeon_id","anesthesia_type","started_at","ended_at","notes","status","created_by","created_at"] as const
+const columns: ColumnDef<Surgery, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('diagnosis_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/diagnoses" id={(row.original as unknown as Record<string, unknown>).diagnosis_id as number | null} />,
+  },
+  {
+    header: humanizeField('procedure_name'),
+    accessorKey: 'procedure_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).procedure_name ?? '—'),
+  },
+  {
+    header: humanizeField('surgeon_id'),
+    accessorKey: 'surgeon_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).surgeon_id ?? '—'),
+  },
+  {
+    header: humanizeField('anesthesia_type'),
+    accessorKey: 'anesthesia_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).anesthesia_type ?? '—'),
+  },
+  {
+    header: humanizeField('started_at'),
+    accessorKey: 'started_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).started_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'diagnosis_id', label: humanizeField('diagnosis_id'), type: 'relation', relationEndpoint: '/diagnoses' },
+  { key: 'procedure_name', label: humanizeField('procedure_name'), required: true },
+  { key: 'surgeon_id', label: humanizeField('surgeon_id'), type: 'number', required: true },
+  { key: 'anesthesia_type', label: humanizeField('anesthesia_type') },
+  { key: 'started_at', label: humanizeField('started_at'), type: 'date' },
+  { key: 'ended_at', label: humanizeField('ended_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  diagnosis_id: null,
+  procedure_name: '',
+  surgeon_id: '',
+  anesthesia_type: '',
+  started_at: '',
+  ended_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<Surgery>[] = []
 
 export function SurgeryListPage() {
-  const { useList } = useSurgeryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useSurgeryResource()
+  const title = humanizeModuleName('MedicalRecordSurgery')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Surgery</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-surgery/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/medical-record-surgery/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Surgery>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordSurgeryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.procedure_name ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

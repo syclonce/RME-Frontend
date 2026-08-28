@@ -1,49 +1,82 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useTransferResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PembayaranTransferEndpoint, useTransferResource } from '../api'
+import type { Transfer } from '../types'
 
-const COLUMNS = ["id","payment_id","transfer_reference_number","source_bank_name","destination_account_number","destination_account_name","amount","transferred_at","proof_file_path","status","created_at","updated_at"] as const
+const columns: ColumnDef<Transfer, unknown>[] = [
+  {
+    header: humanizeField('payment_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/payments" id={(row.original as unknown as Record<string, unknown>).payment_id as number | null} />,
+  },
+  {
+    header: humanizeField('transfer_reference_number'),
+    accessorKey: 'transfer_reference_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).transfer_reference_number ?? '—'),
+  },
+  {
+    header: humanizeField('source_bank_name'),
+    accessorKey: 'source_bank_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).source_bank_name ?? '—'),
+  },
+  {
+    header: humanizeField('destination_account_number'),
+    accessorKey: 'destination_account_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).destination_account_number ?? '—'),
+  },
+  {
+    header: humanizeField('destination_account_name'),
+    accessorKey: 'destination_account_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).destination_account_name ?? '—'),
+  },
+  {
+    header: humanizeField('amount'),
+    accessorKey: 'amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).amount ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'payment_id', label: humanizeField('payment_id'), type: 'relation', relationEndpoint: '/payments', required: true },
+  { key: 'transfer_reference_number', label: humanizeField('transfer_reference_number'), required: true },
+  { key: 'source_bank_name', label: humanizeField('source_bank_name'), required: true },
+  { key: 'destination_account_number', label: humanizeField('destination_account_number'), required: true },
+  { key: 'destination_account_name', label: humanizeField('destination_account_name'), required: true },
+  { key: 'amount', label: humanizeField('amount'), type: 'number', required: true },
+  { key: 'transferred_at', label: humanizeField('transferred_at'), type: 'date' },
+  { key: 'proof_file_path', label: humanizeField('proof_file_path') },
+]
+
+const emptyForm = {
+  payment_id: null,
+  transfer_reference_number: '',
+  source_bank_name: '',
+  destination_account_number: '',
+  destination_account_name: '',
+  amount: '',
+  transferred_at: '',
+  proof_file_path: '',
+}
+
+const actions: WorkflowAction<Transfer>[] = []
 
 export function TransferListPage() {
-  const { useList } = useTransferResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useTransferResource()
+  const title = humanizeModuleName('PembayaranTransfer')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Transfer</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-transfer/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pembayaran-transfer/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Transfer>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PembayaranTransferEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.transfer_reference_number ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

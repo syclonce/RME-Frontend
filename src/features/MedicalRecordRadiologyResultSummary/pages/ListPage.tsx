@@ -1,41 +1,71 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useRadiologyResultSummaryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordRadiologyResultSummaryEndpoint, useRadiologyResultSummaryResource } from '../api'
+import type { RadiologyResultSummary } from '../types'
 
-const COLUMNS = ["id","visit_id","summarized_by","created_by","overall_impression","summarized_at","created_at"] as const
+const columns: ColumnDef<RadiologyResultSummary, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('summarized_by'),
+    accessorKey: 'summarized_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).summarized_by ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+  {
+    header: humanizeField('overall_impression'),
+    accessorKey: 'overall_impression',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).overall_impression ?? '—'),
+  },
+  {
+    header: humanizeField('summarized_at'),
+    accessorKey: 'summarized_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).summarized_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'summarized_by', label: humanizeField('summarized_by'), type: 'number', required: true },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'overall_impression', label: humanizeField('overall_impression') },
+  { key: 'summarized_at', label: humanizeField('summarized_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  summarized_by: '',
+  created_by: '',
+  overall_impression: '',
+  summarized_at: '',
+}
+
+const actions: WorkflowAction<RadiologyResultSummary>[] = []
 
 export function RadiologyResultSummaryListPage() {
-  const { useList } = useRadiologyResultSummaryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useRadiologyResultSummaryResource()
+  const title = humanizeModuleName('MedicalRecordRadiologyResultSummary')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">RadiologyResultSummary</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-radiology-result-summary/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<RadiologyResultSummary>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordRadiologyResultSummaryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.overall_impression ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

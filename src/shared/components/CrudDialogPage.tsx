@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,7 +11,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogContent,
@@ -20,9 +19,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
   Pagination,
   PaginationContent,
@@ -32,9 +28,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { Textarea } from '@/components/ui/textarea'
 import { DataTable } from '@/shared/components/DataTable'
-import { RelationSelect } from '@/shared/components/RelationSelect'
+import { RecordFieldsForm, groupFieldsBySection, type CrudField } from '@/shared/components/RecordFieldsForm'
+
+export type { CrudField }
 
 /**
  * Windowed page list for <Pagination> — always shows page 1, the last page,
@@ -54,28 +51,6 @@ function pageWindow(current: number, last: number): (number | 'ellipsis')[] {
     result.push(sorted[i])
   }
   return result
-}
-
-export interface CrudField {
-  key: string
-  label: string
-  type?: 'text' | 'number' | 'date' | 'textarea' | 'checkbox' | 'relation' | 'custom' | 'select'
-  relationEndpoint?: string
-  /** type: 'select' only — static enum options (not a server-backed relation). */
-  options?: { value: string; label: string }[]
-  required?: boolean
-  /** Groups fields under a subheading inside the dialog — mirrors the Card-section pattern used on full-page forms. */
-  section?: string
-  /** For type: 'custom' — renders its own widget (e.g. a cascading region picker) instead of a generic input. */
-  render?: (value: unknown, onChange: (v: unknown) => void) => React.ReactNode
-  /** Greys out + disables the field when true — e.g. identity fields once a patient is marked "tidak dikenal". */
-  disabledWhen?: (form: Record<string, unknown>) => boolean
-  /**
-   * checkbox only — extra side effect run alongside the normal value update,
-   * so toggling one flag can also adjust OTHER fields (e.g. checking "tidak
-   * dikenal" auto-fills `name` instead of leaving it blank-but-required).
-   */
-  onToggle?: (checked: boolean, form: Record<string, unknown>, setForm: (updater: (prev: Record<string, unknown>) => Record<string, unknown>) => void) => void
 }
 
 /**
@@ -185,12 +160,7 @@ export function CrudDialogPage<T extends { id: number | string }>({
 
   // Group fields by their (optional) `section` while preserving first-seen order,
   // so plain flat field lists (no section set) render exactly as before.
-  const sectionGroups: [string | undefined, CrudField[]][] = []
-  for (const f of fields) {
-    const last = sectionGroups[sectionGroups.length - 1]
-    if (last && last[0] === f.section) last[1].push(f)
-    else sectionGroups.push([f.section, [f]])
-  }
+  const sectionGroups = groupFieldsBySection(fields)
   // Small reference-data modules (a handful of fields) get a compact dialog;
   // heavy modules (sectioned, or just many fields) get the wide one — a 2-3
   // field module in a max-w-4xl dialog looks as awkward as 21 fields did in
@@ -249,80 +219,7 @@ export function CrudDialogPage<T extends { id: number | string }>({
           </DialogHeader>
 
           <div className="flex flex-col gap-5 overflow-y-auto px-1 py-2 pr-3 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
-            {sectionGroups.map(([section, sectionFields]) => (
-              <Fragment key={section ?? '__default'}>
-                {section && <h3 className="text-sm font-semibold text-foreground">{section}</h3>}
-                <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                  {sectionFields.map((f) => {
-                    const disabled = f.disabledWhen?.(form) ?? false
-                    return (
-                      <div
-                        key={f.key}
-                        className={`flex flex-col gap-1.5 ${f.type === 'textarea' || f.type === 'custom' ? 'sm:col-span-2' : ''}`}
-                      >
-                        {f.type !== 'checkbox' && <Label htmlFor={f.key}>{f.label}</Label>}
-                        {f.type === 'checkbox' ? (
-                          <div className="flex items-center gap-2">
-                            <Checkbox
-                              id={f.key}
-                              checked={Boolean(form[f.key])}
-                              onCheckedChange={(v) => {
-                                const checked = Boolean(v)
-                                setForm((prev) => ({ ...prev, [f.key]: checked }))
-                                f.onToggle?.(checked, form, setForm)
-                              }}
-                            />
-                            <Label htmlFor={f.key}>{f.label}</Label>
-                          </div>
-                        ) : f.type === 'textarea' ? (
-                          <Textarea
-                            id={f.key}
-                            disabled={disabled}
-                            value={(form[f.key] as string) ?? ''}
-                            onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
-                          />
-                        ) : f.type === 'relation' && f.relationEndpoint ? (
-                          <RelationSelect
-                            endpoint={f.relationEndpoint}
-                            value={(form[f.key] as number) ?? null}
-                            onChange={(v) => setForm((prev) => ({ ...prev, [f.key]: v }))}
-                            disabled={disabled}
-                          />
-                        ) : f.type === 'custom' && f.render ? (
-                          f.render(form[f.key], (v) => setForm((prev) => ({ ...prev, [f.key]: v })))
-                        ) : f.type === 'select' ? (
-                          <Select
-                            value={(form[f.key] as string) ?? ''}
-                            onValueChange={(v) => setForm((prev) => ({ ...prev, [f.key]: v }))}
-                            disabled={disabled}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Pilih..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {f.options?.map((o) => (
-                                <SelectItem key={o.value} value={o.value}>
-                                  {o.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        ) : (
-                          <Input
-                            id={f.key}
-                            type={f.type === 'number' ? 'number' : f.type === 'date' ? 'date' : 'text'}
-                            value={(form[f.key] as string | number) ?? ''}
-                            required={f.required && !disabled}
-                            disabled={disabled}
-                            onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
-                          />
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              </Fragment>
-            ))}
+            <RecordFieldsForm fields={fields} form={form} setForm={setForm} />
 
             {renderExtra?.(editing)}
           </div>

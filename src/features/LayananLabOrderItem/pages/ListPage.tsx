@@ -1,41 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useLabOrderItemResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananLabOrderItemEndpoint, useLabOrderItemResource } from '../api'
+import type { LabOrderItem } from '../types'
 
-const COLUMNS = ["id","lab_order_id","examination_name","item_id","price","created_at"] as const
+const columns: ColumnDef<LabOrderItem, unknown>[] = [
+  {
+    header: humanizeField('lab_order_id'),
+    accessorKey: 'lab_order_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).lab_order_id ?? '—'),
+  },
+  {
+    header: humanizeField('examination_name'),
+    accessorKey: 'examination_name',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).examination_name ?? '—'),
+  },
+  {
+    header: humanizeField('item_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/items" id={(row.original as unknown as Record<string, unknown>).item_id as number | null} />,
+  },
+  {
+    header: humanizeField('price'),
+    accessorKey: 'price',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).price ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'lab_order_id', label: humanizeField('lab_order_id'), type: 'number', required: true },
+  { key: 'examination_name', label: humanizeField('examination_name'), required: true },
+  { key: 'item_id', label: humanizeField('item_id'), type: 'relation', relationEndpoint: '/items' },
+  { key: 'price', label: humanizeField('price'), type: 'number' },
+]
+
+const emptyForm = {
+  lab_order_id: '',
+  examination_name: '',
+  item_id: null,
+  price: '',
+}
+
+const actions: WorkflowAction<LabOrderItem>[] = []
 
 export function LabOrderItemListPage() {
-  const { useList } = useLabOrderItemResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLabOrderItemResource()
+  const title = humanizeModuleName('LayananLabOrderItem')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LabOrderItem</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-lab-order-item/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<LabOrderItem>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananLabOrderItemEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.examination_name ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

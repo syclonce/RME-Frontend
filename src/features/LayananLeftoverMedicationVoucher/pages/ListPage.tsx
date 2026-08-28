@@ -1,49 +1,85 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useLeftoverMedicationVoucherResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananLeftoverMedicationVoucherEndpoint, useLeftoverMedicationVoucherResource } from '../api'
+import type { LeftoverMedicationVoucher } from '../types'
 
-const COLUMNS = ["id","voucher_number","visit_id","patient_id","prescription_id","status","issued_at","redeemed_at","notes","created_at"] as const
+const columns: ColumnDef<LeftoverMedicationVoucher, unknown>[] = [
+  {
+    header: humanizeField('voucher_number'),
+    accessorKey: 'voucher_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).voucher_number ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('prescription_id'),
+    accessorKey: 'prescription_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).prescription_id ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+  {
+    header: humanizeField('issued_at'),
+    accessorKey: 'issued_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).issued_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'voucher_number', label: humanizeField('voucher_number'), required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'number' },
+  { key: 'status', label: humanizeField('status') },
+  { key: 'issued_at', label: humanizeField('issued_at'), type: 'date', required: true },
+  { key: 'redeemed_at', label: humanizeField('redeemed_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  voucher_number: '',
+  visit_id: '',
+  patient_id: '',
+  prescription_id: '',
+  status: '',
+  issued_at: '',
+  redeemed_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<LeftoverMedicationVoucher>[] = []
 
 export function LeftoverMedicationVoucherListPage() {
-  const { useList } = useLeftoverMedicationVoucherResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useLeftoverMedicationVoucherResource()
+  const title = humanizeModuleName('LayananLeftoverMedicationVoucher')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LeftoverMedicationVoucher</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-leftover-medication-voucher/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-leftover-medication-voucher/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<LeftoverMedicationVoucher>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananLeftoverMedicationVoucherEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.voucher_number ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

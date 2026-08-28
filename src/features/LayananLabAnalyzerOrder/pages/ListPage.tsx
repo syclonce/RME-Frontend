@@ -1,102 +1,79 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useLabAnalyzerVendorResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananLabAnalyzerOrderEndpoint, useLabAnalyzerVendorResource } from '../api'
+import type { LabAnalyzerVendor } from '../types'
 
-const COLUMNS = ["id","visit_id","vendor_id","test_code","ordered_by","ordered_at","status","raw_result_text","verified_by","verified_at","visit","visit_number","vendor","vendor_name","created_at"] as const
+const columns: ColumnDef<LabAnalyzerVendor, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('vendor_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/lab-analyzer-vendors" id={(row.original as unknown as Record<string, unknown>).vendor_id as number | null} />,
+  },
+  {
+    header: humanizeField('test_code'),
+    accessorKey: 'test_code',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).test_code ?? '—'),
+  },
+  {
+    header: humanizeField('ordered_by'),
+    accessorKey: 'ordered_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ordered_by ?? '—'),
+  },
+  {
+    header: humanizeField('ordered_at'),
+    accessorKey: 'ordered_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ordered_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
 
-const WF_ACTIONS = [{"label":"Send To Analyzer","verb":"post","prefix":"lab-analyzer-orders","action":"send-to-analyzer"},{"label":"Result","verb":"post","prefix":"lab-analyzer-orders","action":"result"},{"label":"Verify","verb":"post","prefix":"lab-analyzer-orders","action":"verify"}] as const
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'vendor_id', label: humanizeField('vendor_id'), type: 'relation', relationEndpoint: '/lab-analyzer-vendors' },
+  { key: 'test_code', label: humanizeField('test_code'), required: true },
+  { key: 'ordered_by', label: humanizeField('ordered_by'), type: 'number', required: true },
+  { key: 'ordered_at', label: humanizeField('ordered_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  vendor_id: null,
+  test_code: '',
+  ordered_by: '',
+  ordered_at: '',
+}
+
+const actions: WorkflowAction<LabAnalyzerVendor>[] = []
 
 export function LabAnalyzerVendorListPage() {
-  const { useList, remove } = useLabAnalyzerVendorResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/lab-analyzer-vendors'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useLabAnalyzerVendorResource()
+  const title = humanizeModuleName('LayananLabAnalyzerOrder')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">LabAnalyzerVendor</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-lab-analyzer-order/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-lab-analyzer-order/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Send To Analyzer'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Send To Analyzer
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Result'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
-                  >
-                    Result
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Verify'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[2], row.id)}
-                  >
-                    Verify
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<LabAnalyzerVendor>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananLabAnalyzerOrderEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.test_code ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

@@ -1,102 +1,94 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useBloodBagResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { InventoryBloodBagEndpoint, useBloodBagResource } from '../api'
+import type { BloodBag } from '../types'
 
-const COLUMNS = ["id","bag_number","blood_type_id","volume_ml","collected_at","expires_at","status","created_at","updated_at"] as const
+const columns: ColumnDef<BloodBag, unknown>[] = [
+  {
+    header: humanizeField('bag_number'),
+    accessorKey: 'bag_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).bag_number ?? '—'),
+  },
+  {
+    header: humanizeField('blood_type_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/blood_types" id={(row.original as unknown as Record<string, unknown>).blood_type_id as number | null} />,
+  },
+  {
+    header: humanizeField('volume_ml'),
+    accessorKey: 'volume_ml',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).volume_ml ?? '—'),
+  },
+  {
+    header: humanizeField('collected_at'),
+    accessorKey: 'collected_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).collected_at ?? '—'),
+  },
+  {
+    header: humanizeField('expires_at'),
+    accessorKey: 'expires_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).expires_at ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
 
-const WF_ACTIONS = [{"label":"Crossmatch","verb":"post","prefix":"blood-bags","action":"crossmatch"},{"label":"Transfuse","verb":"post","prefix":"blood-bags","action":"transfuse"},{"label":"Release","verb":"post","prefix":"crossmatch-tests","action":"release"}] as const
+const fields: CrudField[] = [
+  { key: 'bag_number', label: humanizeField('bag_number'), required: true },
+  { key: 'blood_type_id', label: humanizeField('blood_type_id'), type: 'relation', relationEndpoint: '/blood_types', required: true },
+  { key: 'volume_ml', label: humanizeField('volume_ml'), type: 'number', required: true },
+  { key: 'collected_at', label: humanizeField('collected_at'), type: 'date', required: true },
+  { key: 'expires_at', label: humanizeField('expires_at'), type: 'date', required: true },
+  { key: 'status', label: humanizeField('status') },
+]
+
+const emptyForm = {
+  bag_number: '',
+  blood_type_id: null,
+  volume_ml: '',
+  collected_at: '',
+  expires_at: '',
+  status: '',
+}
+
+const actions: WorkflowAction<BloodBag>[] = [
+  {
+    key: 'crossmatch',
+    label: 'Crossmatch',
+    method: 'post',
+    path: (item) => `/blood-bags/${item.id}/crossmatch`,
+  },
+  {
+    key: 'transfuse',
+    label: 'Transfusikan',
+    method: 'post',
+    path: (item) => `/blood-bags/${item.id}/transfuse`,
+  },
+]
 
 export function BloodBagListPage() {
-  const { useList, remove } = useBloodBagResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/blood-bags'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useBloodBagResource()
+  const title = humanizeModuleName('InventoryBloodBag')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BloodBag</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-blood-bag/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-blood-bag/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Crossmatch'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Crossmatch
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Transfuse'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
-                  >
-                    Transfuse
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Release'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[2], row.id)}
-                  >
-                    Release
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<BloodBag>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={InventoryBloodBagEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.bag_number ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

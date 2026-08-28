@@ -1,49 +1,74 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useServiceHandoverResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranServiceHandoverEndpoint, useServiceHandoverResource } from '../api'
+import type { ServiceHandover } from '../types'
 
-const COLUMNS = ["id","visit_id","ward_id","handed_over_by","received_by","handed_over_at","received_at","notes","status","created_at","updated_at"] as const
+const columns: ColumnDef<ServiceHandover, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('handed_over_by'),
+    accessorKey: 'handed_over_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).handed_over_by ?? '—'),
+  },
+  {
+    header: humanizeField('received_by'),
+    accessorKey: 'received_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).received_by ?? '—'),
+  },
+  {
+    header: humanizeField('handed_over_at'),
+    accessorKey: 'handed_over_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).handed_over_at ?? '—'),
+  },
+  {
+    header: humanizeField('received_at'),
+    accessorKey: 'received_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).received_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'handed_over_at', label: humanizeField('handed_over_at'), type: 'date' },
+  { key: 'notes', label: humanizeField('notes') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  ward_id: null,
+  handed_over_at: '',
+  notes: '',
+}
+
+const actions: WorkflowAction<ServiceHandover>[] = []
 
 export function ServiceHandoverListPage() {
-  const { useList } = useServiceHandoverResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useServiceHandoverResource()
+  const title = humanizeModuleName('PendaftaranServiceHandover')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">ServiceHandover</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-service-handover/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pendaftaran-service-handover/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<ServiceHandover>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranServiceHandoverEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.notes ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

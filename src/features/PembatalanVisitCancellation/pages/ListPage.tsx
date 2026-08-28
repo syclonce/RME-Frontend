@@ -1,41 +1,64 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useVisitCancellationResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PembatalanVisitCancellationEndpoint, useVisitCancellationResource } from '../api'
+import type { VisitCancellation } from '../types'
 
-const COLUMNS = ["id","visit_id","cancelled_by","reason","cancelled_at","created_at"] as const
+const columns: ColumnDef<VisitCancellation, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('cancelled_by'),
+    accessorKey: 'cancelled_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cancelled_by ?? '—'),
+  },
+  {
+    header: humanizeField('reason'),
+    accessorKey: 'reason',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reason ?? '—'),
+  },
+  {
+    header: humanizeField('cancelled_at'),
+    accessorKey: 'cancelled_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).cancelled_at ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'cancelled_by', label: humanizeField('cancelled_by'), type: 'number', required: true },
+  { key: 'reason', label: humanizeField('reason'), required: true },
+  { key: 'cancelled_at', label: humanizeField('cancelled_at'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  cancelled_by: '',
+  reason: '',
+  cancelled_at: '',
+}
+
+const actions: WorkflowAction<VisitCancellation>[] = []
 
 export function VisitCancellationListPage() {
-  const { useList } = useVisitCancellationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useVisitCancellationResource()
+  const title = humanizeModuleName('PembatalanVisitCancellation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">VisitCancellation</h1>
-        <Button asChild>
-          <Link to="/modul/pembatalan-visit-cancellation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<VisitCancellation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PembatalanVisitCancellationEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.reason ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

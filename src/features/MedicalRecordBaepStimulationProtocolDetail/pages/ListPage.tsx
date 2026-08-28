@@ -1,41 +1,78 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useBaepStimulationProtocolDetailResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordBaepStimulationProtocolDetailEndpoint, useBaepStimulationProtocolDetailResource } from '../api'
+import type { BaepStimulationProtocolDetail } from '../types'
 
-const COLUMNS = ["id","baep_protocol_id","stimulation_site","stimulation_frequency_hz","stimulation_duration_minutes","intensity_ma","number_of_sessions","created_at"] as const
+const columns: ColumnDef<BaepStimulationProtocolDetail, unknown>[] = [
+  {
+    header: humanizeField('baep_protocol_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/baep-intervention-protocols" id={(row.original as unknown as Record<string, unknown>).baep_protocol_id as number | null} />,
+  },
+  {
+    header: humanizeField('stimulation_site'),
+    accessorKey: 'stimulation_site',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).stimulation_site ?? '—'),
+  },
+  {
+    header: humanizeField('stimulation_frequency_hz'),
+    accessorKey: 'stimulation_frequency_hz',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).stimulation_frequency_hz ?? '—'),
+  },
+  {
+    header: humanizeField('stimulation_duration_minutes'),
+    accessorKey: 'stimulation_duration_minutes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).stimulation_duration_minutes ?? '—'),
+  },
+  {
+    header: humanizeField('intensity_ma'),
+    accessorKey: 'intensity_ma',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).intensity_ma ?? '—'),
+  },
+  {
+    header: humanizeField('number_of_sessions'),
+    accessorKey: 'number_of_sessions',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).number_of_sessions ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'baep_protocol_id', label: humanizeField('baep_protocol_id'), type: 'relation', relationEndpoint: '/baep-intervention-protocols', required: true },
+  { key: 'stimulation_site', label: humanizeField('stimulation_site'), required: true },
+  { key: 'stimulation_frequency_hz', label: humanizeField('stimulation_frequency_hz'), type: 'number' },
+  { key: 'stimulation_duration_minutes', label: humanizeField('stimulation_duration_minutes'), type: 'number' },
+  { key: 'intensity_ma', label: humanizeField('intensity_ma'), type: 'number' },
+  { key: 'number_of_sessions', label: humanizeField('number_of_sessions'), type: 'number' },
+]
+
+const emptyForm = {
+  baep_protocol_id: null,
+  stimulation_site: '',
+  stimulation_frequency_hz: '',
+  stimulation_duration_minutes: '',
+  intensity_ma: '',
+  number_of_sessions: '',
+}
+
+const actions: WorkflowAction<BaepStimulationProtocolDetail>[] = []
 
 export function BaepStimulationProtocolDetailListPage() {
-  const { useList } = useBaepStimulationProtocolDetailResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBaepStimulationProtocolDetailResource()
+  const title = humanizeModuleName('MedicalRecordBaepStimulationProtocolDetail')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BaepStimulationProtocolDetail</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-baep-stimulation-protocol-detail/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<BaepStimulationProtocolDetail>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordBaepStimulationProtocolDetailEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.stimulation_site ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

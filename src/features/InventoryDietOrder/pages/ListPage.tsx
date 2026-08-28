@@ -1,84 +1,93 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useDietOrderResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { InventoryDietOrderEndpoint, useDietOrderResource } from '../api'
+import type { DietOrder } from '../types'
 
-const COLUMNS = ["id","visit_id","diet_type","calorie_target","allergy_notes","meal_schedule","ordered_by","status","order_date","created_at","updated_at"] as const
+const columns: ColumnDef<DietOrder, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('diet_type'),
+    accessorKey: 'diet_type',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).diet_type ?? '—'),
+  },
+  {
+    header: humanizeField('calorie_target'),
+    accessorKey: 'calorie_target',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).calorie_target ?? '—'),
+  },
+  {
+    header: humanizeField('allergy_notes'),
+    accessorKey: 'allergy_notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).allergy_notes ?? '—'),
+  },
+  {
+    header: humanizeField('meal_schedule'),
+    accessorKey: 'meal_schedule',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).meal_schedule ?? '—'),
+  },
+  {
+    header: humanizeField('ordered_by'),
+    accessorKey: 'ordered_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ordered_by ?? '—'),
+  },
+]
 
-const WF_ACTIONS = [{"label":"Status","verb":"patch","prefix":"diet-orders","action":"status"}] as const
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'diet_type', label: humanizeField('diet_type'), required: true },
+  { key: 'calorie_target', label: humanizeField('calorie_target'), type: 'number' },
+  { key: 'allergy_notes', label: humanizeField('allergy_notes') },
+  { key: 'meal_schedule', label: humanizeField('meal_schedule'), required: true },
+  { key: 'ordered_by', label: humanizeField('ordered_by'), type: 'number', required: true },
+  { key: 'order_date', label: humanizeField('order_date'), type: 'date', required: true },
+]
+
+const emptyForm = {
+  visit_id: '',
+  diet_type: '',
+  calorie_target: '',
+  allergy_notes: '',
+  meal_schedule: '',
+  ordered_by: '',
+  order_date: '',
+}
+
+const actions: WorkflowAction<DietOrder>[] = [
+  {
+    key: 'status',
+    label: 'Ubah Status',
+    method: 'patch',
+    path: (item) => `/diet-orders/${item.id}/status`,
+    fields: [
+        { key: 'status', label: humanizeField('status'), required: true },
+    ],
+    emptyForm: {
+        status: '',
+    },
+  },
+]
 
 export function DietOrderListPage() {
-  const { useList, remove } = useDietOrderResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/diet-orders'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useDietOrderResource()
+  const title = humanizeModuleName('InventoryDietOrder')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">DietOrder</h1>
-        <Button asChild>
-          <Link to="/modul/inventory-diet-order/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/inventory-diet-order/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Status'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Status
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<DietOrder>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={InventoryDietOrderEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.diet_type ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

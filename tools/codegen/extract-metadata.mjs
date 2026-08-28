@@ -107,17 +107,37 @@ function extractFieldsFromRequests(moduleDir) {
   return byFile
 }
 
+/**
+ * Cari SEMUA method di controller lalu, per method, tentukan span badan
+ * method yang BENAR via penghitungan depth kurung kurawal (bukan regex lazy
+ * lintas-method yang salah asosiasi - bug lama: __construct() bisa "mencuri"
+ * validate() milik method lain di bawahnya karena [\s\S]*? lazy tidak
+ * berhenti di penutup kurung method-nya sendiri). Dalam span yang benar itu
+ * baru dicari validate([...]) inline.
+ */
 function extractInlineValidate(moduleDir) {
   const files = findFiles(path.join(moduleDir, 'app/Http/Controllers'), (n) => n.endsWith('.php'))
   const byMethod = {}
   for (const f of files) {
     const src = readIfExists(f)
     if (!src) continue
-    const re = /function\s+(store|update)\s*\([^)]*\)[^{]*\{([\s\S]*?)validate\(\s*\[([\s\S]*?)\]\s*\)/g
-    let m
-    while ((m = re.exec(src)) !== null) {
-      const [, method, , rulesBody] = m
-      byMethod[`${path.basename(f, '.php')}::${method}`] = parseRulesBlock(rulesBody)
+    const headerRe = /function\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)[^{;]*\{/g
+    let hm
+    while ((hm = headerRe.exec(src)) !== null) {
+      const method = hm[1]
+      const bodyStart = hm.index + hm[0].length
+      let depth = 1
+      let i = bodyStart
+      while (i < src.length && depth > 0) {
+        if (src[i] === '{') depth++
+        else if (src[i] === '}') depth--
+        i++
+      }
+      const body = src.slice(bodyStart, i - 1)
+      const vm = body.match(/validate\(\s*\[([\s\S]*?)\]\s*\)/)
+      if (vm) {
+        byMethod[`${path.basename(f, '.php')}::${method}`] = parseRulesBlock(vm[1])
+      }
     }
   }
   return byMethod

@@ -1,41 +1,47 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useConsultationResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranConsultationEndpoint, useConsultationResource } from '../api'
+import type { Consultation } from '../types'
 
-const COLUMNS = [] as const
+const columns: ColumnDef<Consultation, unknown>[] = [
+
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'requesting_department_id', label: humanizeField('requesting_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
+  { key: 'consulted_department_id', label: humanizeField('consulted_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
+  { key: 'requested_at', label: humanizeField('requested_at'), type: 'date' },
+  { key: 'question', label: humanizeField('question') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  requesting_department_id: null,
+  consulted_department_id: null,
+  requested_at: '',
+  question: '',
+}
+
+const actions: WorkflowAction<Consultation>[] = []
 
 export function ConsultationListPage() {
-  const { useList } = useConsultationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useConsultationResource()
+  const title = humanizeModuleName('PendaftaranConsultation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Consultation</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-consultation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Consultation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranConsultationEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.question ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

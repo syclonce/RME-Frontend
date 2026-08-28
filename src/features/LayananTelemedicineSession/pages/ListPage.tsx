@@ -1,93 +1,93 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { apiClient } from '@/api/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useTelemedicineSessionResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { LayananTelemedicineSessionEndpoint, useTelemedicineSessionResource } from '../api'
+import type { TelemedicineSession } from '../types'
 
-const COLUMNS = ["id","visit_id","doctor_employee_id","scheduled_at","started_at","ended_at","session_url","status","consultation_notes","created_at"] as const
+const columns: ColumnDef<TelemedicineSession, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('doctor_employee_id'),
+    accessorKey: 'doctor_employee_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).doctor_employee_id ?? '—'),
+  },
+  {
+    header: humanizeField('scheduled_at'),
+    accessorKey: 'scheduled_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).scheduled_at ?? '—'),
+  },
+  {
+    header: humanizeField('started_at'),
+    accessorKey: 'started_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).started_at ?? '—'),
+  },
+  {
+    header: humanizeField('ended_at'),
+    accessorKey: 'ended_at',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).ended_at ?? '—'),
+  },
+  {
+    header: humanizeField('session_url'),
+    accessorKey: 'session_url',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).session_url ?? '—'),
+  },
+]
 
-const WF_ACTIONS = [{"label":"Start","verb":"post","prefix":"telemedicine-sessions","action":"start"},{"label":"Complete","verb":"post","prefix":"telemedicine-sessions","action":"complete"}] as const
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'doctor_employee_id', label: humanizeField('doctor_employee_id'), type: 'number', required: true },
+  { key: 'scheduled_at', label: humanizeField('scheduled_at'), type: 'date', required: true },
+  { key: 'session_url', label: humanizeField('session_url') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  doctor_employee_id: '',
+  scheduled_at: '',
+  session_url: '',
+}
+
+const actions: WorkflowAction<TelemedicineSession>[] = [
+  {
+    key: 'start',
+    label: 'Mulai',
+    method: 'post',
+    path: (item) => `/telemedicine-sessions/${item.id}/start`,
+  },
+  {
+    key: 'complete',
+    label: 'Selesaikan',
+    method: 'post',
+    path: (item) => `/telemedicine-sessions/${item.id}/complete`,
+    fields: [
+        { key: 'consultation_notes', label: humanizeField('consultation_notes') },
+    ],
+    emptyForm: {
+        consultation_notes: '',
+    },
+  },
+]
 
 export function TelemedicineSessionListPage() {
-  const { useList, remove } = useTelemedicineSessionResource()
-  const { data, isLoading } = useList()
-  const queryClient = useQueryClient()
-  const [wfLoading, setWfLoading] = useState<string | null>(null)
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
-
-  const handleWorkflow = async (wf: typeof WF_ACTIONS[number], id: number) => {
-    setWfLoading(wf.label)
-    try {
-      await apiClient({ method: wf.verb, url: `/${wf.prefix}/${id}/${wf.action}` })
-      queryClient.invalidateQueries({ queryKey: ['/telemedicine-sessions'] })
-    } finally {
-      setWfLoading(null)
-    }
-  }
+  const resource = useTelemedicineSessionResource()
+  const title = humanizeModuleName('LayananTelemedicineSession')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">TelemedicineSession</h1>
-        <Button asChild>
-          <Link to="/modul/layanan-telemedicine-session/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/layanan-telemedicine-session/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      if (confirm('Hapus data ini?')) remove.mutate(row.id)
-                    }}
-                  >
-                    Hapus
-                  </Button>
-                                    <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Start'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[0], row.id)}
-                  >
-                    Start
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={wfLoading === 'Complete'}
-                    onClick={() => handleWorkflow(WF_ACTIONS[1], row.id)}
-                  >
-                    Complete
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<TelemedicineSession>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={LayananTelemedicineSessionEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.session_url ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

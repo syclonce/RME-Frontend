@@ -1,41 +1,82 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useTransferMedicationReconciliationResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordTransferMedicationReconciliationEndpoint, useTransferMedicationReconciliationResource } from '../api'
+import type { TransferMedicationReconciliation } from '../types'
 
-const COLUMNS = ["id","visit_id","reconciled_by","created_by","transferred_to_ward_id","source_of_medication_list","notes","status","reconciled_at","created_at"] as const
+const columns: ColumnDef<TransferMedicationReconciliation, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('reconciled_by'),
+    accessorKey: 'reconciled_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).reconciled_by ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+  {
+    header: humanizeField('transferred_to_ward_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/wards" id={(row.original as unknown as Record<string, unknown>).transferred_to_ward_id as number | null} />,
+  },
+  {
+    header: humanizeField('source_of_medication_list'),
+    accessorKey: 'source_of_medication_list',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).source_of_medication_list ?? '—'),
+  },
+  {
+    header: humanizeField('notes'),
+    accessorKey: 'notes',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).notes ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'reconciled_by', label: humanizeField('reconciled_by'), type: 'number', required: true },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'transferred_to_ward_id', label: humanizeField('transferred_to_ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
+  { key: 'source_of_medication_list', label: humanizeField('source_of_medication_list') },
+  { key: 'notes', label: humanizeField('notes') },
+  { key: 'status', label: humanizeField('status'), type: 'select', options: [{"value":"draft","label":"Draft"},{"value":"completed","label":"Completed"}] },
+  { key: 'reconciled_at', label: humanizeField('reconciled_at'), type: 'date' },
+]
+
+const emptyForm = {
+  visit_id: '',
+  reconciled_by: '',
+  created_by: '',
+  transferred_to_ward_id: null,
+  source_of_medication_list: '',
+  notes: '',
+  status: '',
+  reconciled_at: '',
+}
+
+const actions: WorkflowAction<TransferMedicationReconciliation>[] = []
 
 export function TransferMedicationReconciliationListPage() {
-  const { useList } = useTransferMedicationReconciliationResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useTransferMedicationReconciliationResource()
+  const title = humanizeModuleName('MedicalRecordTransferMedicationReconciliation')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">TransferMedicationReconciliation</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-transfer-medication-reconciliation/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<TransferMedicationReconciliation>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordTransferMedicationReconciliationEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.source_of_medication_list ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

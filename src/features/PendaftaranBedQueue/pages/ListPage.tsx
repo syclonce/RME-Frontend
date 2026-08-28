@@ -1,49 +1,65 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useBedQueueResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { RelationLabel } from '@/shared/components/RelationLabel'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PendaftaranBedQueueEndpoint, useBedQueueResource } from '../api'
+import type { BedQueue } from '../types'
 
-const COLUMNS = ["id","bed_id","patient_id","queue_number","status","created_at"] as const
+const columns: ColumnDef<BedQueue, unknown>[] = [
+  {
+    header: humanizeField('bed_id'),
+    cell: ({ row }) => <RelationLabel endpoint="/beds" id={(row.original as unknown as Record<string, unknown>).bed_id as number | null} />,
+  },
+  {
+    header: humanizeField('patient_id'),
+    accessorKey: 'patient_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).patient_id ?? '—'),
+  },
+  {
+    header: humanizeField('queue_number'),
+    accessorKey: 'queue_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).queue_number ?? '—'),
+  },
+  {
+    header: humanizeField('status'),
+    cell: ({ row }) => {
+      const v = (row.original as unknown as Record<string, unknown>).status
+      return v ? <Badge variant="outline">{String(v)}</Badge> : '—'
+    },
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'bed_id', label: humanizeField('bed_id'), type: 'relation', relationEndpoint: '/beds', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'queue_number', label: humanizeField('queue_number'), type: 'number', required: true },
+]
+
+const emptyForm = {
+  bed_id: null,
+  patient_id: '',
+  queue_number: '',
+}
+
+const actions: WorkflowAction<BedQueue>[] = []
 
 export function BedQueueListPage() {
-  const { useList } = useBedQueueResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useBedQueueResource()
+  const title = humanizeModuleName('PendaftaranBedQueue')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">BedQueue</h1>
-        <Button asChild>
-          <Link to="/modul/pendaftaran-bed-queue/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Link to={`/modul/pendaftaran-bed-queue/${row.id}/edit`} className="text-primary underline">Ubah</Link>
-                  
-                  
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<BedQueue>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PendaftaranBedQueueEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

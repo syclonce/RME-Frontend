@@ -333,7 +333,7 @@
   {
     "module": "AuditInfectionSurveillance",
     "hasRequests": true,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {
       "StoreDeviceDayRequest": [
@@ -483,7 +483,37 @@
         }
       ]
     },
-    "inlineFields": {},
+    "inlineFields": {
+      "SurveillanceRateController::rate": [
+        {
+          "name": "type",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "start",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "end",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [
@@ -731,7 +761,7 @@
       ]
     },
     "inlineFields": {
-      "QualityIndicatorController::store": [
+      "QualityIndicatorController::trend": [
         {
           "name": "year",
           "type": "number",
@@ -1089,6 +1119,10 @@
         }
       ],
       "verbs": [
+        {
+          "verb": "get",
+          "uri": "me/modules"
+        },
         {
           "verb": "get",
           "uri": "users/{user}/roles"
@@ -2485,7 +2519,7 @@
       ]
     },
     "inlineFields": {
-      "AntreanController::store": [
+      "AntreanController::batal": [
         {
           "name": "keterangan",
           "type": "string",
@@ -2682,7 +2716,7 @@
         {
           "uri": "antrean-fktp/antrean",
           "controller": "AntreanController",
-          "chain": "->only(['index', 'store', 'show'])\n        ->parameters(['antrean' => 'antrean'])"
+          "chain": "->only(['index', 'store', 'show'])\n        ->parameters(['antrean' => 'antrean'])\n        ->names('bpjsantreanfktp.antrean')"
         }
       ],
       "verbs": [
@@ -3157,7 +3191,7 @@
       ]
     },
     "inlineFields": {
-      "AntreanController::store": [
+      "AntreanController::batal": [
         {
           "name": "keterangan",
           "type": "string",
@@ -3354,7 +3388,7 @@
         {
           "uri": "antrean-rs/antrean",
           "controller": "AntreanController",
-          "chain": "->only(['index', 'store', 'show'])\n        ->parameters(['antrean' => 'antrean'])"
+          "chain": "->only(['index', 'store', 'show'])\n        ->parameters(['antrean' => 'antrean'])\n        ->names('bpjsantreanrs.antrean')"
         }
       ],
       "verbs": [
@@ -3714,10 +3748,50 @@
       ]
     },
     "inlineFields": {
-      "ApotekPenyimpananObatController::store": [
+      "ApotekMonitoringController::index": [
+        {
+          "name": "tanggal_mulai",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "tanggal_akhir",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "ApotekPenyimpananObatController::updateStok": [
         {
           "name": "obat",
           "type": "array",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "ApotekPrbController::index": [
+        {
+          "name": "bulan",
+          "type": "number",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "tahun",
+          "type": "number",
           "required": true,
           "nullable": false,
           "relation": null,
@@ -3854,10 +3928,31 @@
   {
     "module": "BpjsICare",
     "hasRequests": false,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {},
-    "inlineFields": {},
+    "inlineFields": {
+      "RiwayatPelayananController::validate": [
+        {
+          "name": "param",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "kodedokter",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [],
@@ -5918,10 +6013,64 @@
   {
     "module": "CetakanPrintDocument",
     "hasRequests": false,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {},
-    "inlineFields": {},
+    "inlineFields": {
+      "PrintDocumentController::issue": [
+        {
+          "name": "document_type",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": [
+            ""
+          ],
+          "max": null
+        },
+        {
+          "name": "ref_type",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 30
+        },
+        {
+          "name": "ref_id",
+          "type": "number",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "PrintDocumentController::index": [
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": [
+            ""
+          ],
+          "max": null
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [],
@@ -5945,10 +6094,22 @@
   {
     "module": "DashboardCore",
     "hasRequests": false,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {},
-    "inlineFields": {},
+    "inlineFields": {
+      "DashboardCoreController::core": [
+        {
+          "name": "date",
+          "type": "date",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [],
@@ -17931,12 +18092,12 @@
         {
           "uri": "patientfamilies",
           "controller": "PatientFamilyController",
-          "chain": "->names('generalpatientfamily.patientfamilies')->only(['index', 'show'])->middleware('auth:sanctum')"
+          "chain": "->names('generalpatientfamily.patientfamilies')->only(['index', 'show'])"
         },
         {
           "uri": "patientfamilies",
           "controller": "PatientFamilyController",
-          "chain": "->names('generalpatientfamily.patientfamilies')->only(['store', 'update', 'destroy'])->middleware(['auth:sanctum'])"
+          "chain": "->names('generalpatientfamily.patientfamilies')->only(['store', 'update', 'destroy'])"
         }
       ],
       "verbs": []
@@ -27198,6 +27359,205 @@
     "tableName": "yes_no_options"
   },
   {
+    "module": "Grup",
+    "hasRequests": true,
+    "hasInline": true,
+    "hasResources": false,
+    "requestFields": {
+      "SearchGroupPatientRequest": [
+        {
+          "name": "branch_id",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 100
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 1000
+        },
+        {
+          "name": "per_page",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 50
+        }
+      ],
+      "StoreGroupReferralRequest": [
+        {
+          "name": "destination_branch_id",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "patient_id",
+          "type": "relation",
+          "required": true,
+          "nullable": false,
+          "relation": {
+            "table": "patients",
+            "column": "id"
+          },
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "reason",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 5000
+        },
+        {
+          "name": "clinical_summary",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 20000
+        }
+      ],
+      "UpdateGroupReferralStatusRequest": [
+        {
+          "name": "status",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": [
+            "accepted",
+            "rejected",
+            "in_progress",
+            "completed",
+            "cancelled"
+          ],
+          "max": null
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 5000
+        }
+      ]
+    },
+    "inlineFields": {
+      "HubRelayController::patients": [
+        {
+          "name": "q",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 100
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 1000
+        },
+        {
+          "name": "per_page",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 50
+        }
+      ]
+    },
+    "resourceFields": {},
+    "route": {
+      "apiResources": [],
+      "verbs": [
+        {
+          "verb": "get",
+          "uri": "grup/context"
+        },
+        {
+          "verb": "post",
+          "uri": "grup/context/sync"
+        },
+        {
+          "verb": "get",
+          "uri": "grup/patients"
+        },
+        {
+          "verb": "get",
+          "uri": "grup/patients/{branchId}/{patientId}"
+        },
+        {
+          "verb": "get",
+          "uri": "grup/referrals"
+        },
+        {
+          "verb": "post",
+          "uri": "grup/referrals"
+        },
+        {
+          "verb": "patch",
+          "uri": "grup/referrals/{referralId}/status"
+        },
+        {
+          "verb": "get",
+          "uri": "grup/events"
+        },
+        {
+          "verb": "get",
+          "uri": "grup/relay/patients"
+        },
+        {
+          "verb": "get",
+          "uri": "grup/relay/patients/{patient}"
+        },
+        {
+          "verb": "get",
+          "uri": "grup/relay/referrals/{referralId}"
+        },
+        {
+          "verb": "post",
+          "uri": "grup/relay/notifications"
+        }
+      ]
+    },
+    "tableName": "grup_groups"
+  },
+  {
     "module": "InventoryBloodBag",
     "hasRequests": true,
     "hasInline": false,
@@ -28141,7 +28501,7 @@
       ]
     },
     "inlineFields": {
-      "ItemController::store": [
+      "ItemController::adjustStock": [
         {
           "name": "quantity",
           "type": "number",
@@ -30497,10 +30857,62 @@
   {
     "module": "KemkesReport",
     "hasRequests": false,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {},
-    "inlineFields": {},
+    "inlineFields": {
+      "KemkesReportController::bedOccupancy": [
+        {
+          "name": "date",
+          "type": "date",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "KemkesReportController::inpatientIndicators": [
+        {
+          "name": "from",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "to",
+          "type": "date",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "KemkesReportController::inpatientVisitsByClass": [
+        {
+          "name": "from",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "to",
+          "type": "date",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [],
@@ -32607,7 +33019,7 @@
       ]
     },
     "inlineFields": {
-      "ImagingOrderController::store": [
+      "ImagingOrderController::schedule": [
         {
           "name": "scheduled_at",
           "type": "date",
@@ -34958,7 +35370,7 @@
       ]
     },
     "inlineFields": {
-      "MedicineDeliveryController::store": [
+      "MedicineDeliveryController::assignCourier": [
         {
           "name": "courier_employee_id",
           "type": "relation",
@@ -40042,7 +40454,7 @@
   {
     "module": "MedicalRecordAnamnesis",
     "hasRequests": true,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": true,
     "requestFields": {
       "StoreAnamnesisRequest": [
@@ -40206,7 +40618,19 @@
         }
       ]
     },
-    "inlineFields": {},
+    "inlineFields": {
+      "AnamnesisController::index": [
+        {
+          "name": "per_page",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 100
+        }
+      ]
+    },
     "resourceFields": {
       "AnamnesisResource": [
         "id",
@@ -44388,7 +44812,7 @@
   {
     "module": "MedicalRecordDiagnosis",
     "hasRequests": true,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": true,
     "requestFields": {
       "StoreDiagnosisRequest": [
@@ -44436,7 +44860,19 @@
         }
       ]
     },
-    "inlineFields": {},
+    "inlineFields": {
+      "DiagnosisController::index": [
+        {
+          "name": "per_page",
+          "type": "number",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": 100
+        }
+      ]
+    },
     "resourceFields": {
       "DiagnosisResource": [
         "id",
@@ -66906,7 +67342,7 @@
   {
     "module": "PegawaiJadwalShift",
     "hasRequests": true,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {
       "StoreShiftScheduleRequest": [
@@ -67076,7 +67512,40 @@
         }
       ]
     },
-    "inlineFields": {},
+    "inlineFields": {
+      "ShiftScheduleController::byWardAndDateRange": [
+        {
+          "name": "ward_id",
+          "type": "relation",
+          "required": true,
+          "nullable": false,
+          "relation": {
+            "table": "wards",
+            "column": "id"
+          },
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "from",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "to",
+          "type": "date",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [
@@ -67222,7 +67691,7 @@
   {
     "module": "PegawaiRemunerasiJasaMedis",
     "hasRequests": true,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {
       "StoreRemunerationEntryRequest": [
@@ -67398,7 +67867,40 @@
         }
       ]
     },
-    "inlineFields": {},
+    "inlineFields": {
+      "RemunerationEntryController::summary": [
+        {
+          "name": "employee_id",
+          "type": "relation",
+          "required": true,
+          "nullable": false,
+          "relation": {
+            "table": "employees",
+            "column": "id"
+          },
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "month",
+          "type": "number",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 12
+        },
+        {
+          "name": "year",
+          "type": "number",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 2100
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [
@@ -73766,7 +74268,7 @@
       ]
     },
     "inlineFields": {
-      "VisitController::store": [
+      "VisitController::transfer": [
         {
           "name": "target_bed_id",
           "type": "relation",
@@ -73781,6 +74283,35 @@
         },
         {
           "name": "notes",
+          "type": "string",
+          "required": false,
+          "nullable": true,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "VisitController::discharge": [
+        {
+          "name": "final_outcome",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 255
+        },
+        {
+          "name": "discharge_method",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": 255
+        },
+        {
+          "name": "follow_up_notes",
           "type": "string",
           "required": false,
           "nullable": true,
@@ -75476,10 +76007,66 @@
   {
     "module": "SatuSehatKptl",
     "hasRequests": false,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {},
-    "inlineFields": {},
+    "inlineFields": {
+      "KptlController::code": [
+        {
+          "name": "query_string",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "KptlController::baseCode": [
+        {
+          "name": "query_string",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "KptlController::baseCodeCombination": [
+        {
+          "name": "query_string",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "KptlController::modifierValue": [
+        {
+          "name": "query_string",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "KptlController::baseCodeByModifier": [
+        {
+          "name": "query_string",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [],
@@ -75515,10 +76102,67 @@
   {
     "module": "SatuSehatMasterData",
     "hasRequests": false,
-    "hasInline": false,
+    "hasInline": true,
     "hasResources": false,
     "requestFields": {},
-    "inlineFields": {},
+    "inlineFields": {
+      "MasterDataController::kfaProduct": [
+        {
+          "name": "identifier",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": [
+            "kfa",
+            "lkpp",
+            "nie"
+          ],
+          "max": null
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        }
+      ],
+      "MasterDataController::kfaProductsAll": [
+        {
+          "name": "page",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "size",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": null,
+          "max": null
+        },
+        {
+          "name": "product_type",
+          "type": "string",
+          "required": true,
+          "nullable": false,
+          "relation": null,
+          "enumValues": [
+            "alkes",
+            "farmasi"
+          ],
+          "max": null
+        }
+      ]
+    },
     "resourceFields": {},
     "route": {
       "apiResources": [],
@@ -76352,7 +76996,7 @@
     "hasResources": false,
     "requestFields": {},
     "inlineFields": {
-      "SitbController::store": [
+      "SitbController::validated": [
         {
           "name": "nourut_pasien",
           "type": "string",

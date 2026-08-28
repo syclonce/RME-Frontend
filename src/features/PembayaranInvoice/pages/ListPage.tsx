@@ -1,65 +1,99 @@
-import { Link } from 'react-router-dom'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useInvoiceResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { PembayaranInvoiceEndpoint, useInvoiceResource } from '../api'
+import type { Invoice } from '../types'
+
+const columns: ColumnDef<Invoice, unknown>[] = [
+  {
+    header: humanizeField('invoice_number'),
+    accessorKey: 'invoice_number',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_number ?? '—'),
+  },
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('invoice_date'),
+    accessorKey: 'invoice_date',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).invoice_date ?? '—'),
+  },
+  {
+    header: humanizeField('subtotal'),
+    accessorKey: 'subtotal',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).subtotal ?? '—'),
+  },
+  {
+    header: humanizeField('rounding_adjustment'),
+    accessorKey: 'rounding_adjustment',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).rounding_adjustment ?? '—'),
+  },
+  {
+    header: humanizeField('total_amount'),
+    accessorKey: 'total_amount',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).total_amount ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'invoice_number', label: humanizeField('invoice_number') },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'invoice_date', label: humanizeField('invoice_date'), type: 'date' },
+  { key: 'rounding_adjustment', label: humanizeField('rounding_adjustment'), type: 'number' },
+]
+
+const emptyForm = {
+  invoice_number: '',
+  visit_id: '',
+  invoice_date: '',
+  rounding_adjustment: '',
+}
+
+const actions: WorkflowAction<Invoice>[] = [
+  {
+    key: 'guarantors',
+    label: 'Guarantors',
+    method: 'post',
+    path: (item) => `/invoices/${item.id}/guarantors`,
+  },
+  {
+    key: 'redistribute',
+    label: 'Redistribute',
+    method: 'post',
+    path: (item) => `/invoices/${item.id}/redistribute`,
+  },
+  {
+    key: 'lock',
+    label: 'Kunci',
+    method: 'post',
+    path: (item) => `/invoices/${item.id}/lock`,
+  },
+  {
+    key: 'unlock',
+    label: 'Buka Kunci',
+    method: 'post',
+    path: (item) => `/invoices/${item.id}/unlock`,
+  },
+]
 
 export function InvoiceListPage() {
-  const { useList, lock, unlock } = useInvoiceResource()
-  const { data, isLoading } = useList()
-
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useInvoiceResource()
+  const title = humanizeModuleName('PembayaranInvoice')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Tagihan (Invoice)</h1>
-        <Button asChild>
-          <Link to="/modul/pembayaran-invoice/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>No. Invoice</TableHead>
-            <TableHead>Visit</TableHead>
-            <TableHead>Tanggal</TableHead>
-            <TableHead>Total</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Kunci</TableHead>
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.invoice_number ?? `#${row.id}`}</TableCell>
-              <TableCell>{row.visit_id}</TableCell>
-              <TableCell>{row.invoice_date ?? '-'}</TableCell>
-              <TableCell>{row.total_amount}</TableCell>
-              <TableCell>
-                <Badge variant="outline">{row.status}</Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant={row.is_locked ? 'default' : 'secondary'}>
-                  {row.is_locked ? 'Terkunci' : 'Terbuka'}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                {row.is_locked ? (
-                  <Button type="button" variant="ghost" size="sm" onClick={() => unlock.mutate(row.id)}>
-                    Buka Kunci
-                  </Button>
-                ) : (
-                  <Button type="button" variant="ghost" size="sm" onClick={() => lock.mutate(row.id)}>
-                    Kunci
-                  </Button>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<Invoice>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={PembayaranInvoiceEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.invoice_number ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }

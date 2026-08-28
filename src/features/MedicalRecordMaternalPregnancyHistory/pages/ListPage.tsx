@@ -1,41 +1,80 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useMaternalPregnancyHistoryResource } from '../api'
+import type { ColumnDef } from '@tanstack/react-table'
+import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
+import { humanizeField, humanizeModuleName } from '@/shared/labels'
+import { MedicalRecordMaternalPregnancyHistoryEndpoint, useMaternalPregnancyHistoryResource } from '../api'
+import type { MaternalPregnancyHistory } from '../types'
 
-const COLUMNS = ["id","visit_id","created_by","gravida","para","abortus","pregnancy_complications","delivery_method_history","created_at"] as const
+const columns: ColumnDef<MaternalPregnancyHistory, unknown>[] = [
+  {
+    header: humanizeField('visit_id'),
+    accessorKey: 'visit_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).visit_id ?? '—'),
+  },
+  {
+    header: humanizeField('created_by'),
+    accessorKey: 'created_by',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).created_by ?? '—'),
+  },
+  {
+    header: humanizeField('gravida'),
+    accessorKey: 'gravida',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).gravida ?? '—'),
+  },
+  {
+    header: humanizeField('para'),
+    accessorKey: 'para',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).para ?? '—'),
+  },
+  {
+    header: humanizeField('abortus'),
+    accessorKey: 'abortus',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).abortus ?? '—'),
+  },
+  {
+    header: humanizeField('pregnancy_complications'),
+    accessorKey: 'pregnancy_complications',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).pregnancy_complications ?? '—'),
+  },
+]
+
+const fields: CrudField[] = [
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'gravida', label: humanizeField('gravida'), type: 'number' },
+  { key: 'para', label: humanizeField('para'), type: 'number' },
+  { key: 'abortus', label: humanizeField('abortus'), type: 'number' },
+  { key: 'pregnancy_complications', label: humanizeField('pregnancy_complications') },
+  { key: 'delivery_method_history', label: humanizeField('delivery_method_history') },
+]
+
+const emptyForm = {
+  visit_id: '',
+  created_by: '',
+  gravida: '',
+  para: '',
+  abortus: '',
+  pregnancy_complications: '',
+  delivery_method_history: '',
+}
+
+const actions: WorkflowAction<MaternalPregnancyHistory>[] = []
 
 export function MaternalPregnancyHistoryListPage() {
-  const { useList } = useMaternalPregnancyHistoryResource()
-  const { data, isLoading } = useList()
-  if (isLoading) return <p className="text-muted-foreground p-4 text-sm">Memuat...</p>
+  const resource = useMaternalPregnancyHistoryResource()
+  const title = humanizeModuleName('MedicalRecordMaternalPregnancyHistory')
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">MaternalPregnancyHistory</h1>
-        <Button asChild>
-          <Link to="/modul/medical-record-maternal-pregnancy-history/tambah">Tambah</Link>
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {COLUMNS.map((col) => (
-              <TableHead key={col}>{col}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.items.map((row) => (
-            <TableRow key={row.id}>
-              {COLUMNS.map((col) => (
-                <TableCell key={col}>{String((row as unknown as Record<string, unknown>)[col] ?? '-')}</TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <WorkflowListPage<MaternalPregnancyHistory>
+      title={title}
+      description={`Kelola data ${title.toLowerCase()}.`}
+      endpoint={MedicalRecordMaternalPregnancyHistoryEndpoint}
+      columns={columns}
+      capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
+      fields={fields}
+      emptyForm={emptyForm}
+      itemLabel={(item) => item.pregnancy_complications ?? `#${item.id}`}
+      actions={actions}
+      resource={resource}
+    />
   )
 }
