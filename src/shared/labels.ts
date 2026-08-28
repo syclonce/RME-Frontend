@@ -35,6 +35,12 @@ const DOMAIN_LABELS: Record<string, string> = {
   System: 'Sistem',
   EKlaim: 'e-Klaim',
   Grup: 'Grup',
+  Cetakan: 'Cetakan',
+  Dashboard: 'Dasbor',
+  Kemkes: 'Kemkes',
+  Pasien: 'Pasien',
+  Pembatalan: 'Pembatalan',
+  Penjualan: 'Penjualan',
 }
 
 /** Raw prefixes sorted longest-first so "BerkasKlaim" wins over "Berkas". */
@@ -71,6 +77,106 @@ const FIELD_LABELS: Record<string, string> = {
   description: 'Keterangan',
   phone: 'No. Telepon',
   email: 'Surel',
+
+  // BPJS (VClaim/general sync)
+  bpjs_code: 'Kode BPJS',
+  bpjs_error: 'Pesan Error BPJS',
+  bpjs_message: 'Pesan BPJS',
+  bpjs_no_pelayanan: 'No. Pelayanan BPJS',
+  bpjs_no_pelayanan_obat: 'No. Pelayanan Obat BPJS',
+  bpjs_no_pendaftaran: 'No. Pendaftaran BPJS',
+  bpjs_no_resep: 'No. Resep BPJS',
+  bpjs_response: 'Respons BPJS',
+  bpjs_room_id: 'Ruang BPJS',
+  bpjs_sync_status: 'Status Sinkronisasi BPJS',
+  deleted_at_bpjs: 'Waktu Hapus (BPJS)',
+  no_bpjs: 'No. BPJS',
+
+  // ICD
+  icd_code: 'Kode ICD',
+  icd_description: 'Deskripsi ICD',
+  kode_icd_x: 'Kode ICD-X',
+
+  // SATUSEHAT
+  satu_sehat_consent: 'Persetujuan SATUSEHAT',
+  satusehat_id: 'ID SATUSEHAT',
+  satu_sehat_staging_submission_id: 'ID Pengiriman Staging SATUSEHAT',
+
+  // Identity / SEP / SPRI / SIP / SMF / DPJP
+  nik: 'NIK',
+  no_sep: 'No. SEP',
+  no_sep_asal: 'No. SEP Asal',
+  tgl_sep: 'Tanggal SEP',
+  sep_id: 'SEP',
+  no_spri: 'No. SPRI',
+  dpjp_doctor_id: 'Dokter DPJP',
+  sip_number: 'No. SIP',
+  smf_id: 'SMF',
+  tgl_lahir: 'Tanggal Lahir',
+
+  // Assessment scores / classifications
+  adl_score: 'Skor ADL',
+  adl_status: 'Status ADL',
+  asa_classification: 'Klasifikasi ASA',
+
+  // JKN quotas (BPJS Antrean)
+  kuotajkn: 'Kuota JKN',
+  kuotanonjkn: 'Kuota Non-JKN',
+  sisakuotajkn: 'Sisa Kuota JKN',
+  sisakuotanonjkn: 'Sisa Kuota Non-JKN',
+
+  // SITB (TB reporting, Kemkes)
+  kd_wasor: 'Kode Wasor TB',
+  kd_fasyankes: 'Kode Fasyankes',
+  kd_kabupaten_faskes: 'Kabupaten Faskes',
+  kd_kabupaten_pasien: 'Kabupaten Pasien',
+  kd_pasien: 'Kode Pasien',
+  id_propinsi_faskes: 'Provinsi Faskes',
+  nourut_pasien: 'Nomor Urut Pasien',
+  id_tb_03: 'ID TB.03',
+  noregkab: 'No. Reg Kabupaten',
+  noreglab_bulan_2: 'No. Reg Lab Bulan 2',
+  noreglab_bulan_3: 'No. Reg Lab Bulan 3',
+  noreglab_bulan_5: 'No. Reg Lab Bulan 5',
+  akhir_pengobatan_noreglab: 'No. Reg Lab Akhir Pengobatan',
+  paduan_oat: 'Paduan OAT',
+  art: 'ART',
+  tb_dm: 'TB-DM',
+  terapi_dm: 'Terapi DM',
+  pindah_ro: 'Pindah RO',
+  toraks_tdk_dilakukan: 'Toraks Tidak Dilakukan',
+  konfirmasiSkoring5: 'Konfirmasi Skoring 5',
+  konfirmasiSkoring6: 'Konfirmasi Skoring 6',
+
+  // PPK / JPK
+  ppk: 'PPK',
+  ppk_id: 'PPK',
+  ppk_tujuan: 'PPK Tujuan',
+  jpk: 'Jenis Pelayanan Kesehatan',
+
+  // BPJS Antrean payload (FKTP/RS queue booking)
+  kodebooking: 'Kode Booking',
+  jenispasien: 'Jenis Pasien',
+  nomorkartu: 'Nomor Kartu',
+  nohp: 'No. HP',
+  kodepoli: 'Kode Poli',
+  namapoli: 'Nama Poli',
+  pasienbaru: 'Pasien Baru',
+  tanggalperiksa: 'Tanggal Periksa',
+  kodedokter: 'Kode Dokter',
+  namadokter: 'Nama Dokter',
+  jampraktek: 'Jam Praktik',
+  jeniskunjungan: 'Jenis Kunjungan',
+  nomorreferensi: 'Nomor Referensi',
+  nomorantrean: 'Nomor Antrean',
+  angkaantrean: 'Angka Antrean',
+  estimasidilayani: 'Estimasi Dilayani',
+
+  // Misc abbreviations
+  ip: 'Alamat IP',
+  url: 'URL',
+  uri: 'URI',
+  spo2: 'SpO2',
 }
 
 /** Split "GeneralPatientFamilyContact" into ["General", "Patient", "Family", "Contact"]. */
