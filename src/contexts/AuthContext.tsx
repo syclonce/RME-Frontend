@@ -50,9 +50,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function login(loginValue: string, password: string) {
     const res = await apiClient.post('/login', { login: loginValue, password })
     setAuthToken(res.data.token)
-    setUser(res.data.user)
-    const accessResponse = await apiClient.get('/me/modules')
-    setAccess((accessResponse.data?.data ?? accessResponse.data) as AccessSnapshot)
+    try {
+      const accessResponse = await apiClient.get('/me/modules')
+      setUser(res.data.user)
+      setAccess((accessResponse.data?.data ?? accessResponse.data) as AccessSnapshot)
+    } catch (error) {
+      setAuthToken(null)
+      setUser(null)
+      setAccess({ modules: [], permissions_by_module: {} })
+      throw error
+    }
   }
 
   async function logout() {
