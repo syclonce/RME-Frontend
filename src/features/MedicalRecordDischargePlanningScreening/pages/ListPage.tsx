@@ -37,20 +37,20 @@ const columns: ColumnDef<DischargePlanningScreening, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'screening_criteria', label: humanizeField('screening_criteria') },
   { key: 'total_score', label: humanizeField('total_score'), type: 'number' },
   { key: 'requires_planning', label: humanizeField('requires_planning'), type: 'checkbox' },
-  { key: 'screened_by', label: humanizeField('screened_by'), type: 'number', required: true },
+  { key: 'screened_by', label: humanizeField('screened_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'screened_at', label: humanizeField('screened_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   screening_criteria: '',
   total_score: '',
   requires_planning: false,
-  screened_by: '',
+  screened_by: null,
   screened_at: '',
 }
 

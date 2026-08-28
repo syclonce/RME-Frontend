@@ -38,21 +38,21 @@ const columns: ColumnDef<RiskFactor, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'risk_category', label: humanizeField('risk_category'), required: true },
   { key: 'description', label: humanizeField('description') },
   { key: 'risk_level', label: humanizeField('risk_level') },
-  { key: 'identified_by', label: humanizeField('identified_by'), type: 'number', required: true },
+  { key: 'identified_by', label: humanizeField('identified_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'identified_at', label: humanizeField('identified_at'), type: 'date', required: true },
   { key: 'mitigation_plan', label: humanizeField('mitigation_plan') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   risk_category: '',
   description: '',
   risk_level: '',
-  identified_by: '',
+  identified_by: null,
   identified_at: '',
   mitigation_plan: '',
 }

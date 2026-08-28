@@ -23,13 +23,13 @@ const columns: ColumnDef<EmployeeContact, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'contact_type', label: humanizeField('contact_type'), type: 'select', required: true, options: [{"value":"phone","label":"Phone"},{"value":"email","label":"Email"},{"value":"emergency","label":"Emergency"}] },
   { key: 'value', label: humanizeField('value'), required: true },
 ]
 
 const emptyForm = {
-  employee_id: '',
+  employee_id: null,
   contact_type: '',
   value: '',
 }

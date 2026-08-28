@@ -38,16 +38,16 @@ const columns: ColumnDef<InvoiceItem, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
-  { key: 'service_id', label: humanizeField('service_id'), type: 'number' },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'combobox', relationEndpoint: '/invoices', required: true },
+  { key: 'service_id', label: humanizeField('service_id'), type: 'combobox', relationEndpoint: '/services' },
   { key: 'description', label: humanizeField('description'), required: true },
   { key: 'category', label: humanizeField('category') },
   { key: 'quantity', label: humanizeField('quantity'), type: 'number', required: true },
 ]
 
 const emptyForm = {
-  invoice_id: '',
-  service_id: '',
+  invoice_id: null,
+  service_id: null,
   description: '',
   category: '',
   quantity: '',

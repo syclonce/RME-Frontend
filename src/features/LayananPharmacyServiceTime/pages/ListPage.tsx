@@ -33,7 +33,7 @@ const columns: ColumnDef<PharmacyServiceTime, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'number', required: true },
+  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'combobox', relationEndpoint: '/prescriptions', required: true },
   { key: 'received_at', label: humanizeField('received_at'), type: 'date' },
   { key: 'prepared_at', label: humanizeField('prepared_at'), type: 'date' },
   { key: 'dispensed_at', label: humanizeField('dispensed_at'), type: 'date' },
@@ -41,7 +41,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  prescription_id: '',
+  prescription_id: null,
   received_at: '',
   prepared_at: '',
   dispensed_at: '',

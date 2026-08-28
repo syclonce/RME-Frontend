@@ -38,13 +38,13 @@ const columns: ColumnDef<ImmunizationVaccination, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true, section: 'Detail' },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', section: 'Detail' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true, section: 'Detail' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', section: 'Detail' },
   { key: 'vaccine_name', label: humanizeField('vaccine_name'), required: true, section: 'Detail' },
   { key: 'dose_number', label: humanizeField('dose_number'), type: 'number', section: 'Detail' },
   { key: 'batch_number', label: humanizeField('batch_number'), section: 'Detail' },
   { key: 'administered_at', label: humanizeField('administered_at'), type: 'date', required: true, section: 'Detail' },
-  { key: 'administered_by', label: humanizeField('administered_by'), type: 'number', required: true, section: 'Detail Tambahan' },
+  { key: 'administered_by', label: humanizeField('administered_by'), type: 'combobox', relationEndpoint: '/employees', required: true, section: 'Detail Tambahan' },
   { key: 'site', label: humanizeField('site'), section: 'Detail Tambahan' },
   { key: 'route', label: humanizeField('route'), section: 'Detail Tambahan' },
   { key: 'adverse_reaction', label: humanizeField('adverse_reaction'), section: 'Detail Tambahan' },
@@ -52,13 +52,13 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   vaccine_name: '',
   dose_number: '',
   batch_number: '',
   administered_at: '',
-  administered_by: '',
+  administered_by: null,
   site: '',
   route: '',
   adverse_reaction: '',

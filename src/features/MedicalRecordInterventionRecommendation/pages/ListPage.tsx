@@ -38,21 +38,21 @@ const columns: ColumnDef<InterventionRecommendation, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'source', label: humanizeField('source') },
   { key: 'recommendation', label: humanizeField('recommendation') },
   { key: 'priority', label: humanizeField('priority') },
-  { key: 'recommended_by', label: humanizeField('recommended_by'), type: 'number', required: true },
+  { key: 'recommended_by', label: humanizeField('recommended_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recommended_at', label: humanizeField('recommended_at'), type: 'date', required: true },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   source: '',
   recommendation: '',
   priority: '',
-  recommended_by: '',
+  recommended_by: null,
   recommended_at: '',
   status: '',
 }

@@ -38,25 +38,25 @@ const columns: ColumnDef<AudioAttachment, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number' },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits' },
   { key: 'title', label: humanizeField('title'), required: true },
   { key: 'file_path', label: humanizeField('file_path'), required: true },
   { key: 'mime_type', label: humanizeField('mime_type') },
   { key: 'duration_seconds', label: humanizeField('duration_seconds'), type: 'number' },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number' },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/users' },
   { key: 'notes', label: humanizeField('notes') },
   { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   title: '',
   file_path: '',
   mime_type: '',
   duration_seconds: '',
-  recorded_by: '',
+  recorded_by: null,
   notes: '',
   is_active: false,
 }

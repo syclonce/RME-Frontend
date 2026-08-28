@@ -1,6 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
-import { RelationLabel } from '@/shared/components/RelationLabel'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePhysicianRestrictionResource } from '../api'
 import type { PhysicianRestriction } from '../types'
@@ -8,7 +7,8 @@ import type { PhysicianRestriction } from '../types'
 const columns: ColumnDef<PhysicianRestriction, unknown>[] = [
   {
     header: humanizeField('doctor_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+    accessorKey: 'doctor_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).doctor_id ?? '—'),
   },
   {
     header: humanizeField('restricted_antibiotic_name'),
@@ -32,7 +32,7 @@ const columns: ColumnDef<PhysicianRestriction, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'combobox', relationEndpoint: '/doctors', required: true },
   { key: 'restricted_antibiotic_name', label: humanizeField('restricted_antibiotic_name'), required: true },
   { key: 'authorization_level', label: humanizeField('authorization_level') },
   { key: 'is_authorized_prescriber', label: humanizeField('is_authorized_prescriber'), type: 'checkbox' },

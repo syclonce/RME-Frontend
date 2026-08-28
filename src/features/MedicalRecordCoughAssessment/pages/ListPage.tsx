@@ -36,24 +36,24 @@ const columns: ColumnDef<CoughAssessment, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'has_cough', label: humanizeField('has_cough'), type: 'checkbox' },
   { key: 'duration_weeks', label: humanizeField('duration_weeks'), type: 'number' },
   { key: 'cough_type', label: humanizeField('cough_type') },
   { key: 'other_symptoms', label: humanizeField('other_symptoms') },
   { key: 'is_referred_tb_screening', label: humanizeField('is_referred_tb_screening'), type: 'checkbox' },
-  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   has_cough: false,
   duration_weeks: '',
   cough_type: '',
   other_symptoms: '',
   is_referred_tb_screening: false,
-  assessed_by: '',
+  assessed_by: null,
   assessed_at: '',
 }
 

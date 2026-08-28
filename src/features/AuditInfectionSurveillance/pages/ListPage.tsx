@@ -28,14 +28,14 @@ const columns: ColumnDef<DeviceDay, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'device_type', label: humanizeField('device_type'), required: true },
   { key: 'inserted_at', label: humanizeField('inserted_at'), type: 'date', required: true },
   { key: 'removed_at', label: humanizeField('removed_at'), type: 'date' },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   device_type: '',
   inserted_at: '',
   removed_at: '',

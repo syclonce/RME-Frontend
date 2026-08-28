@@ -8,7 +8,8 @@ import type { DoctorMedicalDepartment } from '../types'
 const columns: ColumnDef<DoctorMedicalDepartment, unknown>[] = [
   {
     header: humanizeField('doctor_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+    accessorKey: 'doctor_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).doctor_id ?? '—'),
   },
   {
     header: humanizeField('medical_department_id'),
@@ -21,7 +22,7 @@ const columns: ColumnDef<DoctorMedicalDepartment, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'combobox', relationEndpoint: '/doctors', required: true },
   { key: 'medical_department_id', label: humanizeField('medical_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
   { key: 'is_head', label: humanizeField('is_head'), type: 'checkbox' },
 ]

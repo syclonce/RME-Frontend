@@ -32,7 +32,7 @@ const columns: ColumnDef<AdmissionDiagnosis, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'diagnosis_code_id', label: humanizeField('diagnosis_code_id'), type: 'relation', relationEndpoint: '/diagnosis-codes', required: true },
   { key: 'diagnosis_text', label: humanizeField('diagnosis_text') },
   { key: 'is_primary', label: humanizeField('is_primary'), type: 'checkbox' },
@@ -40,7 +40,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   diagnosis_code_id: null,
   diagnosis_text: '',
   is_primary: false,

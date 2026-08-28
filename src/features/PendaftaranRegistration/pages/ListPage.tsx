@@ -37,7 +37,7 @@ const columns: ColumnDef<Registration, unknown>[] = [
 
 const fields: CrudField[] = [
   { key: 'registration_number', label: humanizeField('registration_number'), section: 'Detail' },
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true, section: 'Detail' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true, section: 'Detail' },
   { key: 'registered_at', label: humanizeField('registered_at'), type: 'date', section: 'Detail' },
   { key: 'admission_diagnosis_id', label: humanizeField('admission_diagnosis_id'), type: 'relation', relationEndpoint: '/diagnosis-codes', section: 'Detail' },
   { key: 'referral_id', label: humanizeField('referral_id'), type: 'relation', relationEndpoint: '/referrals', section: 'Detail' },
@@ -55,7 +55,7 @@ const fields: CrudField[] = [
 
 const emptyForm = {
   registration_number: '',
-  patient_id: '',
+  patient_id: null,
   registered_at: '',
   admission_diagnosis_id: null,
   referral_id: null,

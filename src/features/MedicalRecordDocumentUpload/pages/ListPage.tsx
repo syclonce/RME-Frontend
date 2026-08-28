@@ -38,8 +38,8 @@ const columns: ColumnDef<DocumentUpload, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits' },
   { key: 'document_name', label: humanizeField('document_name'), required: true },
   { key: 'document_type', label: humanizeField('document_type') },
   { key: 'file_path', label: humanizeField('file_path'), required: true },
@@ -49,8 +49,8 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   document_name: '',
   document_type: '',
   file_path: '',

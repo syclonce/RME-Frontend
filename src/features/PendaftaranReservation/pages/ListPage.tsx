@@ -9,7 +9,7 @@ const columns: ColumnDef<Reservation, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
   { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
   { key: 'reserved_at', label: humanizeField('reserved_at'), type: 'date', required: true },
   { key: 'scheduled_at', label: humanizeField('scheduled_at'), type: 'date', required: true },
@@ -17,7 +17,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  patient_id: '',
+  patient_id: null,
   ward_id: null,
   reserved_at: '',
   scheduled_at: '',

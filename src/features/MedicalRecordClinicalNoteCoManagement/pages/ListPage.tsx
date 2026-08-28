@@ -35,7 +35,7 @@ const fields: CrudField[] = [
   { key: 'clinical_note_id', label: humanizeField('clinical_note_id'), type: 'relation', relationEndpoint: '/clinical-notes', required: true },
   { key: 'medical_department_id', label: humanizeField('medical_department_id'), type: 'relation', relationEndpoint: '/medical-departments', required: true },
   { key: 'notes', label: humanizeField('notes') },
-  { key: 'author_id', label: humanizeField('author_id'), type: 'number', required: true },
+  { key: 'author_id', label: humanizeField('author_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
 ]
 
@@ -43,7 +43,7 @@ const emptyForm = {
   clinical_note_id: null,
   medical_department_id: null,
   notes: '',
-  author_id: '',
+  author_id: null,
   recorded_at: '',
 }
 

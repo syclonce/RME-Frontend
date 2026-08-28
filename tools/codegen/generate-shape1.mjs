@@ -36,17 +36,17 @@ for (const entry of catalog) {
   }
 }
 
-/** Tabel yang dianggap "besar" (ribuan+ baris) — field FK ke sini butuh
- * AsyncCombobox cari-sambil-ketik, bukan RelationSelect dropdown polos yang
- * cuma muat 100 opsi pertama. BELUM dipakai generator ini (lihat catatan di
- * relationEndpoint) — modul dengan FK ke tabel ini di-skip, bukan dipaksa
- * pakai RelationSelect biasa yang bakal terpotong datanya.
+/** Tabel yang dianggap "besar" (ratusan-ribuan+ baris) — field FK ke sini
+ * pakai AsyncCombobox cari-sambil-ketik (type: 'combobox'), BUKAN
+ * RelationSelect dropdown polos yang cuma muat 100 opsi pertama dan bakal
+ * terpotong datanya. Lihat fieldToCrudField().
  */
 const LARGE_TABLES = new Set([
   'patients', 'employees', 'visits', 'services', 'registrations',
   'invoices', 'invoice_items', 'prescriptions', 'prescription_items',
   'drugs', 'medication_stocks', 'bed_occupancies',
   'lab_orders', 'radiology_orders', 'users',
+  'doctors', 'nurses', 'staff_members',
 ])
 
 function pickStoreFields(entry) {
@@ -173,13 +173,18 @@ function fieldToCrudField(f, opts) {
   // 'number' bukan 'relation', endpoint ketemu tapi dibuang karena gate
   // f.type === 'relation' dicek lebih dulu).
   const endpoint = relationEndpoint(f)
+  if (endpoint && isLargeFk(f)) {
+    // FK ke tabel besar (patients/employees/visits/dst) — dropdown polos
+    // RelationSelect cuma muat 100 opsi pertama, jadi butuh AsyncCombobox
+    // cari-sambil-ketik.
+    return { ...base, type: 'combobox', relationEndpoint: endpoint }
+  }
   if (endpoint && !isLargeFk(f)) {
     return { ...base, type: 'relation', relationEndpoint: endpoint }
   }
-  if (f.type === 'relation' && (isLargeFk(f) || !endpoint)) {
-    // FK ke tabel besar (butuh AsyncCombobox, belum ada di CrudDialogPage) atau
-    // endpoint tidak ketemu di katalog — jangan tebak, treat sebagai angka polos
-    // supaya form tetap valid daripada pura-pura jadi dropdown yang kosong.
+  if (f.type === 'relation' && !endpoint) {
+    // endpoint tidak ketemu di katalog — jangan tebak, treat sebagai angka
+    // polos supaya form tetap valid daripada pura-pura jadi dropdown kosong.
     return { ...base, type: 'number' }
   }
   if (f.type === 'boolean') return { ...base, type: 'checkbox' }
@@ -320,7 +325,7 @@ export function use${entity}Resource() {
     .map((f) => {
       const cf = fieldToCrudField(f)
       const defaultVal =
-        cf.type === 'checkbox' ? 'false' : cf.type === 'relation' || cf.type === 'custom' ? 'null' : "''"
+        cf.type === 'checkbox' ? 'false' : cf.type === 'relation' || cf.type === 'combobox' || cf.type === 'custom' ? 'null' : "''"
       return `  ${f.name}: ${defaultVal},`
     })
     .join('\n')

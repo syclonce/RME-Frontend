@@ -38,7 +38,7 @@ const columns: ColumnDef<Guarantor, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'registration_id', label: humanizeField('registration_id'), type: 'number', required: true },
+  { key: 'registration_id', label: humanizeField('registration_id'), type: 'combobox', relationEndpoint: '/registrations', required: true },
   { key: 'payer_type', label: humanizeField('payer_type'), required: true },
   { key: 'member_number', label: humanizeField('member_number') },
   { key: 'room_class_id', label: humanizeField('room_class_id'), type: 'relation', relationEndpoint: '/room-classes' },
@@ -47,7 +47,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  registration_id: '',
+  registration_id: null,
   payer_type: '',
   member_number: '',
   room_class_id: null,

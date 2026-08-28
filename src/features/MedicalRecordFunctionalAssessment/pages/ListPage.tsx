@@ -38,22 +38,22 @@ const columns: ColumnDef<FunctionalAssessment, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'assessment_date', label: humanizeField('assessment_date'), type: 'date', required: true },
   { key: 'mobility_status', label: humanizeField('mobility_status') },
   { key: 'adl_score', label: humanizeField('adl_score'), type: 'number' },
   { key: 'assistive_device', label: humanizeField('assistive_device') },
-  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'notes', label: humanizeField('notes') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   assessment_date: '',
   mobility_status: '',
   adl_score: '',
   assistive_device: '',
-  assessed_by: '',
+  assessed_by: null,
   notes: '',
 }
 

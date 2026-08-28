@@ -1,6 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
-import { RelationLabel } from '@/shared/components/RelationLabel'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useUltrasoundGuidedProcedureResource } from '../api'
 import type { UltrasoundGuidedProcedure } from '../types'
@@ -18,7 +17,8 @@ const columns: ColumnDef<UltrasoundGuidedProcedure, unknown>[] = [
   },
   {
     header: humanizeField('doctor_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).doctor_id as number | null} />,
+    accessorKey: 'doctor_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).doctor_id ?? '—'),
   },
   {
     header: humanizeField('procedure_name'),
@@ -38,9 +38,9 @@ const columns: ColumnDef<UltrasoundGuidedProcedure, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
-  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'relation', relationEndpoint: '/doctors' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
+  { key: 'doctor_id', label: humanizeField('doctor_id'), type: 'combobox', relationEndpoint: '/doctors' },
   { key: 'procedure_name', label: humanizeField('procedure_name'), required: true },
   { key: 'target_site', label: humanizeField('target_site') },
   { key: 'needle_gauge', label: humanizeField('needle_gauge') },
@@ -50,8 +50,8 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   doctor_id: null,
   procedure_name: '',
   target_site: '',

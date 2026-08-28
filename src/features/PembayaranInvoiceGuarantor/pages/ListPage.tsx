@@ -38,7 +38,7 @@ const columns: ColumnDef<InvoiceGuarantor, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'combobox', relationEndpoint: '/invoices', required: true },
   { key: 'guarantor_id', label: humanizeField('guarantor_id'), type: 'relation', relationEndpoint: '/guarantors', required: true },
   { key: 'covered_amount', label: humanizeField('covered_amount'), type: 'number' },
   { key: 'coverage_percentage', label: humanizeField('coverage_percentage'), type: 'number' },
@@ -47,7 +47,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  invoice_id: '',
+  invoice_id: null,
   guarantor_id: null,
   covered_amount: '',
   coverage_percentage: '',

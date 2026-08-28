@@ -23,13 +23,13 @@ const columns: ColumnDef<GeneralEmployeePhoto, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'file_path', label: humanizeField('file_path'), required: true },
   { key: 'taken_at', label: humanizeField('taken_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  employee_id: '',
+  employee_id: null,
   file_path: '',
   taken_at: '',
 }

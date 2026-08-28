@@ -38,8 +38,8 @@ const columns: ColumnDef<PediatricStatus, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'birth_weight_grams', label: humanizeField('birth_weight_grams'), type: 'number' },
   { key: 'birth_length_cm', label: humanizeField('birth_length_cm'), type: 'number' },
   { key: 'head_circumference_cm', label: humanizeField('head_circumference_cm'), type: 'number' },
@@ -51,8 +51,8 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   birth_weight_grams: '',
   birth_length_cm: '',
   head_circumference_cm: '',

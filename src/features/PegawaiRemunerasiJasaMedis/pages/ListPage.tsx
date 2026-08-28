@@ -38,7 +38,7 @@ const columns: ColumnDef<RemunerationEntry, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'source_type', label: humanizeField('source_type'), required: true },
   { key: 'source_id', label: humanizeField('source_id'), type: 'number', required: true },
   { key: 'role', label: humanizeField('role'), required: true },
@@ -50,7 +50,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  employee_id: '',
+  employee_id: null,
   source_type: '',
   source_id: '',
   role: '',

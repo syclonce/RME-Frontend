@@ -43,15 +43,15 @@ const columns: ColumnDef<PatientAccessLock, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
-  { key: 'locked_by', label: humanizeField('locked_by'), type: 'number' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
+  { key: 'locked_by', label: humanizeField('locked_by'), type: 'combobox', relationEndpoint: '/employees' },
   { key: 'reason', label: humanizeField('reason'), required: true },
   { key: 'locked_at', label: humanizeField('locked_at'), type: 'date' },
 ]
 
 const emptyForm = {
-  patient_id: '',
-  locked_by: '',
+  patient_id: null,
+  locked_by: null,
   reason: '',
   locked_at: '',
 }

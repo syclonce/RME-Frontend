@@ -38,24 +38,24 @@ const columns: ColumnDef<MedicalCheckupResult, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits' },
   { key: 'checkup_date', label: humanizeField('checkup_date'), type: 'date', required: true },
   { key: 'category', label: humanizeField('category') },
   { key: 'summary', label: humanizeField('summary') },
   { key: 'recommendation', label: humanizeField('recommendation') },
-  { key: 'examined_by', label: humanizeField('examined_by'), type: 'number', required: true },
+  { key: 'examined_by', label: humanizeField('examined_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   checkup_date: '',
   category: '',
   summary: '',
   recommendation: '',
-  examined_by: '',
+  examined_by: null,
   status: '',
 }
 

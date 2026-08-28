@@ -29,13 +29,13 @@ const columns: ColumnDef<WardService, unknown>[] = [
 
 const fields: CrudField[] = [
   { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
-  { key: 'service_id', label: humanizeField('service_id'), type: 'number', required: true },
+  { key: 'service_id', label: humanizeField('service_id'), type: 'combobox', relationEndpoint: '/services', required: true },
   { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
 ]
 
 const emptyForm = {
   ward_id: null,
-  service_id: '',
+  service_id: null,
   is_active: false,
 }
 

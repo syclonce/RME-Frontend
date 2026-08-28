@@ -27,15 +27,15 @@ const columns: ColumnDef<PenjaminRSAttendingPhysician, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'assigned_at', label: humanizeField('assigned_at'), type: 'date' },
   { key: 'is_primary', label: humanizeField('is_primary'), type: 'checkbox' },
 ]
 
 const emptyForm = {
-  visit_id: '',
-  employee_id: '',
+  visit_id: null,
+  employee_id: null,
   assigned_at: '',
   is_primary: false,
 }

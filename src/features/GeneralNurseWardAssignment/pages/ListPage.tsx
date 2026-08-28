@@ -8,7 +8,8 @@ import type { NurseWardAssignment } from '../types'
 const columns: ColumnDef<NurseWardAssignment, unknown>[] = [
   {
     header: humanizeField('nurse_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/nurses" id={(row.original as unknown as Record<string, unknown>).nurse_id as number | null} />,
+    accessorKey: 'nurse_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).nurse_id ?? '—'),
   },
   {
     header: humanizeField('ward_id'),
@@ -27,7 +28,7 @@ const columns: ColumnDef<NurseWardAssignment, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'nurse_id', label: humanizeField('nurse_id'), type: 'relation', relationEndpoint: '/nurses', required: true },
+  { key: 'nurse_id', label: humanizeField('nurse_id'), type: 'combobox', relationEndpoint: '/nurses', required: true },
   { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
   { key: 'shift', label: humanizeField('shift') },
   { key: 'assigned_at', label: humanizeField('assigned_at'), type: 'date' },

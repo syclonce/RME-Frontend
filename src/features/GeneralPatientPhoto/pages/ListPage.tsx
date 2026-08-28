@@ -23,13 +23,13 @@ const columns: ColumnDef<GeneralPatientPhoto, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
   { key: 'file_path', label: humanizeField('file_path'), required: true },
   { key: 'taken_at', label: humanizeField('taken_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  patient_id: '',
+  patient_id: null,
   file_path: '',
   taken_at: '',
 }

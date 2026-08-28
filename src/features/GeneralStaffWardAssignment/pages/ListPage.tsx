@@ -8,7 +8,8 @@ import type { StaffWardAssignment } from '../types'
 const columns: ColumnDef<StaffWardAssignment, unknown>[] = [
   {
     header: humanizeField('staff_member_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/staff-members" id={(row.original as unknown as Record<string, unknown>).staff_member_id as number | null} />,
+    accessorKey: 'staff_member_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).staff_member_id ?? '—'),
   },
   {
     header: humanizeField('ward_id'),
@@ -22,7 +23,7 @@ const columns: ColumnDef<StaffWardAssignment, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'staff_member_id', label: humanizeField('staff_member_id'), type: 'relation', relationEndpoint: '/staff-members', required: true },
+  { key: 'staff_member_id', label: humanizeField('staff_member_id'), type: 'combobox', relationEndpoint: '/staff-members', required: true },
   { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards', required: true },
   { key: 'assigned_at', label: humanizeField('assigned_at'), type: 'date' },
 ]

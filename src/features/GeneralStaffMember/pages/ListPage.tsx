@@ -28,13 +28,13 @@ const columns: ColumnDef<StaffMember, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'staff_role', label: humanizeField('staff_role') },
   { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
 ]
 
 const emptyForm = {
-  employee_id: '',
+  employee_id: null,
   staff_role: '',
   is_active: false,
 }

@@ -38,22 +38,22 @@ const columns: ColumnDef<FibroscanResult, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'examination_date', label: humanizeField('examination_date'), type: 'date', required: true },
   { key: 'liver_stiffness_kpa', label: humanizeField('liver_stiffness_kpa'), type: 'number' },
   { key: 'cap_score', label: humanizeField('cap_score'), type: 'number' },
   { key: 'fibrosis_stage', label: humanizeField('fibrosis_stage') },
-  { key: 'examined_by', label: humanizeField('examined_by'), type: 'number', required: true },
+  { key: 'examined_by', label: humanizeField('examined_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'notes', label: humanizeField('notes') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   examination_date: '',
   liver_stiffness_kpa: '',
   cap_score: '',
   fibrosis_stage: '',
-  examined_by: '',
+  examined_by: null,
   notes: '',
 }
 

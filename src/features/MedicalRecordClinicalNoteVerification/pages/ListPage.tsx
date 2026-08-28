@@ -12,7 +12,8 @@ const columns: ColumnDef<ClinicalNoteVerification, unknown>[] = [
   },
   {
     header: humanizeField('verifier_doctor_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/doctors" id={(row.original as unknown as Record<string, unknown>).verifier_doctor_id as number | null} />,
+    accessorKey: 'verifier_doctor_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).verifier_doctor_id ?? '—'),
   },
   {
     header: humanizeField('verification_status'),
@@ -38,7 +39,7 @@ const columns: ColumnDef<ClinicalNoteVerification, unknown>[] = [
 
 const fields: CrudField[] = [
   { key: 'clinical_note_id', label: humanizeField('clinical_note_id'), type: 'relation', relationEndpoint: '/clinical-notes', required: true },
-  { key: 'verifier_doctor_id', label: humanizeField('verifier_doctor_id'), type: 'relation', relationEndpoint: '/doctors', required: true },
+  { key: 'verifier_doctor_id', label: humanizeField('verifier_doctor_id'), type: 'combobox', relationEndpoint: '/doctors', required: true },
   { key: 'verification_status', label: humanizeField('verification_status') },
   { key: 'verified_at', label: humanizeField('verified_at'), type: 'date', required: true },
   { key: 'notes', label: humanizeField('notes') },

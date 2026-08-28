@@ -33,16 +33,16 @@ const columns: ColumnDef<PatientComplaint, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number' },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits' },
   { key: 'category', label: humanizeField('category'), required: true },
   { key: 'description', label: humanizeField('description'), required: true },
   { key: 'submitted_at', label: humanizeField('submitted_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   category: '',
   description: '',
   submitted_at: '',

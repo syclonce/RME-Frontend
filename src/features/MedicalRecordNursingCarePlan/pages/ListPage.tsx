@@ -38,23 +38,23 @@ const columns: ColumnDef<NursingCarePlan, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'assessment', label: humanizeField('assessment') },
   { key: 'goal', label: humanizeField('goal') },
   { key: 'intervention_plan', label: humanizeField('intervention_plan') },
   { key: 'target_date', label: humanizeField('target_date'), type: 'date' },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   assessment: '',
   goal: '',
   intervention_plan: '',
   target_date: '',
-  recorded_by: '',
+  recorded_by: null,
   recorded_at: '',
   status: '',
 }

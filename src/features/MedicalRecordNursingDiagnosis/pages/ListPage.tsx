@@ -38,23 +38,23 @@ const columns: ColumnDef<NursingDiagnosis, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'diagnosis_label', label: humanizeField('diagnosis_label'), required: true },
   { key: 'related_factors', label: humanizeField('related_factors') },
   { key: 'defining_characteristics', label: humanizeField('defining_characteristics') },
   { key: 'priority', label: humanizeField('priority') },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   diagnosis_label: '',
   related_factors: '',
   defining_characteristics: '',
   priority: '',
-  recorded_by: '',
+  recorded_by: null,
   recorded_at: '',
   status: '',
 }

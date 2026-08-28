@@ -28,14 +28,14 @@ const columns: ColumnDef<EmployeeIdentityCard, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'id_type', label: humanizeField('id_type'), type: 'select', required: true, options: [{"value":"KTP","label":"KTP"},{"value":"SIM","label":"SIM"},{"value":"Paspor","label":"Paspor"}] },
   { key: 'id_number', label: humanizeField('id_number'), required: true },
   { key: 'issued_at', label: humanizeField('issued_at'), type: 'date' },
 ]
 
 const emptyForm = {
-  employee_id: '',
+  employee_id: null,
   id_type: '',
   id_number: '',
   issued_at: '',

@@ -39,7 +39,7 @@ const columns: ColumnDef<Employee, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'user_id', label: humanizeField('user_id'), type: 'number', section: 'Detail' },
+  { key: 'user_id', label: humanizeField('user_id'), type: 'combobox', relationEndpoint: '/users', section: 'Detail' },
   { key: 'employee_number', label: humanizeField('employee_number'), section: 'Detail' },
   { key: 'name', label: humanizeField('name'), required: true, section: 'Detail' },
   { key: 'nickname', label: humanizeField('nickname'), section: 'Detail' },
@@ -63,7 +63,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  user_id: '',
+  user_id: null,
   employee_number: '',
   name: '',
   nickname: '',

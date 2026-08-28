@@ -8,7 +8,8 @@ import type { ShiftSchedule } from '../types'
 const columns: ColumnDef<ShiftSchedule, unknown>[] = [
   {
     header: humanizeField('staff_member_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/staff-members" id={(row.original as unknown as Record<string, unknown>).staff_member_id as number | null} />,
+    accessorKey: 'staff_member_id',
+    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).staff_member_id ?? '—'),
   },
   {
     header: humanizeField('employee_id'),
@@ -37,8 +38,8 @@ const columns: ColumnDef<ShiftSchedule, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'staff_member_id', label: humanizeField('staff_member_id'), type: 'relation', relationEndpoint: '/staff-members' },
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number' },
+  { key: 'staff_member_id', label: humanizeField('staff_member_id'), type: 'combobox', relationEndpoint: '/staff-members' },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees' },
   { key: 'ward_id', label: humanizeField('ward_id'), type: 'relation', relationEndpoint: '/wards' },
   { key: 'shift_type', label: humanizeField('shift_type'), required: true },
   { key: 'shift_date', label: humanizeField('shift_date'), type: 'date', required: true },
@@ -49,7 +50,7 @@ const fields: CrudField[] = [
 
 const emptyForm = {
   staff_member_id: null,
-  employee_id: '',
+  employee_id: null,
   ward_id: null,
   shift_type: '',
   shift_date: '',

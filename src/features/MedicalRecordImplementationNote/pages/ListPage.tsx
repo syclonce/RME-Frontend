@@ -33,18 +33,18 @@ const columns: ColumnDef<ImplementationNote, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'note_type', label: humanizeField('note_type') },
   { key: 'content', label: humanizeField('content') },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   note_type: '',
   content: '',
-  recorded_by: '',
+  recorded_by: null,
   recorded_at: '',
 }
 

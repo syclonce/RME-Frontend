@@ -21,9 +21,10 @@ interface AsyncComboboxProps {
   endpoint: string
   value: number | null
   onChange: (value: number | null) => void
+  disabled?: boolean
 }
 
-export function AsyncCombobox({ endpoint, value, onChange }: AsyncComboboxProps) {
+export function AsyncCombobox({ endpoint, value, onChange, disabled }: AsyncComboboxProps) {
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const { data: options, isLoading } = useSearchOptions(endpoint, search)
@@ -47,6 +48,7 @@ export function AsyncCombobox({ endpoint, value, onChange }: AsyncComboboxProps)
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          disabled={disabled}
           className="w-full justify-between font-normal"
         >
           {selected ? selected.label : isLoading ? 'Memuat...' : 'Pilih...'}

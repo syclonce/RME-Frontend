@@ -38,22 +38,22 @@ const columns: ColumnDef<EndOfLifePsychosocialRelationship, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'relationship_type', label: humanizeField('relationship_type') },
   { key: 'support_system', label: humanizeField('support_system') },
   { key: 'spiritual_needs', label: humanizeField('spiritual_needs') },
   { key: 'emotional_state', label: humanizeField('emotional_state') },
-  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   relationship_type: '',
   support_system: '',
   spiritual_needs: '',
   emotional_state: '',
-  assessed_by: '',
+  assessed_by: null,
   assessed_at: '',
 }
 

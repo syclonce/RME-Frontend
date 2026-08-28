@@ -23,14 +23,14 @@ const columns: ColumnDef<BerkasKlaimClaimFile, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
-  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'combobox', relationEndpoint: '/invoices' },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  visit_id: '',
-  invoice_id: '',
+  visit_id: null,
+  invoice_id: null,
   status: '',
 }
 

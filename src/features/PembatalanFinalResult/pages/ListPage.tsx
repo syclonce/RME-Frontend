@@ -33,7 +33,7 @@ const columns: ColumnDef<PembatalanFinalResult, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'reason', label: humanizeField('reason'), required: true },
   { key: 'cancellation_date', label: humanizeField('cancellation_date'), type: 'date', required: true },
   { key: 'requested_by', label: humanizeField('requested_by'), required: true },
@@ -41,7 +41,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   reason: '',
   cancellation_date: '',
   requested_by: '',

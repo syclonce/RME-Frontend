@@ -38,20 +38,20 @@ const columns: ColumnDef<EndOfLifeEducation, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'topic', label: humanizeField('topic'), required: true },
   { key: 'participants', label: humanizeField('participants') },
   { key: 'decision_summary', label: humanizeField('decision_summary') },
-  { key: 'educator_id', label: humanizeField('educator_id'), type: 'number', required: true },
+  { key: 'educator_id', label: humanizeField('educator_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'educated_at', label: humanizeField('educated_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   topic: '',
   participants: '',
   decision_summary: '',
-  educator_id: '',
+  educator_id: null,
   educated_at: '',
 }
 

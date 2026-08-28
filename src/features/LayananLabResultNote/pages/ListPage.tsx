@@ -25,13 +25,13 @@ const columns: ColumnDef<LabResultNote, unknown>[] = [
 const fields: CrudField[] = [
   { key: 'lab_result_id', label: humanizeField('lab_result_id'), type: 'relation', relationEndpoint: '/lab-results', required: true },
   { key: 'note', label: humanizeField('note'), required: true },
-  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'combobox', relationEndpoint: '/users' },
 ]
 
 const emptyForm = {
   lab_result_id: null,
   note: '',
-  created_by: '',
+  created_by: null,
 }
 
 export function LabResultNoteListPage() {

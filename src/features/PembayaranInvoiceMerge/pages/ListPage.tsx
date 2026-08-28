@@ -40,7 +40,7 @@ const columns: ColumnDef<InvoiceMerge, unknown>[] = [
 const fields: CrudField[] = [
   { key: 'merge_number', label: humanizeField('merge_number') },
   { key: 'payment_id', label: humanizeField('payment_id'), type: 'relation', relationEndpoint: '/payments', required: true },
-  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'combobox', relationEndpoint: '/invoices', required: true },
   { key: 'allocated_amount', label: humanizeField('allocated_amount'), type: 'number', required: true },
   { key: 'merged_at', label: humanizeField('merged_at'), type: 'date' },
   { key: 'notes', label: humanizeField('notes') },
@@ -49,7 +49,7 @@ const fields: CrudField[] = [
 const emptyForm = {
   merge_number: '',
   payment_id: null,
-  invoice_id: '',
+  invoice_id: null,
   allocated_amount: '',
   merged_at: '',
   notes: '',

@@ -33,14 +33,14 @@ const columns: ColumnDef<Doctor, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'specialization', label: humanizeField('specialization') },
   { key: 'sip_number', label: humanizeField('sip_number') },
   { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
 ]
 
 const emptyForm = {
-  employee_id: '',
+  employee_id: null,
   specialization: '',
   sip_number: '',
   is_active: false,

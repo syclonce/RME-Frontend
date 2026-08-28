@@ -38,7 +38,7 @@ const columns: ColumnDef<InvoiceSubsidy, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'combobox', relationEndpoint: '/invoices', required: true },
   { key: 'subsidy_source', label: humanizeField('subsidy_source'), required: true },
   { key: 'subsidy_amount', label: humanizeField('subsidy_amount'), type: 'number', required: true },
   { key: 'status', label: humanizeField('status') },
@@ -46,7 +46,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  invoice_id: '',
+  invoice_id: null,
   subsidy_source: '',
   subsidy_amount: '',
   status: '',

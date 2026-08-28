@@ -38,20 +38,20 @@ const columns: ColumnDef<ExternalRiskFactor, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'factor_type', label: humanizeField('factor_type'), required: true },
   { key: 'description', label: humanizeField('description') },
   { key: 'impact_level', label: humanizeField('impact_level') },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   factor_type: '',
   description: '',
   impact_level: '',
-  recorded_by: '',
+  recorded_by: null,
   recorded_at: '',
 }
 

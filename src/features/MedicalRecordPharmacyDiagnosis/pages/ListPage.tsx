@@ -38,23 +38,23 @@ const columns: ColumnDef<PharmacyDiagnosis, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
-  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'number' },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
+  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'combobox', relationEndpoint: '/prescriptions' },
   { key: 'problem_category', label: humanizeField('problem_category'), required: true },
   { key: 'description', label: humanizeField('description') },
   { key: 'recommendation', label: humanizeField('recommendation') },
-  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date', required: true },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  visit_id: '',
-  prescription_id: '',
+  visit_id: null,
+  prescription_id: null,
   problem_category: '',
   description: '',
   recommendation: '',
-  assessed_by: '',
+  assessed_by: null,
   assessed_at: '',
   status: '',
 }

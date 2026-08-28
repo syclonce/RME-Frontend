@@ -37,8 +37,8 @@ const columns: ColumnDef<PrescriptionInitialReview, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'number', required: true },
-  { key: 'reviewed_by', label: humanizeField('reviewed_by'), type: 'number', required: true },
+  { key: 'prescription_id', label: humanizeField('prescription_id'), type: 'combobox', relationEndpoint: '/prescriptions', required: true },
+  { key: 'reviewed_by', label: humanizeField('reviewed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'reviewed_at', label: humanizeField('reviewed_at'), type: 'date', required: true },
   { key: 'is_appropriate', label: humanizeField('is_appropriate'), type: 'checkbox' },
   { key: 'issues_found', label: humanizeField('issues_found') },
@@ -47,8 +47,8 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  prescription_id: '',
-  reviewed_by: '',
+  prescription_id: null,
+  reviewed_by: null,
   reviewed_at: '',
   is_appropriate: false,
   issues_found: '',

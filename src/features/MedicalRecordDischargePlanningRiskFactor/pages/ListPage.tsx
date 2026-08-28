@@ -33,18 +33,18 @@ const columns: ColumnDef<DischargePlanningRiskFactor, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'risk_factor', label: humanizeField('risk_factor'), required: true },
   { key: 'score', label: humanizeField('score'), type: 'number' },
-  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'number', required: true },
+  { key: 'assessed_by', label: humanizeField('assessed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'assessed_at', label: humanizeField('assessed_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   risk_factor: '',
   score: '',
-  assessed_by: '',
+  assessed_by: null,
   assessed_at: '',
 }
 

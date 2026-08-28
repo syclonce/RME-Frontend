@@ -38,19 +38,19 @@ const columns: ColumnDef<ExaminationResultStatus, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'examination_type', label: humanizeField('examination_type'), required: true },
   { key: 'status', label: humanizeField('status') },
-  { key: 'verified_by', label: humanizeField('verified_by'), type: 'number' },
+  { key: 'verified_by', label: humanizeField('verified_by'), type: 'combobox', relationEndpoint: '/employees' },
   { key: 'verified_at', label: humanizeField('verified_at'), type: 'date' },
   { key: 'notes', label: humanizeField('notes') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   examination_type: '',
   status: '',
-  verified_by: '',
+  verified_by: null,
   verified_at: '',
   notes: '',
 }

@@ -38,7 +38,7 @@ const columns: ColumnDef<PatientPortalAccount, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
   { key: 'username', label: humanizeField('username'), required: true },
   { key: 'email', label: humanizeField('email') },
   { key: 'phone', label: humanizeField('phone') },
@@ -46,7 +46,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  patient_id: '',
+  patient_id: null,
   username: '',
   email: '',
   phone: '',

@@ -38,24 +38,24 @@ const columns: ColumnDef<Anamnesis, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'present_illness_history', label: humanizeField('present_illness_history') },
   { key: 'past_medical_history', label: humanizeField('past_medical_history') },
   { key: 'family_medical_history', label: humanizeField('family_medical_history') },
   { key: 'allergy_history', label: humanizeField('allergy_history') },
   { key: 'social_history', label: humanizeField('social_history') },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   present_illness_history: '',
   past_medical_history: '',
   family_medical_history: '',
   allergy_history: '',
   social_history: '',
-  recorded_by: '',
+  recorded_by: null,
   recorded_at: '',
 }
 

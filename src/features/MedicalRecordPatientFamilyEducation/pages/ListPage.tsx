@@ -37,24 +37,24 @@ const columns: ColumnDef<PatientFamilyEducation, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'topic', label: humanizeField('topic'), required: true },
   { key: 'method', label: humanizeField('method') },
   { key: 'barrier', label: humanizeField('barrier') },
   { key: 'understanding_level', label: humanizeField('understanding_level') },
   { key: 're_education_needed', label: humanizeField('re_education_needed'), type: 'checkbox' },
-  { key: 'educator_id', label: humanizeField('educator_id'), type: 'number', required: true },
+  { key: 'educator_id', label: humanizeField('educator_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'educated_at', label: humanizeField('educated_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   topic: '',
   method: '',
   barrier: '',
   understanding_level: '',
   re_education_needed: false,
-  educator_id: '',
+  educator_id: null,
   educated_at: '',
 }
 

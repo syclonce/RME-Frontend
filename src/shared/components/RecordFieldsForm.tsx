@@ -4,12 +4,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { AsyncCombobox } from '@/shared/components/AsyncCombobox'
 import { RelationSelect } from '@/shared/components/RelationSelect'
 
 export interface CrudField {
   key: string
   label: string
-  type?: 'text' | 'number' | 'date' | 'textarea' | 'checkbox' | 'relation' | 'custom' | 'select'
+  type?: 'text' | 'number' | 'date' | 'textarea' | 'checkbox' | 'relation' | 'custom' | 'select' | 'combobox'
   relationEndpoint?: string
   /** type: 'select' only — static enum options (not a server-backed relation). */
   options?: { value: string; label: string }[]
@@ -103,6 +104,13 @@ export function RecordFieldsForm({
                     />
                   ) : f.type === 'relation' && f.relationEndpoint ? (
                     <RelationSelect
+                      endpoint={f.relationEndpoint}
+                      value={(rawValue as number) ?? null}
+                      onChange={(v) => setForm((prev) => ({ ...prev, [f.key]: v }))}
+                      disabled={disabled}
+                    />
+                  ) : f.type === 'combobox' && f.relationEndpoint ? (
+                    <AsyncCombobox
                       endpoint={f.relationEndpoint}
                       value={(rawValue as number) ?? null}
                       onChange={(v) => setForm((prev) => ({ ...prev, [f.key]: v }))}

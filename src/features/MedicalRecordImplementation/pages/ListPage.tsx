@@ -38,19 +38,19 @@ const columns: ColumnDef<Implementation, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'order_reference', label: humanizeField('order_reference') },
   { key: 'description', label: humanizeField('description') },
-  { key: 'performed_by', label: humanizeField('performed_by'), type: 'number', required: true },
+  { key: 'performed_by', label: humanizeField('performed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'performed_at', label: humanizeField('performed_at'), type: 'date', required: true },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   order_reference: '',
   description: '',
-  performed_by: '',
+  performed_by: null,
   performed_at: '',
   status: '',
 }

@@ -38,23 +38,23 @@ const columns: ColumnDef<ControlSchedule, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number' },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits' },
   { key: 'medical_department_id', label: humanizeField('medical_department_id'), type: 'relation', relationEndpoint: '/medical-departments' },
   { key: 'scheduled_date', label: humanizeField('scheduled_date'), type: 'date', required: true },
   { key: 'purpose', label: humanizeField('purpose') },
-  { key: 'scheduled_by', label: humanizeField('scheduled_by'), type: 'number', required: true },
+  { key: 'scheduled_by', label: humanizeField('scheduled_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'status', label: humanizeField('status') },
   { key: 'notes', label: humanizeField('notes') },
 ]
 
 const emptyForm = {
-  patient_id: '',
-  visit_id: '',
+  patient_id: null,
+  visit_id: null,
   medical_department_id: null,
   scheduled_date: '',
   purpose: '',
-  scheduled_by: '',
+  scheduled_by: null,
   status: '',
   notes: '',
 }

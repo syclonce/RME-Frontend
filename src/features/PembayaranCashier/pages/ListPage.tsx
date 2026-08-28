@@ -33,14 +33,14 @@ const columns: ColumnDef<Cashier, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'cashier_code', label: humanizeField('cashier_code'), required: true },
   { key: 'shift', label: humanizeField('shift'), required: true },
   { key: 'is_active', label: humanizeField('is_active'), type: 'checkbox' },
 ]
 
 const emptyForm = {
-  employee_id: '',
+  employee_id: null,
   cashier_code: '',
   shift: '',
   is_active: false,

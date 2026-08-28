@@ -24,13 +24,13 @@ const columns: ColumnDef<DoctorDiscount, unknown>[] = [
 
 const fields: CrudField[] = [
   { key: 'discount_id', label: humanizeField('discount_id'), type: 'relation', relationEndpoint: '/discounts', required: true },
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'percentage', label: humanizeField('percentage'), type: 'number', required: true },
 ]
 
 const emptyForm = {
   discount_id: null,
-  employee_id: '',
+  employee_id: null,
   percentage: '',
 }
 

@@ -35,7 +35,7 @@ const columns: ColumnDef<NursingImplementation, unknown>[] = [
 const fields: CrudField[] = [
   { key: 'nursing_diagnosis_id', label: humanizeField('nursing_diagnosis_id'), type: 'relation', relationEndpoint: '/nursing-diagnoses', required: true },
   { key: 'action_taken', label: humanizeField('action_taken') },
-  { key: 'performed_by', label: humanizeField('performed_by'), type: 'number', required: true },
+  { key: 'performed_by', label: humanizeField('performed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'performed_at', label: humanizeField('performed_at'), type: 'date', required: true },
   { key: 'patient_response', label: humanizeField('patient_response') },
 ]
@@ -43,7 +43,7 @@ const fields: CrudField[] = [
 const emptyForm = {
   nursing_diagnosis_id: null,
   action_taken: '',
-  performed_by: '',
+  performed_by: null,
   performed_at: '',
   patient_response: '',
 }

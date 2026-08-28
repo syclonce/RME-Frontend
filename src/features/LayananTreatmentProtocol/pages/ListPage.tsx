@@ -38,25 +38,25 @@ const columns: ColumnDef<TreatmentProtocol, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'protocol_name', label: humanizeField('protocol_name'), required: true },
-  { key: 'prescribed_by', label: humanizeField('prescribed_by'), type: 'number', required: true },
+  { key: 'prescribed_by', label: humanizeField('prescribed_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'started_at', label: humanizeField('started_at'), type: 'date', required: true },
   { key: 'ended_at', label: humanizeField('ended_at'), type: 'date' },
   { key: 'status', label: humanizeField('status') },
   { key: 'notes', label: humanizeField('notes') },
-  { key: 'created_by', label: humanizeField('created_by'), type: 'number' },
+  { key: 'created_by', label: humanizeField('created_by'), type: 'combobox', relationEndpoint: '/users' },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   protocol_name: '',
-  prescribed_by: '',
+  prescribed_by: null,
   started_at: '',
   ended_at: '',
   status: '',
   notes: '',
-  created_by: '',
+  created_by: null,
 }
 
 export function TreatmentProtocolListPage() {

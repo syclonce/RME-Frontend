@@ -38,7 +38,7 @@ const columns: ColumnDef<PatientGuardian, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'registration_id', label: humanizeField('registration_id'), type: 'number', required: true },
+  { key: 'registration_id', label: humanizeField('registration_id'), type: 'combobox', relationEndpoint: '/registrations', required: true },
   { key: 'full_name', label: humanizeField('full_name'), required: true },
   { key: 'relationship_to_patient', label: humanizeField('relationship_to_patient'), required: true },
   { key: 'identity_number', label: humanizeField('identity_number') },
@@ -48,7 +48,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  registration_id: '',
+  registration_id: null,
   full_name: '',
   relationship_to_patient: '',
   identity_number: '',

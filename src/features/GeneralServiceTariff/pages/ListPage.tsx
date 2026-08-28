@@ -38,7 +38,7 @@ const columns: ColumnDef<ServiceTariff, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'service_id', label: humanizeField('service_id'), type: 'number', required: true },
+  { key: 'service_id', label: humanizeField('service_id'), type: 'combobox', relationEndpoint: '/services', required: true },
   { key: 'room_class_id', label: humanizeField('room_class_id'), type: 'relation', relationEndpoint: '/room-classes' },
   { key: 'price', label: humanizeField('price'), type: 'number', required: true },
   { key: 'effective_date', label: humanizeField('effective_date'), type: 'date', required: true },
@@ -48,7 +48,7 @@ const fields: CrudField[] = [
 ]
 
 const emptyForm = {
-  service_id: '',
+  service_id: null,
   room_class_id: null,
   price: '',
   effective_date: '',

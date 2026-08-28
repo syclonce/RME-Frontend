@@ -37,14 +37,14 @@ const columns: ColumnDef<PatientContact, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'patient_id', label: humanizeField('patient_id'), type: 'number', required: true },
+  { key: 'patient_id', label: humanizeField('patient_id'), type: 'combobox', relationEndpoint: '/patients', required: true },
   { key: 'contact_type', label: humanizeField('contact_type'), required: true },
   { key: 'contact_value', label: humanizeField('contact_value'), required: true },
   { key: 'is_primary', label: humanizeField('is_primary'), type: 'checkbox' },
 ]
 
 const emptyForm = {
-  patient_id: '',
+  patient_id: null,
   contact_type: '',
   contact_value: '',
   is_primary: false,

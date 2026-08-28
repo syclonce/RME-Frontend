@@ -33,7 +33,7 @@ const columns: ColumnDef<PrescriptionFulfillmentItem, unknown>[] = [
 
 const fields: CrudField[] = [
   { key: 'prescription_fulfillment_id', label: humanizeField('prescription_fulfillment_id'), type: 'relation', relationEndpoint: '/prescription-fulfillments', required: true },
-  { key: 'prescription_item_id', label: humanizeField('prescription_item_id'), type: 'number', required: true },
+  { key: 'prescription_item_id', label: humanizeField('prescription_item_id'), type: 'combobox', relationEndpoint: '/prescription-items', required: true },
   { key: 'quantity_served', label: humanizeField('quantity_served'), type: 'number', required: true },
   { key: 'is_substituted', label: humanizeField('is_substituted'), type: 'checkbox' },
   { key: 'notes', label: humanizeField('notes') },
@@ -41,7 +41,7 @@ const fields: CrudField[] = [
 
 const emptyForm = {
   prescription_fulfillment_id: null,
-  prescription_item_id: '',
+  prescription_item_id: null,
   quantity_served: '',
   is_substituted: false,
   notes: '',

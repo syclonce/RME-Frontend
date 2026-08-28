@@ -38,22 +38,22 @@ const columns: ColumnDef<FluidFinalBalance, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'period_date', label: humanizeField('period_date'), type: 'date', required: true },
   { key: 'total_intake_ml', label: humanizeField('total_intake_ml'), type: 'number', required: true },
   { key: 'total_output_ml', label: humanizeField('total_output_ml'), type: 'number', required: true },
   { key: 'balance_ml', label: humanizeField('balance_ml'), type: 'number' },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   period_date: '',
   total_intake_ml: '',
   total_output_ml: '',
   balance_ml: '',
-  recorded_by: '',
+  recorded_by: null,
   recorded_at: '',
 }
 

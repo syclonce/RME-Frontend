@@ -38,22 +38,22 @@ const columns: ColumnDef<SocialCondition, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'visit_id', label: humanizeField('visit_id'), type: 'number', required: true },
+  { key: 'visit_id', label: humanizeField('visit_id'), type: 'combobox', relationEndpoint: '/visits', required: true },
   { key: 'living_situation', label: humanizeField('living_situation') },
   { key: 'occupation_status', label: humanizeField('occupation_status') },
   { key: 'financial_status', label: humanizeField('financial_status') },
   { key: 'support_system', label: humanizeField('support_system') },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number', required: true },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'recorded_at', label: humanizeField('recorded_at'), type: 'date', required: true },
 ]
 
 const emptyForm = {
-  visit_id: '',
+  visit_id: null,
   living_situation: '',
   occupation_status: '',
   financial_status: '',
   support_system: '',
-  recorded_by: '',
+  recorded_by: null,
   recorded_at: '',
 }
 

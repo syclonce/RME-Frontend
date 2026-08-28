@@ -38,19 +38,19 @@ const columns: ColumnDef<PharmacyReturn, unknown>[] = [
 ]
 
 const fields: CrudField[] = [
-  { key: 'prescription_item_id', label: humanizeField('prescription_item_id'), type: 'number', required: true },
+  { key: 'prescription_item_id', label: humanizeField('prescription_item_id'), type: 'combobox', relationEndpoint: '/prescription-items', required: true },
   { key: 'quantity_returned', label: humanizeField('quantity_returned'), type: 'number', required: true },
   { key: 'reason', label: humanizeField('reason'), required: true },
-  { key: 'returned_by', label: humanizeField('returned_by'), type: 'number', required: true },
+  { key: 'returned_by', label: humanizeField('returned_by'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'returned_at', label: humanizeField('returned_at'), type: 'date', required: true },
   { key: 'status', label: humanizeField('status') },
 ]
 
 const emptyForm = {
-  prescription_item_id: '',
+  prescription_item_id: null,
   quantity_returned: '',
   reason: '',
-  returned_by: '',
+  returned_by: null,
   returned_at: '',
   status: '',
 }

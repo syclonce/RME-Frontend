@@ -39,14 +39,14 @@ const columns: ColumnDef<ClaimInvoice, unknown>[] = [
 
 const fields: CrudField[] = [
   { key: 'claim_number', label: humanizeField('claim_number') },
-  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
+  { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'combobox', relationEndpoint: '/invoices', required: true },
   { key: 'guarantor_id', label: humanizeField('guarantor_id'), type: 'relation', relationEndpoint: '/guarantors' },
   { key: 'claim_amount', label: humanizeField('claim_amount'), type: 'number', required: true },
 ]
 
 const emptyForm = {
   claim_number: '',
-  invoice_id: '',
+  invoice_id: null,
   guarantor_id: null,
   claim_amount: '',
 }

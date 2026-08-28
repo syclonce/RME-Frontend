@@ -29,14 +29,14 @@ const columns: ColumnDef<MedicalProcedureStaff, unknown>[] = [
 
 const fields: CrudField[] = [
   { key: 'medical_procedure_id', label: humanizeField('medical_procedure_id'), type: 'relation', relationEndpoint: '/medical-procedures', required: true },
-  { key: 'employee_id', label: humanizeField('employee_id'), type: 'number', required: true },
+  { key: 'employee_id', label: humanizeField('employee_id'), type: 'combobox', relationEndpoint: '/employees', required: true },
   { key: 'role', label: humanizeField('role'), required: true },
   { key: 'notes', label: humanizeField('notes') },
 ]
 
 const emptyForm = {
   medical_procedure_id: null,
-  employee_id: '',
+  employee_id: null,
   role: '',
   notes: '',
 }

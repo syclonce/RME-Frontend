@@ -43,7 +43,7 @@ const fields: CrudField[] = [
   { key: 'period_year', label: humanizeField('period_year'), type: 'number', required: true },
   { key: 'numerator', label: humanizeField('numerator'), type: 'number', required: true },
   { key: 'denominator', label: humanizeField('denominator'), type: 'number', required: true },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'number' },
+  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees' },
 ]
 
 const emptyForm = {
@@ -52,7 +52,7 @@ const emptyForm = {
   period_year: '',
   numerator: '',
   denominator: '',
-  recorded_by: '',
+  recorded_by: null,
 }
 
 export function QualityIndicatorListPage() {
