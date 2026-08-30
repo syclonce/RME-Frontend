@@ -1,9 +1,12 @@
+// codegen:preserve — tersedia kueri rentang jadwal dan workflow shift.
 import type { ColumnDef } from '@tanstack/react-table'
 import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
 import { RelationLabel } from '@/shared/components/RelationLabel'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useShiftScheduleResource } from '../api'
 import type { ShiftSchedule } from '../types'
+import { EndpointQueryDialog } from '@/shared/components/EndpointQueryDialog'
+import { apiClient } from '@/api/client'
 
 const columns: ColumnDef<ShiftSchedule, unknown>[] = [
   {
@@ -72,6 +75,19 @@ export function ShiftScheduleListPage() {
       emptyForm={emptyForm}
       itemLabel={(item) => item.shift_type ?? `#${item.id}`}
       resource={resource}
+      headerActions={
+        <EndpointQueryDialog
+          triggerLabel="Jadwal per Bangsal" title="Jadwal Jaga per Bangsal"
+          description="Lihat petugas yang dijadwalkan pada rentang tanggal tertentu."
+          fields={[
+            { key: 'ward_id', label: 'Bangsal', type: 'relation', relationEndpoint: '/wards', required: true },
+            { key: 'from', label: 'Dari Tanggal', type: 'date', required: true },
+            { key: 'to', label: 'Sampai Tanggal', type: 'date', required: true },
+          ]}
+          initialForm={{ ward_id: null, from: '', to: '' }}
+          query={async (form) => (await apiClient.get('/shift-schedules-by-ward', { params: form })).data}
+        />
+      }
     />
   )
 }

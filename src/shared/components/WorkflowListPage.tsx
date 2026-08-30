@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/pagination'
 import { DataTable } from '@/shared/components/DataTable'
 import { RecordFieldsForm, groupFieldsBySection, type CrudField } from '@/shared/components/RecordFieldsForm'
+import { StructuredDataView } from '@/shared/components/StructuredDataView'
 
 export type { CrudField }
 
@@ -46,12 +47,15 @@ export type { CrudField }
 export interface WorkflowAction<T> {
   key: string
   label: string
-  method: 'post' | 'patch' | 'put'
+  method: 'get' | 'post' | 'patch' | 'put'
   /** Builds the action URL from the row's id, e.g. (id) => `/beds/${id}/reserve`. */
   path: (item: T) => string
   /** When set, the action opens a small Dialog collecting these fields as the request body instead of firing an empty-body POST. */
   fields?: CrudField[]
   emptyForm?: Record<string, unknown>
+  loadInitialForm?: (item: T) => Promise<Record<string, unknown>>
+  payload?: Record<string, unknown>
+  resultTitle?: string
   /** Only shown for rows where this returns true — e.g. hide "Selesaikan" once status is already 'selesai'. Omit to always show. */
   visibleWhen?: (item: T) => boolean
   variant?: 'default' | 'destructive'
@@ -91,18 +95,28 @@ export function WorkflowListPage<T extends { id: number | string }>({
   itemLabel,
   actions = [],
   resource,
+  headerActions,
+  createLabel,
 }: {
   title: string
   description: string
   /** Base REST endpoint, e.g. '/lab-orders' — used to invalidate the list query after a workflow action fires. */
   endpoint: string
   columns: ColumnDef<T, unknown>[]
-  capabilities: { canCreate: boolean; canUpdate: boolean; canDestroy: boolean }
+  capabilities: {
+    canCreate: boolean
+    canUpdate: boolean
+    canDestroy: boolean
+    canUpdateWhen?: (item: T) => boolean
+    canDestroyWhen?: (item: T) => boolean
+  }
   /** Fields for the Tambah/Ubah dialog — used only when capabilities.canCreate / canUpdate is true. */
   fields: CrudField[]
   emptyForm: Record<string, unknown>
   itemLabel: (item: T) => string
   actions?: WorkflowAction<T>[]
+  headerActions?: React.ReactNode
+  createLabel?: string
   resource: {
     useList: (params?: Record<string, unknown>) => {
       data?: { items: T[]; currentPage: number; lastPage: number }
@@ -129,15 +143,17 @@ export function WorkflowListPage<T extends { id: number | string }>({
   // Active workflow action: which action + which row it's being confirmed/filled-in for.
   const [activeAction, setActiveAction] = useState<{ action: WorkflowAction<T>; item: T } | null>(null)
   const [actionForm, setActionForm] = useState<Record<string, unknown>>({})
+  const [actionFormLoading, setActionFormLoading] = useState(false)
+  const [actionResult, setActionResult] = useState<{ title: string; data: unknown } | null>(null)
 
   const actionMutation = useMutation({
     mutationFn: async ({ action, item, payload }: { action: WorkflowAction<T>; item: T; payload: Record<string, unknown> }) => {
       const url = action.path(item)
+      if (action.method === 'get') return apiClient.get(url, { params: payload })
       if (action.method === 'post') return apiClient.post(url, payload)
       if (action.method === 'patch') return apiClient.patch(url, payload)
       return apiClient.put(url, payload)
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [endpoint] }),
   })
 
   function openAdd() {
@@ -169,9 +185,19 @@ export function WorkflowListPage<T extends { id: number | string }>({
     setDeleteTarget(null)
   }
 
-  function openAction(action: WorkflowAction<T>, item: T) {
+  async function openAction(action: WorkflowAction<T>, item: T) {
+    if (action.method === 'get' && (!action.fields || action.fields.length === 0)) {
+      const response = await actionMutation.mutateAsync({ action, item, payload: action.payload ?? {} })
+      setActionResult({ title: action.resultTitle ?? action.label, data: response.data })
+      return
+    }
     if (action.fields && action.fields.length > 0) {
-      setActionForm(action.emptyForm ?? {})
+      setActionFormLoading(true)
+      try {
+        setActionForm(action.loadInitialForm ? await action.loadInitialForm(item) : (action.emptyForm ?? {}))
+      } finally {
+        setActionFormLoading(false)
+      }
     }
     setActiveAction({ action, item })
   }
@@ -179,8 +205,14 @@ export function WorkflowListPage<T extends { id: number | string }>({
   async function confirmAction() {
     if (!activeAction) return
     const { action, item } = activeAction
-    await actionMutation.mutateAsync({ action, item, payload: action.fields ? actionForm : {} })
+    const payload = { ...(action.payload ?? {}), ...(action.fields ? actionForm : {}) }
+    const response = await actionMutation.mutateAsync({ action, item, payload })
     setActiveAction(null)
+    if (action.method === 'get') {
+      setActionResult({ title: action.resultTitle ?? action.label, data: response.data })
+    } else {
+      await queryClient.invalidateQueries({ queryKey: [endpoint] })
+    }
   }
 
   const hasRowActions = capabilities.canUpdate || capabilities.canDestroy || actions.length > 0
@@ -193,7 +225,7 @@ export function WorkflowListPage<T extends { id: number | string }>({
           const rowActions = actions.filter((a) => a.visibleWhen?.(item) ?? true)
           return (
             <div className="flex flex-wrap items-center gap-3">
-              {capabilities.canUpdate && (
+              {capabilities.canUpdate && (capabilities.canUpdateWhen?.(item) ?? true) && (
                 <button type="button" className="text-primary text-sm hover:underline" onClick={() => openEdit(item)}>
                   Ubah
                 </button>
@@ -203,12 +235,12 @@ export function WorkflowListPage<T extends { id: number | string }>({
                   key={a.key}
                   type="button"
                   className={`text-sm hover:underline ${a.variant === 'destructive' ? 'text-destructive' : 'text-primary'}`}
-                  onClick={() => openAction(a, item)}
+                  onClick={() => void openAction(a, item)}
                 >
                   {a.label}
                 </button>
               ))}
-              {capabilities.canDestroy && (
+              {capabilities.canDestroy && (capabilities.canDestroyWhen?.(item) ?? true) && (
                 <button
                   type="button"
                   className="text-destructive text-sm hover:underline"
@@ -242,7 +274,10 @@ export function WorkflowListPage<T extends { id: number | string }>({
           <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
           <p className="text-muted-foreground text-sm">{description}</p>
         </div>
-        {capabilities.canCreate && <Button onClick={openAdd}>Tambah {title}</Button>}
+        <div className="flex flex-wrap items-center gap-2">
+          {headerActions}
+          {capabilities.canCreate && <Button onClick={openAdd}>{createLabel ?? `Tambah ${title}`}</Button>}
+        </div>
       </div>
 
       <DataTable columns={actionColumn ? [...columns, actionColumn] : columns} data={data?.items ?? []} loading={isLoading} />
@@ -356,7 +391,7 @@ export function WorkflowListPage<T extends { id: number | string }>({
               <DialogDescription>{itemLabel(activeAction.item)}</DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-5 overflow-y-auto px-1 py-2 pr-3 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
-              <RecordFieldsForm fields={activeAction.action.fields} form={actionForm} setForm={setActionForm} />
+              {actionFormLoading ? <p className="text-muted-foreground text-sm">Memuat data saat ini...</p> : <RecordFieldsForm fields={activeAction.action.fields} form={actionForm} setForm={setActionForm} />}
             </div>
             <DialogFooter className="bg-transparent pt-3">
               <Button variant="outline" onClick={() => setActiveAction(null)}>
@@ -392,6 +427,17 @@ export function WorkflowListPage<T extends { id: number | string }>({
           </AlertDialogContent>
         </AlertDialog>
       )}
+
+      <Dialog open={actionResult !== null} onOpenChange={(open) => !open && setActionResult(null)}>
+        <DialogContent className="flex max-h-[85vh] flex-col overflow-hidden sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{actionResult?.title}</DialogTitle>
+            <DialogDescription>Data terbaru dari sistem.</DialogDescription>
+          </DialogHeader>
+          <div className="overflow-y-auto py-2">{actionResult && <StructuredDataView data={actionResult.data} />}</div>
+          <DialogFooter><Button variant="outline" onClick={() => setActionResult(null)}>Tutup</Button></DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

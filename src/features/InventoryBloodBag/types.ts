@@ -18,3 +18,17 @@ export interface BloodBagFormValues {
   expires_at?: string | null
   status?: string | null
 }
+
+export interface CrossmatchTest {
+  id: number
+  blood_bag_id: number
+  patient_id: number
+  major_result: string
+  minor_result: string
+  auto_control: string
+  is_compatible: boolean
+  tested_by?: number | null
+  tested_at?: string | null
+  reserved_until?: string | null
+  blood_bag_status?: string | null
+}

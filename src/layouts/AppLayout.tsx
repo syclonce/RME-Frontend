@@ -2,6 +2,17 @@ import { useMemo, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Input } from '@/components/ui/input'
 import {
   Sidebar,
@@ -32,9 +43,13 @@ function initials(name: string): string {
     .toUpperCase()
 }
 
+function routeDisplayName(route: { module: string; label?: string }): string {
+  return route.label ?? humanizeModuleName(route.module)
+}
+
 export function AppLayout() {
   const [filter, setFilter] = useState('')
-  const { user, logout, hasModule } = useAuth()
+  const { user, logout, logoutAll, hasModule } = useAuth()
   const navigate = useNavigate()
 
   const grouped = useMemo(() => {
@@ -69,7 +84,7 @@ export function AppLayout() {
             const visible = q
               ? routes.filter(
                   (r) =>
-                    r.module.toLowerCase().includes(q) || humanizeModuleName(r.module).toLowerCase().includes(q),
+                    r.module.toLowerCase().includes(q) || routeDisplayName(r).toLowerCase().includes(q),
                 )
               : routes
             if (visible.length === 0) return null
@@ -83,7 +98,7 @@ export function AppLayout() {
                     {visible.map((r) => (
                       <SidebarMenuItem key={r.path}>
                         <SidebarMenuButton asChild tooltip={r.module}>
-                          <Link to={r.path}>{humanizeModuleName(r.module)}</Link>
+                          <Link to={r.path}>{routeDisplayName(r)}</Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
@@ -108,6 +123,19 @@ export function AppLayout() {
             >
               Keluar
             </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild><Button variant="ghost" size="sm">Semua sesi</Button></AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Keluar dari semua perangkat?</AlertDialogTitle>
+                  <AlertDialogDescription>Semua token login akun ini akan dicabut, termasuk sesi pada perangkat lain.</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => { void logoutAll().then(() => navigate('/login')) }}>Keluar Semua</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </SidebarFooter>
       </Sidebar>

@@ -1,8 +1,13 @@
 import { useCrudResource } from '@/shared/hooks/useCrudResource'
-import type { LabAnalyzerVendor } from './types'
+import type { LabAnalyzerVendor, LabAnalyzerOrder } from './types'
 
-export const LayananLabAnalyzerOrderEndpoint = '/lab-analyzer-vendors'
+export const LayananLabAnalyzerVendorEndpoint = '/lab-analyzer-vendors'
+export const LayananLabAnalyzerOrderEndpoint = '/lab-analyzer-orders'
 
 export function useLabAnalyzerVendorResource() {
-  return useCrudResource<LabAnalyzerVendor>(LayananLabAnalyzerOrderEndpoint)
+  return useCrudResource<LabAnalyzerVendor>(LayananLabAnalyzerVendorEndpoint)
+}
+
+export function useLabAnalyzerOrderResource() {
+  return useCrudResource<LabAnalyzerOrder>(LayananLabAnalyzerOrderEndpoint)
 }

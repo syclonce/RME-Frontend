@@ -1,3 +1,4 @@
+// codegen:preserve — studi imaging memiliki lifecycle berbeda dari order.
 import type { ColumnDef } from '@tanstack/react-table'
 import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'

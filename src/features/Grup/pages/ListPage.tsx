@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react'
+// codegen:preserve — halaman referral terhubung ke event realtime grup.
+import { useEffect, useMemo, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -15,6 +17,7 @@ import {
   useGroupPatient,
   useGroupPatients,
   useGroupReferrals,
+  useGroupRealtimeEvents,
   useSyncGroupContext,
   useUpdateGroupReferralStatus,
 } from '../api'
@@ -29,6 +32,8 @@ export function GroupListPage() {
   const { hasPermission } = useAuth()
   const context = useGroupContext()
   const referrals = useGroupReferrals()
+  const realtimeEvents = useGroupRealtimeEvents()
+  const queryClient = useQueryClient()
   const sync = useSyncGroupContext()
   const createReferral = useCreateGroupReferral()
   const updateStatus = useUpdateGroupReferralStatus()
@@ -38,6 +43,13 @@ export function GroupListPage() {
   const patients = useGroupPatients({ q: query, branch_id: branchId === 'all' ? undefined : branchId })
   const patient = useGroupPatient(selectedPatient?.branch_id ?? (branchId === 'all' ? undefined : branchId), selectedPatient?.id)
   const [form, setForm] = useState<CreateGroupReferralInput>({ destination_branch_id: '', patient_id: null, reason: '' })
+
+  const latestEventId = realtimeEvents.data?.[0]?.event_id
+  useEffect(() => {
+    if (!latestEventId) return
+    void queryClient.invalidateQueries({ queryKey: ['grup', 'referrals'] })
+    void queryClient.invalidateQueries({ queryKey: ['grup', 'context'] })
+  }, [latestEventId, queryClient])
 
   const siblings = useMemo(() => context.data?.branches.filter((item) => !item.is_local && item.status === 'active') ?? [], [context.data])
   const canSync = hasPermission('grup.group-context.sync')
@@ -97,6 +109,14 @@ export function GroupListPage() {
       </form></CardContent></Card>}
 
       <Card><CardHeader><CardTitle>Rujukan realtime</CardTitle><CardDescription>Diperbarui otomatis; payload klinis tetap diambil melalui REST hub.</CardDescription></CardHeader><CardContent><Table><TableHeader><TableRow><TableHead>Waktu</TableHead><TableHead>Pasien</TableHead><TableHead>Asal → Tujuan</TableHead><TableHead>Status</TableHead><TableHead>Aksi</TableHead></TableRow></TableHeader><TableBody>{referrals.data?.items.map((item) => <TableRow key={item.hub_referral_id}><TableCell>{new Date(item.referred_at).toLocaleString('id-ID')}</TableCell><TableCell>{item.patient_snapshot?.name ?? '-'}</TableCell><TableCell>{item.source_branch?.code ?? '-'} → {item.destination_branch?.code ?? '-'}</TableCell><TableCell><Badge variant="secondary">{item.status}</Badge></TableCell><TableCell>{canUpdateReferral && item.status === 'requested' && <div className="flex gap-2"><Button size="sm" onClick={() => updateStatus.mutate({ id: item.hub_referral_id, status: 'accepted' })}>Terima</Button><Button size="sm" variant="outline" onClick={() => updateStatus.mutate({ id: item.hub_referral_id, status: 'rejected' })}>Tolak</Button></div>}</TableCell></TableRow>)}</TableBody></Table></CardContent></Card>
+      <Card>
+        <CardHeader><CardTitle>Status Event Grup</CardTitle><CardDescription>Event Reverb diproses backend dan dipantau UI setiap 5 detik sebagai fallback koneksi.</CardDescription></CardHeader>
+        <CardContent className="space-y-2">
+          {realtimeEvents.isError ? <p className="text-destructive text-sm">Gagal membaca status event.</p> :
+            realtimeEvents.data?.slice(0, 5).map((event) => <div key={event.event_id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border p-2 text-sm"><span>{event.event_type}</span><span className="text-muted-foreground">{new Date(event.received_at).toLocaleString('id-ID')}</span><Badge variant={event.processed_at ? 'default' : 'secondary'}>{event.processed_at ? 'Diproses' : 'Menunggu'}</Badge></div>)}
+          {!realtimeEvents.isLoading && realtimeEvents.data?.length === 0 && <p className="text-muted-foreground text-sm">Belum ada event diterima.</p>}
+        </CardContent>
+      </Card>
     </div>
   )
 }

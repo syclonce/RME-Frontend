@@ -1,73 +1,61 @@
+// codegen:preserve — master indikator, rekaman, dan tren dipisahkan.
 import type { ColumnDef } from '@tanstack/react-table'
-import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
-import { RelationLabel } from '@/shared/components/RelationLabel'
-import { humanizeField, humanizeModuleName } from '@/shared/labels'
-import { useQualityIndicatorResource } from '../api'
+import { WorkflowListPage, type CrudField, type WorkflowAction } from '@/shared/components/WorkflowListPage'
+import { humanizeModuleName } from '@/shared/labels'
+import { AuditQualityIndicatorEndpoint, useQualityIndicatorResource } from '../api'
 import type { QualityIndicator } from '../types'
 
 const columns: ColumnDef<QualityIndicator, unknown>[] = [
   {
-    header: humanizeField('indicator_id'),
-    cell: ({ row }) => <RelationLabel endpoint="/quality-indicators" id={(row.original as unknown as Record<string, unknown>).indicator_id as number | null} />,
+    header: 'Kode', accessorKey: 'code',
   },
   {
-    header: humanizeField('period_month'),
-    accessorKey: 'period_month',
-    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).period_month ?? '—'),
+    header: 'Nama Indikator', accessorKey: 'name',
   },
   {
-    header: humanizeField('period_year'),
-    accessorKey: 'period_year',
-    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).period_year ?? '—'),
+    header: 'Kategori', accessorKey: 'category',
   },
   {
-    header: humanizeField('numerator'),
-    accessorKey: 'numerator',
-    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).numerator ?? '—'),
+    header: 'Target', accessorKey: 'target_value',
   },
   {
-    header: humanizeField('denominator'),
-    accessorKey: 'denominator',
-    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).denominator ?? '—'),
-  },
-  {
-    header: humanizeField('recorded_by'),
-    accessorKey: 'recorded_by',
-    cell: ({ row }) => String((row.original as unknown as Record<string, unknown>).recorded_by ?? '—'),
+    header: 'Satuan', accessorKey: 'unit_of_measure',
   },
 ]
 
 const fields: CrudField[] = [
-  { key: 'indicator_id', label: humanizeField('indicator_id'), type: 'relation', relationEndpoint: '/quality-indicators', required: true },
-  { key: 'period_month', label: humanizeField('period_month'), type: 'number', required: true },
-  { key: 'period_year', label: humanizeField('period_year'), type: 'number', required: true },
-  { key: 'numerator', label: humanizeField('numerator'), type: 'number', required: true },
-  { key: 'denominator', label: humanizeField('denominator'), type: 'number', required: true },
-  { key: 'recorded_by', label: humanizeField('recorded_by'), type: 'combobox', relationEndpoint: '/employees' },
+  { key: 'code', label: 'Kode', required: true }, { key: 'name', label: 'Nama Indikator', required: true },
+  { key: 'unit_of_measure', label: 'Satuan', required: true }, { key: 'target_value', label: 'Target', type: 'number' },
+  { key: 'category', label: 'Kategori', type: 'select', required: true, options: [
+    { value: 'klinis', label: 'Klinis' }, { value: 'manajerial', label: 'Manajerial' }, { value: 'sasaran_keselamatan', label: 'Sasaran Keselamatan' },
+  ] },
 ]
 
 const emptyForm = {
-  indicator_id: null,
-  period_month: '',
-  period_year: '',
-  numerator: '',
-  denominator: '',
-  recorded_by: null,
+  code: '', name: '', unit_of_measure: '', target_value: '', category: 'klinis',
 }
+
+const actions: WorkflowAction<QualityIndicator>[] = [{
+  key: 'trend', label: 'Lihat Tren', method: 'get', path: (item) => `/quality-indicators/${item.id}/trend`,
+  fields: [{ key: 'year', label: 'Tahun', type: 'number' }], emptyForm: { year: new Date().getFullYear() }, resultTitle: 'Tren Indikator Mutu',
+}]
 
 export function QualityIndicatorListPage() {
   const resource = useQualityIndicatorResource()
   const title = humanizeModuleName('AuditQualityIndicator')
 
   return (
-    <CrudDialogPage<QualityIndicator>
+    <WorkflowListPage<QualityIndicator>
       title={title}
       description={`Kelola data ${title.toLowerCase()}.`}
       columns={columns}
+      endpoint={AuditQualityIndicatorEndpoint}
+      capabilities={{ canCreate: true, canUpdate: true, canDestroy: true }}
       fields={fields}
       emptyForm={emptyForm}
-      itemLabel={(item) => `#${item.id}`}
+      itemLabel={(item) => item.name}
       resource={resource}
+      actions={actions}
     />
   )
 }

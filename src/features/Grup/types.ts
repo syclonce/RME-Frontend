@@ -56,3 +56,10 @@ export interface CreateGroupReferralInput {
   reason: string
   clinical_summary?: string
 }
+
+export interface GroupRealtimeEvent {
+  event_id: string
+  event_type: string
+  received_at: string
+  processed_at?: string | null
+}

@@ -22,3 +22,13 @@ export interface SterilizationCycleFormValues {
   biological_indicator_result?: string | null
   status?: string | null
 }
+
+export interface SterilizedItem {
+  id: number
+  cycle_id: number
+  item_name: string
+  quantity: number
+  expiry_date?: string | null
+  created_at?: string
+  updated_at?: string
+}

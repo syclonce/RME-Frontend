@@ -1,3 +1,4 @@
+// codegen:preserve — modul ini juga memiliki workflow work order pemeliharaan.
 import type { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/ui/badge'
 import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'

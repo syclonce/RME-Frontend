@@ -16,3 +16,13 @@ export interface PatientComplaintFormValues {
   description?: string | null
   submitted_at?: string | null
 }
+
+export interface PatientSurvey {
+  id: number
+  visit_id: number
+  satisfaction_score: number
+  feedback_text?: string | null
+  submitted_at: string
+  created_at?: string
+  updated_at?: string
+}

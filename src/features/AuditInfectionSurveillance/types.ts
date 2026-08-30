@@ -14,3 +14,13 @@ export interface DeviceDayFormValues {
   inserted_at?: string | null
   removed_at?: string | null
 }
+
+export interface InfectionCase {
+  id: number
+  visit_id: number
+  infection_type: string
+  diagnosed_at: string
+  related_device_day_id?: number | null
+  created_at?: string
+  updated_at?: string
+}

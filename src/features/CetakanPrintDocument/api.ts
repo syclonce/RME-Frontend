@@ -17,6 +17,16 @@ export function usePrintDocumentResource() {
       },
     })
 
+  const useDetail = (id: number | null) =>
+    useQuery({
+      queryKey: [PrintDocumentEndpoint, id],
+      queryFn: async () => {
+        const res = await apiClient.get(`${PrintDocumentEndpoint}/${id}`)
+        return (res.data?.data ?? res.data) as PrintDocument
+      },
+      enabled: id !== null,
+    })
+
   const issue = useMutation({
     mutationFn: async (payload: { document_type: string; ref_type: string; ref_id: number }) => {
       const res = await apiClient.post(`${PrintDocumentEndpoint}/issue`, payload)
@@ -25,5 +35,5 @@ export function usePrintDocumentResource() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [PrintDocumentEndpoint] }),
   })
 
-  return { useList, issue }
+  return { useList, useDetail, issue }
 }

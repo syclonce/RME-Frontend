@@ -1,3 +1,4 @@
+// codegen:preserve — modul ini juga memiliki workflow perjalanan ambulans.
 import type { ColumnDef } from '@tanstack/react-table'
 import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'

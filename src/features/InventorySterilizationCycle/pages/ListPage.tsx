@@ -1,3 +1,4 @@
+// codegen:preserve — modul ini juga menampilkan item hasil sterilisasi.
 import type { ColumnDef } from '@tanstack/react-table'
 import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'

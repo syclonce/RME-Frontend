@@ -7,7 +7,7 @@
  * semua rute-nya - BUKAN UI klinis dipoles, murni alat teknis supaya
  * modul ini "punya representasi" sambil menunggu bespoke UI sungguhan.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -37,6 +37,8 @@ function generateModule(entry) {
   if (routes.length === 0) return false
 
   const dir = path.join(FEATURES_ROOT, entry.module)
+  const pagePath = path.join(dir, 'pages/ListPage.tsx')
+  if (existsSync(pagePath) && readFileSync(pagePath, 'utf8').includes('// codegen:preserve')) return false
   mkdirSync(path.join(dir, 'pages'), { recursive: true })
 
   const pageTsx = `import { ApiConsole } from '@/shared/components/ApiConsole'
@@ -48,7 +50,7 @@ export function ${entry.module}ListPage() {
 }
 `
 
-  writeFileSync(path.join(dir, 'pages/ListPage.tsx'), pageTsx)
+  writeFileSync(pagePath, pageTsx)
   return true
 }
 

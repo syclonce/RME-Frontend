@@ -7,6 +7,7 @@ import type {
   GroupPatientDetail,
   GroupPatientSummary,
   GroupReferral,
+  GroupRealtimeEvent,
 } from './types'
 
 const endpoint = '/grup'
@@ -41,6 +42,14 @@ export function useGroupReferrals() {
     queryKey: ['grup', 'referrals'],
     queryFn: async () => normalizeList<GroupReferral>((await apiClient.get(`${endpoint}/referrals`)).data.data),
     refetchInterval: 15_000,
+  })
+}
+
+export function useGroupRealtimeEvents() {
+  return useQuery({
+    queryKey: ['grup', 'events'],
+    queryFn: async () => (await apiClient.get(`${endpoint}/events`)).data.data as GroupRealtimeEvent[],
+    refetchInterval: 5_000,
   })
 }
 

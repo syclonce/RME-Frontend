@@ -1,3 +1,4 @@
+// codegen:preserve — katalog operasi P-Care diperluas di luar fallback generator.
 import { ApiConsole } from '@/shared/components/ApiConsole'
 
 const ROUTES = [
@@ -92,7 +93,14 @@ const ROUTES = [
   {
     "verb": "get",
     "uri": "pendaftarans/provider"
-  }
+  },
+  ...["mcus", "alergis", "prognosas", "skrinnings", "tindakans"].flatMap((resource) => [
+    { verb: "get" as const, uri: resource },
+    { verb: "get" as const, uri: `${resource}/{id}` },
+    { verb: "post" as const, uri: resource },
+    { verb: "put" as const, uri: `${resource}/{id}` },
+    { verb: "delete" as const, uri: `${resource}/{id}` },
+  ])
 ] as const
 
 export function BpjsPCareListPage() {

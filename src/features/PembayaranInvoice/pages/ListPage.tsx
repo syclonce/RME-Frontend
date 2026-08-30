@@ -1,3 +1,4 @@
+// codegen:preserve — coverage dan penjamin mengikuti status invoice.
 import type { ColumnDef } from '@tanstack/react-table'
 import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
@@ -57,24 +58,36 @@ const actions: WorkflowAction<Invoice>[] = [
     label: 'Guarantors',
     method: 'post',
     path: (item) => `/invoices/${item.id}/guarantors`,
+    fields: [
+      { key: 'guarantor_id', label: 'Penjamin', type: 'relation', relationEndpoint: '/guarantors', required: true },
+      { key: 'room_class_id', label: 'Kelas Klaim', type: 'relation', relationEndpoint: '/room-classes' },
+    ],
+    emptyForm: { guarantor_id: null, room_class_id: null },
+    visibleWhen: (item) => !item.is_locked,
+  },
+  {
+    key: 'coverage', label: 'Rincian Tanggungan', method: 'get', path: (item) => `/invoices/${item.id}/coverage`, resultTitle: 'Rincian Tanggungan Invoice',
   },
   {
     key: 'redistribute',
     label: 'Redistribute',
     method: 'post',
     path: (item) => `/invoices/${item.id}/redistribute`,
+    visibleWhen: (item) => !item.is_locked,
   },
   {
     key: 'lock',
     label: 'Kunci',
     method: 'post',
     path: (item) => `/invoices/${item.id}/lock`,
+    visibleWhen: (item) => !item.is_locked,
   },
   {
     key: 'unlock',
     label: 'Buka Kunci',
     method: 'post',
     path: (item) => `/invoices/${item.id}/unlock`,
+    visibleWhen: (item) => Boolean(item.is_locked),
   },
 ]
 

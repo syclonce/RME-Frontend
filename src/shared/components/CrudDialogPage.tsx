@@ -70,6 +70,8 @@ export function CrudDialogPage<T extends { id: number | string }>({
   itemLabel,
   resource,
   renderExtra,
+  headerActions,
+  createLabel,
 }: {
   title: string
   description: string
@@ -79,6 +81,8 @@ export function CrudDialogPage<T extends { id: number | string }>({
   itemLabel: (item: T) => string
   /** Extra content rendered below the field sections — e.g. nested Kontak/Keluarga lists that only make sense once a record already has an id (edit mode). */
   renderExtra?: (editing: T | null) => React.ReactNode
+  headerActions?: React.ReactNode
+  createLabel?: string
   resource: {
     useList: (params?: Record<string, unknown>) => {
       data?: { items: T[]; currentPage: number; lastPage: number }
@@ -174,7 +178,10 @@ export function CrudDialogPage<T extends { id: number | string }>({
           <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
           <p className="text-muted-foreground text-sm">{description}</p>
         </div>
-        <Button onClick={openAdd}>Tambah {title}</Button>
+        <div className="flex flex-wrap items-center gap-2">
+          {headerActions}
+          <Button onClick={openAdd}>{createLabel ?? `Tambah ${title}`}</Button>
+        </div>
       </div>
 
       <DataTable columns={[...columns, actionColumn]} data={data?.items ?? []} loading={isLoading} />

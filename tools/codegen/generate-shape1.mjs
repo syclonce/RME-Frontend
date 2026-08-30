@@ -152,7 +152,7 @@ function isEligibleForDialog(entry) {
 function looksHandCustomized(filePath) {
   if (!existsSync(filePath)) return false
   const src = readFileSync(filePath, 'utf8')
-  return src.includes('renderExtra') || src.includes('InlineNestedList') || src.includes('CrudListPage')
+  return src.includes('// codegen:preserve') || src.includes('renderExtra') || src.includes('InlineNestedList') || src.includes('CrudListPage')
 }
 
 function fieldToCrudField(f, opts) {

@@ -1,8 +1,11 @@
+// codegen:preserve — ringkasan remunerasi adalah operasi laporan khusus.
 import type { ColumnDef } from '@tanstack/react-table'
 import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { useRemunerationEntryResource } from '../api'
 import type { RemunerationEntry } from '../types'
+import { EndpointQueryDialog } from '@/shared/components/EndpointQueryDialog'
+import { apiClient } from '@/api/client'
 
 const columns: ColumnDef<RemunerationEntry, unknown>[] = [
   {
@@ -74,6 +77,19 @@ export function RemunerationEntryListPage() {
       emptyForm={emptyForm}
       itemLabel={(item) => item.source_type ?? `#${item.id}`}
       resource={resource}
+      headerActions={
+        <EndpointQueryDialog
+          triggerLabel="Ringkasan Remunerasi" title="Ringkasan Remunerasi Pegawai"
+          description="Total bruto dan neto seorang pegawai dalam satu bulan."
+          fields={[
+            { key: 'employee_id', label: 'Pegawai', type: 'combobox', relationEndpoint: '/employees', required: true },
+            { key: 'month', label: 'Bulan', type: 'number', required: true },
+            { key: 'year', label: 'Tahun', type: 'number', required: true },
+          ]}
+          initialForm={{ employee_id: null, month: new Date().getMonth() + 1, year: new Date().getFullYear() }}
+          query={async (form) => (await apiClient.get('/remuneration-entries/summary', { params: form })).data}
+        />
+      }
     />
   )
 }

@@ -67,6 +67,11 @@ function generateEndpoint(entry, endpoint, index) {
   const entityName = toPascalCase((endpoint.controller ?? endpoint.uri).replace(/Controller$/, ''))
   const dir = path.join(FEATURES_ROOT, entry.module)
   mkdirSync(path.join(dir, 'pages'), { recursive: true })
+  const fileName = index === 0 ? 'ListPage.tsx' : `ListPage${index}.tsx`
+  const pagePath = path.join(dir, 'pages', fileName)
+  if (existsSync(pagePath) && readFileSync(pagePath, 'utf8').includes('// codegen:preserve')) {
+    return { module: entry.module, uri: endpoint.uri, fileName, entityName }
+  }
 
   const pageTsx = `import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/api/client'
@@ -112,8 +117,7 @@ export function ${entityName}ListPage() {
 }
 `
 
-  const fileName = index === 0 ? 'ListPage.tsx' : `ListPage${index}.tsx`
-  writeFileSync(path.join(dir, 'pages', fileName), pageTsx)
+  writeFileSync(pagePath, pageTsx)
   return { module: entry.module, uri: endpoint.uri, fileName, entityName }
 }
 

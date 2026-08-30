@@ -1,8 +1,11 @@
+// codegen:preserve — keluhan, survei, dan ringkasan memakai alur berbeda.
 import type { ColumnDef } from '@tanstack/react-table'
 import { CrudDialogPage, type CrudField } from '@/shared/components/CrudDialogPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { usePatientComplaintResource } from '../api'
 import type { PatientComplaint } from '../types'
+import { EndpointQueryDialog } from '@/shared/components/EndpointQueryDialog'
+import { apiClient } from '@/api/client'
 
 const columns: ColumnDef<PatientComplaint, unknown>[] = [
   {
@@ -61,6 +64,13 @@ export function PatientComplaintListPage() {
       emptyForm={emptyForm}
       itemLabel={(item) => item.category ?? `#${item.id}`}
       resource={resource}
+      headerActions={
+        <EndpointQueryDialog
+          triggerLabel="Ringkasan Komplain" title="Ringkasan Status Komplain"
+          description="Jumlah komplain baru, sedang diproses, dan selesai."
+          query={async () => (await apiClient.get('/patient-complaints/summary')).data?.data}
+        />
+      }
     />
   )
 }

@@ -1,3 +1,4 @@
+// codegen:preserve — aksi crossmatch dan transfusi mengikuti status kantong.
 import type { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/ui/badge'
 import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
@@ -64,12 +65,22 @@ const actions: WorkflowAction<BloodBag>[] = [
     label: 'Crossmatch',
     method: 'post',
     path: (item) => `/blood-bags/${item.id}/crossmatch`,
+    fields: [
+      { key: 'patient_id', label: 'Pasien', type: 'combobox', relationEndpoint: '/patients', required: true },
+      { key: 'major_result', label: 'Hasil Mayor', type: 'select', required: true, options: [{ value: 'neg', label: 'Negatif' }, { value: 'pos', label: 'Positif' }] },
+      { key: 'minor_result', label: 'Hasil Minor', type: 'select', required: true, options: [{ value: 'neg', label: 'Negatif' }, { value: 'pos', label: 'Positif' }] },
+      { key: 'auto_control', label: 'Auto Control', type: 'select', required: true, options: [{ value: 'neg', label: 'Negatif' }, { value: 'pos', label: 'Positif' }] },
+      { key: 'tested_by', label: 'Petugas Penguji', type: 'combobox', relationEndpoint: '/employees' },
+    ],
+    emptyForm: { patient_id: null, major_result: 'neg', minor_result: 'neg', auto_control: 'neg', tested_by: null },
+    visibleWhen: (item) => item.status === 'in_stock',
   },
   {
     key: 'transfuse',
     label: 'Transfusikan',
     method: 'post',
     path: (item) => `/blood-bags/${item.id}/transfuse`,
+    visibleWhen: (item) => item.status === 'crossmatch_reserved',
   },
 ]
 

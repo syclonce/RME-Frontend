@@ -23,6 +23,7 @@ interface AuthContextValue {
   hasPermission: (permission: string) => boolean
   login: (login: string, password: string) => Promise<void>
   logout: () => Promise<void>
+  logoutAll: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -72,6 +73,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function logoutAll() {
+    try {
+      await apiClient.post('/logout-all')
+    } finally {
+      setAuthToken(null)
+      setUser(null)
+      setAccess({ modules: [], permissions_by_module: {} })
+    }
+  }
+
   const hasModule = (module: string) => access.modules.includes(module)
   const hasPermission = (permission: string) =>
     Object.values(access.permissions_by_module).some((permissions) => permissions.includes(permission))
@@ -87,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         hasPermission,
         login,
         logout,
+        logoutAll,
       }}
     >
       {children}
