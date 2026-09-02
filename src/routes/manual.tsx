@@ -2,6 +2,8 @@
 import { lazy } from 'react'
 import type { ReactElement } from 'react'
 
+const DashboardCoreListPage = lazy(() => import('@/features/DashboardCore/pages/ListPage').then((m) => ({ default: m.DashboardCoreListPage })))
+
 const GroupListPage = lazy(() => import('@/features/Grup/pages/ListPage').then((module) => ({ default: module.GroupListPage })))
 
 // Authorization — second page (Permission CRUD)
@@ -31,6 +33,9 @@ export interface AppRoute {
 }
 
 export const manualRoutes: AppRoute[] = [
+  // DashboardCore: path pendek dipakai di sidebar sebagai pengganti /modul/dashboard-core (lihat filter di App.tsx)
+  { path: '/dashboard', module: 'DashboardCore', label: 'Dashboard', element: <DashboardCoreListPage /> },
+
   { path: '/modul/grup', module: 'Grup', element: <GroupListPage /> },
 
   // Authorization: Permission management

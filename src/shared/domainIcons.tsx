@@ -1,0 +1,71 @@
+import {
+  Ambulance,
+  Banknote,
+  Bed,
+  BookText,
+  Boxes,
+  Building2,
+  ClipboardList,
+  Cross,
+  FileStack,
+  FileText,
+  Fingerprint,
+  Folder,
+  Hospital,
+  KeyRound,
+  LayoutDashboard,
+  Network,
+  Package,
+  Printer,
+  Radio,
+  Settings,
+  ShieldCheck,
+  ShoppingCart,
+  Siren,
+  Stethoscope,
+  UserRound,
+  Users,
+  Wallet,
+  type LucideIcon,
+} from 'lucide-react'
+
+/** Ikon per domain sidebar, dikunci oleh raw prefix yang sama dengan DOMAIN_LABELS di shared/labels.ts. */
+const DOMAIN_ICONS: Record<string, LucideIcon> = {
+  General: Boxes,
+  Audit: ClipboardList,
+  Authorization: ShieldCheck,
+  Auth: KeyRound,
+  Aplikasi: Settings,
+  BerkasKlaim: FileStack,
+  Berkas: Folder,
+  Bpjs: Cross,
+  Finance: Wallet,
+  Inventory: Package,
+  Layanan: Stethoscope,
+  MedicalRecord: BookText,
+  Pegawai: Users,
+  Pembayaran: Banknote,
+  Pendaftaran: ClipboardList,
+  Penjamin: ShieldCheck,
+  SatuSehat: Hospital,
+  Sisrute: Network,
+  Sitb: Radio,
+  RsOnline: Building2,
+  SirsOnlineBor: Bed,
+  System: Settings,
+  EKlaim: FileText,
+  Grup: Building2,
+  Cetakan: Printer,
+  Dashboard: LayoutDashboard,
+  Kemkes: Fingerprint,
+  Pasien: UserRound,
+  Pembatalan: Siren,
+  Penjualan: ShoppingCart,
+}
+
+const FALLBACK_ICON = Ambulance
+
+/** Ikon sidebar untuk satu domain; jatuh ke ikon generik bila domain belum dipetakan. */
+export function domainIconOf(domain: string): LucideIcon {
+  return DOMAIN_ICONS[domain] ?? FALLBACK_ICON
+}
