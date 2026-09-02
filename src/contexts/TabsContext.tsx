@@ -27,6 +27,7 @@ interface TabsContextValue {
   openTab: (route: AppRoute) => void
   activateTab: (id: string) => void
   closeTab: (id: string) => void
+  reorderTab: (draggedId: string, targetId: string) => void
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null)
@@ -126,6 +127,21 @@ export function TabsProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  function reorderTab(draggedId: string, targetId: string) {
+    if (draggedId === targetId) return
+    setRawTabs((prev) => {
+      const dragged = prev.find((t) => t.id === draggedId)
+      const target = prev.find((t) => t.id === targetId)
+      if (!dragged || !target || dragged.pinned || target.pinned) return prev
+      const draggedIndex = prev.findIndex((t) => t.id === draggedId)
+      const targetIndex = prev.findIndex((t) => t.id === targetId)
+      const next = [...prev]
+      const [moved] = next.splice(draggedIndex, 1)
+      next.splice(targetIndex, 0, moved)
+      return next
+    })
+  }
+
   const tabs = useMemo(
     () =>
       rawTabs
@@ -138,7 +154,7 @@ export function TabsProvider({ children }: { children: ReactNode }) {
   )
 
   return (
-    <TabsContext.Provider value={{ tabs, activeTabId, openTab, activateTab, closeTab }}>
+    <TabsContext.Provider value={{ tabs, activeTabId, openTab, activateTab, closeTab, reorderTab }}>
       {children}
     </TabsContext.Provider>
   )

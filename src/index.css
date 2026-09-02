@@ -147,4 +147,11 @@
   .animate-collapsible-up {
     animation: collapsible-up 200ms ease-out;
   }
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
