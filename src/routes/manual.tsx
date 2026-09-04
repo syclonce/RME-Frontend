@@ -15,8 +15,6 @@ const LabAnalyzerOrderListPage = lazy(() => import('@/features/LayananLabAnalyze
 // GeneralFacilityMaintenance — second page (Work Order list with assign/complete actions)
 const MaintenanceWorkOrderListPage = lazy(() => import('@/features/GeneralFacilityMaintenance/pages/MaintenanceWorkOrderListPage').then((m) => ({ default: m.MaintenanceWorkOrderListPage })))
 
-// LayananImagingOrder — second page (Imaging Study CRUD)
-const ImagingStudyListPage = lazy(() => import('@/features/LayananImagingOrder/pages/ImagingStudyListPage').then((m) => ({ default: m.ImagingStudyListPage })))
 const AmbulanceTripListPage = lazy(() => import('@/features/GeneralAmbulanceFleet/pages/AmbulanceTripListPage').then((m) => ({ default: m.AmbulanceTripListPage })))
 const CrossmatchTestListPage = lazy(() => import('@/features/InventoryBloodBag/pages/CrossmatchTestListPage').then((m) => ({ default: m.CrossmatchTestListPage })))
 const SterilizedItemListPage = lazy(() => import('@/features/InventorySterilizationCycle/pages/SterilizedItemListPage').then((m) => ({ default: m.SterilizedItemListPage })))
@@ -70,8 +68,6 @@ export const manualRoutes: AppRoute[] = [
   // GeneralFacilityMaintenance: Work Order management (assign/complete)
   { path: '/modul/general-facility-maintenance/work-order', module: 'GeneralFacilityMaintenance', label: 'Work Order Pemeliharaan', element: <MaintenanceWorkOrderListPage /> },
 
-  // LayananImagingOrder: Imaging Study CRUD
-  { path: '/modul/layanan-imaging-order/study', module: 'LayananImagingOrder', label: 'Studi Imaging', element: <ImagingStudyListPage /> },
   { path: '/modul/general-ambulance-fleet/trip', module: 'GeneralAmbulanceFleet', label: 'Perjalanan Ambulans', element: <AmbulanceTripListPage /> },
   { path: '/modul/inventory-blood-bag/crossmatch', module: 'InventoryBloodBag', label: 'Hasil Crossmatch Darah', element: <CrossmatchTestListPage /> },
   { path: '/modul/inventory-sterilization-cycle/item', module: 'InventorySterilizationCycle', label: 'Item Hasil Sterilisasi', element: <SterilizedItemListPage /> },

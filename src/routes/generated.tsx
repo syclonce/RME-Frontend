@@ -1,5 +1,10 @@
-// FILE HASIL GENERATOR (tools/codegen/generate-routes.mjs) - JANGAN EDIT TANGAN.
-// Jalankan ulang generator kalau ada modul baru, jangan sunting file ini langsung.
+// FILE HASIL GENERATOR - hindari menyunting tangan; tambahkan override di
+// src/routes/manual.tsx.
+//
+// CATATAN: skrip generatornya (tools/codegen/generate-routes.mjs) TIDAK ADA di
+// repo ini. Sampai skrip itu dipulihkan, file ini praktis dipelihara manual —
+// dan perubahan di sini tidak akan tertimpa. Kalau generatornya kembali,
+// jalankan ulang dan periksa apakah modul yang sudah dihapus tidak muncul lagi.
 import { lazy } from 'react'
 import type { ReactElement } from 'react'
 
@@ -286,7 +291,6 @@ const List_276 = lazy(() => import('@/features/LayananCriticalLabValue/pages/Lis
 const List_277 = lazy(() => import('@/features/LayananDrugInteractionCheck/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const List_278 = lazy(() => import('@/features/LayananEarlyWarningScore/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const List_279 = lazy(() => import('@/features/LayananExaminationResultStatus/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
-const List_280 = lazy(() => import('@/features/LayananImagingOrder/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const List_281 = lazy(() => import('@/features/LayananLabAnalyzerOrder/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const List_282 = lazy(() => import('@/features/LayananLabCultureResult/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
 const List_283 = lazy(() => import('@/features/LayananLabExaminationResult/pages/ListPage').then((m) => ({ default: Object.values(m)[0] as React.ComponentType })))
@@ -905,7 +909,6 @@ export const generatedRoutes: GeneratedRoute[] = [
   { path: '/modul/layanan-drug-interaction-check', module: 'LayananDrugInteractionCheck', element: <List_277 /> },
   { path: '/modul/layanan-early-warning-score', module: 'LayananEarlyWarningScore', element: <List_278 /> },
   { path: '/modul/layanan-examination-result-status', module: 'LayananExaminationResultStatus', element: <List_279 /> },
-  { path: '/modul/layanan-imaging-order', module: 'LayananImagingOrder', element: <List_280 /> },
   { path: '/modul/layanan-lab-analyzer-order', module: 'LayananLabAnalyzerOrder', element: <List_281 /> },
   { path: '/modul/layanan-lab-culture-result', module: 'LayananLabCultureResult', element: <List_282 /> },
   { path: '/modul/layanan-lab-examination-result', module: 'LayananLabExaminationResult', element: <List_283 /> },
