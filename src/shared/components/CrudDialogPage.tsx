@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
+import { Search, X } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,6 +12,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Dialog,
   DialogContent,
@@ -29,6 +31,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { DataTable } from '@/shared/components/DataTable'
+import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue'
 import { RecordFieldsForm, groupFieldsBySection, type CrudField } from '@/shared/components/RecordFieldsForm'
 
 export type { CrudField }
@@ -97,7 +100,18 @@ export function CrudDialogPage<T extends { id: number | string }>({
   }
 }) {
   const [page, setPage] = useState(1)
-  const { data, isLoading } = resource.useList({ page })
+  const [search, setSearch] = useState('')
+  // Ditunda 300ms: sebagian tabel di aplikasi ini besar (diagnosis_codes
+  // 40.807 baris), dan satu permintaan per ketikan membuat daftar terasa
+  // tersendat justru saat petugas sedang mengetik.
+  const debouncedSearch = useDebouncedValue(search)
+
+  // Backend menerima `?name=` — kontrak yang sama sudah dipakai AsyncCombobox.
+  const { data, isLoading } = resource.useList({
+    page,
+    ...(debouncedSearch.trim() !== '' ? { name: debouncedSearch.trim() } : {}),
+  })
+
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<T | null>(null)
@@ -184,7 +198,47 @@ export function CrudDialogPage<T extends { id: number | string }>({
         </div>
       </div>
 
-      <DataTable columns={[...columns, actionColumn]} data={data?.items ?? []} loading={isLoading} />
+      <div className="relative max-w-sm">
+        <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
+        <Input
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value)
+            // Reset halaman di sini, bukan di useEffect: hasil pencarian baru
+            // hampir pasti punya jumlah halaman berbeda, dan bertahan di
+            // halaman 7 menampilkan daftar kosong yang tampak seperti
+            // "tidak ada hasil".
+            setPage(1)
+          }}
+          placeholder={`Cari ${title.toLowerCase()}...`}
+          className="pr-8 pl-8"
+          aria-label={`Cari ${title.toLowerCase()}`}
+        />
+        {search !== '' && (
+          <button
+            type="button"
+            onClick={() => { setSearch(''); setPage(1) }}
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2"
+            aria-label="Bersihkan pencarian"
+          >
+            <X className="size-4" />
+          </button>
+        )}
+      </div>
+
+      <DataTable
+        columns={[...columns, actionColumn]}
+        data={data?.items ?? []}
+        loading={isLoading}
+        emptyMessage={
+          debouncedSearch.trim() !== ''
+            ? `Tidak ada hasil untuk "${debouncedSearch.trim()}".`
+            : undefined
+        }
+        onClearSearch={
+          debouncedSearch.trim() !== '' ? () => { setSearch(''); setPage(1) } : undefined
+        }
+      />
 
       {data && data.lastPage > 1 && (
         <Pagination>

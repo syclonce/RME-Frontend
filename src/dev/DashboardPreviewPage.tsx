@@ -4,6 +4,7 @@ import { lazy, Suspense } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { DashboardCore } from '@/features/DashboardCore/types'
 import { BloodPressureReading, VitalReading } from '@/features/MedicalRecordVitalSign/components/VitalReading'
+import { CrudDialogPage } from '@/shared/components/CrudDialogPage'
 
 // Lazy: import statis dari halaman dev menarik ListPage ke bundel utama dan
 // membatalkan pemecahan kodenya (rolldown: INEFFECTIVE_DYNAMIC_IMPORT).
@@ -193,6 +194,42 @@ export function DashboardPreviewPage() {
           ))}
         </CardContent>
       </Card>
+      </div>
+
+      {/* Kotak pencarian daftar generik — menyentuh 563 halaman sekaligus,
+          jadi tampilannya diperiksa di sini alih-alih ditebak. */}
+      <div className="border-t pt-2">
+        <p className="text-muted-foreground px-6 pt-4 text-xs font-medium tracking-wide uppercase">
+          Daftar generik dengan pencarian
+        </p>
+        <CrudDialogPage
+          title="Kode Diagnosis"
+          description="40.807 baris — tanpa pencarian, menemukan satu kode butuh 2.720 halaman."
+          columns={[
+            { header: 'Kode', accessorKey: 'code' },
+            { header: 'Nama', accessorKey: 'name' },
+          ]}
+          fields={[{ key: 'name', label: 'Nama', type: 'text' }]}
+          emptyForm={{ name: '' }}
+          itemLabel={(item: { id: number; name?: string }) => item.name ?? `#${item.id}`}
+          resource={{
+            // Menghormati parameter `name` supaya state kosong hasil pencarian
+            // ikut terlihat di pratinjau, bukan hanya daftar terisi.
+            useList: (params?: Record<string, unknown>) => {
+              const all = [
+                { id: 1, code: 'E11.9', name: 'Diabetes mellitus tipe 2 tanpa komplikasi' },
+                { id: 2, code: 'I10', name: 'Hipertensi esensial (primer)' },
+                { id: 3, code: 'J18.9', name: 'Pneumonia, organisme tidak spesifik' },
+              ]
+              const q = String(params?.name ?? '').toLowerCase()
+              const items = q === '' ? all : all.filter((x) => x.name.toLowerCase().includes(q))
+              return { data: { items, currentPage: 1, lastPage: q === '' ? 2720 : 1 }, isLoading: false }
+            },
+            create: { mutateAsync: async () => {}, isPending: false },
+            update: { mutateAsync: async () => {}, isPending: false },
+            remove: { mutate: () => {} },
+          }}
+        />
       </div>
     </div>
   )

@@ -13,11 +13,18 @@ export function DataTable<TData>({
   data,
   loading,
   emptyMessage = 'Belum ada data.',
+  onClearSearch,
 }: {
   columns: ColumnDef<TData, unknown>[]
   data: TData[]
   loading?: boolean
   emptyMessage?: string
+  /**
+   * Diisi hanya bila kosongnya daftar disebabkan pencarian. Tanpa jalan
+   * keluar di tempat, petugas yang salah ketik harus menebak bahwa kotak
+   * pencarian di atas yang menyebabkan tabelnya kosong.
+   */
+  onClearSearch?: () => void
 }) {
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
 
@@ -54,6 +61,15 @@ export function DataTable<TData>({
                 <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 text-sm">
                   <Inbox className="size-8" />
                   <span>{emptyMessage}</span>
+                  {onClearSearch && (
+                    <button
+                      type="button"
+                      onClick={onClearSearch}
+                      className="text-primary text-sm hover:underline"
+                    >
+                      Bersihkan pencarian
+                    </button>
+                  )}
                 </div>
               </TableCell>
             </TableRow>
