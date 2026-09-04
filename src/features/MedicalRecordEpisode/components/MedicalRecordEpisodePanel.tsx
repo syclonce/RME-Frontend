@@ -9,11 +9,17 @@ import {
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { notifyApiError } from '@/shared/lib/apiError'
+import { useFinalizeVisitService } from '@/features/PendaftaranVisit/api'
 import { useMedicalRecordEpisode } from '../api'
 import type { EpisodeStatus } from '../types'
 
 interface Props {
   visitId: number
+  /**
+   * Waktu pelayanan kunjungan difinalkan, bila sudah. Dipakai memutuskan
+   * apakah tombol finalisasi pelayanan masih perlu ditampilkan.
+   */
+  serviceFinalizedAt?: string | null
 }
 
 const STATUS_LABEL: Record<EpisodeStatus, string> = {
@@ -36,13 +42,14 @@ const STATUS_VARIANT: Record<EpisodeStatus, 'default' | 'secondary' | 'outline'>
  * final" — tanpa pernah tahu RME-nya final, dan tanpa jalan memulai perbaikan.
  * Endpoint start/finalize/amend tidak dipanggil dari mana pun di frontend.
  */
-export function MedicalRecordEpisodePanel({ visitId }: Props) {
+export function MedicalRecordEpisodePanel({ visitId, serviceFinalizedAt }: Props) {
   const { query, start, finalize, amend } = useMedicalRecordEpisode(visitId)
+  const finalizeService = useFinalizeVisitService(visitId)
   const [amendOpen, setAmendOpen] = useState(false)
   const [reason, setReason] = useState('')
 
   const episode = query.data
-  const busy = start.isPending || finalize.isPending || amend.isPending
+  const busy = start.isPending || finalize.isPending || amend.isPending || finalizeService.isPending
 
   async function run(action: () => Promise<unknown>, success: string) {
     try {
@@ -80,6 +87,8 @@ export function MedicalRecordEpisodePanel({ visitId }: Props) {
               {episode?.status === 'open' && 'Modul klinis dapat diisi. Finalkan bila pelayanan sudah selesai.'}
               {episode?.status === 'finalized' && 'Rekam medis terkunci. Mulai perbaikan untuk menambah koreksi.'}
               {episode?.status === 'amending' && 'Perbaikan sedang berjalan — modul klinis dapat diisi kembali.'}
+              {episode?.status === 'finalized' && serviceFinalizedAt
+                && ' Pelayanan sudah difinalkan; tagihan dapat dibayarkan di kasir.'}
             </CardDescription>
           </div>
         </CardHeader>
@@ -97,6 +106,17 @@ export function MedicalRecordEpisodePanel({ visitId }: Props) {
           {episode?.status === 'finalized' && (
             <Button variant="outline" disabled={busy} onClick={() => setAmendOpen(true)}>
               Mulai Perbaikan
+            </Button>
+          )}
+          {/* Finalisasi pelayanan hanya mungkin setelah RME final — urutan itu
+              ditegakkan backend. Tanpa langkah ini, kasir tidak dapat memposting
+              pembayaran sama sekali ("Pelayanan kunjungan belum difinalkan"). */}
+          {episode?.status === 'finalized' && !serviceFinalizedAt && (
+            <Button
+              disabled={busy}
+              onClick={() => run(() => finalizeService.mutateAsync(), 'Pelayanan kunjungan difinalkan.')}
+            >
+              Finalkan Pelayanan
             </Button>
           )}
         </CardContent>

@@ -18,6 +18,9 @@ const LABEL: Record<string, string> = {
   cancelled: 'Batal',
   received: 'Diterima',
   rejected: 'Ditolak',
+  reversed: 'Dibatalkan',
+  open: 'Terbuka',
+  closed: 'Ditutup',
 }
 
 const VARIANT: Record<string, 'default' | 'secondary' | 'outline' | 'destructive'> = {
@@ -28,6 +31,9 @@ const VARIANT: Record<string, 'default' | 'secondary' | 'outline' | 'destructive
   cancelled: 'destructive',
   received: 'secondary',
   rejected: 'destructive',
+  reversed: 'destructive',
+  open: 'default',
+  closed: 'secondary',
 }
 
 export function OrderStatusBadge({ status }: { status: string | null | undefined }) {

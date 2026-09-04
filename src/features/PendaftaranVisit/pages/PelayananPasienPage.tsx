@@ -101,7 +101,7 @@ export function PelayananPasienPage() {
         </CardContent>
       </Card>
 
-      <MedicalRecordEpisodePanel visitId={numericVisitId} />
+      <MedicalRecordEpisodePanel visitId={numericVisitId} serviceFinalizedAt={visit.service_finalized_at} />
 
       <div>
         <h2 className="text-lg font-semibold">Modul Pelayanan</h2>

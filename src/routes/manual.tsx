@@ -45,6 +45,10 @@ const PenyerahanObatPage = lazy(() =>
 const TriaseIgdPage = lazy(() =>
   import('@/features/MedicalRecordTriage/pages/TriaseIgdPage').then((m) => ({ default: m.TriaseIgdPage })),
 )
+// PembayaranCashierShift — modul ini tidak punya halaman generated sama sekali
+const CashierShiftListPage = lazy(() =>
+  import('@/features/PembayaranCashierShift/pages/ListPage').then((m) => ({ default: m.CashierShiftListPage })),
+)
 
 export interface AppRoute {
   path: string
@@ -96,4 +100,5 @@ export const manualRoutes: AppRoute[] = [
   // lihat komentar di TriaseIgdPage.tsx) + form triase level 1-5 →
   // POST /triages lalu redirect ke pelayanan pasien.
   { path: '/triase-igd', module: 'MedicalRecordTriage', label: 'Triase IGD', element: <TriaseIgdPage /> },
+  { path: '/modul/pembayaran-cashier-shift', module: 'PembayaranCashierShift', label: 'Shift Kasir', element: <CashierShiftListPage /> },
 ]
