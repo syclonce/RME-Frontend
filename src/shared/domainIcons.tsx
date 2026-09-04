@@ -6,6 +6,7 @@ import {
   Boxes,
   Building2,
   ClipboardList,
+  ClipboardPlus,
   Cross,
   FileStack,
   FileText,
@@ -52,6 +53,7 @@ const DOMAIN_ICONS: Record<string, LucideIcon> = {
   Sitb: Radio,
   RsOnline: Building2,
   SirsOnlineBor: Bed,
+  SDM: Users,
   System: Settings,
   EKlaim: FileText,
   Grup: Building2,
@@ -61,6 +63,7 @@ const DOMAIN_ICONS: Record<string, LucideIcon> = {
   Pasien: UserRound,
   Pembatalan: Siren,
   Penjualan: ShoppingCart,
+  PendaftaranKunjunganGrup: ClipboardPlus,
 }
 
 const FALLBACK_ICON = Ambulance

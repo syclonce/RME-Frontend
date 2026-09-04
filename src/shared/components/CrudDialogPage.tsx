@@ -79,8 +79,8 @@ export function CrudDialogPage<T extends { id: number | string }>({
   fields: CrudField[]
   emptyForm: Record<string, unknown>
   itemLabel: (item: T) => string
-  /** Extra content rendered below the field sections — e.g. nested Kontak/Keluarga lists that only make sense once a record already has an id (edit mode). */
-  renderExtra?: (editing: T | null) => React.ReactNode
+  /** Extra content rendered below the field sections — e.g. nested Kontak/Keluarga lists (need `editing` for their parent id) or live duplicate-check warnings (need the in-progress `form` values). */
+  renderExtra?: (editing: T | null, form: Record<string, unknown>) => React.ReactNode
   headerActions?: React.ReactNode
   createLabel?: string
   resource: {
@@ -228,7 +228,7 @@ export function CrudDialogPage<T extends { id: number | string }>({
           <div className="flex flex-col gap-5 overflow-y-auto px-1 py-2 pr-3 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
             <RecordFieldsForm fields={fields} form={form} setForm={setForm} />
 
-            {renderExtra?.(editing)}
+            {renderExtra?.(editing, form)}
           </div>
 
           <DialogFooter className="bg-transparent pt-3">

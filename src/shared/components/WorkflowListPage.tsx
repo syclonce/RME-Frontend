@@ -1,7 +1,10 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/client'
+import { ActiveVisitBanner } from '@/shared/components/ActiveVisitBanner'
+import { useActiveVisit } from '@/shared/hooks/useActiveVisit'
+import { notifyApiError } from '@/shared/lib/apiError'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -127,12 +130,45 @@ export function WorkflowListPage<T extends { id: number | string }>({
       mutateAsync: (args: { id: T['id']; payload: Record<string, unknown> }) => Promise<unknown>
       isPending: boolean
     }
-    remove: { mutate: (id: T['id']) => void }
+    // `mutateAsync` (bukan `mutate`) dipakai supaya penghapusan bisa di-`await`
+    // dalam try/catch — TanStack Query menyediakan keduanya dari hook yang sama,
+    // jadi ini tidak mengubah kontrak untuk pemanggil yang sudah ada.
+    remove: { mutateAsync: (id: T['id']) => Promise<unknown> }
   }
 }) {
   const queryClient = useQueryClient()
+  const { visitId: activeVisitId } = useActiveVisit()
   const [page, setPage] = useState(1)
-  const { data, isLoading } = resource.useList({ page })
+
+  /**
+   * Isi otomatis `visit_id` saat modul dibuka dari workspace Pelayanan Pasien.
+   *
+   * Tanpa ini petugas harus mengetik nomor kunjungan manual — nomor yang tidak
+   * dihafal siapa pun, sehingga rawan tertukar antar pasien. Hanya berlaku bila
+   * modul memang punya field `visit_id`, dan tidak menimpa nilai yang sudah ada.
+   */
+  function withVisitContext(base: Record<string, unknown>): Record<string, unknown> {
+    if (activeVisitId === null) return base
+    if (!fields.some((f) => f.key === 'visit_id')) return base
+    if (base.visit_id !== undefined && base.visit_id !== null && base.visit_id !== '') return base
+    return { ...base, visit_id: activeVisitId }
+  }
+  // Daftar ikut disaring ke kunjungan aktif. Tanpa ini modul klinis yang dibuka
+  // dari workspace menampilkan catatan SELURUH pasien, dan petugas harus mencari
+  // sendiri milik pasien yang sedang dilayani — sumber salah-baca yang nyata.
+  //
+  // Hanya dikirim bila modul memang mengenal `visit_id`; backend yang tidak
+  // memakainya akan mengabaikan parameter ini, tetapi mengirimkannya tetap
+  // menyesatkan saat menelusuri permintaan.
+  const listParams = useMemo(() => {
+    const base: Record<string, unknown> = { page }
+    if (activeVisitId !== null && fields.some((f) => f.key === 'visit_id')) {
+      base.visit_id = activeVisitId
+    }
+    return base
+  }, [page, activeVisitId, fields])
+
+  const { data, isLoading } = resource.useList(listParams)
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<T | null>(null)
@@ -158,7 +194,7 @@ export function WorkflowListPage<T extends { id: number | string }>({
 
   function openAdd() {
     setEditing(null)
-    setForm(emptyForm)
+    setForm(withVisitContext(emptyForm))
     setDialogOpen(true)
   }
 
@@ -171,30 +207,53 @@ export function WorkflowListPage<T extends { id: number | string }>({
   }
 
   async function handleSubmit() {
-    if (editing) {
-      await resource.update.mutateAsync({ id: editing.id, payload: form })
-    } else {
-      await resource.create.mutateAsync(form)
+    // Dialog TIDAK ditutup saat gagal — kalau ditutup, isian yang sudah
+    // dipenuhi petugas (bisa panjang, form section-banyak) hilang begitu saja
+    // dan mereka harus mengetik ulang dari nol tanpa tahu kenapa gagal.
+    try {
+      if (editing) {
+        await resource.update.mutateAsync({ id: editing.id, payload: form })
+      } else {
+        await resource.create.mutateAsync(form)
+      }
+      setDialogOpen(false)
+    } catch (error) {
+      notifyApiError(error)
     }
-    setDialogOpen(false)
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
     if (!deleteTarget) return
-    resource.remove.mutate(deleteTarget.id)
-    setDeleteTarget(null)
+    // Hapus dulu baru tutup dialog agar target masih ada untuk toast galat
+    // (mis. 403 "tidak ada akses") bila backend menolak.
+    try {
+      await resource.remove.mutateAsync(deleteTarget.id)
+      setDeleteTarget(null)
+    } catch (error) {
+      notifyApiError(error)
+    }
   }
 
   async function openAction(action: WorkflowAction<T>, item: T) {
     if (action.method === 'get' && (!action.fields || action.fields.length === 0)) {
-      const response = await actionMutation.mutateAsync({ action, item, payload: action.payload ?? {} })
-      setActionResult({ title: action.resultTitle ?? action.label, data: response.data })
+      try {
+        const response = await actionMutation.mutateAsync({ action, item, payload: action.payload ?? {} })
+        setActionResult({ title: action.resultTitle ?? action.label, data: response.data })
+      } catch (error) {
+        notifyApiError(error)
+      }
       return
     }
     if (action.fields && action.fields.length > 0) {
       setActionFormLoading(true)
       try {
         setActionForm(action.loadInitialForm ? await action.loadInitialForm(item) : (action.emptyForm ?? {}))
+      } catch (error) {
+        // Gagal memuat nilai awal form tidak boleh membiarkan dialog terbuka
+        // dengan form kosong tanpa penjelasan — batalkan aksi dan beri tahu.
+        notifyApiError(error)
+        setActionFormLoading(false)
+        return
       } finally {
         setActionFormLoading(false)
       }
@@ -206,12 +265,19 @@ export function WorkflowListPage<T extends { id: number | string }>({
     if (!activeAction) return
     const { action, item } = activeAction
     const payload = { ...(action.payload ?? {}), ...(action.fields ? actionForm : {}) }
-    const response = await actionMutation.mutateAsync({ action, item, payload })
-    setActiveAction(null)
-    if (action.method === 'get') {
-      setActionResult({ title: action.resultTitle ?? action.label, data: response.data })
-    } else {
-      await queryClient.invalidateQueries({ queryKey: [endpoint] })
+    // Dialog aksi (konfirmasi/isian) TIDAK ditutup bila gagal, dengan alasan
+    // sama seperti handleSubmit: payload yang sudah diisi jangan hilang, dan
+    // petugas perlu tahu kenapa aksi backend ditolak sebelum mencoba lagi.
+    try {
+      const response = await actionMutation.mutateAsync({ action, item, payload })
+      setActiveAction(null)
+      if (action.method === 'get') {
+        setActionResult({ title: action.resultTitle ?? action.label, data: response.data })
+      } else {
+        await queryClient.invalidateQueries({ queryKey: [endpoint] })
+      }
+    } catch (error) {
+      notifyApiError(error)
     }
   }
 
@@ -269,6 +335,7 @@ export function WorkflowListPage<T extends { id: number | string }>({
 
   return (
     <div className="flex flex-col gap-4 p-6">
+      <ActiveVisitBanner />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">{title}</h1>

@@ -76,7 +76,9 @@ export function TabsProvider({ children }: { children: ReactNode }) {
       { id, path: dashboardRoute.path, module: dashboardRoute.module, label: routeDisplayName(dashboardRoute), pinned: true },
     ])
     setActiveTabId(id)
-    navigate(dashboardRoute.path)
+    // navigate() ditunda ke microtask agar tidak batching dengan setState di atas pada commit
+    // yang sama -- React Router bisa warn "update BrowserRouter while rendering" kalau sinkron.
+    queueMicrotask(() => navigate(dashboardRoute.path))
     // eslint-disable-next-line react-hooks/exhaustive-deps -- hanya jalan sekali saat tabs kosong
   }, [])
 
@@ -98,6 +100,12 @@ export function TabsProvider({ children }: { children: ReactNode }) {
   }, [rawTabs, activeTabId])
 
   function openTab(route: AppRoute) {
+    const existing = rawTabs.find((t) => t.path === route.path)
+    if (existing) {
+      setActiveTabId(existing.id)
+      navigate(existing.path)
+      return
+    }
     const label = routeDisplayName(route)
     const id = crypto.randomUUID()
     setRawTabs((prev) => [...prev, { id, path: route.path, module: route.module, label }])

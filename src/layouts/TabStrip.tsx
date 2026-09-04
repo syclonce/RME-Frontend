@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { X } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { useTabs } from '@/contexts/TabsContext'
 
@@ -77,7 +78,12 @@ export function TabStrip() {
             dragOverId === tab.id && 'border-primary',
           )}
         >
-          <span className="max-w-40 truncate">{tab.label}</span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="max-w-40 truncate">{tab.label}</span>
+            </TooltipTrigger>
+            <TooltipContent>{tab.label}</TooltipContent>
+          </Tooltip>
           {!tab.pinned && (
             <button
               type="button"
@@ -86,7 +92,7 @@ export function TabStrip() {
                 e.stopPropagation()
                 closeTab(tab.id)
               }}
-              className="rounded-sm p-0.5 opacity-0 group-hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/10"
+              className="rounded-sm p-0.5 hover:bg-black/10 dark:hover:bg-white/10"
             >
               <X className="size-3.5" />
             </button>

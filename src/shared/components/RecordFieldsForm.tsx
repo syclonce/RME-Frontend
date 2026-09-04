@@ -15,10 +15,16 @@ export interface CrudField {
   /** type: 'select' only — static enum options (not a server-backed relation). */
   options?: { value: string; label: string }[]
   required?: boolean
+  /** Hint text shown inside an empty text/number/date input — e.g. what happens if left blank. */
+  placeholder?: string
   /** Groups fields under a subheading inside the dialog — mirrors the Card-section pattern used on full-page forms. */
   section?: string
-  /** For type: 'custom' — renders its own widget (e.g. a cascading region picker) instead of a generic input. */
-  render?: (value: unknown, onChange: (v: unknown) => void) => React.ReactNode
+  /**
+   * For type: 'custom' — renders its own widget (e.g. a cascading region picker)
+   * instead of a generic input. Receives the whole `form` as a third argument so
+   * a widget can derive its output from OTHER fields (e.g. age from birth_date).
+   */
+  render?: (value: unknown, onChange: (v: unknown) => void, form: Record<string, unknown>) => React.ReactNode
   /** Greys out + disables the field when true — e.g. identity fields once a patient is marked "tidak dikenal". */
   disabledWhen?: (form: Record<string, unknown>) => boolean
   /**
@@ -117,7 +123,7 @@ export function RecordFieldsForm({
                       disabled={disabled}
                     />
                   ) : f.type === 'custom' && f.render ? (
-                    f.render(rawValue, (v) => setForm((prev) => ({ ...prev, [f.key]: v })))
+                    f.render(rawValue, (v) => setForm((prev) => ({ ...prev, [f.key]: v })), form)
                   ) : f.type === 'select' ? (
                     <Select
                       value={(rawValue as string) ?? ''}
@@ -140,6 +146,7 @@ export function RecordFieldsForm({
                       id={f.key}
                       type={f.type === 'number' ? 'number' : f.type === 'date' ? 'date' : 'text'}
                       value={(rawValue as string | number) ?? ''}
+                      placeholder={f.placeholder}
                       required={f.required && !disabled}
                       disabled={disabled}
                       onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
