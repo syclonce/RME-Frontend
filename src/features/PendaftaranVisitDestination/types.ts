@@ -13,4 +13,5 @@ export interface VisitDestination {
   mother_visit_id?: number | null
   status?: string | null
   created_at?: string | null
+  created_by?: number | null
 }

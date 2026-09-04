@@ -5,6 +5,8 @@ export interface InventoryGoodsReceiptCancellation {
   cancelled_at?: string | null
   created_at?: string
   updated_at?: string
+  cancellation_number?: string | null
+  cancelled_by?: number | null
 }
 
 export interface InventoryGoodsReceiptCancellationFormValues {

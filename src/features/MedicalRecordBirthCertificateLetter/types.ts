@@ -14,6 +14,7 @@ export interface BirthCertificateLetter {
   remarks?: string | null
   created_at?: string
   updated_at?: string
+  created_by?: number | null
 }
 
 export interface BirthCertificateLetterFormValues {

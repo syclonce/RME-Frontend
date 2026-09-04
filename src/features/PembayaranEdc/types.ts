@@ -10,6 +10,7 @@ export interface Edc {
   transaction_at?: string | null
   created_at?: string
   updated_at?: string
+  status?: string | null
 }
 
 export interface EdcFormValues {

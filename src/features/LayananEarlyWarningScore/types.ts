@@ -11,6 +11,8 @@ export interface VitalSignObservation {
   recorded_at?: string | null
   created_at?: string
   updated_at?: string
+  total_score?: number | null
+  risk_level?: string | null
 }
 
 export interface VitalSignObservationFormValues {

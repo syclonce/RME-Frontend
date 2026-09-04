@@ -7,6 +7,10 @@ export interface StockRequest {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  request_number?: string | null
+  requested_by?: number | null
+  fulfilled_at?: string | null
+  status?: string | null
 }
 
 export interface StockRequestFormValues {

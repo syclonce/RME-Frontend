@@ -5,6 +5,8 @@ export interface Bed {
   is_active?: boolean | null
   created_at?: string
   updated_at?: string
+  status?: string | null
+  reserved_until?: string | null
 }
 
 export interface BedFormValues {

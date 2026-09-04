@@ -11,6 +11,7 @@ export interface RadiologyOrder {
   status: string | null
   created_at?: string
   updated_at?: string
+  scheduled_at?: string | null
 }
 
 export interface RadiologyOrderFormValues {

@@ -5,6 +5,7 @@ export interface BedQueue {
   queue_number: number | null
   created_at?: string
   updated_at?: string
+  status?: string | null
 }
 
 export interface BedQueueFormValues {

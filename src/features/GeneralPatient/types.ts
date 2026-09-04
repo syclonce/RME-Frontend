@@ -36,6 +36,7 @@ export interface Patient {
   is_active?: boolean | null
   created_at?: string
   updated_at?: string
+  registered_by?: number | null
 }
 
 export interface PatientFormValues {

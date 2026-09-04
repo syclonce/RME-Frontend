@@ -5,6 +5,9 @@ export interface InventoryGoodsReturn {
   reason: string | null
   created_at?: string
   updated_at?: string
+  return_number?: string | null
+  returned_by?: number | null
+  status?: string | null
 }
 
 export interface InventoryGoodsReturnFormValues {

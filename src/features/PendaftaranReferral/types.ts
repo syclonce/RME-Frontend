@@ -7,6 +7,8 @@ export interface Referral {
   referred_at?: string | null
   created_at?: string
   updated_at?: string
+  referral_number?: string | null
+  status?: string | null
 }
 
 export interface ReferralFormValues {

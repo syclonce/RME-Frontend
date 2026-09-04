@@ -5,6 +5,8 @@ export interface BerkasKlaimClaimFile {
   status?: string | null
   created_at?: string
   updated_at?: string
+  claim_number?: string | null
+  submitted_at?: string | null
 }
 
 export interface BerkasKlaimClaimFileFormValues {

@@ -7,6 +7,7 @@ export interface PendaftaranHistory {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  changed_by?: number | null
 }
 
 export interface PendaftaranHistoryFormValues {

@@ -12,6 +12,9 @@ export interface ServiceHandover {
   status?: string | null
   created_at?: string
   updated_at?: string
+  handed_over_by?: number | null
+  received_by?: number | null
+  received_at?: string | null
 }
 
 export interface ServiceHandoverFormValues {

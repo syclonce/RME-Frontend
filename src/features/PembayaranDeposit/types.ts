@@ -6,6 +6,9 @@ export interface Deposit {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  deposit_number?: string | null
+  received_by?: number | null
+  status?: string | null
 }
 
 export interface DepositFormValues {

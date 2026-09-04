@@ -6,6 +6,7 @@ export interface VisitDateChange {
   reason?: string | null
   created_at?: string
   updated_at?: string
+  changed_by?: number | null
 }
 
 export interface VisitDateChangeFormValues {

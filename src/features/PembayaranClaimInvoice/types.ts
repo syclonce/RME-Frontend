@@ -6,6 +6,10 @@ export interface ClaimInvoice {
   claim_amount: number | null
   created_at?: string
   updated_at?: string
+  verified_amount?: number | null
+  submitted_at?: string | null
+  status?: string | null
+  rejection_reason?: string | null
 }
 
 export interface ClaimInvoiceFormValues {

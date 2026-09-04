@@ -9,6 +9,7 @@ export interface ServiceTariff {
   is_active?: boolean | null
   created_at?: string
   updated_at?: string
+  created_by?: number | null
 }
 
 export interface ServiceTariffFormValues {

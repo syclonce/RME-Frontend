@@ -6,6 +6,7 @@ export interface InventoryStockOpname {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  status?: string | null
 }
 
 export interface InventoryStockOpnameFormValues {

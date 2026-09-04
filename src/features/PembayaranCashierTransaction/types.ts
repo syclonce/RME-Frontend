@@ -7,6 +7,7 @@ export interface CashierTransaction {
   transacted_at?: string | null
   created_at?: string
   updated_at?: string
+  cashier_shift_id?: number | null
 }
 
 export interface CashierTransactionFormValues {

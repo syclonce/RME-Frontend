@@ -8,6 +8,8 @@ export interface RadiologyResult {
   status: string | null
   created_at?: string
   updated_at?: string
+  study_instance_uid?: string | null
+  report_url?: string | null
 }
 
 export interface RadiologyResultFormValues {

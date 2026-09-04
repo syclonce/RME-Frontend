@@ -7,6 +7,9 @@ export interface InvoiceItem {
   quantity: number | null
   created_at?: string
   updated_at?: string
+  ward_id?: number | null
+  unit_price?: number | null
+  subtotal?: number | null
 }
 
 export interface InvoiceItemFormValues {

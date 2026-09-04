@@ -8,6 +8,7 @@ export interface InventoryWardStockTransaction {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  performed_by?: number | null
 }
 
 export interface InventoryWardStockTransactionFormValues {

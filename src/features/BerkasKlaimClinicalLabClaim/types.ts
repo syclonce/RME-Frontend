@@ -5,6 +5,7 @@ export interface ClinicalLabClaim {
   submitted_at?: string | null
   created_at?: string
   updated_at?: string
+  status?: string | null
 }
 
 export interface ClinicalLabClaimFormValues {

@@ -8,6 +8,7 @@ export interface PembatalanDocumentCancellation {
   status?: string | null
   created_at?: string
   updated_at?: string
+  cancellation_number?: string | null
 }
 
 export interface PembatalanDocumentCancellationFormValues {
