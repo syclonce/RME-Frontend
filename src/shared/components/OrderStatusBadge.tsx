@@ -19,6 +19,7 @@ const LABEL: Record<string, string> = {
   received: 'Diterima',
   rejected: 'Ditolak',
   reversed: 'Dibatalkan',
+  final: 'Final',
   open: 'Terbuka',
   closed: 'Ditutup',
 }
@@ -32,6 +33,7 @@ const VARIANT: Record<string, 'default' | 'secondary' | 'outline' | 'destructive
   received: 'secondary',
   rejected: 'destructive',
   reversed: 'destructive',
+  final: 'default',
   open: 'default',
   closed: 'secondary',
 }
