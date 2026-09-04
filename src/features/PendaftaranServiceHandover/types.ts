@@ -4,6 +4,12 @@ export interface ServiceHandover {
   ward_id: number | null
   handed_over_at?: string | null
   notes?: string | null
+  /**
+   * pending → received / rejected (ServiceHandoverService). Sebelumnya hilang
+   * dari tipe ini, sehingga layar tidak dapat menampilkan apakah serah terima
+   * sudah diterima unit tujuan — padahal itulah pertanyaan utamanya.
+   */
+  status?: string | null
   created_at?: string
   updated_at?: string
 }

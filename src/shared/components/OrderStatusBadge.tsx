@@ -16,6 +16,8 @@ const LABEL: Record<string, string> = {
   in_progress: 'Dikerjakan',
   completed: 'Selesai',
   cancelled: 'Batal',
+  received: 'Diterima',
+  rejected: 'Ditolak',
 }
 
 const VARIANT: Record<string, 'default' | 'secondary' | 'outline' | 'destructive'> = {
@@ -24,6 +26,8 @@ const VARIANT: Record<string, 'default' | 'secondary' | 'outline' | 'destructive
   in_progress: 'default',
   completed: 'secondary',
   cancelled: 'destructive',
+  received: 'secondary',
+  rejected: 'destructive',
 }
 
 export function OrderStatusBadge({ status }: { status: string | null | undefined }) {
