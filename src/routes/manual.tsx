@@ -36,6 +36,22 @@ const PendaftaranKunjunganPage = lazy(() =>
 const PelayananPasienPage = lazy(() =>
   import('@/features/PendaftaranVisit/pages/PelayananPasienPage').then((m) => ({ default: m.PelayananPasienPage })),
 )
+// TagihanKunjungan: layar kasir per-kunjungan (tagihan → coverage → kunci →
+// bayar idempoten → kuitansi → reversal). Dipetakan ke module
+// 'PembayaranInvoice' supaya mengikuti RBAC modul backend yang sama.
+const TagihanKunjunganPage = lazy(() =>
+  import('@/features/PembayaranInvoice/pages/TagihanKunjunganPage').then((m) => ({ default: m.TagihanKunjunganPage })),
+)
+// KlaimKunjungan: berkas klaim per-kunjungan (draf dari tagihan terkunci →
+// maju status sesuai ALLOWED_TRANSITIONS). Module 'BerkasKlaimClaimFile'.
+const KlaimKunjunganPage = lazy(() =>
+  import('@/features/BerkasKlaimClaimFile/pages/KlaimKunjunganPage').then((m) => ({ default: m.KlaimKunjunganPage })),
+)
+// SepPendaftaran: SEP per-pendaftaran (draf → cek peserta → terbit VClaim).
+// Module 'BpjsVClaim'.
+const SepPendaftaranPage = lazy(() =>
+  import('@/features/BpjsVClaim/pages/SepPendaftaranPage').then((m) => ({ default: m.SepPendaftaranPage })),
+)
 const AntreanPoliPage = lazy(() =>
   import('@/features/PendaftaranVisitDestination/pages/AntreanPoliPage').then((m) => ({ default: m.AntreanPoliPage })),
 )
@@ -83,6 +99,9 @@ export const manualRoutes: AppRoute[] = [
   // PendaftaranKunjungan: wizard gabungan (lihat komentar lazy import di atas).
   { path: '/pendaftaran-kunjungan', module: 'PendaftaranRegistration', label: 'Pendaftaran Kunjungan', element: <PendaftaranKunjunganPage /> },
   { path: '/pelayanan-pasien/:visitId', module: 'PendaftaranVisit', label: 'Pelayanan Pasien', element: <PelayananPasienPage /> },
+  { path: '/tagihan-kunjungan/:visitId', module: 'PembayaranInvoice', label: 'Tagihan Kunjungan', element: <TagihanKunjunganPage /> },
+  { path: '/klaim-kunjungan/:visitId', module: 'BerkasKlaimClaimFile', label: 'Klaim Kunjungan', element: <KlaimKunjunganPage /> },
+  { path: '/sep-pendaftaran/:registrationId', module: 'BpjsVClaim', label: 'SEP Pendaftaran', element: <SepPendaftaranPage /> },
 
   // AntreanPoli: daftar tujuan pasien yang belum diterima ruangan (VisitDestination
   // pending), dengan aksi terima → POST /visits. Dipetakan ke module 'PendaftaranVisitDestination'

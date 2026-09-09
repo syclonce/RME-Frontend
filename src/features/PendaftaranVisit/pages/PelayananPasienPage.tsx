@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Activity, ArrowLeft, Bed, ClipboardList, FlaskConical, HeartPulse, MessageSquareText, Pill, Stethoscope, Stamp } from 'lucide-react'
+import { Activity, ArrowLeft, Bed, ClipboardList, FlaskConical, HeartPulse, MessageSquareText, Pill, Receipt, Stethoscope, Stamp } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { apiClient } from '@/api/client'
 import { Button } from '@/components/ui/button'
@@ -35,6 +35,7 @@ const SERVICE_MODULES: ServiceModule[] = [
   { label: 'Laboratorium', description: 'Buat order dan pantau hasil pemeriksaan laboratorium.', path: '/modul/layanan-lab-order', icon: FlaskConical },
   { label: 'Radiologi', description: 'Buat order dan pantau hasil pemeriksaan radiologi.', path: '/modul/layanan-radiology-order', icon: Activity },
   { label: 'Serah Terima', description: 'Serahkan pelayanan pasien ke unit atau petugas berikutnya.', path: '/modul/pendaftaran-service-handover', icon: Bed },
+  { label: 'Tagihan & Kasir', description: 'Lihat tagihan, kunci, bayar, dan cetak kuitansi kunjungan ini.', path: '/tagihan-kunjungan', icon: Receipt },
 ]
 
 export function PelayananPasienPage() {
@@ -58,6 +59,11 @@ export function PelayananPasienPage() {
 
   function openServiceModule(path: string) {
     sessionStorage.setItem('simgos.activeVisitId', String(numericVisitId))
+    // Rute berparameter path (:visitId) dinavigasi langsung; sisanya bawa konteks via query.
+    if (path === '/tagihan-kunjungan') {
+      navigate(`${path}/${numericVisitId}`)
+      return
+    }
     navigate(`${path}?visit_id=${numericVisitId}`)
   }
 
