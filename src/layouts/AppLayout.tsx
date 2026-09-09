@@ -50,14 +50,35 @@ import { domainPrefixOf, humanizeDomain, humanizeModuleName, sidebarGroupOverrid
 // 'PendaftaranKunjunganGrup' (wizard 1-halaman) sengaja ditaruh SEBELUM
 // 'Pendaftaran' (grup besar 28+ modul CRUD terpisah) supaya jalur cepat
 // petugas tidak tenggelam di antara modul-modul CRUD granular tersebut.
+//
+// Urutan grup mengikuti L1 katalog menu SIMGOS2 legacy
+// (docs-sim/referensi-simpel/katalog-menu.csv) supaya petugas migrasi
+// menemukan menu di tempat yang sama: 10 PENDAFTARAN → 11 LAYANAN →
+// 12 PEMBAYARAN → 13 REKAM MEDIS → 30 BERKAS → 21 PENJUALAN → 23 INVENTORY →
+// 25 INTEGRASI (Bpjs/SatuSehat/EKlaim/Sisrute/Sitb/RSOnline) → 15 DASHBOARD →
+// 19 MASTER (General) + SDM. Grup di luar daftar alfabetis setelahnya.
 const SIDEBAR_DOMAIN_PRIORITY = [
-  'Dashboard',
+  'Pendaftaran',
+  'PendaftaranKunjunganGrup',
   'DataPasien',
   'Pasien',
-  'PendaftaranKunjunganGrup',
+  'Layanan',
+  'Pembayaran',
+  'MedicalRecord',
+  'BerkasKlaim',
+  'Penjualan',
+  'Inventory',
+  'Bpjs',
+  'SatuSehat',
+  'EKlaim',
+  'Sisrute',
+  'Sitb',
+  'RsOnline',
+  'Kemkes',
+  'Cetakan',
+  'Dashboard',
   'General',
   'SDM',
-  'Pendaftaran',
 ]
 
 // Fitur yang belum selesai ditempatkan setelah seluruh grup aktif lainnya.
