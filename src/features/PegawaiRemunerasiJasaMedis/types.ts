@@ -11,6 +11,7 @@ export interface RemunerationEntry {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  net_amount?: number | null
 }
 
 export interface RemunerationEntryFormValues {

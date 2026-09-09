@@ -1,7 +1,7 @@
 export interface PrintDocument {
   id: number
   document_number: string
-  document_type: 'receipt' | 'karcis' | 'wristband' | 'tracer'
+  document_type: 'receipt' | 'karcis' | 'wristband' | 'tracer' | 'patient_card'
   ref_type: string
   ref_id: number
   payload: Record<string, unknown> | null

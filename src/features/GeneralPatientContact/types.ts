@@ -6,6 +6,7 @@ export interface PatientContact {
   is_primary?: boolean | null
   created_at?: string
   updated_at?: string
+  is_active?: boolean | null
 }
 
 export interface PatientContactFormValues {

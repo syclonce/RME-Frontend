@@ -29,3 +29,4 @@ tools/codegen/.env
 *.sln
 *.sw?
 .claude/
+/test-results/

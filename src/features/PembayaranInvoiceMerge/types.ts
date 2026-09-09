@@ -8,6 +8,7 @@ export interface InvoiceMerge {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  merged_by?: number | null
 }
 
 export interface InvoiceMergeFormValues {

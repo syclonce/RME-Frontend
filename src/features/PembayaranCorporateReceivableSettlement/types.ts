@@ -5,6 +5,7 @@ export interface CorporateReceivableSettlement {
   paid_at?: string | null
   created_at?: string
   updated_at?: string
+  received_by?: number | null
 }
 
 export interface CorporateReceivableSettlementFormValues {

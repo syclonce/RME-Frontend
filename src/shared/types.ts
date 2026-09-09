@@ -45,6 +45,11 @@ export function normalizeList<T>(raw: unknown): NormalizedList<T> {
   if (Array.isArray(raw)) {
     return { items: raw as T[], currentPage: 1, lastPage: 1, total: (raw as unknown[]).length }
   }
+  // Bentuk Resource::collection() TANPA pagination (mis. endpoint search):
+  // { data: [...] } tanpa meta/links sama sekali.
+  if (Array.isArray(r?.data)) {
+    return { items: r.data as T[], currentPage: 1, lastPage: 1, total: (r.data as unknown[]).length }
+  }
   return { items: [], currentPage: 1, lastPage: 1, total: 0 }
 }
 

@@ -8,6 +8,9 @@ export interface BloodTransfusion {
   reaction_notes?: string | null
   created_at?: string
   updated_at?: string
+  ended_at?: string | null
+  status?: string | null
+  created_by?: number | null
 }
 
 export interface BloodTransfusionFormValues {

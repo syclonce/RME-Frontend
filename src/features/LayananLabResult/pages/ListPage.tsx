@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { LayananLabResultEndpoint, useLabResultResource } from '../api'
+import { OrderStatusBadge } from '@/shared/components/OrderStatusBadge'
 import type { LabResult } from '../types'
 
 const columns: ColumnDef<LabResult, unknown>[] = [
@@ -36,6 +37,12 @@ const columns: ColumnDef<LabResult, unknown>[] = [
   },
 ]
 
+const statusColumn: ColumnDef<LabResult, unknown> = {
+  header: 'Status',
+  accessorKey: 'status',
+  cell: ({ row }) => <OrderStatusBadge status={(row.original as LabResult).status} />,
+}
+
 const fields: CrudField[] = [
   { key: 'lab_order_id', label: humanizeField('lab_order_id'), type: 'number', required: true },
   { key: 'test_name', label: humanizeField('test_name'), required: true },
@@ -58,7 +65,37 @@ const emptyForm = {
   recorded_at: '',
 }
 
-const actions: WorkflowAction<LabResult>[] = []
+/**
+ * Transisi status hasil lab: final -> completed / cancelled.
+ *
+ * Keduanya jalan buntu — LabResultService::TRANSITIONS tidak memberi jalan
+ * keluar dari completed maupun cancelled. Karena itu tombolnya hilang begitu
+ * status berpindah, bukan sekadar dinonaktifkan: menyisakan tombol yang pasti
+ * ditolak hanya membuat petugas menebak apa yang salah.
+ */
+const actions: WorkflowAction<LabResult>[] = [
+  {
+    key: 'complete',
+    label: 'Selesaikan',
+    method: 'post',
+    path: (item) => `/lab-results/${item.id}/transition`,
+    payload: { status: 'completed' },
+    visibleWhen: (item) => item.status === 'final',
+    confirmDescription: (item, label) =>
+      `Hasil ${label(item)} ditandai selesai dan tidak dapat diubah lagi.`,
+  },
+  {
+    key: 'cancel',
+    label: 'Batalkan',
+    method: 'post',
+    path: (item) => `/lab-results/${item.id}/transition`,
+    payload: { status: 'cancelled' },
+    variant: 'destructive',
+    visibleWhen: (item) => item.status === 'final',
+    confirmDescription: (item, label) =>
+      `Hasil ${label(item)} dibatalkan dan tidak dapat dikembalikan.`,
+  },
+]
 
 export function LabResultListPage() {
   const resource = useLabResultResource()
@@ -69,7 +106,7 @@ export function LabResultListPage() {
       title={title}
       description={`Kelola data ${title.toLowerCase()}.`}
       endpoint={LayananLabResultEndpoint}
-      columns={columns}
+      columns={[...columns, statusColumn]}
       capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
       fields={fields}
       emptyForm={emptyForm}

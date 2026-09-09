@@ -8,6 +8,8 @@ export interface GoodsReceipt {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  receipt_number?: string | null
+  received_by?: number | null
 }
 
 export interface GoodsReceiptFormValues {

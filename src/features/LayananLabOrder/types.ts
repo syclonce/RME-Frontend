@@ -8,6 +8,13 @@ export interface LabOrder {
   is_emergency?: boolean | null
   reason?: string | null
   notes?: string | null
+  /**
+   * Kolomnya ADA di database dan digerakkan LabOrderService.TRANSITIONS
+   * (pending → in_progress → completed, dengan cancelled sebagai jalan keluar),
+   * tapi sebelumnya hilang dari tipe ini — sehingga layar tidak dapat
+   * menampilkan status order sama sekali.
+   */
+  status?: string | null
   created_at?: string
   updated_at?: string
 }

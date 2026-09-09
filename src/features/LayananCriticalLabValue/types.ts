@@ -8,6 +8,9 @@ export interface CriticalLabValue {
   acknowledged?: boolean | null
   created_at?: string
   updated_at?: string
+  notified_by?: number | null
+  acknowledged_by?: number | null
+  acknowledged_at?: string | null
 }
 
 export interface CriticalLabValueFormValues {

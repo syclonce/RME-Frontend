@@ -9,6 +9,7 @@ export interface DietOrder {
   order_date: string | null
   created_at?: string
   updated_at?: string
+  status?: string | null
 }
 
 export interface DietOrderFormValues {

@@ -5,6 +5,7 @@ export interface RadiologyClaim {
   submitted_at?: string | null
   created_at?: string
   updated_at?: string
+  status?: string | null
 }
 
 export interface RadiologyClaimFormValues {

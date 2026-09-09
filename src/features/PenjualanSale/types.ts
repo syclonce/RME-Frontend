@@ -6,6 +6,8 @@ export interface Sale {
   total_amount: number | null
   created_at?: string
   updated_at?: string
+  sale_number?: string | null
+  status?: string | null
 }
 
 export interface SaleFormValues {

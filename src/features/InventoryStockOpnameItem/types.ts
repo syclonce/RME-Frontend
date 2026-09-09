@@ -6,6 +6,7 @@ export interface InventoryStockOpnameItem {
   physical_quantity: number | null
   created_at?: string
   updated_at?: string
+  difference?: number | null
 }
 
 export interface InventoryStockOpnameItemFormValues {

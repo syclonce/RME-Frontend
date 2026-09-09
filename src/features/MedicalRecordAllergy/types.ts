@@ -8,6 +8,8 @@ export interface Allergy {
   recorded_by: number | null
   created_at?: string
   updated_at?: string
+  is_active?: boolean | null
+  created_by?: number | null
 }
 
 export interface AllergyFormValues {

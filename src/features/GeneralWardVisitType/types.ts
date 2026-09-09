@@ -5,6 +5,7 @@ export interface WardVisitType {
   is_active?: boolean | null
   created_at?: string
   updated_at?: string
+  triggers_emergency_flag?: boolean | null
 }
 
 export interface WardVisitTypeFormValues {

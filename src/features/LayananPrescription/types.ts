@@ -1,8 +1,14 @@
+// status resep: 'active' (belum diserahkan) | 'dispensed' (sudah diserahkan) |
+// 'cancelled'. Dipakai halaman Farmasi — Penyerahan Obat untuk memfilter
+// resep yang masih menunggu diserahkan.
+export type PrescriptionStatus = 'active' | 'dispensed' | 'cancelled'
+
 export interface Prescription {
   id: number
   prescription_number?: string | null
   visit_id: number | null
   diagnosis_id?: number | null
+  status?: PrescriptionStatus | string | null
   prescribed_by: number | null
   prescribed_at?: string | null
   weight_kg?: number | null
@@ -15,6 +21,7 @@ export interface Prescription {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  created_by?: number | null
 }
 
 export interface PrescriptionFormValues {

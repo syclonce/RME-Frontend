@@ -9,6 +9,8 @@ export interface PatientEscort {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  created_by?: number | null
+  status?: string | null
 }
 
 export interface PatientEscortFormValues {

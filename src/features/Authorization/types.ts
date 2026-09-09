@@ -4,6 +4,13 @@ export interface Role {
   permissions?: string[]
   created_at?: string
   updated_at?: string
+  permission_id?: number | null
+  method?: string | null
+  uri?: string | null
+  controller_action?: string | null
+  module?: string | null
+  legacy_tier?: string | null
+  is_public?: boolean | null
 }
 
 export interface RoleFormValues {

@@ -5,6 +5,7 @@ export interface VisitCancellation {
   reason?: string | null
   created_at?: string
   updated_at?: string
+  cancelled_by?: number | null
 }
 
 export interface VisitCancellationFormValues {

@@ -7,6 +7,9 @@ export interface Consultation {
   question?: string | null
   created_at?: string
   updated_at?: string
+  status?: string | null
+  answered_at?: string | null
+  requested_by?: number | null
 }
 
 export interface ConsultationFormValues {

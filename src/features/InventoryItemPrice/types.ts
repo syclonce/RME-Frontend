@@ -5,6 +5,7 @@ export interface InventoryItemPrice {
   effective_date: string | null
   created_at?: string
   updated_at?: string
+  is_active?: boolean | null
 }
 
 export interface InventoryItemPriceFormValues {

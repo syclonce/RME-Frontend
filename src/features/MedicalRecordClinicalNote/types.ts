@@ -14,6 +14,8 @@ export interface ClinicalNote {
   discharge_plan_date?: string | null
   created_at?: string
   updated_at?: string
+  created_by?: number | null
+  status?: string | null
 }
 
 export interface ClinicalNoteFormValues {

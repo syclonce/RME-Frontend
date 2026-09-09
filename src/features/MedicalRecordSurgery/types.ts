@@ -10,6 +10,8 @@ export interface Surgery {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  status?: string | null
+  created_by?: number | null
 }
 
 export interface SurgeryFormValues {

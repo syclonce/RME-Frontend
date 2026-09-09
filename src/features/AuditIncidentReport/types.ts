@@ -10,6 +10,9 @@ export interface IncidentReport {
   probability_score: number | null
   created_at?: string
   updated_at?: string
+  risk_grade?: string | null
+  status?: string | null
+  sla_due_at?: string | null
 }
 
 export interface IncidentReportFormValues {

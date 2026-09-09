@@ -6,6 +6,10 @@ export interface TelemedicineSession {
   session_url?: string | null
   created_at?: string
   updated_at?: string
+  started_at?: string | null
+  ended_at?: string | null
+  status?: string | null
+  consultation_notes?: string | null
 }
 
 export interface TelemedicineSessionFormValues {

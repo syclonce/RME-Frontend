@@ -10,6 +10,8 @@ export interface LabResult {
   recorded_at?: string | null
   created_at?: string
   updated_at?: string
+  recorded_by?: number | null
+  status?: string | null
 }
 
 export interface LabResultFormValues {

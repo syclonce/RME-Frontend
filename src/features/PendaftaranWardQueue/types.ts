@@ -5,6 +5,10 @@ export interface WardQueue {
   visit_id?: number | null
   created_at?: string
   updated_at?: string
+  registration_id?: number | null
+  queue_date?: string | null
+  called_at?: string | null
+  status?: string | null
 }
 
 export interface WardQueueFormValues {

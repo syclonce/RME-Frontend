@@ -15,6 +15,7 @@ export interface GroupContext {
   status: 'active' | 'suspended' | 'revoked'
   synced_at?: string | null
   branches: GroupBranch[]
+  hub_group_id?: string | null
 }
 
 export interface GroupPatientSummary {

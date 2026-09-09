@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { WorkflowListPage, type WorkflowAction, type CrudField } from '@/shared/components/WorkflowListPage'
 import { humanizeField, humanizeModuleName } from '@/shared/labels'
 import { PembayaranPaymentEndpoint, usePaymentResource } from '../api'
+import { OrderStatusBadge } from '@/shared/components/OrderStatusBadge'
 import type { Payment } from '../types'
 
 const columns: ColumnDef<Payment, unknown>[] = [
@@ -37,6 +38,12 @@ const columns: ColumnDef<Payment, unknown>[] = [
   },
 ]
 
+const statusColumn: ColumnDef<Payment, unknown> = {
+  header: 'Status',
+  accessorKey: 'status',
+  cell: ({ row }) => <OrderStatusBadge status={(row.original as Payment).status} />,
+}
+
 const fields: CrudField[] = [
   { key: 'payment_number', label: humanizeField('payment_number') },
   { key: 'invoice_id', label: humanizeField('invoice_id'), type: 'number', required: true },
@@ -55,7 +62,40 @@ const emptyForm = {
   paid_at: '',
 }
 
-const actions: WorkflowAction<Payment>[] = []
+/**
+ * Pembatalan pembayaran.
+ *
+ * Menuntut shift kasir yang MASIH TERBUKA — bukan shift asal pembayaran itu.
+ * Backend menolak shift tertutup ("Shift kasir sudah ditutup."), karena
+ * pembatalan mengubah kas yang sudah dihitung dan diserahterimakan.
+ *
+ * Sebelum ini POST /payments/{id}/reverse tidak dipanggil dari mana pun di
+ * frontend: pembayaran yang salah nominal tidak dapat dikoreksi lewat layar.
+ */
+const actions: WorkflowAction<Payment>[] = [
+  {
+    key: 'reverse',
+    label: 'Batalkan',
+    method: 'post',
+    path: (item) => `/payments/${item.id}/reverse`,
+    variant: 'destructive',
+    // Pembayaran yang sudah dibatalkan tidak dapat dibatalkan lagi.
+    visibleWhen: (item) => item.status !== 'reversed',
+    fields: [
+      {
+        key: 'cashier_shift_id',
+        label: 'Shift kasir (harus masih terbuka)',
+        type: 'relation',
+        relationEndpoint: '/cashier-shifts',
+        required: true,
+      },
+      { key: 'reason', label: 'Alasan pembatalan', type: 'textarea', required: true },
+    ],
+    emptyForm: { cashier_shift_id: null, reason: '' },
+    confirmDescription: (item, label) =>
+      `Pembayaran ${label(item)} akan dibatalkan dan tagihannya dibuka kembali.`,
+  },
+]
 
 export function PaymentListPage() {
   const resource = usePaymentResource()
@@ -66,7 +106,7 @@ export function PaymentListPage() {
       title={title}
       description={`Kelola data ${title.toLowerCase()}.`}
       endpoint={PembayaranPaymentEndpoint}
-      columns={columns}
+      columns={[...columns, statusColumn]}
       capabilities={{ canCreate: true, canUpdate: false, canDestroy: false }}
       fields={fields}
       emptyForm={emptyForm}

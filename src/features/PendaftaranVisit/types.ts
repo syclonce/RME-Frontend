@@ -6,9 +6,12 @@ export interface Visit {
   ward_id?: number | null
   bed_id?: number | null
   admitted_at?: string | null
+  discharged_at?: string | null
   is_new_visit?: boolean | null
   is_deposit?: boolean | null
   deposit_class_id?: number | null
+  status?: string | null
+  service_finalized_at?: string | null
   created_at?: string
   updated_at?: string
 }

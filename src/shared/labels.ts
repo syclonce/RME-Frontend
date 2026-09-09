@@ -32,6 +32,7 @@ const DOMAIN_LABELS: Record<string, string> = {
   Sitb: 'SITB',
   RsOnline: 'RS Online',
   SirsOnlineBor: 'SIRS Online BOR',
+  SDM: 'SDM',
   System: 'Sistem',
   EKlaim: 'e-Klaim',
   Grup: 'Grup',
@@ -41,6 +42,7 @@ const DOMAIN_LABELS: Record<string, string> = {
   Pasien: 'Pasien',
   Pembatalan: 'Pembatalan',
   Penjualan: 'Penjualan',
+  PendaftaranKunjunganGrup: 'Pendaftaran Kunjungan',
 }
 
 /** Raw prefixes sorted longest-first so "BerkasKlaim" wins over "Berkas". */
@@ -203,7 +205,49 @@ export function humanizeModuleName(moduleName: string): string {
 
 /** Just the translated domain/group label, e.g. "General" -> "Umum". */
 export function humanizeDomain(domain: string): string {
+  // Nama grup sidebar untuk modul-modul referensi General. Dipisahkan dari
+  // DOMAIN_LABELS agar nama setiap modul tetap terbaca sebagai "Umum ...".
+  if (domain === 'General') return 'Datamater'
   return DOMAIN_LABELS[domain] ?? domain
+}
+
+/**
+ * Modul yang sengaja dikeluarkan dari grup domain-nya sendiri supaya tampil
+ * sebagai satu menu top-level di sidebar (bukan tenggelam di dalam grup besar
+ * seperti "Umum"). Key grup di sini HANYA memengaruhi sidebar grouping —
+ * route.module (dipakai untuk RBAC hasModule()) tidak berubah.
+ */
+const SIDEBAR_GROUP_OVERRIDE: Record<string, string> = {
+  GeneralPatient: 'DataPasien',
+  PasienPatientPortalAccount: 'PatientPortalAccountPending',
+}
+
+/**
+ * Override grup sidebar berdasar PATH route, bukan module — dibutuhkan untuk
+ * route yang berbagi module string dengan route LAIN yang sudah ada (mis.
+ * wizard PendaftaranKunjungan sengaja pakai module 'PendaftaranRegistration'
+ * demi RBAC gating, lihat src/routes/manual.tsx, tapi harus tampil sebagai
+ * grup top-level sendiri, TERPISAH dari grup besar 'Pendaftaran' berisi 28+
+ * modul CRUD lain — SIDEBAR_GROUP_OVERRIDE by-module tidak bisa dipakai di
+ * sini karena akan ikut memindahkan modul PendaftaranRegistration ASLI juga).
+ */
+const SIDEBAR_GROUP_OVERRIDE_BY_PATH: Record<string, string> = {
+  '/pendaftaran-kunjungan': 'PendaftaranKunjunganGrup',
+}
+
+// SDM hanya berisi data orang/tenaga. Tipe, status, aturan, penempatan,
+// profesi, jabatan, dan tabel referensi lainnya tetap berada di Datamater.
+const SIDEBAR_SDM_MODULES = new Set([
+  'GeneralDoctor',
+  'GeneralEmployee',
+  'GeneralEmployeePhoto',
+  'GeneralMedicalPersonnel',
+  'GeneralNurse',
+])
+
+/** Path-keyed override lookup — dicek LEBIH DULU daripada domainPrefixOf(module) di caller. */
+export function sidebarGroupOverrideForPath(path: string): string | undefined {
+  return SIDEBAR_GROUP_OVERRIDE_BY_PATH[path]
 }
 
 /**
@@ -214,6 +258,11 @@ export function humanizeDomain(domain: string): string {
  * key and humanizeModuleName's prefix-stripping never disagree.
  */
 export function domainPrefixOf(moduleName: string): string {
+  if (SIDEBAR_GROUP_OVERRIDE[moduleName]) return SIDEBAR_GROUP_OVERRIDE[moduleName]
+  // Seluruh tabel referensi berbentuk status tetap menjadi bagian Datamater.
+  if (moduleName.startsWith('General') && moduleName.includes('Status')) return 'General'
+  // Nama module aslinya tetap dipertahankan untuk pemeriksaan RBAC.
+  if (SIDEBAR_SDM_MODULES.has(moduleName)) return 'SDM'
   const matched = DOMAIN_PREFIXES_BY_LENGTH.find((p) => moduleName.startsWith(p))
   if (matched) return matched
   const match = moduleName.match(/^[A-Z][a-z0-9]*/)

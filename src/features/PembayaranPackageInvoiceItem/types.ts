@@ -7,6 +7,7 @@ export interface PackageInvoiceItem {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  subtotal?: number | null
 }
 
 export interface PackageInvoiceItemFormValues {

@@ -15,8 +15,6 @@ const LabAnalyzerOrderListPage = lazy(() => import('@/features/LayananLabAnalyze
 // GeneralFacilityMaintenance — second page (Work Order list with assign/complete actions)
 const MaintenanceWorkOrderListPage = lazy(() => import('@/features/GeneralFacilityMaintenance/pages/MaintenanceWorkOrderListPage').then((m) => ({ default: m.MaintenanceWorkOrderListPage })))
 
-// LayananImagingOrder — second page (Imaging Study CRUD)
-const ImagingStudyListPage = lazy(() => import('@/features/LayananImagingOrder/pages/ImagingStudyListPage').then((m) => ({ default: m.ImagingStudyListPage })))
 const AmbulanceTripListPage = lazy(() => import('@/features/GeneralAmbulanceFleet/pages/AmbulanceTripListPage').then((m) => ({ default: m.AmbulanceTripListPage })))
 const CrossmatchTestListPage = lazy(() => import('@/features/InventoryBloodBag/pages/CrossmatchTestListPage').then((m) => ({ default: m.CrossmatchTestListPage })))
 const SterilizedItemListPage = lazy(() => import('@/features/InventorySterilizationCycle/pages/SterilizedItemListPage').then((m) => ({ default: m.SterilizedItemListPage })))
@@ -24,6 +22,49 @@ const InfectionCaseListPage = lazy(() => import('@/features/AuditInfectionSurvei
 const QualityIndicatorRecordListPage = lazy(() => import('@/features/AuditQualityIndicator/pages/QualityIndicatorRecordListPage').then((m) => ({ default: m.QualityIndicatorRecordListPage })))
 const PatientSurveyListPage = lazy(() => import('@/features/LayananPatientComplaint/pages/PatientSurveyListPage').then((m) => ({ default: m.PatientSurveyListPage })))
 const LinenCycleListPage = lazy(() => import('@/features/InventoryLinenTracking/pages/LinenCycleListPage').then((m) => ({ default: m.LinenCycleListPage })))
+
+// PendaftaranKunjungan: wizard 1 halaman yang menggabungkan create Registration+Guarantor+Visit
+// dalam satu alur (lihat docs-sim/histori/catatan/2026-09-02-wizard-pendaftaran-kunjungan.md).
+// module DISENGAJA 'PendaftaranRegistration' (bukan string baru) — hasModule() mengecek
+// keanggotaan PERSIS di GET /me/modules; modul backend baru tidak akan pernah otomatis
+// muncul di sana untuk siapapun sampai di-assign manual di RBAC, sedangkan wizard ini
+// hanya jalur cepat ke create-access modul Registration/Guarantor/Visit yang SUDAH ADA —
+// siapa pun yang sudah boleh membuat Registration kemungkinan besar juga boleh Guarantor+Visit.
+const PendaftaranKunjunganPage = lazy(() =>
+  import('@/features/PendaftaranRegistration/pages/PendaftaranKunjunganPage').then((m) => ({ default: m.PendaftaranKunjunganPage })),
+)
+const PelayananPasienPage = lazy(() =>
+  import('@/features/PendaftaranVisit/pages/PelayananPasienPage').then((m) => ({ default: m.PelayananPasienPage })),
+)
+// TagihanKunjungan: layar kasir per-kunjungan (tagihan → coverage → kunci →
+// bayar idempoten → kuitansi → reversal). Dipetakan ke module
+// 'PembayaranInvoice' supaya mengikuti RBAC modul backend yang sama.
+const TagihanKunjunganPage = lazy(() =>
+  import('@/features/PembayaranInvoice/pages/TagihanKunjunganPage').then((m) => ({ default: m.TagihanKunjunganPage })),
+)
+// KlaimKunjungan: berkas klaim per-kunjungan (draf dari tagihan terkunci →
+// maju status sesuai ALLOWED_TRANSITIONS). Module 'BerkasKlaimClaimFile'.
+const KlaimKunjunganPage = lazy(() =>
+  import('@/features/BerkasKlaimClaimFile/pages/KlaimKunjunganPage').then((m) => ({ default: m.KlaimKunjunganPage })),
+)
+// SepPendaftaran: SEP per-pendaftaran (draf → cek peserta → terbit VClaim).
+// Module 'BpjsVClaim'.
+const SepPendaftaranPage = lazy(() =>
+  import('@/features/BpjsVClaim/pages/SepPendaftaranPage').then((m) => ({ default: m.SepPendaftaranPage })),
+)
+const AntreanPoliPage = lazy(() =>
+  import('@/features/PendaftaranVisitDestination/pages/AntreanPoliPage').then((m) => ({ default: m.AntreanPoliPage })),
+)
+const PenyerahanObatPage = lazy(() =>
+  import('@/features/LayananPrescription/pages/PenyerahanObatPage').then((m) => ({ default: m.PenyerahanObatPage })),
+)
+const TriaseIgdPage = lazy(() =>
+  import('@/features/MedicalRecordTriage/pages/TriaseIgdPage').then((m) => ({ default: m.TriaseIgdPage })),
+)
+// PembayaranCashierShift — modul ini tidak punya halaman generated sama sekali
+const CashierShiftListPage = lazy(() =>
+  import('@/features/PembayaranCashierShift/pages/ListPage').then((m) => ({ default: m.CashierShiftListPage })),
+)
 
 export interface AppRoute {
   path: string
@@ -47,8 +88,6 @@ export const manualRoutes: AppRoute[] = [
   // GeneralFacilityMaintenance: Work Order management (assign/complete)
   { path: '/modul/general-facility-maintenance/work-order', module: 'GeneralFacilityMaintenance', label: 'Work Order Pemeliharaan', element: <MaintenanceWorkOrderListPage /> },
 
-  // LayananImagingOrder: Imaging Study CRUD
-  { path: '/modul/layanan-imaging-order/study', module: 'LayananImagingOrder', label: 'Studi Imaging', element: <ImagingStudyListPage /> },
   { path: '/modul/general-ambulance-fleet/trip', module: 'GeneralAmbulanceFleet', label: 'Perjalanan Ambulans', element: <AmbulanceTripListPage /> },
   { path: '/modul/inventory-blood-bag/crossmatch', module: 'InventoryBloodBag', label: 'Hasil Crossmatch Darah', element: <CrossmatchTestListPage /> },
   { path: '/modul/inventory-sterilization-cycle/item', module: 'InventorySterilizationCycle', label: 'Item Hasil Sterilisasi', element: <SterilizedItemListPage /> },
@@ -56,4 +95,29 @@ export const manualRoutes: AppRoute[] = [
   { path: '/modul/audit-quality-indicator/record', module: 'AuditQualityIndicator', label: 'Capaian Indikator Mutu', element: <QualityIndicatorRecordListPage /> },
   { path: '/modul/layanan-patient-complaint/survey', module: 'LayananPatientComplaint', label: 'Survei Kepuasan Pasien', element: <PatientSurveyListPage /> },
   { path: '/modul/inventory-linen-tracking/cycle', module: 'InventoryLinenTracking', label: 'Siklus Pencucian Linen', element: <LinenCycleListPage /> },
+
+  // PendaftaranKunjungan: wizard gabungan (lihat komentar lazy import di atas).
+  { path: '/pendaftaran-kunjungan', module: 'PendaftaranRegistration', label: 'Pendaftaran Kunjungan', element: <PendaftaranKunjunganPage /> },
+  { path: '/pelayanan-pasien/:visitId', module: 'PendaftaranVisit', label: 'Pelayanan Pasien', element: <PelayananPasienPage /> },
+  { path: '/tagihan-kunjungan/:visitId', module: 'PembayaranInvoice', label: 'Tagihan Kunjungan', element: <TagihanKunjunganPage /> },
+  { path: '/klaim-kunjungan/:visitId', module: 'BerkasKlaimClaimFile', label: 'Klaim Kunjungan', element: <KlaimKunjunganPage /> },
+  { path: '/sep-pendaftaran/:registrationId', module: 'BpjsVClaim', label: 'SEP Pendaftaran', element: <SepPendaftaranPage /> },
+
+  // AntreanPoli: daftar tujuan pasien yang belum diterima ruangan (VisitDestination
+  // pending), dengan aksi terima → POST /visits. Dipetakan ke module 'PendaftaranVisitDestination'
+  // supaya visibilitas sidebar mengikuti RBAC modul backend yang sama.
+  { path: '/antrean-poli', module: 'PendaftaranVisitDestination', label: 'Antrean Poli', element: <AntreanPoliPage /> },
+
+  // PenyerahanObat: halaman farmasi untuk petugas apotek — daftar resep
+  // status 'active' + aksi serahkan (POST /prescriptions/{id}/dispense).
+  // Dipetakan ke module 'LayananPrescription' supaya visibilitas sidebar
+  // mengikuti RBAC modul backend yang sama (bukan modul baru).
+  { path: '/farmasi-penyerahan', module: 'LayananPrescription', label: 'Penyerahan Obat', element: <PenyerahanObatPage /> },
+
+  // TriaseIgd: daftar tunggu pasien IGD (join visits+registrations di
+  // frontend, backend belum punya filter is_emergency/status di /visits —
+  // lihat komentar di TriaseIgdPage.tsx) + form triase level 1-5 →
+  // POST /triages lalu redirect ke pelayanan pasien.
+  { path: '/triase-igd', module: 'MedicalRecordTriage', label: 'Triase IGD', element: <TriaseIgdPage /> },
+  { path: '/modul/pembayaran-cashier-shift', module: 'PembayaranCashierShift', label: 'Shift Kasir', element: <CashierShiftListPage /> },
 ]

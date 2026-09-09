@@ -5,6 +5,9 @@ export interface MedicineDelivery {
   requested_at?: string | null
   created_at?: string
   updated_at?: string
+  courier_employee_id?: number | null
+  status?: string | null
+  delivered_at?: string | null
 }
 
 export interface MedicineDeliveryFormValues {

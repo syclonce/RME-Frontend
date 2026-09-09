@@ -7,6 +7,8 @@ export interface InvoiceSubsidy {
   notes?: string | null
   created_at?: string
   updated_at?: string
+  approved_by?: number | null
+  approved_at?: string | null
 }
 
 export interface InvoiceSubsidyFormValues {
